@@ -28,32 +28,11 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: '#F5138E',
-
     alignSelf: 'center',
     height: hp('6'),
     width: hp('15'),
     borderRadius: hp('1.2'),
     marginVertical: hp('3'),
-  },
-  forgotPassword: {
-    color: '#ffffff',
-    marginBottom: hp('3'),
-  },
-  signupText: {
-    color: '#ffffff',
-    fontSize: hp('2'),
-    marginTop: hp('1'),
-  },
-  signupSection: {
-    alignItems: 'center',
-  },
-  signup: {
-    color: '#ffffff',
-    fontWeight: 'bold',
-    fontSize: hp('2.5'),
-  },
-  loginSection: {
-    alignItems: 'center',
   },
 });
 
