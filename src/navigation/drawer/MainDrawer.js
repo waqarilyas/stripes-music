@@ -1,32 +1,10 @@
 import * as React from 'react';
-import {View, Text, Button, Image} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import { Image } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-//Local imports
 import Profile from '../../screens/Profile';
-import MainTabs from '../Tabs/MainTabs';
-import VideoStack from '../stacks/VideoStack';
-import PlaylistStack from '../stacks/PlaylistStack';
-import NewsStack from '../stacks/NewsStack';
-import CommunityStack from '../stacks/CommunityStack';
-import {
-  tab1White,
-  tab1Grey,
-  tab2White,
-  tab2Grey,
-  tab3White,
-  tab3Grey,
-  tab4White,
-  tab4Grey,
-  tab5White,
-  tab5Grey,
-} from '../../../Assets/Icons';
+import MainTabs from '../tabs/MainTabs';
+import { tab1White, tab1Grey } from '../../../Assets/Icons';
 
 const Drawer = createDrawerNavigator();
 
@@ -39,8 +17,8 @@ const MainDrawer = () => {
       }}
       labeled={false}
       initialRouteName="Home"
-      screenOptions={({route}) => ({
-        drawerIcon: ({focused, color, size}) => {
+      screenOptions={({ route }) => ({
+        drawerIcon: ({ focused }) => {
           let iconName;
 
           if (route.name === 'Home Screen') {

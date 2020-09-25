@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Button} from 'react-native';
+import { View, Text } from 'react-native';
 
-//local imports
 import styles from './styles';
 
-const Signup = ({navigation}) => {
+const Signup = ({ navigation }) => {
   return (
     <View>
       <Text>Signup Screen</Text>

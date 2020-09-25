@@ -1,13 +1,12 @@
+/**
+ *
+ * @format
+ * @flow strict-local
+ */
+
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+
 import SwitchNavigator from './src/navigation/switchNavigator/SwitchNavigator';
 
 const App = () => {
@@ -17,7 +16,5 @@ const App = () => {
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

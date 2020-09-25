@@ -1,7 +1,6 @@
 import React from 'react';
-import {createSwitchNavigator, createAppContainer} from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-//local imports
 import MainDrawer from '../drawer/MainDrawer';
 import AuthenticationStack from '../stacks/AuthenticationStack';
 

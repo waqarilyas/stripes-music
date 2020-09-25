@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Button} from 'react-native';
+import { View, Text, TouchableOpacity, Button } from 'react-native';
 
-//local imports
 import styles from './styles';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   return (
     <View>
       <Text>Login Screen</Text>

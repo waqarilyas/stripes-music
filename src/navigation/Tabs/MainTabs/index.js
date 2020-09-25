@@ -1,7 +1,6 @@
 import React from 'react';
-import {Image} from 'react-native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
+import { Image } from 'react-native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 //local imports
 import HomeStack from '../../stacks/HomeStack';
@@ -27,11 +26,10 @@ const Tab = createMaterialBottomTabNavigator();
 const MainTabs = () => {
   return (
     <Tab.Navigator
-      // barStyle={mainTabStyles.main}
       labeled={false}
       initialRouteName="Home"
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
           if (route.name === 'Home') {
