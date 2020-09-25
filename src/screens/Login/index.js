@@ -11,6 +11,7 @@ import {
   facebookIcon,
   googleIcon,
 } from '../../../Assets/Icons';
+import Input from '../../components/Input';
 
 const loginUser = (email, password, navigation) => {
   auth()
@@ -25,7 +26,8 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = () => {
-    loginUser(email, password, navigation);
+    console.log(email, password);
+    // loginUser(email, password, navigation);
   };
 
   return (
@@ -33,33 +35,25 @@ const Login = ({ navigation }) => {
       <View>
         <Text style={styles.headerText}>Login</Text>
 
-        <View style={styles.input}>
-          <Image source={emailIcon} style={styles.inputIcon} />
-          <TextInput
-            textContentType="emailAddress"
-            placeholder="Email"
-            placeholderTextColor="#515151"
-            style={styles.textInput}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            defaultValue={email}
-            onChangeText={(e) => setEmail(e)}
-          />
-        </View>
+        <Input
+          icon={emailIcon}
+          name="Email"
+          textContentType="emailAddress"
+          capitalize="none"
+          keyboardType="email-address"
+          defaultValue={email}
+          onChangeText={(e) => setEmail(e)}
+        />
 
-        <View style={styles.input}>
-          <Image source={passwordIcon} style={styles.inputIcon} />
-          <TextInput
-            textContentType="password"
-            placeholder="Password"
-            secureTextEntry
-            selectTextOnFocus
-            defaultValue={password}
-            placeholderTextColor="#515151"
-            style={styles.textInput}
-            onChangeText={(e) => setPassword(e)}
-          />
-        </View>
+        <Input
+          icon={passwordIcon}
+          name="Password"
+          textContentType="password"
+          capitalize="none"
+          secureTextEntry={true}
+          defaultValue={password}
+          onChangeText={(e) => setPassword(e)}
+        />
 
         <Button
           type="solid"

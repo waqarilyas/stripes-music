@@ -1,13 +1,10 @@
 import { StyleSheet } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   loginButtonText: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: hp('2'),
   },
   error: {
     color: '#B22222',
@@ -18,7 +15,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: hp('3.5'),
+    fontSize: hp('3'),
     marginBottom: hp('4'),
     marginTop: hp('2'),
   },
@@ -26,7 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: hp('2'),
     color: '#ffffff',
-    fontSize: hp('2.5'),
+    fontSize: hp('2'),
   },
   input: {
     backgroundColor: '#1a1a1a',
@@ -47,7 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5138E',
     alignSelf: 'center',
     height: hp('6'),
-    width: hp('15'),
+    width: hp('16'),
     borderRadius: hp('1'),
     marginVertical: hp('4'),
   },
@@ -70,7 +67,7 @@ const styles = StyleSheet.create({
     marginVertical: hp('1'),
     alignItems: 'center',
     borderRadius: hp('1'),
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   socialButtonText: {
     fontWeight: 'bold',
@@ -78,8 +75,8 @@ const styles = StyleSheet.create({
   },
   signupText: {
     color: 'white',
-    fontSize: hp('2'),
-    marginTop: hp('1'),
+    fontSize: 14,
+    marginTop: hp('2'),
   },
   faceBookButton: {
     backgroundColor: '#3B5998',
@@ -88,7 +85,7 @@ const styles = StyleSheet.create({
     marginVertical: hp('1'),
     borderRadius: hp('1'),
     fontWeight: 'bold',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   signupSection: {
     alignItems: 'center',
