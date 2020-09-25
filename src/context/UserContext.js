@@ -11,6 +11,8 @@ const UserProvider = (props) => {
     auth().onAuthStateChanged((currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+      } else {
+        setUser(null);
       }
     }, []);
   });

@@ -1,26 +1,19 @@
 import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
 
-import styles from './styles';
 import useUser from '../../hooks/useUser';
 
 const LoadingScreen = ({ navigation }) => {
-  const user = useUser();
+  const currentUser = useUser();
 
   useEffect(() => {
-    if (user) {
+    if (currentUser) {
       navigation.navigate('App');
     } else {
       navigation.navigate('Auth');
     }
-  }, [user, navigation]);
+  }, [currentUser, navigation]);
 
-  return (
-    <View style={styles.root}>
-      <ActivityIndicator />
-      <Text style={styles.text}>Loading...</Text>
-    </View>
-  );
+  return <></>;
 };
 
 export default LoadingScreen;
