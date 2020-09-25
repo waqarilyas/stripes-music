@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import Profile from '../../screens/Profile';
@@ -11,10 +11,7 @@ const Drawer = createDrawerNavigator();
 const MainDrawer = () => {
   return (
     <Drawer.Navigator
-      drawerStyle={{
-        backgroundColor: '#c6cbef',
-        width: 240,
-      }}
+      drawerStyle={styles.drawerStyle}
       labeled={false}
       initialRouteName="Home"
       screenOptions={({ route }) => ({
@@ -32,5 +29,12 @@ const MainDrawer = () => {
     </Drawer.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  drawerStyle: {
+    backgroundColor: '#c6cbef',
+    width: 240,
+  },
+});
 
 export default MainDrawer;
