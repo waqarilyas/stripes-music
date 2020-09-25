@@ -8,12 +8,15 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 import SwitchNavigator from './src/navigation/switchNavigator/SwitchNavigator';
+import { UserProvider } from './src/context/UserContext';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <SwitchNavigator />
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <SwitchNavigator />
+      </NavigationContainer>
+    </UserProvider>
   );
 };
 
