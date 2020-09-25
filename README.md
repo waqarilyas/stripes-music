@@ -19,7 +19,7 @@ npm install
 Navigate into the ios folder and run the following command
 
 ```shell
-pods install
+cd ios && pods install && cd ..
 ```
 
 ### Run on Android
