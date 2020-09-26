@@ -7,16 +7,18 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 
-import Block from './src/components/Block';
 import SwitchNavigator from './src/navigation/switchNavigator/SwitchNavigator';
+import { UserProvider } from './src/context/UserContext';
 
 const App = () => {
   return (
     <>
       <StatusBar barStyle="default" />
-      <NavigationContainer>
-        <SwitchNavigator />
-      </NavigationContainer>
+      <UserProvider>
+        <NavigationContainer>
+          <SwitchNavigator />
+        </NavigationContainer>
+      </UserProvider>
     </>
   );
 };
