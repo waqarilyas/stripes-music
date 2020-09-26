@@ -9,11 +9,7 @@ const Home = ({ navigation }) => {
   const currentUser = useUser();
 
   const handlePress = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        navigation.navigate('Auth');
-      });
+    auth().signOut();
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { Button as RNEButton } from 'react-native-elements';
 
 import Block from '../../components/Block';
@@ -14,6 +15,8 @@ import {
 } from '../../../Assets/Icons';
 import Input from '../../components/Input';
 import reducer from '../../hooks/useReducer';
+import onFacebookButtonPress from './FacebookLogin';
+import onGoogleButtonPress from './GoogleLogin';
 
 const initialState = {
   email: '',
@@ -25,6 +28,9 @@ const loginUser = (state, navigation) => {
     .signInWithEmailAndPassword(state.email, state.password)
     .then((_result) => {
       navigation.navigate('App');
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
@@ -33,6 +39,14 @@ const Login = ({ navigation }) => {
 
   const handleSubmit = () => {
     loginUser(state, navigation);
+  };
+
+  const handleFacebookLogin = () => {
+    onFacebookButtonPress().then(() => navigation.navigate('App'));
+  };
+
+  const handleGoogleLogin = () => {
+    onGoogleButtonPress().then(() => navigation.navigate('App'));
   };
 
   return (
@@ -78,6 +92,7 @@ const Login = ({ navigation }) => {
           title="Google"
           buttonStyle={styles.socialButton}
           titleStyle={styles.socialButtonText}
+          onPress={handleGoogleLogin}
         />
 
         <RNEButton
@@ -86,6 +101,7 @@ const Login = ({ navigation }) => {
           title="Facebook"
           buttonStyle={styles.faceBookButton}
           titleStyle={styles.socialButtonText}
+          onPress={handleFacebookLogin}
         />
 
         <View style={styles.signupSection}>
