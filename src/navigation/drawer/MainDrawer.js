@@ -11,6 +11,10 @@ const Drawer = createDrawerNavigator();
 const MainDrawer = () => {
   return (
     <Drawer.Navigator
+      drawerStyle={{
+        backgroundColor: 'black',
+        width: 240,
+      }}
       drawerStyle={styles.drawerStyle}
       labeled={false}
       initialRouteName="Home"
