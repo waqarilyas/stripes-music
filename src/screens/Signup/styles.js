@@ -5,6 +5,10 @@ import {
 } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
+  signupButtonText: {
+    fontWeight: 'bold',
+    fontSize: hp('2'),
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

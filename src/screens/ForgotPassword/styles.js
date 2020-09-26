@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: hp('5'),
+    marginTop: hp('2'),
     marginHorizontal: wp('3'),
   },
   headerText: {
@@ -24,15 +24,8 @@ const styles = StyleSheet.create({
   topText: {
     color: 'white',
     textAlign: 'center',
-    marginBottom: hp('6'),
-  },
-  loginButton: {
-    backgroundColor: '#F5138E',
-    alignSelf: 'center',
-    height: hp('6'),
-    width: hp('15'),
-    borderRadius: hp('1.2'),
-    marginVertical: hp('3'),
+    marginVertical: hp('5'),
+    paddingHorizontal: hp('4'),
   },
 });
 

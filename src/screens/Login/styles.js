@@ -2,10 +2,6 @@ import { StyleSheet } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
-  loginButtonText: {
-    fontWeight: 'bold',
-    fontSize: hp('2'),
-  },
   error: {
     color: '#B22222',
     marginBottom: hp('1'),
@@ -39,14 +35,6 @@ const styles = StyleSheet.create({
     height: hp('3'),
     width: hp('3'),
     marginHorizontal: hp('2'),
-  },
-  loginButton: {
-    backgroundColor: '#F5138E',
-    alignSelf: 'center',
-    height: hp('6'),
-    width: hp('16'),
-    borderRadius: hp('1'),
-    marginVertical: hp('4'),
   },
   socialSection: {
     alignItems: 'center',

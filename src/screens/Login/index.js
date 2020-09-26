@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
-import { Button } from 'react-native-elements';
+import React, { useReducer } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import { Button as RNEButton } from 'react-native-elements';
 
 import Block from '../../components/Block';
+import Button from '../../components/Button';
 import styles from './styles';
 import {
   emailIcon,
@@ -12,22 +13,26 @@ import {
   googleIcon,
 } from '../../../Assets/Icons';
 import Input from '../../components/Input';
+import reducer from '../../hooks/useReducer';
 
-const loginUser = (email, password, navigation) => {
+const initialState = {
+  email: '',
+  password: '',
+};
+
+const loginUser = (state, navigation) => {
   auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((_user) => {
-      navigation.navigate('Home');
+    .signInWithEmailAndPassword(state.email, state.password)
+    .then((_result) => {
+      navigation.navigate('App');
     });
 };
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleSubmit = () => {
-    console.log(email, password);
-    // loginUser(email, password, navigation);
+    loginUser(state, navigation);
   };
 
   return (
@@ -41,8 +46,8 @@ const Login = ({ navigation }) => {
           textContentType="emailAddress"
           capitalize="none"
           keyboardType="email-address"
-          defaultValue={email}
-          onChangeText={(e) => setEmail(e)}
+          defaultValue={state.email}
+          onChangeText={(input) => dispatch({ email: input })}
         />
 
         <Input
@@ -51,29 +56,23 @@ const Login = ({ navigation }) => {
           textContentType="password"
           capitalize="none"
           secureTextEntry={true}
-          defaultValue={password}
-          onChangeText={(e) => setPassword(e)}
+          defaultValue={state.password}
+          onChangeText={(input) => dispatch({ password: input })}
         />
 
-        <Button
-          type="solid"
-          title="Login"
-          titleStyle={styles.loginButtonText}
-          buttonStyle={styles.loginButton}
-          onPress={handleSubmit}
-        />
+        <Button onPress={handleSubmit} text="Login" />
       </View>
 
       <View style={styles.socialSection}>
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text style={styles.forgotPassword}>Forgot Password? </Text>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
 
         <Text style={styles.socialSignInText}>
           or sign in with social networks
         </Text>
 
-        <Button
+        <RNEButton
           icon={<Image source={googleIcon} />}
           iconRight
           title="Google"
@@ -81,7 +80,7 @@ const Login = ({ navigation }) => {
           titleStyle={styles.socialButtonText}
         />
 
-        <Button
+        <RNEButton
           icon={<Image source={facebookIcon} />}
           iconRight
           title="Facebook"
