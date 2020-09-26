@@ -1,56 +1,40 @@
 import { StyleSheet } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
+  error: {
+    color: '#B22222',
+    marginBottom: hp('1'),
+    marginLeft: hp('1'),
+  },
   headerText: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: hp('3.5'),
-    marginBottom: hp('6'),
+    fontSize: hp('3'),
+    marginBottom: hp('4'),
     marginTop: hp('2'),
-  },
-  topText: {
-    color: 'white',
-    textAlign: 'center',
-    marginBottom: hp('6'),
   },
   textInput: {
     flex: 1,
+    paddingVertical: hp('2'),
     color: '#ffffff',
-    fontSize: hp('2.5'),
+    fontSize: hp('2'),
   },
   input: {
     backgroundColor: '#1a1a1a',
     alignItems: 'center',
     flexDirection: 'row',
-    marginVertical: hp('2'),
+    marginVertical: hp('1'),
     padding: hp('1'),
     paddingLeft: hp('1'),
-    borderRadius: hp('2'),
+    borderRadius: hp('1'),
   },
   inputIcon: {
     resizeMode: 'contain',
     height: hp('3'),
     width: hp('3'),
     marginHorizontal: hp('2'),
-  },
-  loginButton: {
-    backgroundColor: '#F5138E',
-
-    alignSelf: 'center',
-    height: hp('6'),
-    width: hp('15'),
-    borderRadius: hp('1.2'),
-    marginVertical: hp('3'),
-  },
-  loginButtonText: {
-    color: '#ffffff',
-    fontWeight: 'bold',
-    fontSize: hp('2'),
   },
   socialSection: {
     alignItems: 'center',
@@ -66,43 +50,40 @@ const styles = StyleSheet.create({
   },
   socialButton: {
     backgroundColor: '#4285F4',
-    height: hp('7'),
-    width: hp('24'),
+    height: hp('6'),
+    width: hp('20'),
     marginVertical: hp('1'),
     alignItems: 'center',
-    borderRadius: hp('1 '),
-    justifyContent: 'space-around',
+    borderRadius: hp('1'),
+    justifyContent: 'space-evenly',
   },
   socialButtonText: {
     fontWeight: 'bold',
-    fontSize: hp('2.5'),
+    fontSize: hp('2'),
   },
   signupText: {
-    color: '#ffffff',
-    fontSize: hp('2'),
-    marginTop: hp('1'),
-  },
-  socialIcon: {
-    resizeMode: 'contain',
-    height: hp('3'),
-    width: hp('3'),
+    color: 'white',
+    fontSize: 14,
+    marginTop: hp('2'),
   },
   faceBookButton: {
     backgroundColor: '#3B5998',
-    height: hp('7'),
-    width: hp('24'),
+    height: hp('6'),
+    width: hp('20'),
     marginVertical: hp('1'),
-    borderRadius: hp('1 '),
+    borderRadius: hp('1'),
     fontWeight: 'bold',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   signupSection: {
     alignItems: 'center',
+    marginTop: hp('1'),
   },
   signup: {
-    color: '#ffffff',
+    color: 'white',
     fontWeight: 'bold',
-    fontSize: hp('2.5'),
+    fontSize: hp('3'),
+    marginTop: hp('3'),
   },
 });
 

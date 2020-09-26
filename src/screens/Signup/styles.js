@@ -5,16 +5,22 @@ import {
 } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
+  signupButtonText: {
+    fontWeight: 'bold',
+    fontSize: hp('2'),
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: hp('5'),
+    marginTop: hp('2'),
     marginHorizontal: wp('3'),
   },
   headerText: {
-    color: '#ffffff',
+    color: 'white',
     fontWeight: 'bold',
+    textAlign: 'center',
     fontSize: hp('3'),
+    marginBottom: hp('4'),
   },
   headerIcon: {
     resizeMode: 'contain',
@@ -28,29 +34,29 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: '#F5138E',
-
     alignSelf: 'center',
     height: hp('6'),
-    width: hp('15'),
-    borderRadius: hp('1.2'),
-    marginVertical: hp('3'),
+    width: hp('16'),
+    borderRadius: hp('1'),
+    marginVertical: hp('4'),
   },
   forgotPassword: {
-    color: '#ffffff',
-    marginBottom: hp('3'),
+    color: 'white',
+    marginBottom: hp('2'),
   },
   signupText: {
-    color: '#ffffff',
-    fontSize: hp('2'),
+    color: 'white',
+    fontSize: 14,
     marginTop: hp('1'),
   },
   signupSection: {
     alignItems: 'center',
   },
   signup: {
-    color: '#ffffff',
+    color: 'white',
     fontWeight: 'bold',
-    fontSize: hp('2.5'),
+    fontSize: hp('3'),
+    marginTop: hp('3'),
   },
   loginSection: {
     alignItems: 'center',
