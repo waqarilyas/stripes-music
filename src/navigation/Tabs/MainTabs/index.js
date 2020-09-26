@@ -27,6 +27,7 @@ const MainTabs = () => {
   return (
     <Tab.Navigator
       labeled={false}
+      barStyle={{ backgroundColor: 'black' }}
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {

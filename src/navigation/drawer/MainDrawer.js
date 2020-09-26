@@ -12,7 +12,7 @@ const MainDrawer = () => {
   return (
     <Drawer.Navigator
       drawerStyle={{
-        backgroundColor: '#c6cbef',
+        backgroundColor: 'black',
         width: 240,
       }}
       labeled={false}
