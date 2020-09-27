@@ -1,12 +1,21 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import styles from './styles';
 
-const Button = ({ onPress, text }) => {
+const Button = ({ onPress, text, isSubmitting = false }) => {
   return (
-    <TouchableOpacity style={styles.backgroundStyle} onPress={onPress}>
-      <Text style={styles.textStyle}>{text}</Text>
+    <TouchableOpacity
+      disabled={isSubmitting}
+      style={styles.backgroundStyle}
+      onPress={onPress}>
+      {isSubmitting ? (
+        <>
+          <ActivityIndicator color="white" />
+        </>
+      ) : (
+        <Text style={styles.textStyle}>{text}</Text>
+      )}
     </TouchableOpacity>
   );
 };

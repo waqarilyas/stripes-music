@@ -1,12 +1,11 @@
 import React from 'react';
-import { Text, View, Image, TextInput } from 'react-native';
+import { View, Image, TextInput } from 'react-native';
 
 import styles from './styles';
 
 const Input = ({
   icon,
   name,
-  error = '',
   textType,
   capitalize,
   keyboardType = 'default',
@@ -30,7 +29,6 @@ const Input = ({
           secureTextEntry={secureTextEntry}
         />
       </View>
-      <Text style={styles.error}>{error}</Text>
     </>
   );
 };
