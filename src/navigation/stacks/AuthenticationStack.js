@@ -4,18 +4,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../../screens/Login';
 import Signup from '../../screens/Signup';
 import ForgotPassword from '../../screens/ForgotPassword';
-import MainDrawer from '../../navigation/drawer/MainDrawer';
-const stack = createStackNavigator();
 
-const AuthenticationStack = () => {
+const Stack = createStackNavigator();
+
+const AuthStack = () => {
   return (
-    <stack.Navigator headerMode="none">
-      <stack.Screen name="Login" component={Login} />
-      <stack.Screen name="Signup" component={Signup} />
-      <stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <stack.Screen name="App" component={MainDrawer} />
-    </stack.Navigator>
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+    </Stack.Navigator>
   );
 };
 
-export default AuthenticationStack;
+export default AuthStack;
