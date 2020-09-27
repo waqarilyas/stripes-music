@@ -26,9 +26,6 @@ const initialState = {
 const loginUser = (state, navigation) => {
   auth()
     .signInWithEmailAndPassword(state.email, state.password)
-    .then((_result) => {
-      navigation.navigate('App');
-    })
     .catch((err) => {
       console.log(err);
     });
@@ -42,11 +39,11 @@ const Login = ({ navigation }) => {
   };
 
   const handleFacebookLogin = () => {
-    onFacebookButtonPress().then(() => navigation.navigate('App'));
+    onFacebookButtonPress();
   };
 
   const handleGoogleLogin = () => {
-    onGoogleButtonPress().then(() => navigation.navigate('App'));
+    onGoogleButtonPress();
   };
 
   return (

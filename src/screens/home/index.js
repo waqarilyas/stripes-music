@@ -1,6 +1,7 @@
 import React from 'react';
-
 import { View, FlatList, ScrollView } from 'react-native';
+import auth from '@react-native-firebase/auth';
+import randomize from 'randomatic';
 
 import styles from './styles';
 import TabsMainHeader from '../../components/TabsMainHeader';
@@ -18,21 +19,30 @@ import {
   artistIcon,
   playIcon,
 } from '../../../Assets/Icons';
+import Button from '../../components/Button';
+
+const pattern = 'Aa0!';
+const count = 10;
 
 const Home = ({ navigation }) => {
   const data = ['1', '2', '3', '4', '5'];
+
+  const handleSignOut = () => {
+    auth().signOut();
+  };
 
   return (
     <Block>
       <ScrollView>
         <View style={styles.topSection}>
           <TabsMainHeader navigation={navigation} name="Music" />
+          <Button text="Sign Out" onPress={handleSignOut} />
           <FlatList
             data={data}
             horizontal
             keyExtractor={(item) => item}
             renderItem={() => {
-              return <HomeTopSlider />;
+              return <HomeTopSlider key={randomize(pattern, count)} />;
             }}
           />
         </View>
@@ -45,7 +55,7 @@ const Home = ({ navigation }) => {
             horizontal
             keyExtractor={(item) => item}
             renderItem={() => {
-              return <SongCard />;
+              return <SongCard key={randomize(pattern, count)} />;
             }}
           />
           {/* Most Played Section Ends here */}
@@ -62,7 +72,7 @@ const Home = ({ navigation }) => {
               data={data}
               keyExtractor={(item) => item}
               renderItem={() => {
-                return <SongCardListView />;
+                return <SongCardListView key={randomize(pattern, count)} />;
               }}
             />
           </View>
@@ -76,7 +86,7 @@ const Home = ({ navigation }) => {
               keyExtractor={(item) => item}
               horizontal
               renderItem={() => {
-                return <ArtistsImage />;
+                return <ArtistsImage key={randomize(pattern, count)} />;
               }}
             />
           </View>
@@ -90,7 +100,7 @@ const Home = ({ navigation }) => {
               keyExtractor={(item) => item}
               horizontal
               renderItem={() => {
-                return <BestPlaylistsCard />;
+                return <BestPlaylistsCard key={randomize(pattern, count)} />;
               }}
             />
           </View>

@@ -9,9 +9,11 @@
     "test": "jest",
     "lint": "eslint .",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
-    "build:project": "npm i && cd ios && pod install && cd .."
+    "build:project": "npm i && cd ios && pod install && cd ..",
+    "build:pods": "cd ios/ && pod install && cd .."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.0",
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^8.4.3",
@@ -23,6 +25,7 @@
     "@react-navigation/material-top-tabs": "^5.2.17",
     "@react-navigation/native": "^5.7.4",
     "@react-navigation/stack": "^5.9.1",
+    "randomatic": "^3.1.1",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-elements": "^2.3.2",
@@ -31,6 +34,7 @@
     "react-native-paper": "^4.2.0",
     "react-native-reanimated": "^1.13.1",
     "react-native-responsive-screen": "^1.4.1",
+    "react-native-restart": "0.0.17",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
     "react-native-tab-view": "^2.15.1",
