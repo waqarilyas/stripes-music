@@ -1,6 +1,11 @@
 import * as yup from 'yup';
 
-const ValidationScheme = yup.object().shape({
+const LoginVS = yup.object().shape({
+  email: yup.string().required().email().label('Email'),
+  password: yup.string().required().min(8).max(50).label('Password'),
+});
+
+const SignUpVS = yup.object().shape({
   name: yup.string().required().max(50).label('Name'),
   email: yup.string().required().email().label('Email'),
   password: yup.string().required().min(8).max(50).label('Password'),
@@ -13,4 +18,8 @@ const ValidationScheme = yup.object().shape({
     .label('Confirm Password'),
 });
 
-export default ValidationScheme;
+const ForgotPasswordVS = yup.object().shape({
+  email: yup.string().required().email().label('Email'),
+});
+
+export { LoginVS, SignUpVS, ForgotPasswordVS };

@@ -15,9 +15,15 @@ import {
 import Input from '../../components/Input';
 import onFacebookButtonPress from './FacebookLogin';
 import onGoogleButtonPress from './GoogleLogin';
-import ValidationScheme from '../../utils/Validation';
+import { LoginVS } from '../../utils/Validation';
 import LoginUser from './utils';
 import { ScrollView } from 'react-native-gesture-handler';
+
+const initValues = {
+  email: '',
+  password: '',
+  globalError: '',
+};
 
 const Login = ({ navigation }) => {
   return (
@@ -25,13 +31,9 @@ const Login = ({ navigation }) => {
       <ScrollView>
         <Text style={styles.headerText}>Login</Text>
         <Formik
-          initialValues={{
-            email: '',
-            password: '',
-            globalError: '',
-          }}
+          initialValues={initValues}
           onSubmit={(values, actions) => LoginUser(values, actions)}
-          validationSchema={ValidationScheme}>
+          validationSchema={LoginVS}>
           {({
             initialValues,
             errors,

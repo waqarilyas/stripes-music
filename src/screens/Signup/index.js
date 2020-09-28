@@ -12,15 +12,15 @@ import {
   emailIcon,
   backIcon,
 } from '../../../Assets/Icons';
-import ValidationSchema from '../../utils/Validation';
+import { SignUpVS } from '../../utils/Validation';
 import RegisterUser from './utils';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const initValues = {
-  name: 'Test User 01',
-  email: 'test.user.01@email.com',
-  password: 'testpass',
-  confirmPassword: 'testpass',
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
   globalErr: '',
 };
 
@@ -42,7 +42,7 @@ const Signup = ({ navigation }) => {
         <Formik
           initialValues={initValues}
           onSubmit={(values, actions) => RegisterUser(values, actions)}
-          validationSchema={ValidationSchema}>
+          validationSchema={SignUpVS}>
           {({
             initialValues,
             errors,

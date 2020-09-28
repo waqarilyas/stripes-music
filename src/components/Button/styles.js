@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5138E',
     alignSelf: 'center',
     height: hp('6'),
-    width: hp('16'),
+    width: hp('19'),
     flexDirection: 'row',
     borderRadius: hp('1'),
     marginVertical: hp('3'),
