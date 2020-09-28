@@ -4,8 +4,13 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const styles = StyleSheet.create({
   error: {
     color: '#B22222',
-    marginBottom: hp('1'),
+    marginVertical: hp('1'),
     marginLeft: hp('1'),
+  },
+  globalError: {
+    color: '#B22222',
+    marginVertical: hp('1'),
+    textAlign: 'center',
   },
   headerText: {
     color: 'white',

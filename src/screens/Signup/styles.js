@@ -5,6 +5,16 @@ import {
 } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
+  error: {
+    color: '#B22222',
+    marginVertical: hp('1'),
+    marginLeft: hp('1'),
+  },
+  globalError: {
+    color: '#B22222',
+    marginVertical: hp('1'),
+    textAlign: 'center',
+  },
   signupButtonText: {
     fontWeight: 'bold',
     fontSize: hp('2'),
@@ -46,7 +56,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 12,
     marginTop: hp('1'),
   },
   signupSection: {
@@ -56,7 +66,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: hp('3'),
-    marginTop: hp('3'),
+    marginTop: hp('2'),
   },
   loginSection: {
     alignItems: 'center',

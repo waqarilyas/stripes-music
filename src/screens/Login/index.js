@@ -1,8 +1,7 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import { Button as RNEButton } from 'react-native-elements';
+import { Formik } from 'formik';
 
 import Block from '../../components/Block';
 import Button from '../../components/Button';
@@ -14,100 +13,112 @@ import {
   googleIcon,
 } from '../../../Assets/Icons';
 import Input from '../../components/Input';
-import reducer from '../../hooks/useReducer';
 import onFacebookButtonPress from './FacebookLogin';
 import onGoogleButtonPress from './GoogleLogin';
+import { LoginVS } from '../../utils/Validation';
+import LoginUser from './utils';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const initialState = {
+const initValues = {
   email: '',
   password: '',
-};
-
-const loginUser = (state, navigation) => {
-  auth()
-    .signInWithEmailAndPassword(state.email, state.password)
-    .catch((err) => {
-      console.log(err);
-    });
+  globalError: '',
 };
 
 const Login = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleSubmit = () => {
-    loginUser(state, navigation);
-  };
-
-  const handleFacebookLogin = () => {
-    onFacebookButtonPress();
-  };
-
-  const handleGoogleLogin = () => {
-    onGoogleButtonPress();
-  };
-
   return (
     <Block>
-      <View>
+      <ScrollView>
         <Text style={styles.headerText}>Login</Text>
+        <Formik
+          initialValues={initValues}
+          onSubmit={(values, actions) => LoginUser(values, actions)}
+          validationSchema={LoginVS}>
+          {({
+            initialValues,
+            errors,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+          }) => (
+            <>
+              <Input
+                icon={emailIcon}
+                name="Email Address"
+                error={errors.email}
+                textContentType="emailAddress"
+                capitalize="none"
+                defaultValue={initialValues.email}
+                keyboardType="email-address"
+                onChangeText={handleChange('email')}
+              />
+              <Text style={styles.error}>
+                {touched.email && errors.email ? errors.email : ''}
+              </Text>
 
-        <Input
-          icon={emailIcon}
-          name="Email"
-          textContentType="emailAddress"
-          capitalize="none"
-          keyboardType="email-address"
-          defaultValue={state.email}
-          onChangeText={(input) => dispatch({ email: input })}
-        />
+              <Input
+                icon={passwordIcon}
+                name="Password"
+                error={errors.password}
+                defaultValue={initialValues.password}
+                textContentType="password"
+                capitalize="none"
+                secureTextEntry={true}
+                onChangeText={handleChange('password')}
+              />
+              <Text style={styles.error}>
+                {touched.password && errors.password ? errors.password : ''}
+              </Text>
 
-        <Input
-          icon={passwordIcon}
-          name="Password"
-          textContentType="password"
-          capitalize="none"
-          secureTextEntry={true}
-          defaultValue={state.password}
-          onChangeText={(input) => dispatch({ password: input })}
-        />
+              {errors.globalErr ? (
+                <Text style={styles.globalError}>{errors.globalErr}</Text>
+              ) : null}
+              <Button
+                onPress={handleSubmit}
+                text="Login"
+                isSubmitting={isSubmitting}
+              />
+            </>
+          )}
+        </Formik>
 
-        <Button onPress={handleSubmit} text="Login" />
-      </View>
-
-      <View style={styles.socialSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.socialSignInText}>
-          or sign in with social networks
-        </Text>
-
-        <RNEButton
-          icon={<Image source={googleIcon} />}
-          iconRight
-          title="Google"
-          buttonStyle={styles.socialButton}
-          titleStyle={styles.socialButtonText}
-          onPress={handleGoogleLogin}
-        />
-
-        <RNEButton
-          icon={<Image source={facebookIcon} />}
-          iconRight
-          title="Facebook"
-          buttonStyle={styles.faceBookButton}
-          titleStyle={styles.socialButtonText}
-          onPress={handleFacebookLogin}
-        />
-
-        <View style={styles.signupSection}>
-          <Text style={styles.signupText}>Do not have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.signup}>Sign Up</Text>
+        <View style={styles.socialSection}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
+
+          <Text style={styles.socialSignInText}>
+            or sign in with social networks
+          </Text>
+
+          <RNEButton
+            icon={<Image source={googleIcon} />}
+            iconRight
+            title="Google"
+            buttonStyle={styles.socialButton}
+            titleStyle={styles.socialButtonText}
+            onPress={() => onGoogleButtonPress()}
+          />
+
+          <RNEButton
+            icon={<Image source={facebookIcon} />}
+            iconRight
+            title="Facebook"
+            buttonStyle={styles.faceBookButton}
+            titleStyle={styles.socialButtonText}
+            onPress={() => onFacebookButtonPress()}
+          />
+
+          <View style={styles.signupSection}>
+            <Text style={styles.signupText}>Do not have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+              <Text style={styles.signup}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </Block>
   );
 };

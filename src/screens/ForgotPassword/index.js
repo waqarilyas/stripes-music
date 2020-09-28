@@ -1,32 +1,22 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { Button as RNEButton, Overlay } from 'react-native-elements';
+import { Formik } from 'formik';
 
 import styles from './styles';
 import Block from '../../components/Block';
 import { emailIcon, backIcon } from '../../../Assets/Icons';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import reducer from '../../hooks/useReducer';
+import { ForgotPasswordVS } from '../../utils/Validation';
+import ResetPassword from './utils';
 
-const initialState = {
+const initValues = {
   email: '',
-};
-
-const resetPassword = (email, navigation) => {
-  auth()
-    .sendPasswordResetEmail(email)
-    .then(() => navigation.navigate('Login'));
+  globalErr: '',
+  isSent: false,
 };
 
 const ForgotPassword = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleSubmit = () => {
-    resetPassword(state.email, navigation);
-  };
-
   return (
     <Block>
       <View style={styles.header}>
@@ -42,17 +32,52 @@ const ForgotPassword = ({ navigation }) => {
       <Text style={styles.topText}>
         Enter your emaill address so we can send you a reset password link
       </Text>
-      <Input
-        icon={emailIcon}
-        name="Email"
-        textContentType="emailAddress"
-        capitalize="none"
-        keyboardType="email-address"
-        defaultValue={state.email}
-        onChangeText={(input) => dispatch({ email: input })}
-      />
 
-      <Button onPress={handleSubmit} text="Reset" />
+      <Formik
+        initialValues={initValues}
+        onSubmit={(values, actions) => ResetPassword(values, actions)}
+        validationSchema={ForgotPasswordVS}>
+        {({
+          initialValues,
+          errors,
+          values,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+          touched,
+        }) => (
+          <>
+            <Input
+              icon={emailIcon}
+              name="Email"
+              textContentType="emailAddress"
+              capitalize="none"
+              keyboardType="email-address"
+              defaultValue={initialValues.email}
+              onChangeText={handleChange('email')}
+            />
+            <Text style={styles.error}>
+              {touched.email && errors.email ? errors.email : ''}
+            </Text>
+
+            {errors.globalErr ? (
+              <Text style={styles.globalError}>{errors.globalErr}</Text>
+            ) : null}
+
+            <Button
+              onPress={handleSubmit}
+              text="Reset Password"
+              isSubmitting={isSubmitting}
+            />
+
+            {errors.isSent ? (
+              <Text style={styles.message}>
+                Password reset email sent to {values.email}
+              </Text>
+            ) : null}
+          </>
+        )}
+      </Formik>
     </Block>
   );
 };

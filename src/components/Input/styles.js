@@ -20,11 +20,6 @@ const styles = StyleSheet.create({
     width: hp('3'),
     marginHorizontal: hp('3'),
   },
-  error: {
-    color: '#B22222',
-    marginVertical: hp('1'),
-    marginLeft: hp('1'),
-  },
 });
 
 export default styles;
