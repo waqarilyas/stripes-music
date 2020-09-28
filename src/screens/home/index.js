@@ -22,12 +22,14 @@ import {
 } from '../../../Assets/Icons';
 import Button from '../../components/Button';
 import reducer from '../../hooks/useReducer';
+import { getCollection, getOrderedCollection } from './utils';
 
 const pattern = 'Aa0!';
 const count = 10;
 
 const initialState = {
   albums: [],
+  songs: [],
 };
 
 const Home = ({ navigation }) => {
@@ -39,14 +41,10 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
-    const getAlbums = async () => {
-      const collections = await firestore().collection('albums').get();
-      const documents = collections.docs.map((doc) => {
-        return doc.data();
-      });
-      dispatch({ albums: documents });
-    };
-    getAlbums();
+    getCollection('albums', (collection) => dispatch({ albums: collection }));
+    getOrderedCollection('songs', 'likesCount', 'asc', (collection) =>
+      dispatch({ songs: collection }),
+    );
   }, []);
 
   return (
@@ -54,6 +52,10 @@ const Home = ({ navigation }) => {
       <ScrollView>
         <View style={styles.topSection}>
           <TabsMainHeader navigation={navigation} name="Music" />
+
+          {/* <Button text="Add" onPress={Add} /> */}
+
+          {/* Album Slider Section */}
           <FlatList
             data={state.albums}
             horizontal
@@ -70,13 +72,21 @@ const Home = ({ navigation }) => {
         <View>
           <SectionHeader name="Most Played" icon={musicIcon} />
           <FlatList
-            data={data}
+            data={state.songs}
             horizontal
-            keyExtractor={(item) => item}
-            renderItem={() => {
-              return <SongCard key={randomize(pattern, count)} />;
+            keyExtractor={(item) => item.id}
+            renderItem={({ item: { title, artist, arts } }) => {
+              return (
+                <SongCard
+                  key={randomize(pattern, count)}
+                  title={title}
+                  artist={artist}
+                  arts={arts}
+                />
+              );
             }}
           />
+
           {/* Most Played Section Ends here */}
 
           <View style={styles.forYouContainer}>

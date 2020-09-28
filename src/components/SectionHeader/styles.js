@@ -5,11 +5,14 @@ import {
 } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
-  // right: {
-  //   backgroundColor: '#1B1B1B',
-  //   padding: wp('2'),
-  //   borderRadius: hp('1'),
-  // },
+  containerStyle: {
+    backgroundColor: 'black',
+    justifyContent: 'space-around',
+    marginBottom: hp('1'),
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
   rightText: {
     color: 'white',
     fontSize: wp('4'),

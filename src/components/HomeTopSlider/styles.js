@@ -21,18 +21,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   songName: {
-    fontSize: hp('4'),
+    fontSize: hp('3'),
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
     paddingHorizontal: hp('4'),
   },
   subText: {
-    fontSize: wp('4'),
+    fontSize: wp('3'),
     color: 'white',
     textAlign: 'center',
     paddingHorizontal: hp('5'),
-    marginTop: hp('2'),
+    marginTop: hp('1'),
   },
   text: {
     alignItems: 'center',

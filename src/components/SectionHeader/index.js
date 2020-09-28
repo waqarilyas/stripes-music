@@ -1,10 +1,7 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import { Header } from 'react-native-elements';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import styles from './styles';
 
@@ -29,14 +26,7 @@ const SectionHeader = ({ name, icon }) => {
         style: { color: '#fff', fontWeight: 'bold', fontSize: wp('5') },
       }}
       rightComponent={<RightComponent />}
-      containerStyle={{
-        backgroundColor: 'black',
-        justifyContent: 'space-around',
-        marginBottom: hp('1'),
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      }}
+      containerStyle={styles.containerStyle}
     />
   );
 };

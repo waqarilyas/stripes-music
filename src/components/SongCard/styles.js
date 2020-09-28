@@ -1,25 +1,21 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'black',
     height: hp('25'),
-    width: hp('20'),
-    borderTopLeftRadius: hp('3'),
-    borderTopRightRadius: hp('3'),
-    margin: hp('1'),
+    width: hp('15'),
+    marginHorizontal: hp('1'),
+    marginTop: hp('1'),
   },
   image: {
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     justifyContent: 'center',
-    height: hp('16'),
-    width: hp('16'),
-    borderRadius: hp('3'),
+    height: hp('15'),
+    width: hp('15'),
+    borderRadius: hp('1'),
     overflow: 'hidden',
   },
   cardHeader: {
@@ -28,6 +24,8 @@ const styles = StyleSheet.create({
   },
   cardSubHeader: {
     color: '#787878',
+    marginTop: hp('0.5'),
+    fontSize: 12,
   },
   cardText: {
     marginTop: hp('2'),

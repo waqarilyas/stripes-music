@@ -4,7 +4,6 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: 'black',
-    justifyContent: 'space-around',
     marginBottom: hp('1'),
     elevation: 0,
     shadowOpacity: 0,
