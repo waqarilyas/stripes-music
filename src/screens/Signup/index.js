@@ -1,7 +1,6 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import { Formik } from 'formik';
 
 import styles from './styles';
 import Block from '../../components/Block';
@@ -13,116 +12,125 @@ import {
   emailIcon,
   backIcon,
 } from '../../../Assets/Icons';
-import reducer from '../../hooks/useReducer';
+import ValidationSchema from '../../utils/Validation';
+import RegisterUser from './utils';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const initialState = {
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-};
-
-const registerUser = (state, navigation) => {
-  auth()
-    .createUserWithEmailAndPassword(state.email, state.password)
-    .then((result) => {
-      firestore()
-        .collection('users')
-        .doc(result.user.uid)
-        .set({
-          id: result.user.uid,
-          fullName: state.name,
-          email: state.email,
-          isPaidUser: false,
-          isActive: false,
-          createdAt: firestore.FieldValue.serverTimestamp(),
-          updatedAt: firestore.FieldValue.serverTimestamp(),
-          subscribedAt: null,
-          fbAccessToken: '',
-          googleAccessToken: '',
-          fbUserId: '',
-          profilePicture: '',
-          isAdmin: false,
-        })
-        .then(() => {
-          navigation.navigate('App');
-        });
-    })
-    .catch((err) => console.log(err));
+const initValues = {
+  name: 'Test User 01',
+  email: 'test.user.01@email.com',
+  password: 'testpass',
+  confirmPassword: 'testpass',
+  globalErr: '',
 };
 
 const Signup = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleSubmit = () => {
-    registerUser(state, navigation);
-  };
-
   return (
     <Block>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={backIcon} style={styles.headerIcon} />
-        </TouchableOpacity>
-
-        <Text style={styles.headerText}>Sign Up</Text>
-        <>
-          <Text />
-        </>
-      </View>
-
-      <Input
-        icon={usernameIcon}
-        name="Full Name"
-        textType="name"
-        capitalize="words"
-        defaultValue={state.name}
-        onChangeText={(input) => dispatch({ name: input })}
-      />
-
-      <Input
-        icon={emailIcon}
-        name="Email"
-        textContentType="emailAddress"
-        capitalize="none"
-        keyboardType="email-address"
-        defaultValue={state.email}
-        onChangeText={(input) => dispatch({ email: input })}
-      />
-
-      <Input
-        icon={passwordIcon}
-        name="Password"
-        textContentType="password"
-        capitalize="none"
-        secureTextEntry={true}
-        defaultValue={state.password}
-        onChangeText={(input) => dispatch({ password: input })}
-      />
-
-      <Input
-        icon={passwordIcon}
-        name="Confirm Password"
-        textContentType="password"
-        capitalize="none"
-        secureTextEntry={true}
-        defaultValue={state.confirmPassword}
-        onChangeText={(input) => dispatch({ confirmPassword: input })}
-      />
-
-      <Button onPress={handleSubmit} text="Signup" />
-
-      <View style={styles.loginSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text style={styles.forgotPassword}>Forgot Password? </Text>
-        </TouchableOpacity>
-        <View style={styles.signupSection}>
-          <Text style={styles.signupText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.signup}>Login</Text>
+      <ScrollView>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={backIcon} style={styles.headerIcon} />
           </TouchableOpacity>
+
+          <Text style={styles.headerText}>Sign Up</Text>
+          <>
+            <Text />
+          </>
         </View>
-      </View>
+
+        <Formik
+          initialValues={initValues}
+          onSubmit={(values, actions) => RegisterUser(values, actions)}
+          validationSchema={ValidationSchema}>
+          {({
+            initialValues,
+            errors,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+          }) => (
+            <>
+              <Input
+                icon={usernameIcon}
+                name="Full Name"
+                textType="name"
+                capitalize="words"
+                defaultValue={initialValues.name}
+                onChangeText={handleChange('name')}
+              />
+              <Text style={styles.error}>
+                {touched.name && errors.name ? errors.name : ''}
+              </Text>
+
+              <Input
+                icon={emailIcon}
+                name="Email"
+                textContentType="emailAddress"
+                capitalize="none"
+                keyboardType="email-address"
+                defaultValue={initialValues.email}
+                onChangeText={handleChange('email')}
+              />
+              <Text style={styles.error}>
+                {touched.email && errors.email ? errors.email : ''}
+              </Text>
+
+              <Input
+                icon={passwordIcon}
+                name="Password"
+                textContentType="password"
+                capitalize="none"
+                secureTextEntry={true}
+                defaultValue={initialValues.password}
+                onChangeText={handleChange('password')}
+              />
+              <Text style={styles.error}>
+                {touched.password && errors.password ? errors.password : ''}
+              </Text>
+
+              <Input
+                icon={passwordIcon}
+                name="Confirm Password"
+                textContentType="password"
+                capitalize="none"
+                secureTextEntry={true}
+                defaultValue={initialValues.confirmPassword}
+                onChangeText={handleChange('confirmPassword')}
+              />
+              <Text style={styles.error}>
+                {touched.confirmPassword && errors.confirmPassword
+                  ? errors.confirmPassword
+                  : ''}
+              </Text>
+
+              {errors.globalErr ? (
+                <Text style={styles.globalError}>{errors.globalErr}</Text>
+              ) : null}
+
+              <Button
+                isSubmitting={isSubmitting}
+                onPress={handleSubmit}
+                text="Signup"
+              />
+            </>
+          )}
+        </Formik>
+
+        <View style={styles.loginSection}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgotPassword}>Forgot Password? </Text>
+          </TouchableOpacity>
+          <View style={styles.signupSection}>
+            <Text style={styles.signupText}>Already have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.signup}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
     </Block>
   );
 };

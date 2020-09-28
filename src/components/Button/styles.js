@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     width: hp('16'),
     flexDirection: 'row',
     borderRadius: hp('1'),
-    marginVertical: hp('4'),
+    marginVertical: hp('3'),
     justifyContent: 'center',
   },
   textStyle: {

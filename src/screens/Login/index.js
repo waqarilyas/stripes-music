@@ -17,104 +17,106 @@ import onFacebookButtonPress from './FacebookLogin';
 import onGoogleButtonPress from './GoogleLogin';
 import ValidationScheme from '../../utils/Validation';
 import LoginUser from './utils';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Login = ({ navigation }) => {
   return (
     <Block>
-      <Text style={styles.headerText}>Login</Text>
-      <Formik
-        initialValues={{
-          email: '',
-          password: '',
-          globalError: '',
-        }}
-        onSubmit={(values, actions) => LoginUser(values, actions)}
-        validationSchema={ValidationScheme}>
-        {({
-          initialValues,
-          errors,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-        }) => (
-          <>
-            <Input
-              icon={emailIcon}
-              name="Email Address"
-              error={errors.email}
-              textContentType="emailAddress"
-              capitalize="none"
-              defaultValue={initialValues.email}
-              keyboardType="email-address"
-              onChangeText={handleChange('email')}
-            />
-            <Text style={styles.error}>
-              {touched.email && errors.email ? errors.email : ''}
-            </Text>
+      <ScrollView>
+        <Text style={styles.headerText}>Login</Text>
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+            globalError: '',
+          }}
+          onSubmit={(values, actions) => LoginUser(values, actions)}
+          validationSchema={ValidationScheme}>
+          {({
+            initialValues,
+            errors,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+          }) => (
+            <>
+              <Input
+                icon={emailIcon}
+                name="Email Address"
+                error={errors.email}
+                textContentType="emailAddress"
+                capitalize="none"
+                defaultValue={initialValues.email}
+                keyboardType="email-address"
+                onChangeText={handleChange('email')}
+              />
+              <Text style={styles.error}>
+                {touched.email && errors.email ? errors.email : ''}
+              </Text>
 
-            <Input
-              icon={passwordIcon}
-              name="Password"
-              error={errors.password}
-              defaultValue={initialValues.password}
-              textContentType="password"
-              capitalize="none"
-              secureTextEntry={true}
-              onChangeText={handleChange('password')}
-            />
-            <Text style={styles.error}>
-              {touched.password && errors.password ? errors.password : ''}
-            </Text>
+              <Input
+                icon={passwordIcon}
+                name="Password"
+                error={errors.password}
+                defaultValue={initialValues.password}
+                textContentType="password"
+                capitalize="none"
+                secureTextEntry={true}
+                onChangeText={handleChange('password')}
+              />
+              <Text style={styles.error}>
+                {touched.password && errors.password ? errors.password : ''}
+              </Text>
 
-            <Text style={styles.globalError}>
-              {touched.globalError && errors.globalError
-                ? errors.globalError
-                : ''}
-            </Text>
-            <Button
-              onPress={handleSubmit}
-              text="Login"
-              isSubmitting={isSubmitting}
-            />
-          </>
-        )}
-      </Formik>
+              {errors.globalErr ? (
+                <Text style={styles.globalError}>{errors.globalErr}</Text>
+              ) : null}
+              <Button
+                onPress={handleSubmit}
+                text="Login"
+                isSubmitting={isSubmitting}
+              />
+            </>
+          )}
+        </Formik>
 
-      <View style={styles.socialSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.socialSignInText}>
-          or sign in with social networks
-        </Text>
-
-        <RNEButton
-          icon={<Image source={googleIcon} />}
-          iconRight
-          title="Google"
-          buttonStyle={styles.socialButton}
-          titleStyle={styles.socialButtonText}
-          onPress={() => onFacebookButtonPress()}
-        />
-
-        <RNEButton
-          icon={<Image source={facebookIcon} />}
-          iconRight
-          title="Facebook"
-          buttonStyle={styles.faceBookButton}
-          titleStyle={styles.socialButtonText}
-          onPress={() => onGoogleButtonPress()}
-        />
-
-        <View style={styles.signupSection}>
-          <Text style={styles.signupText}>Do not have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.signup}>Sign Up</Text>
+        <View style={styles.socialSection}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
+
+          <Text style={styles.socialSignInText}>
+            or sign in with social networks
+          </Text>
+
+          <RNEButton
+            icon={<Image source={googleIcon} />}
+            iconRight
+            title="Google"
+            buttonStyle={styles.socialButton}
+            titleStyle={styles.socialButtonText}
+            onPress={() => onGoogleButtonPress()}
+          />
+
+          <RNEButton
+            icon={<Image source={facebookIcon} />}
+            iconRight
+            title="Facebook"
+            buttonStyle={styles.faceBookButton}
+            titleStyle={styles.socialButtonText}
+            onPress={() => onFacebookButtonPress()}
+          />
+
+          <View style={styles.signupSection}>
+            <Text style={styles.signupText}>Do not have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+              <Text style={styles.signup}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </Block>
   );
 };

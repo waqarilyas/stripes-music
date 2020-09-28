@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">musicapp</string>
+
+    <!-- Coding Pixel Account String -->
+    <string name="facebook_app_id">523894798484633</string>
+    <string name="fb_login_protocol_scheme">fb523894798484633</string>
+
 </resources>
