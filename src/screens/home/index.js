@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { View, FlatList, ScrollView } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
 
 import styles from './styles';
@@ -20,29 +21,47 @@ import {
   playIcon,
 } from '../../../Assets/Icons';
 import Button from '../../components/Button';
+import reducer from '../../hooks/useReducer';
 
 const pattern = 'Aa0!';
 const count = 10;
 
+const initialState = {
+  albums: [],
+};
+
 const Home = ({ navigation }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const data = ['1', '2', '3', '4', '5'];
 
   const handleSignOut = () => {
     auth().signOut();
   };
 
+  useEffect(() => {
+    const getAlbums = async () => {
+      const collections = await firestore().collection('albums').get();
+      const documents = collections.docs.map((doc) => {
+        return doc.data();
+      });
+      dispatch({ albums: documents });
+    };
+    getAlbums();
+  }, []);
+
   return (
     <Block>
       <ScrollView>
         <View style={styles.topSection}>
           <TabsMainHeader navigation={navigation} name="Music" />
-          <Button text="Sign Out" onPress={handleSignOut} />
           <FlatList
-            data={data}
+            data={state.albums}
             horizontal
-            keyExtractor={(item) => item}
-            renderItem={() => {
-              return <HomeTopSlider key={randomize(pattern, count)} />;
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => {
+              return (
+                <HomeTopSlider key={randomize(pattern, count)} item={item} />
+              );
             }}
           />
         </View>
@@ -105,6 +124,7 @@ const Home = ({ navigation }) => {
             />
           </View>
           {/* Artists Section Ends here */}
+          <Button text="Sign Out" onPress={handleSignOut} />
         </View>
       </ScrollView>
     </Block>

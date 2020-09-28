@@ -3,14 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "android": "npx react-native run-android",
+    "ios": "npx react-native run-ios",
+    "start": "npx react-native start",
     "test": "jest",
     "lint": "eslint .",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
     "build:project": "npm i && cd ios && pod install && cd ..",
-    "build:pods": "cd ios/ && pod install && cd .."
+    "build:pods": "cd ios/ && pod install && cd ..",
+    "list:android": "adb devices",
+    "list:ios": "instruments -s devices"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.0",

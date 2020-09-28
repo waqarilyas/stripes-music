@@ -6,34 +6,41 @@ import {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    height: hp('27'),
-    width: hp('40'),
+    backgroundColor: '#212121',
+    height: hp('20'),
+    width: hp('34'),
     borderRadius: hp('2'),
     margin: hp('1'),
   },
   image: {
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     justifyContent: 'center',
-    height: hp('27'),
-    width: hp('40'),
-    borderRadius: hp('2'),
+    height: hp('20'),
+    width: hp('34'),
+    borderRadius: hp('1'),
     overflow: 'hidden',
   },
   songName: {
-    fontSize: hp('5'),
+    fontSize: hp('4'),
     color: 'white',
     fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: hp('4'),
   },
   subText: {
-    fontSize: wp('5'),
+    fontSize: wp('4'),
     color: 'white',
-    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: hp('5'),
+    marginTop: hp('2'),
   },
   text: {
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    height: '100%',
+    width: '100%',
   },
 });
 

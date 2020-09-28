@@ -1,19 +1,23 @@
 import React from 'react';
-import { Text, View, ImageBackground } from 'react-native';
+import { Text, View, ImageBackground, ActivityIndicator } from 'react-native';
+import { Image } from 'react-native-elements';
 
 import styles from './styles.js';
 
-const HomeTopSlider = () => {
+const HomeTopSlider = ({ item }) => {
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../../../Assets/Images/songCover1.jpg')}
-        style={styles.image}>
+      <Image
+        source={{ uri: item.imgUrl }}
+        style={styles.image}
+        PlaceholderContent={<ActivityIndicator />}>
         <View style={styles.text}>
-          <Text style={styles.songName}>Again</Text>
-          <Text style={styles.subText}>Aimyon</Text>
+          <Text style={styles.songName}>{item.title}</Text>
+          <Text numberOfLines={1} style={styles.subText}>
+            {item.description}
+          </Text>
         </View>
-      </ImageBackground>
+      </Image>
     </View>
   );
 };
