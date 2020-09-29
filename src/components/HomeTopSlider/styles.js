@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   songName: {
-    fontSize: hp('3'),
+    fontSize: hp('2.5'),
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',

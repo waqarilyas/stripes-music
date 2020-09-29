@@ -16,6 +16,7 @@ const RightComponent = () => {
     </View>
   );
 };
+
 const SectionHeader = ({ name, icon }) => {
   return (
     <Header
@@ -23,7 +24,7 @@ const SectionHeader = ({ name, icon }) => {
       leftComponent={<LeftComponent icon={icon} />}
       centerComponent={{
         text: name,
-        style: { color: '#fff', fontWeight: 'bold', fontSize: wp('5') },
+        style: { color: 'white', fontWeight: 'bold', fontSize: wp('4.5') },
       }}
       rightComponent={<RightComponent />}
       containerStyle={styles.containerStyle}

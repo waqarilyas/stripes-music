@@ -2,13 +2,20 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../../screens/Home';
+import TabsMainHeader from '../../components/TabsMainHeader';
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const HomeStack = ({ navigation }) => {
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Home" component={Home} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          header: () => <TabsMainHeader name="Home" navigation={navigation} />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

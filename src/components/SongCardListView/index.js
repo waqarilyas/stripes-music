@@ -1,26 +1,23 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements';
+import React, { useEffect, useState } from 'react';
+import { ListItem, Image, Avatar } from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
-import { heartIcon } from '../../../Assets/Icons';
 
-const SongCardListView = () => {
+const SongCardListView = ({ title, artist, arts }) => {
   return (
     <ListItem bottomDivider containerStyle={styles.container}>
       <Avatar
         // title={}
-        source={require('../../../Assets/Images/songCover7.jpg')}
+        source={{ uri: arts[0] }}
         style={styles.cardImage}
       />
       <ListItem.Content>
-        <ListItem.Title style={styles.title}>Blink of youth</ListItem.Title>
-        <ListItem.Subtitle style={styles.subTitle}>
-          Ringo Shinna
-        </ListItem.Subtitle>
+        <ListItem.Title style={styles.title}>{title}</ListItem.Title>
+        <ListItem.Subtitle style={styles.subTitle}>{artist}</ListItem.Subtitle>
       </ListItem.Content>
-      <Avatar source={heartIcon} style={styles.likeImage} />
-      <Text style={styles.subTitle}>3.45</Text>
+
+      {/* <Text style={styles.subTitle}>3.45</Text> */}
     </ListItem>
   );
 };
