@@ -4,5 +4,11 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     marginHorizontal: 10,
   },
+  label: {
+    color: 'white',
+    marginTop: 16,
+    textAlign: 'center',
+    fontSize: 12,
+  },
 });
 export default styles;

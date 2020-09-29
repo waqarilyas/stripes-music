@@ -32,7 +32,7 @@ const MainDrawer = () => {
 
 const styles = StyleSheet.create({
   drawerStyle: {
-    backgroundColor: '#c6cbef',
+    backgroundColor: 'black',
     width: 240,
   },
 });

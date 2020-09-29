@@ -1,10 +1,7 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import { Header } from 'react-native-elements';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import styles from './styles';
 
@@ -19,6 +16,7 @@ const RightComponent = () => {
     </View>
   );
 };
+
 const SectionHeader = ({ name, icon }) => {
   return (
     <Header
@@ -26,17 +24,10 @@ const SectionHeader = ({ name, icon }) => {
       leftComponent={<LeftComponent icon={icon} />}
       centerComponent={{
         text: name,
-        style: { color: '#fff', fontWeight: 'bold', fontSize: wp('5') },
+        style: { color: 'white', fontWeight: 'bold', fontSize: wp('4.5') },
       }}
       rightComponent={<RightComponent />}
-      containerStyle={{
-        backgroundColor: 'black',
-        justifyContent: 'space-around',
-        marginBottom: hp('1'),
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      }}
+      containerStyle={styles.containerStyle}
     />
   );
 };

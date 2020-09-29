@@ -391,24 +391,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				59622105B09C4902ABE945C1 /* AntDesign.ttf in Resources */,
-				908EE1CF3BB54671A736409F /* Entypo.ttf in Resources */,
-				697DED1A9F04409E835355EA /* EvilIcons.ttf in Resources */,
-				F33FCA21A900410DBFBD01A0 /* Feather.ttf in Resources */,
-				D8F503F86E24485DA7738DE9 /* FontAwesome.ttf in Resources */,
-				9B9ECA9EBC3B432DB566992D /* FontAwesome5_Brands.ttf in Resources */,
-				82743D802BF2440E8F07793F /* FontAwesome5_Regular.ttf in Resources */,
-				BC57337F2D6C4CC5A067DDFB /* FontAwesome5_Solid.ttf in Resources */,
-				44793BEE70144D6A8C21A092 /* Fontisto.ttf in Resources */,
-				D3016AC4B1F04366B063ABBD /* Foundation.ttf in Resources */,
-				C53747F22E4D4B4AB3977354 /* Ionicons.ttf in Resources */,
-				B4610FBF79404D76B4400D49 /* MaterialCommunityIcons.ttf in Resources */,
-				19A06E5B4DD448CFB2C6B663 /* MaterialIcons.ttf in Resources */,
-				E2F195D1CFA341E4BEF89B76 /* Octicons.ttf in Resources */,
-				8BA869273FE647C6914A63B1 /* SimpleLineIcons.ttf in Resources */,
-				31B9D246E22E4F5CA8062F29 /* Zocial.ttf in Resources */,
 				CED3919D251DF5DD008E6E8F /* GoogleService-Info.plist in Resources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,11 +1,13 @@
 import { StyleSheet } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
-  topSection: {
-    // height: '35%',
+  bannerLoading: {
+    color: 'white',
+    height: hp('20'),
   },
-  forYouContainer: {
-    // height: '35%',
+  loading: {
+    height: hp('22'),
   },
 });
 

@@ -3,7 +3,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import ForYouSongs from '../../../screens/ForYouSongs';
 import ForYouPlaylist from '../../../screens/ForYouPlaylist';
-import styles from '../../../components/SongCard/styles';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -11,18 +11,19 @@ function ForYouTabs() {
   return (
     <Tab.Navigator
       swipeEnabled={false}
-      style={styles.tabContainer}
       tabBarOptions={{
         activeTintColor: 'white',
-        inactiveTintColor: '#616161',
+        inactiveTintColor: 'gray',
         labelStyle: {
-          fontSize: 15,
+          fontSize: 14,
         },
         indicatorStyle: {
           backgroundColor: 'white',
+          height: 1,
         },
         style: {
           backgroundColor: 'black',
+          marginBottom: hp('2'),
         },
       }}>
       <Tab.Screen name="Songs" component={ForYouSongs} />

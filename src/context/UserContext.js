@@ -1,24 +1,29 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 
 import auth from '@react-native-firebase/auth';
+import reducer from '../hooks/useReducer';
+
+const initialState = { user: null };
 
 const UserContext = createContext();
 
 const UserProvider = (props) => {
-  const [user, setUser] = useState(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const onAuthStateChanged = (result) => {
+    dispatch({ user: result });
+  };
 
   useEffect(() => {
-    auth().onAuthStateChanged((currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
-    }, []);
-  });
+    const authSubscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
+    return authSubscriber;
+  }, []);
 
   return (
-    <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={state.user}>
+      {props.children}
+    </UserContext.Provider>
   );
 };
 
