@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { View, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
 
 import styles from './styles';
-import TabsMainHeader from '../../components/TabsMainHeader';
 import Block from '../../components/Block';
 import HomeTopSlider from '../../components/HomeTopSlider';
 import SectionHeader from '../../components/SectionHeader';
@@ -14,6 +12,7 @@ import ForYouTabs from '../../navigation/tabs/ForYouTabs';
 import SongCardListView from '../../components/SongCardListView';
 import ArtistsImage from '../../components/ArtistsImage';
 import BestPlaylistsCard from '../../components/BestPlaylistsCard';
+
 import {
   musicIcon,
   iconsPlaylist,
@@ -125,9 +124,13 @@ const Home = ({ navigation }) => {
           )}
 
           {/* Most Played Section Ends here */}
-
           <View style={styles.forYouContainer}>
-            <SectionHeader name="For You" icon={musicIcon} />
+            <SectionHeader
+              name="For You"
+              icon={musicIcon}
+              navigateTo="ForYouSeeAll"
+              navigation={navigation}
+            />
             <ForYouTabs />
           </View>
 

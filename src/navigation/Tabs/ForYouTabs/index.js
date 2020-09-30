@@ -5,11 +5,11 @@ import ForYouSongs from '../../../screens/ForYouSongs';
 import ForYouPlaylist from '../../../screens/ForYouPlaylist';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const Tab = createMaterialTopTabNavigator();
+const Tabs = createMaterialTopTabNavigator();
 
 function ForYouTabs() {
   return (
-    <Tab.Navigator
+    <Tabs.Navigator
       swipeEnabled={false}
       tabBarOptions={{
         activeTintColor: 'white',
@@ -26,9 +26,9 @@ function ForYouTabs() {
           marginBottom: hp('2'),
         },
       }}>
-      <Tab.Screen name="Songs" component={ForYouSongs} />
-      <Tab.Screen name="Playlist" component={ForYouPlaylist} />
-    </Tab.Navigator>
+      <Tabs.Screen name="Songs" component={ForYouSongs} />
+      <Tabs.Screen name="Playlist" component={ForYouPlaylist} />
+    </Tabs.Navigator>
   );
 }
 
