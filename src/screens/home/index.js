@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { View, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
 
 import styles from './styles';
-import TabsMainHeader from '../../components/TabsMainHeader';
 import Block from '../../components/Block';
 import HomeTopSlider from '../../components/HomeTopSlider';
 import SectionHeader from '../../components/SectionHeader';

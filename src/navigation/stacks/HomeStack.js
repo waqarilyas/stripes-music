@@ -6,16 +6,13 @@ import TabsMainHeader from '../../components/TabsMainHeader';
 
 const Stack = createStackNavigator();
 
-const HomeStack = ({ navigation }) => {
+const HomeStack = ({ navigation, route: { name } }) => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{
-          header: () => <TabsMainHeader name="Home" navigation={navigation} />,
-        }}
-      />
+    <Stack.Navigator
+      screenOptions={{
+        header: () => <TabsMainHeader navigation={navigation} name={name} />,
+      }}>
+      <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   );
 };

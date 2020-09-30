@@ -30,7 +30,7 @@ const App = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <NavigationContainer>
         {state.user === null ? (
           <AuthStack />

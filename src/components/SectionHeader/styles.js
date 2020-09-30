@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
   },
   leftIcon: {
     resizeMode: 'contain',
-    height: hp('5'),
-    width: hp('5'),
+    height: hp('3'),
+    width: hp('3'),
   },
 });
 
