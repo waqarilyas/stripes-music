@@ -9,11 +9,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    height: '100%',
     borderRadius: 20,
   },
   leftText: {
     color: 'white',
+    fontSize: hp('1.5'),
+    fontWeight: 'bold',
   },
   search: {
     resizeMode: 'contain',
@@ -25,6 +27,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container: {
+    backgroundColor: 'black',
+    justifyContent: 'space-around',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+    marginTop: 10,
+    marginHorizontal: hp('1'),
+  },
+  avatar: {
+    marginRight: hp('1'),
   },
 });
 
