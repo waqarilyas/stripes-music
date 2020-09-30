@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useReducer, useEffect } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
+import { Divider } from 'react-native-elements';
 import randomize from 'randomatic';
 
 import styles from './styles';
 import ChatCard from '../../components/ChatCard';
 import ChatScreenHeader from '../../components/ChatScreenHeader';
+import reducer from '../../hooks/useReducer';
+import { getCollection } from '../../utils/Firebase';
 
 // Data to be used later
 {
@@ -23,26 +26,42 @@ import ChatScreenHeader from '../../components/ChatScreenHeader';
 }
 //Data to be used ends here
 
+const initialState = {
+  users: [],
+};
+
 const Community = ({ navigation }) => {
-  const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    getCollection('users', 100, (collection) =>
+      dispatch({ users: collection }),
+    );
+  }, []);
+
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <ChatScreenHeader navigation={navigation} navigateTo="NewMessage" />
       <Text style={styles.title}>Messages</Text>
 
-      <FlatList
-        data={data}
-        keyExtractor={() => randomize(10)}
-        renderItem={() => {
-          return (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('MessageDetail')}>
-              <ChatCard />
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </ScrollView>
+      {state.users.length ? (
+        <FlatList
+          data={state.users}
+          keyExtractor={() => randomize(10)}
+          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+          renderItem={({ item: { fullName, profilePicture } }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('MessageDetail')}>
+                <ChatCard name={fullName} avatar={profilePicture} />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      ) : (
+        <ActivityIndicator color="white" />
+      )}
+    </View>
   );
 };
 
