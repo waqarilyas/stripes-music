@@ -5,13 +5,14 @@
  */
 import React, { useEffect, useReducer } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
+import { StatusBar, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 import { UserProvider } from './src/context/UserContext';
 import AuthStack from './src/navigation/stacks/AuthenticationStack';
 import MainDrawer from './src/navigation/drawer/MainDrawer';
 import reducer from './src/hooks/useReducer';
+import randomize from 'randomatic';
 
 const initialState = { user: null };
 

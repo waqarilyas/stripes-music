@@ -5,11 +5,11 @@ import ForYouSongs from '../../../screens/ForYouSongs';
 import ForYouPlaylist from '../../../screens/ForYouPlaylist';
 import styles from '../../../components/SongCard/styles';
 
-const Tab = createMaterialTopTabNavigator();
+const Tabs = createMaterialTopTabNavigator();
 
 function ForYouTabs() {
   return (
-    <Tab.Navigator
+    <Tabs.Navigator
       swipeEnabled={false}
       style={styles.tabContainer}
       tabBarOptions={{
@@ -25,9 +25,9 @@ function ForYouTabs() {
           backgroundColor: 'black',
         },
       }}>
-      <Tab.Screen name="Songs" component={ForYouSongs} />
-      <Tab.Screen name="Playlist" component={ForYouPlaylist} />
-    </Tab.Navigator>
+      <Tabs.Screen name="Songs" component={ForYouSongs} />
+      <Tabs.Screen name="Playlist" component={ForYouPlaylist} />
+    </Tabs.Navigator>
   );
 }
 

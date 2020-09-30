@@ -13,6 +13,8 @@ import ForYouTabs from '../../navigation/tabs/ForYouTabs';
 import SongCardListView from '../../components/SongCardListView';
 import ArtistsImage from '../../components/ArtistsImage';
 import BestPlaylistsCard from '../../components/BestPlaylistsCard';
+import NowPlayingTabs from '../../navigation/tabs/NowPlayingTabs';
+
 import {
   musicIcon,
   iconsPlaylist,
@@ -49,7 +51,12 @@ const Home = ({ navigation }) => {
 
         {/* Most Played Section */}
         <View>
-          <SectionHeader name="Most Played" icon={musicIcon} />
+          <SectionHeader
+            name="Most Played"
+            icon={musicIcon}
+            navigateTo="MostPlayedSeeAll"
+            navigation={navigation}
+          />
           <FlatList
             data={data}
             horizontal
@@ -59,15 +66,24 @@ const Home = ({ navigation }) => {
             }}
           />
           {/* Most Played Section Ends here */}
-
           <View style={styles.forYouContainer}>
-            <SectionHeader name="For You" icon={musicIcon} />
+            <SectionHeader
+              name="For You"
+              icon={musicIcon}
+              navigateTo="ForYouSeeAll"
+              navigation={navigation}
+            />
             <ForYouTabs />
           </View>
 
           {/* Recent Played Section */}
           <View>
-            <SectionHeader name="Recent Played" icon={playIcon} />
+            <SectionHeader
+              name="Recent Played"
+              icon={playIcon}
+              navigateTo="ForYouSeeAll"
+              navigation={navigation}
+            />
             <FlatList
               data={data}
               keyExtractor={(item) => item}
@@ -80,7 +96,12 @@ const Home = ({ navigation }) => {
 
           {/* Artists Section */}
           <View>
-            <SectionHeader name="Favourite Artists" icon={artistIcon} />
+            <SectionHeader
+              name="Favourite Artists"
+              icon={artistIcon}
+              navigateTo="ArtistsSeeAll"
+              navigation={navigation}
+            />
             <FlatList
               data={data}
               keyExtractor={(item) => item}
@@ -94,7 +115,12 @@ const Home = ({ navigation }) => {
 
           {/* Artists Section */}
           <View>
-            <SectionHeader name="The Best Playlists" icon={iconsPlaylist} />
+            <SectionHeader
+              name="The Best Playlists"
+              icon={iconsPlaylist}
+              navigateTo="MusicScreenAllPlayLists"
+              navigation={navigation}
+            />
             <FlatList
               data={data}
               keyExtractor={(item) => item}
