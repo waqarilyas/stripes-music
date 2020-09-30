@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import styles from './styles';
+import NewsTabs from '../../navigation/tabs/NewsTabs';
 
 const News = () => {
   return (
-    <View>
-      <Text>Home Screen</Text>
+    <View style={{ flex: 1 }}>
+      <NewsTabs />
     </View>
   );
 };

@@ -12,6 +12,7 @@ import ForYouTabs from '../../navigation/tabs/ForYouTabs';
 import SongCardListView from '../../components/SongCardListView';
 import ArtistsImage from '../../components/ArtistsImage';
 import BestPlaylistsCard from '../../components/BestPlaylistsCard';
+
 import {
   musicIcon,
   iconsPlaylist,
@@ -107,7 +108,11 @@ const Home = ({ navigation }) => {
 
         {/* Most Played Section */}
         <View>
-          <SectionHeader name="Most Played" icon={musicIcon} />
+          <SectionHeader
+            name="Most Played"
+            icon={musicIcon}
+            onPress={() => navigation.navigate('MostPlayedSeeAll')}
+          />
 
           {state.songs.length ? (
             <FlatList
@@ -123,9 +128,13 @@ const Home = ({ navigation }) => {
           )}
 
           {/* Most Played Section Ends here */}
-
           <View style={styles.forYouContainer}>
-            <SectionHeader name="For You" icon={musicIcon} />
+            <SectionHeader
+              name="For You"
+              icon={musicIcon}
+              navigateTo="ForYouSeeAll"
+              navigation={navigation}
+            />
             <ForYouTabs />
           </View>
 

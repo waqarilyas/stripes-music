@@ -22,6 +22,15 @@ const styles = StyleSheet.create({
     height: hp('3'),
     width: hp('3'),
   },
+  seeAll: {
+    color: 'white',
+    fontSize: hp('2'),
+  },
+  background: {
+    padding: 12,
+    backgroundColor: 'rgba(33, 33, 33, 0.5)',
+    borderRadius: hp('1'),
+  },
 });
 
 export default styles;
