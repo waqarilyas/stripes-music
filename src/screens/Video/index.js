@@ -87,33 +87,42 @@ const Video = () => {
         </View>
 
         {/* New Videos */}
-        {state.latestVideos.length ? (
-          <FlatList
-            style={styles.spacing}
-            ListHeaderComponent={
-              <SectionHeader icon={videoIcon} name="New Videos" />
-            }
-            keyExtractor={() => randomize('Aa0!', 10)}
-            data={state.latestVideos}
-            renderItem={({
-              item: { poster, title, artist, likesCount, viewCount, duration },
-            }) => {
-              return (
-                <NewVideos
-                  poster={poster}
-                  title={title}
-                  artist={artist}
-                  likesCount={likesCount}
-                  viewCount={viewCount}
-                  duration={duration}
-                />
-              );
-            }}
-            ListFooterComponent={<></>}
-          />
-        ) : (
-          <ActivityIndicator color="white" />
-        )}
+        <ScrollView horizontal>
+          {state.latestVideos.length ? (
+            <FlatList
+              style={styles.spacing}
+              ListHeaderComponent={
+                <SectionHeader icon={videoIcon} name="New Videos" />
+              }
+              keyExtractor={() => randomize('Aa0!', 10)}
+              data={state.latestVideos}
+              renderItem={({
+                item: {
+                  poster,
+                  title,
+                  artist,
+                  likesCount,
+                  viewCount,
+                  duration,
+                },
+              }) => {
+                return (
+                  <NewVideos
+                    poster={poster}
+                    title={title}
+                    artist={artist}
+                    likesCount={likesCount}
+                    viewCount={viewCount}
+                    duration={duration}
+                  />
+                );
+              }}
+              ListFooterComponent={<></>}
+            />
+          ) : (
+            <ActivityIndicator color="white" />
+          )}
+        </ScrollView>
       </ScrollView>
     </Block>
   );

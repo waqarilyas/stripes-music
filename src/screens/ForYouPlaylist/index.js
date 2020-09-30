@@ -27,6 +27,7 @@ const ForYouPlaylist = () => {
       <View>
         <ScrollView horizontal>
           <FlatList
+            ListHeaderComponent={<></>}
             contentContainerStyle={styles.contentContainerStyle}
             numColumns={Math.ceil(11 / 4)}
             showsVerticalScrollIndicator={false}
@@ -41,6 +42,7 @@ const ForYouPlaylist = () => {
                 />
               );
             }}
+            ListFooterComponent={<></>}
           />
         </ScrollView>
       </View>

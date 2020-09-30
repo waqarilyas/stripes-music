@@ -25,6 +25,7 @@ const ForYouSongs = () => {
     <Block>
       <ScrollView horizontal>
         <FlatList
+          ListHeaderComponent={<></>}
           contentContainerStyle={styles.contentContainerStyle}
           numColumns={Math.ceil(10 / 4)}
           showsVerticalScrollIndicator={false}
@@ -40,6 +41,7 @@ const ForYouSongs = () => {
               />
             );
           }}
+          ListFooterComponent={<></>}
         />
       </ScrollView>
     </Block>
