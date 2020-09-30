@@ -1,10 +1,7 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { Header } from 'react-native-elements';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import styles from './styles';
 

@@ -6,6 +6,9 @@ const styles = StyleSheet.create({
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,
+    elevation: 10,
+    shadowOpacity: 10,
+    // shadowColor: 'white',
   },
 });
 
