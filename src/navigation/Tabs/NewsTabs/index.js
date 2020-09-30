@@ -10,7 +10,6 @@ const Tabs = createMaterialTopTabNavigator();
 function NewsTabs() {
   return (
     <Tabs.Navigator
-      swipeEnabled={false}
       style={styles.tabContainer}
       tabBarOptions={{
         activeTintColor: 'white',
