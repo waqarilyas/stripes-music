@@ -1,5 +1,11 @@
 import React, { useEffect, useReducer } from 'react';
-import { View, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+  SafeAreaView,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import randomize from 'randomatic';
 
@@ -83,131 +89,132 @@ const Home = ({ navigation }) => {
 
   return (
     <Block>
-      <ScrollView>
-        <>
-          {/* Album Slider Section */}
-          {state.banner.length ? (
-            <FlatList
-              data={state.banner}
-              horizontal
-              keyExtractor={() => randomize(pattern, count)}
-              renderItem={({ item: { arts, title, description } }) => {
-                return (
-                  <HomeTopSlider
-                    arts={arts}
-                    title={title}
-                    description={description}
-                  />
-                );
-              }}
-            />
-          ) : (
-            <ActivityIndicator style={styles.bannerLoading} />
-          )}
-        </>
+      {/* Album Slider Section */}
 
-        {/* Most Played Section */}
-        <View>
-          <SectionHeader name="Most Played" icon={musicIcon} />
-
-          {state.songs.length ? (
-            <FlatList
-              data={state.songs}
-              horizontal
-              keyExtractor={() => randomize(pattern, count)}
-              renderItem={({ item: { title, artist, arts } }) => {
-                return <SongCard title={title} artist={artist} arts={arts} />;
-              }}
-            />
-          ) : (
-            <ActivityIndicator style={styles.loading} />
-          )}
-
-          {/* Most Played Section Ends here */}
-          <View style={styles.forYouContainer}>
-            <SectionHeader
-              name="For You"
-              icon={musicIcon}
-              navigateTo="ForYouSeeAll"
-              navigation={navigation}
-            />
-            <ForYouTabs />
-          </View>
-
-          {/* Recent Played Section */}
-          <View>
-            <SectionHeader name="Recent Played" icon={playIcon} />
-            {state.recentlyPlayed.length ? (
-              <FlatList
-                data={state.recentlyPlayed}
-                keyExtractor={() => randomize(pattern, count)}
-                renderItem={({ item: { title, artist, arts } }) => {
-                  return (
-                    <SongCardListView
-                      title={title}
-                      artist={artist}
-                      arts={arts}
-                    />
-                  );
-                }}
+      {state.banner.length ? (
+        <FlatList
+          ListHeaderComponent={<></>}
+          ListFooterComponent={<></>}
+          data={state.banner}
+          horizontal
+          keyExtractor={() => randomize(pattern, count)}
+          renderItem={({ item: { arts, title, description } }) => {
+            return (
+              <HomeTopSlider
+                arts={arts}
+                title={title}
+                description={description}
               />
-            ) : (
-              <ActivityIndicator style={styles.loading} />
-            )}
-          </View>
-          {/* Recent Played Section Ends Here*/}
+            );
+          }}
+        />
+      ) : (
+        <ActivityIndicator style={styles.bannerLoading} />
+      )}
 
-          {/* Artists Section */}
-          <View>
-            <SectionHeader name="Favourite Artists" icon={artistIcon} />
-            {state.artists.length ? (
-              <FlatList
-                data={state.artists}
-                keyExtractor={() => randomize(pattern, count)}
-                horizontal
-                renderItem={({ item: { imgUrl, firstName, lastName } }) => {
-                  return (
-                    <ArtistsImage
-                      imgUrl={imgUrl}
-                      firstName={firstName}
-                      lastName={lastName}
-                    />
-                  );
-                }}
-              />
-            ) : (
-              <ActivityIndicator />
-            )}
-          </View>
-          {/* Artists Section Ends here */}
+      {/* Most Played Section */}
+      <SectionHeader
+        name="Most Played"
+        icon={musicIcon}
+        onPress={() => navigation.navigate('MostPlayedSeeAll')}
+      />
 
-          {/* The Best Playlists Section */}
-          <View>
-            <SectionHeader name="The Best Playlists" icon={iconsPlaylist} />
-            {state.playlists.length ? (
-              <FlatList
-                data={state.playlists}
-                keyExtractor={() => randomize(pattern, count)}
-                horizontal
-                renderItem={({ item: { image, songs, title, viewCount } }) => {
-                  return (
-                    <BestPlaylistsCard
-                      imgUrl={image}
-                      songCount={songs.length}
-                      title={title}
-                      viewCount={viewCount}
-                    />
-                  );
-                }}
-              />
-            ) : (
-              <ActivityIndicator />
-            )}
-          </View>
-          {/* Artists Section Ends here */}
-          <Button text="Sign Out" onPress={handleSignOut} />
-        </View>
+      {state.songs.length ? (
+        <FlatList
+          ListHeaderComponent={<></>}
+          ListFooterComponent={<></>}
+          data={state.songs}
+          horizontal
+          keyExtractor={() => randomize(pattern, count)}
+          renderItem={({ item: { title, artist, arts } }) => {
+            return <SongCard title={title} artist={artist} arts={arts} />;
+          }}
+        />
+      ) : (
+        <ActivityIndicator style={styles.loading} />
+      )}
+
+      {/* Most Played Section Ends here */}
+      <View style={styles.forYouContainer}>
+        <SectionHeader
+          name="For You"
+          icon={musicIcon}
+          navigateTo="ForYouSeeAll"
+          navigation={navigation}
+        />
+        <ForYouTabs />
+      </View>
+
+      {/* Recent Played Section */}
+      <ScrollView horizontal>
+        {state.recentlyPlayed.length ? (
+          <FlatList
+            ListHeaderComponent={
+              <SectionHeader name="Recent Played" icon={playIcon} />
+            }
+            data={state.recentlyPlayed}
+            keyExtractor={() => randomize(pattern, count)}
+            renderItem={({ item: { title, artist, arts } }) => {
+              return (
+                <SongCardListView title={title} artist={artist} arts={arts} />
+              );
+            }}
+          />
+        ) : (
+          <ActivityIndicator style={styles.loading} />
+        )}
       </ScrollView>
+
+      {/* Recent Played Section Ends Here*/}
+
+      {/* Artists Section */}
+      <SectionHeader name="Favourite Artists" icon={artistIcon} />
+      {state.artists.length ? (
+        <FlatList
+          data={state.artists}
+          keyExtractor={() => randomize(pattern, count)}
+          horizontal
+          renderItem={({ item: { imgUrl, firstName, lastName } }) => {
+            return (
+              <ArtistsImage
+                imgUrl={imgUrl}
+                firstName={firstName}
+                lastName={lastName}
+              />
+            );
+          }}
+        />
+      ) : (
+        <ActivityIndicator />
+      )}
+
+      {/* Artists Section Ends here */}
+
+      {/* The Best Playlists Section */}
+
+      <SectionHeader name="The Best Playlists" icon={iconsPlaylist} />
+      {state.playlists.length ? (
+        <FlatList
+          data={state.playlists}
+          keyExtractor={() => randomize(pattern, count)}
+          horizontal
+          renderItem={({ item: { image, songs, title, viewCount } }) => {
+            return (
+              <BestPlaylistsCard
+                imgUrl={image}
+                songCount={songs.length}
+                title={title}
+                viewCount={viewCount}
+              />
+            );
+          }}
+        />
+      ) : (
+        <ActivityIndicator />
+      )}
+
+      {/* Artists Section Ends here */}
+      <Button text="Sign Out" onPress={handleSignOut} />
     </Block>
   );
 };

@@ -23,27 +23,27 @@ const ForYouSongs = () => {
 
   return (
     <Block>
-      <View>
-        <ScrollView horizontal>
-          <FlatList
-            contentContainerStyle={styles.contentContainerStyle}
-            numColumns={Math.ceil(10 / 4)}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={state.songs}
-            renderItem={({ item: { title, arts, artist } }) => {
-              return (
-                <SongCard
-                  key={randomize('Aa0!', 10)}
-                  title={title}
-                  arts={arts}
-                  artist={artist}
-                />
-              );
-            }}
-          />
-        </ScrollView>
-      </View>
+      <ScrollView horizontal>
+        <FlatList
+          ListHeaderComponent={<></>}
+          contentContainerStyle={styles.contentContainerStyle}
+          numColumns={Math.ceil(10 / 4)}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          data={state.songs}
+          renderItem={({ item: { title, arts, artist } }) => {
+            return (
+              <SongCard
+                key={randomize('Aa0!', 10)}
+                title={title}
+                arts={arts}
+                artist={artist}
+              />
+            );
+          }}
+          ListFooterComponent={<></>}
+        />
+      </ScrollView>
     </Block>
   );
 };

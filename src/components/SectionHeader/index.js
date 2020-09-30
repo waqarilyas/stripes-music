@@ -1,10 +1,7 @@
 import React from 'react';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Header } from 'react-native-elements';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import styles from './styles';
 
@@ -12,16 +9,7 @@ const LeftComponent = ({ icon }) => {
   return <Image source={icon} style={styles.leftIcon} />;
 };
 
-const RightComponent = ({ navigateTo, navigation }) => {
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
-      <View style={styles.right}>
-        <Text style={styles.rightText}>SEE ALL</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-const SectionHeader = ({ name, icon, navigation, navigateTo }) => {
+const SectionHeader = ({ name, icon, onPress }) => {
   return (
     <Header
       placement="left"
@@ -31,16 +19,13 @@ const SectionHeader = ({ name, icon, navigation, navigateTo }) => {
         style: { color: 'white', fontWeight: 'bold', fontSize: wp('4.5') },
       }}
       rightComponent={
-        <RightComponent navigateTo={navigateTo} navigation={navigation} />
+        <View style={styles.background}>
+          <Text style={styles.seeAll} onPress={onPress}>
+            SEE ALL
+          </Text>
+        </View>
       }
-      containerStyle={{
-        backgroundColor: 'black',
-        justifyContent: 'space-around',
-        marginBottom: hp('1'),
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      }}
+      containerStyle={styles.containerStyle}
     />
   );
 };

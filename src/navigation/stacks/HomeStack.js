@@ -16,12 +16,16 @@ import MusicScreenAllPlayLists from '../../screens/MusicScreenAllPlaylists';
 import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
 import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
+import TabsMainHeader from '../../components/TabsMainHeader';
 
 const Stack = createStackNavigator();
 
-const HomeStack = ({ navigation }) => {
+const HomeStack = ({ navigation, route: { name } }) => {
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator
+      screenOptions={{
+        header: () => <TabsMainHeader navigation={navigation} name={name} />,
+      }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="ForYouSeeAll" component={ForYouSeeAll} />
       <Stack.Screen name="ArtistsSeeAll" component={ArtistsSeeAll} />
