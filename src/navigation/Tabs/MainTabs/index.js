@@ -30,19 +30,19 @@ const MainTabs = () => {
       barStyle={{ backgroundColor: 'black' }}
       initialRouteName="Home"
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused }) => {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused ? tab1Grey : tab1White;
+            iconName = focused ? tab1White : tab1Grey;
           } else if (route.name === 'Video') {
-            iconName = focused ? tab2Grey : tab2White;
+            iconName = focused ? tab2White : tab2Grey;
           } else if (route.name === 'Playlist') {
-            iconName = focused ? tab3Grey : tab3White;
+            iconName = focused ? tab3White : tab3Grey;
           } else if (route.name === 'Community') {
-            iconName = focused ? tab4Grey : tab4White;
+            iconName = focused ? tab4White : tab4Grey;
           } else if (route.name === 'News') {
-            iconName = focused ? tab5Grey : tab5White;
+            iconName = focused ? tab5White : tab5Grey;
           }
 
           return <Image source={iconName} />;

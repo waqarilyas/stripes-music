@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../../screens/Home';
 import ForYouSeeAll from '../../screens/ForYouSeeAll';
 import MostPlayedSeeAll from '../../screens/MostPlayedSeeAll';
-import NoInternet from '../../screens/NoInternet';
 import ArtistNews from '../../screens/ArtistNews';
 import ArtistPopular from '../../screens/ArtistPopular';
 import ArtistReleases from '../../screens/ArtistReleases';
@@ -20,7 +19,7 @@ import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const HomeStack = ({ navigation }) => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Home" component={Home} />

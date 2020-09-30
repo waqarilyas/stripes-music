@@ -1,10 +1,7 @@
 import React from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { Header } from 'react-native-elements';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import styles from './styles';
 
@@ -28,7 +25,7 @@ const SectionHeader = ({ name, icon, navigation, navigateTo }) => {
       leftComponent={<LeftComponent icon={icon} />}
       centerComponent={{
         text: name,
-        style: { color: '#fff', fontWeight: 'bold', fontSize: wp('5') },
+        style: { color: 'white', fontWeight: 'bold', fontSize: wp('4.5') },
       }}
       rightComponent={
         <RightComponent navigateTo={navigateTo} navigation={navigation} />

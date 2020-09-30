@@ -1,19 +1,18 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 
 import styles from './styles';
 
-const ArtistsImage = () => {
+const ArtistsImage = ({ imgUrl, firstName, lastName }) => {
   return (
     <View style={styles.container}>
-      <Avatar
-        rounded
-        source={require('../../../Assets/Images/songCover4.jpg')}
-        size="large"
-      />
+      <Avatar rounded source={{ uri: imgUrl }} size="large" />
+      <Text numberOfLines={1} style={styles.label}>
+        {firstName} {lastName}
+      </Text>
 
-      <Badge
+      {/* <Badge
         status="error"
         containerStyle={{
           position: 'absolute',
@@ -24,7 +23,7 @@ const ArtistsImage = () => {
         }}
         badgeStyle={{ backgroundColor: '#F5138E' }}
         value="9"
-      />
+      /> */}
     </View>
   );
 };
