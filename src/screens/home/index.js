@@ -108,7 +108,11 @@ const Home = ({ navigation }) => {
 
         {/* Most Played Section */}
         <View>
-          <SectionHeader name="Most Played" icon={musicIcon} />
+          <SectionHeader
+            name="Most Played"
+            icon={musicIcon}
+            onPress={() => navigation.navigate('MostPlayedSeeAll')}
+          />
 
           {state.songs.length ? (
             <FlatList

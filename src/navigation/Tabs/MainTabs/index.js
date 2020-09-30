@@ -35,7 +35,7 @@ const MainTabs = () => {
 
           if (route.name === 'Home') {
             iconName = focused ? tab1White : tab1Grey;
-          } else if (route.name === 'Video') {
+          } else if (route.name === 'Videos') {
             iconName = focused ? tab2White : tab2Grey;
           } else if (route.name === 'Playlist') {
             iconName = focused ? tab3White : tab3Grey;
@@ -49,7 +49,7 @@ const MainTabs = () => {
         },
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Video" component={VideoStack} />
+      <Tab.Screen name="Videos" component={VideoStack} />
       <Tab.Screen name="Playlist" component={PlaylistStack} />
       <Tab.Screen name="Community" component={CommunityStack} />
       <Tab.Screen name="News" component={NewsStack} />
