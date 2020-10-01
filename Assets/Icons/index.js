@@ -46,3 +46,15 @@ export const newsComment = require('./icons-news-34x34-white.png');
 export const newsLike = require('./icons-like-45x45-white.png');
 export const newsShare = require('./icons-news-34x34-white.png');
 export const searchIcon = require('./search-icon.png');
+
+// Comment icons
+export const commentIcon = require('./icon-comment-3x.png');
+export const commentPressedIcon = require('./icon-comment-pressed-3x.png');
+
+// Like icons
+export const likeIcon = require('./icon-like-3x.png');
+export const likePressedIcon = require('./icon-like-pressed-3x.png');
+
+// Share icons
+export const shareIcon = require('./icon-share-3x.png');
+export const sharePressedIcon = require('./icon-share-pressed-3x.png');

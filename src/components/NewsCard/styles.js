@@ -1,56 +1,71 @@
 import { StyleSheet } from 'react-native';
 
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
 const styles = StyleSheet.create({
-  container: {
-    padding: hp('0.8'),
+  inner: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  textInner: {
+    flexDirection: 'column',
+    marginLeft: 18,
+    flexShrink: 1,
   },
   image: {
     resizeMode: 'contain',
-    height: hp('12'),
-    width: hp('18'),
+    height: 85,
+    width: 130,
     overflow: 'hidden',
-    borderRadius: hp('1'),
+    borderRadius: 16,
   },
   title: {
     color: 'white',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    fontSize: 14,
+    letterSpacing: 0.2,
+    lineHeight: 23,
+  },
+  date: {
+    color: 'gray',
+    marginTop: 12,
     fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontSize: 12,
   },
-  cardTop: {
-    flexDirection: 'row',
-    backgroundColor: 'red',
+  description: {
+    color: 'gray',
+    lineHeight: 20,
+    marginVertical: 16,
   },
-  text: {
-    color: '#A09C9F',
-    marginHorizontal: hp('2'),
+  container: {
+    paddingHorizontal: 8,
+    paddingVertical: 20,
+    width: '100%',
   },
-  subtitle: {
-    color: '#A09C9F',
-  },
-  cardBottom: {
+  actions: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: hp('2'),
     justifyContent: 'space-between',
   },
   bottomSectionNumber: {
-    color: 'white',
+    color: 'gray',
     justifyContent: 'center',
+    fontSize: 10,
+    fontWeight: 'bold',
   },
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: hp('2.5'),
+    marginRight: 12,
   },
   readButton: {
-    borderRadius: 5,
     padding: 2,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   readText: {
     color: 'white',
-    backgroundColor: 'rgba(38,38,38,0.5)',
     paddingVertical: 8,
     borderRadius: 5,
     paddingHorizontal: 16,
@@ -58,19 +73,17 @@ const styles = StyleSheet.create({
   },
   icons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   divider: {
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    marginHorizontal: hp('2'),
-    marginTop: hp('2'),
-    marginBottom: hp('0.5'),
+    backgroundColor: 'rgba(255,255,255,0.4)',
+    marginBottom: 12,
   },
   icon: {
     resizeMode: 'contain',
-    height: hp('3'),
-    width: hp('3'),
-    marginRight: hp('1'),
+    height: 20,
+    width: 20,
+    marginRight: 6,
+    tintColor: 'gray',
   },
 });
 
