@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 
-import styles from './styles';
 import NewsTabs from '../../navigation/tabs/NewsTabs';
+import styles from './styles';
 
 const News = () => {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <NewsTabs />
     </View>
   );

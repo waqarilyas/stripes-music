@@ -1,7 +1,6 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import styles from './styles';
 import NewsLatest from '../../../screens/NewsLatest';
 import NewsTrending from '../../../screens/NewsTrending';
 
@@ -10,18 +9,20 @@ const Tabs = createMaterialTopTabNavigator();
 function NewsTabs() {
   return (
     <Tabs.Navigator
-      style={styles.tabContainer}
       tabBarOptions={{
         activeTintColor: 'white',
-        inactiveTintColor: '#616161',
+        inactiveTintColor: 'gray',
         labelStyle: {
-          fontSize: 15,
+          fontSize: 16,
+          textTransform: 'capitalize',
+          fontWeight: 'bold',
         },
         indicatorStyle: {
           backgroundColor: 'white',
         },
         style: {
           backgroundColor: 'black',
+          paddingTop: 12,
         },
       }}>
       <Tabs.Screen name="Latest" component={NewsLatest} />

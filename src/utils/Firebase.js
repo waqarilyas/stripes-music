@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 
-const getCollection = (collection, limit, callback) => {
+export const getCollection = (collection, limit, callback) => {
   let data = [];
   firestore()
     .collection(collection)
@@ -16,7 +16,28 @@ const getCollection = (collection, limit, callback) => {
     });
 };
 
-const getOrderedCollection = (collection, param, order, limit, callback) => {
+export const getCollections = (collection, callback) => {
+  let data = [];
+  firestore()
+    .collection(collection)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
+    });
+};
+
+export const getOrderedCollection = (
+  collection,
+  param,
+  order,
+  limit,
+  callback,
+) => {
   let data = [];
   firestore()
     .collection(collection)
@@ -31,7 +52,21 @@ const getOrderedCollection = (collection, param, order, limit, callback) => {
     });
 };
 
-const getQueriedCollection = (
+export const getOrderedCollections = (collection, param, order, callback) => {
+  let data = [];
+  firestore()
+    .collection(collection)
+    .orderBy(param, order)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        data.push(document.data());
+      });
+      callback(data);
+    });
+};
+
+export const getQueriedCollection = (
   collection,
   field,
   query,
@@ -55,7 +90,7 @@ const getQueriedCollection = (
     });
 };
 
-const getUserProfile = (uid, callback) => {
+export const getUserProfile = (uid, callback) => {
   firestore()
     .collection('users')
     .doc(uid)
@@ -67,7 +102,7 @@ const getUserProfile = (uid, callback) => {
     });
 };
 
-const getDocument = (collection, id, callback) => {
+export const getDocument = (collection, id, callback) => {
   firestore()
     .collection(collection)
     .doc(id)
@@ -77,12 +112,4 @@ const getDocument = (collection, id, callback) => {
         callback(document);
       }
     });
-};
-
-export {
-  getCollection,
-  getOrderedCollection,
-  getUserProfile,
-  getDocument,
-  getQueriedCollection,
 };

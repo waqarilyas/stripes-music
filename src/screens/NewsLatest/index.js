@@ -1,28 +1,60 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import React, { useEffect, useReducer } from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
+import randomize from 'randomatic';
+import dayjs from 'dayjs';
 
-import styles from './styles';
 import NewsCard from '../../components/NewsCard';
-import Block from '../../components/Block';
+import styles from './styles';
+import { getOrderedCollections } from '../../utils/Firebase';
+import reducer from '../../hooks/useReducer';
+
+const initialState = {
+  news: [],
+};
 
 const NewsLatest = ({ navigation }) => {
-  const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    getOrderedCollections('news', 'createdAt', 'desc', (collection) =>
+      dispatch({ news: collection }),
+    );
+  }, []);
+
   return (
-    <Block>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return <NewsCard />;
-        }}
-      />
-    </Block>
+    <View style={styles.container}>
+      {state.news.length > 0 && (
+        <FlatList
+          ListEmptyComponent={<ActivityIndicator />}
+          data={state.news}
+          keyExtractor={() => randomize('Aa0!', 10)}
+          renderItem={({
+            item: {
+              title,
+              imgUrl,
+              createdAt,
+              description,
+              likeCount,
+              shareCount,
+              commentCount,
+            },
+          }) => {
+            const date = dayjs(createdAt.seconds).format('DD MMMM, YYYY');
+            return (
+              <NewsCard
+                title={title}
+                image={imgUrl}
+                date={date}
+                description={description}
+                likeCount={likeCount}
+                shareCount={shareCount}
+                commentCount={commentCount}
+              />
+            );
+          }}
+        />
+      )}
+    </View>
   );
 };
 

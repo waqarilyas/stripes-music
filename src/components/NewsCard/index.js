@@ -1,58 +1,55 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
-import { ListItem, Avatar, Divider } from 'react-native-elements';
+import { View } from 'react-native';
+import { Image, Text, Divider } from 'react-native-elements';
 
 import styles from './styles';
-import {
-  newsComment,
-  newsLike,
-  newsShare,
-  sendIcon,
-} from '../../../Assets/Icons';
+import { likeIcon, commentIcon, shareIcon } from '../../../Assets/Icons';
 
-const NewsCard = ({ title, image }) => {
-  const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+const NewsCard = ({
+  title,
+  image,
+  date,
+  description,
+  likeCount,
+  shareCount,
+  commentCount,
+}) => {
   return (
     <View style={styles.container}>
-      <ListItem containerStyle={{ backgroundColor: 'black' }}>
-        <Avatar
-          source={require('../../../Assets/Images/songCover4.jpg')}
-          style={styles.image}
-        />
-        <ListItem.Content>
-          <ListItem.Title
-            style={styles.title}
-            containerStyle={{ backgroundColor: 'red' }}>
-            A Long Title Goes Here
-          </ListItem.Title>
-          <ListItem.Subtitle style={styles.subtitle}>
-            12 November, 2017
-          </ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
+      <View style={styles.inner}>
+        <Image style={styles.image} source={{ uri: image }} />
+        <View style={styles.textInner}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.date}>{date}</Text>
+        </View>
+      </View>
 
-      <Text style={styles.text}>
-        ListItems are used to display rows of information, such as a contact
-        list, playlist, or menu. They are very customizeable and can contain
-        switches, avatars, badges, icons, and more.
+      <Text numberOfLines={4} style={styles.description}>
+        {description}
       </Text>
 
       <Divider style={styles.divider} />
-      <View style={styles.cardBottom}>
+      <View style={styles.actions}>
         <View style={styles.icons}>
           <View style={styles.iconContainer}>
-            <Image source={newsLike} style={styles.icon} />
-            <Text style={styles.bottomSectionNumber}>113</Text>
+            <Image source={likeIcon} style={styles.icon} />
+            <Text numberOfLines={1} style={styles.bottomSectionNumber}>
+              {likeCount}
+            </Text>
           </View>
 
           <View style={styles.iconContainer}>
-            <Image source={newsComment} style={styles.icon} />
-            <Text style={styles.bottomSectionNumber}>113</Text>
+            <Image source={commentIcon} style={styles.icon} />
+            <Text numberOfLines={1} style={styles.bottomSectionNumber}>
+              {commentCount}
+            </Text>
           </View>
 
           <View style={styles.iconContainer}>
-            <Image source={sendIcon} style={styles.icon} />
-            <Text style={styles.bottomSectionNumber}>113</Text>
+            <Image source={shareIcon} style={styles.icon} />
+            <Text numberOfLines={1} style={styles.bottomSectionNumber}>
+              {shareCount}
+            </Text>
           </View>
         </View>
         <View style={styles.readButton}>

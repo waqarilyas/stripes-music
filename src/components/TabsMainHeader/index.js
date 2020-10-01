@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native';
 import { Header } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
