@@ -1,21 +1,23 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList } from 'react-native';
 
 import styles from './styles';
+import NewsCard from '../../components/NewsCard';
+import Block from '../../components/Block';
 
 const NewsTrending = ({ navigation }) => {
+  const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
   return (
-    <View
-      style={{
-        backgroundColor: 'black',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-      }}>
-      <TouchableOpacity onPress={() => navigation.navigate('NewsDetails')}>
-        <Text style={{ color: 'white' }}>Go to NewsDetails</Text>
-      </TouchableOpacity>
-    </View>
+    <Block>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item}
+        renderItem={() => {
+          return <NewsCard />;
+        }}
+      />
+    </Block>
   );
 };
 

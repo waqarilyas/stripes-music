@@ -24,8 +24,8 @@ function NewsTabs() {
           backgroundColor: 'black',
         },
       }}>
-      <Tabs.Screen name="NewsLatest" component={NewsLatest} />
-      <Tabs.Screen name="NewsTrending" component={NewsTrending} />
+      <Tabs.Screen name="Latest" component={NewsLatest} />
+      <Tabs.Screen name="Trending" component={NewsTrending} />
     </Tabs.Navigator>
   );
 }
