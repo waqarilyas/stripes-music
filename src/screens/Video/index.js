@@ -44,85 +44,76 @@ const Video = () => {
 
   return (
     <Block>
+      {/* Video Slider */}
+      {state.videos.length ? (
+        <FlatList
+          data={state.videos}
+          horizontal
+          keyExtractor={() => randomize('Aa0!', 10)}
+          renderItem={({ item: { poster, title, artist } }) => {
+            return (
+              <VideoSlider poster={poster} title={title} artist={artist} />
+            );
+          }}
+        />
+      ) : (
+        <ActivityIndicator color="white" />
+      )}
+
+      {/* Popular Now Videos */}
+      <View style={styles.spacing}>
+        <SectionHeader icon={starIcon} name="Popular Now" />
+        {state.mostPopular.length ? (
+          <ScrollView horizontal>
+            <PopularVideoHeader
+              poster={state.mostPopular[0].poster}
+              title={state.mostPopular[0].title}
+            />
+            <FlatList
+              numColumns={Math.ceil(data.length / 2)}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={state.mostPopular}
+              keyExtractor={() => randomize('Aa0!', 10)}
+              renderItem={({ item: { poster } }) => {
+                return <PopularVideos poster={poster} />;
+              }}
+            />
+          </ScrollView>
+        ) : (
+          <ActivityIndicator color="white" />
+        )}
+      </View>
+
+      {/* New Videos */}
       <ScrollView>
-        {/* Video Slider */}
-        {state.videos.length ? (
+        {state.latestVideos.length ? (
           <FlatList
-            data={state.videos}
-            horizontal
+            style={styles.spacing}
+            ListHeaderComponent={
+              <SectionHeader icon={videoIcon} name="New Videos" />
+            }
             keyExtractor={() => randomize('Aa0!', 10)}
-            renderItem={({ item: { poster, title, artist } }) => {
+            data={state.latestVideos}
+            renderItem={({
+              item: { poster, title, artist, likesCount, viewCount, duration },
+            }) => {
               return (
-                <VideoSlider poster={poster} title={title} artist={artist} />
+                <NewVideos
+                  poster={poster}
+                  title={title}
+                  artist={artist}
+                  likesCount={likesCount}
+                  viewCount={viewCount}
+                  duration={duration}
+                />
               );
             }}
+            ListFooterComponent={<></>}
           />
         ) : (
           <ActivityIndicator color="white" />
         )}
-
-        {/* Popular Now Videos */}
-        <View style={styles.spacing}>
-          <SectionHeader icon={starIcon} name="Popular Now" />
-          {state.mostPopular.length ? (
-            <ScrollView horizontal>
-              <PopularVideoHeader
-                poster={state.mostPopular[0].poster}
-                title={state.mostPopular[0].title}
-              />
-              <FlatList
-                numColumns={Math.ceil(data.length / 2)}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                data={state.mostPopular}
-                keyExtractor={() => randomize('Aa0!', 10)}
-                renderItem={({ item: { poster } }) => {
-                  return <PopularVideos poster={poster} />;
-                }}
-              />
-            </ScrollView>
-          ) : (
-            <ActivityIndicator color="white" />
-          )}
-        </View>
-
-        {/* New Videos */}
-        <ScrollView horizontal>
-          {state.latestVideos.length ? (
-            <FlatList
-              style={styles.spacing}
-              ListHeaderComponent={
-                <SectionHeader icon={videoIcon} name="New Videos" />
-              }
-              keyExtractor={() => randomize('Aa0!', 10)}
-              data={state.latestVideos}
-              renderItem={({
-                item: {
-                  poster,
-                  title,
-                  artist,
-                  likesCount,
-                  viewCount,
-                  duration,
-                },
-              }) => {
-                return (
-                  <NewVideos
-                    poster={poster}
-                    title={title}
-                    artist={artist}
-                    likesCount={likesCount}
-                    viewCount={viewCount}
-                    duration={duration}
-                  />
-                );
-              }}
-              ListFooterComponent={<></>}
-            />
-          ) : (
-            <ActivityIndicator color="white" />
-          )}
-        </ScrollView>
       </ScrollView>
     </Block>
   );
