@@ -45,3 +45,4 @@ export const menudots = require('./menuDots.png');
 export const newsComment = require('./icons-news-34x34-white.png');
 export const newsLike = require('./icons-like-45x45-white.png');
 export const newsShare = require('./icons-news-34x34-white.png');
+export const searchIcon = require('./search-icon.png');
