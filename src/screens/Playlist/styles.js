@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   followersView: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginVertical: hp('3'),
   },
   followers: {
