@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -122,6 +122,49 @@ const HomeStack = ({ navigation, route: { name } }) => {
       <Stack.Screen
         name="FavouriteArtistSeeAll"
         component={FavouriteArtistSeeAll}
+        options={{
+          title: 'Favourite Artists',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 22,
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={backIcon}
+                style={{
+                  resizeMode: 'contain',
+                  height: 20,
+                  widthwidth: 20,
+                  marginLeft: 10,
+                }}
+              />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Image
+                source={searchIcon}
+                style={{
+                  resizeMode: 'contain',
+                  height: 20,
+                  widthwidth: 20,
+                  marginHorizontal: 5,
+                }}
+              />
+            </View>
+          ),
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+        }}
       />
       <Stack.Screen
         name="MusicPlayerFullscreen"
