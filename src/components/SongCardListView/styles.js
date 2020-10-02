@@ -16,9 +16,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: hp('1'),
   },
-  subTitle: {
-    color: '#808080',
+  subtitle: {
+    color: 'gray',
     marginTop: hp('0.7'),
+  },
+  duration: {
+    color: 'gray',
+    fontWeight: 'bold',
   },
   likeImage: {
     resizeMode: 'contain',

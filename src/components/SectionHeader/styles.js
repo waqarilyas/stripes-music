@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(33, 33, 33, 0.5)',
     borderRadius: hp('1'),
   },
+  centerComponent: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 22,
+  },
 });
 
 export default styles;

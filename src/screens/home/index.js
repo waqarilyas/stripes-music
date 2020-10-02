@@ -2,6 +2,7 @@ import auth from '@react-native-firebase/auth';
 import randomize from 'randomatic';
 import React, { useEffect, useReducer } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, View } from 'react-native';
+import { Divider } from 'react-native-elements';
 import {
   artistIcon,
   iconsPlaylist,
@@ -141,9 +142,15 @@ const Home = ({ navigation }) => {
             }
             data={state.recentlyPlayed}
             keyExtractor={() => randomize(pattern, count)}
-            renderItem={({ item: { title, artist, arts } }) => {
+            ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+            renderItem={({ item: { title, artist, arts, duration } }) => {
               return (
-                <SongCardListView title={title} artist={artist} arts={arts} />
+                <SongCardListView
+                  title={title}
+                  artist={artist}
+                  arts={arts}
+                  duration={duration}
+                />
               );
             }}
           />

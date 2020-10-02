@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { ListItem, Image, Avatar } from 'react-native-elements';
-import auth from '@react-native-firebase/auth';
+import React from 'react';
+import { Avatar, ListItem, Text } from 'react-native-elements';
 
 import styles from './styles';
 
-const SongCardListView = ({ title, artist, arts }) => {
+const SongCardListView = ({ title, artist, arts, duration }) => {
   return (
-    <ListItem bottomDivider containerStyle={styles.container}>
+    <ListItem containerStyle={styles.container}>
       <Avatar
         // title={}
         source={{ uri: arts[0] }}
         style={styles.cardImage}
       />
       <ListItem.Content>
-        <ListItem.Title style={styles.title}>{title}</ListItem.Title>
-        <ListItem.Subtitle style={styles.subTitle}>{artist}</ListItem.Subtitle>
+        <ListItem.Title numberOfLines={1} style={styles.title}>
+          {title}
+        </ListItem.Title>
+        <ListItem.Subtitle style={styles.subtitle}>{artist}</ListItem.Subtitle>
       </ListItem.Content>
 
-      {/* <Text style={styles.subTitle}>3.45</Text> */}
+      <Text style={styles.duration}>{duration}</Text>
     </ListItem>
   );
 };

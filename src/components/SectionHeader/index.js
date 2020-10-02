@@ -16,7 +16,7 @@ const SectionHeader = ({ name, icon, onPress, isRequired = true }) => {
       leftComponent={<LeftComponent icon={icon} />}
       centerComponent={{
         text: name,
-        style: { color: 'white', fontWeight: 'bold', fontSize: wp('4.5') },
+        style: styles.centerComponent,
       }}
       rightComponent={
         isRequired ? (
