@@ -3,7 +3,7 @@ import { View, FlatList, ScrollView } from 'react-native';
 
 import styles from './styles';
 import Block from '../../components/Block';
-import SongCard from '../../components/SongCard';
+import SeeAll from '../../components/SeeAll';
 import { getCollection } from '../../utils/Firebase';
 import reducer from '../../hooks/useReducer';
 import PlaylistCard from '../../components/PlaylistCard';
@@ -13,7 +13,7 @@ const initialState = {
   playlists: [],
 };
 
-const ForYouPlaylist = () => {
+const ForYouPlaylist = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -30,17 +30,20 @@ const ForYouPlaylist = () => {
             ListHeaderComponent={<></>}
             contentContainerStyle={styles.contentContainerStyle}
             numColumns={Math.ceil(11 / 4)}
+            keyExtractor={() => randomize('Aa!0', 10)}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={state.playlists}
-            renderItem={({ item: { title, image } }) => {
-              return (
-                <PlaylistCard
-                  key={randomize('Aa0!', 10)}
-                  title={title}
-                  image={image}
-                />
-              );
+            data={[...state.playlists, { seeAll: true }]}
+            renderItem={({ item: { title, image, seeAll } }) => {
+              if (seeAll) {
+                return (
+                  <SeeAll
+                    onPress={() => navigation.navigate('ForYouPlaylistSeeAll')}
+                  />
+                );
+              } else {
+                return <PlaylistCard title={title} image={image} />;
+              }
             }}
             ListFooterComponent={<></>}
           />

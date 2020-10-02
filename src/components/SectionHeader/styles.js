@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   seeAll: {
     color: 'white',
-    fontSize: hp('2'),
+    fontSize: 12,
   },
   background: {
     padding: 12,

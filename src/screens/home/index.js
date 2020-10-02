@@ -124,15 +124,13 @@ const Home = ({ navigation }) => {
       )}
 
       {/* Most Played Section Ends here */}
+
+      {/* For You section */}
       <View style={styles.forYouContainer}>
-        <SectionHeader
-          name="For You"
-          icon={musicIcon}
-          onPress={() => navigation.navigate('ForYouSeeAll')}
-          navigation={navigation}
-        />
+        <SectionHeader name="For You" icon={musicIcon} isRequired={false} />
         <ForYouTabs />
       </View>
+      {/* For You section ends here */}
 
       {/* Recent Played Section */}
       <ScrollView>

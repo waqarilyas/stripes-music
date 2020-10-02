@@ -4,7 +4,8 @@ import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../../screens/Home';
-import ForYouSeeAll from '../../screens/ForYouSeeAll';
+import ForYouAudioSeeAll from '../../screens/ForYouAudioSeeAll';
+import ForYouPlaylistSeeAll from '../../screens/ForYouPlaylistSeeAll';
 import MostPlayedSeeAll from '../../screens/MostPlayedSeeAll';
 import ArtistNews from '../../screens/ArtistNews';
 import ArtistPopular from '../../screens/ArtistPopular';
@@ -57,8 +58,20 @@ const HomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="ForYouSeeAll"
-        component={ForYouSeeAll}
+        name="ForYouAudioSeeAll"
+        component={ForYouAudioSeeAll}
+        options={({ navigation }) => ({
+          title: 'For You',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: searchAndProfile,
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="ForYouPlaylistSeeAll"
+        component={ForYouPlaylistSeeAll}
         options={({ navigation }) => ({
           title: 'For You',
           headerTitleAlign: 'center',

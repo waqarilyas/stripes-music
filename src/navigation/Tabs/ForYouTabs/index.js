@@ -9,27 +9,28 @@ const Tabs = createMaterialTopTabNavigator();
 
 function ForYouTabs() {
   return (
-    <Tabs.Navigator
-      swipeEnabled={false}
-      tabBarOptions={{
-        activeTintColor: 'white',
-        inactiveTintColor: 'gray',
-        labelStyle: {
-          fontSize: 14,
-        },
-        indicatorStyle: {
-          backgroundColor: 'white',
-          height: 1,
-        },
-        style: {
-          backgroundColor: 'black',
-          marginBottom: hp('2'),
-        },
-      }}>
+    <Tabs.Navigator tabBarOptions={options}>
       <Tabs.Screen name="Songs" component={ForYouSongs} />
       <Tabs.Screen name="Playlist" component={ForYouPlaylist} />
     </Tabs.Navigator>
   );
 }
+
+const options = {
+  activeTintColor: 'white',
+  inactiveTintColor: 'gray',
+  labelStyle: {
+    fontSize: 14,
+    letterSpacing: 1,
+  },
+  indicatorStyle: {
+    backgroundColor: 'white',
+    height: 1,
+  },
+  style: {
+    backgroundColor: 'black',
+    marginBottom: hp('2'),
+  },
+};
 
 export default ForYouTabs;

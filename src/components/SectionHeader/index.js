@@ -9,7 +9,7 @@ const LeftComponent = ({ icon }) => {
   return <Image source={icon} style={styles.leftIcon} />;
 };
 
-const SectionHeader = ({ name, icon, onPress }) => {
+const SectionHeader = ({ name, icon, onPress, isRequired = true }) => {
   return (
     <Header
       placement="left"
@@ -19,11 +19,13 @@ const SectionHeader = ({ name, icon, onPress }) => {
         style: { color: 'white', fontWeight: 'bold', fontSize: wp('4.5') },
       }}
       rightComponent={
-        <View style={styles.background}>
-          <Text style={styles.seeAll} onPress={onPress}>
-            SEE ALL
-          </Text>
-        </View>
+        isRequired ? (
+          <View style={styles.background}>
+            <Text style={styles.seeAll} onPress={onPress}>
+              SEE ALL
+            </Text>
+          </View>
+        ) : null
       }
       containerStyle={styles.containerStyle}
     />
