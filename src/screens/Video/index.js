@@ -12,7 +12,7 @@ import SectionHeader from '../../components/SectionHeader';
 import { starIcon, videoIcon } from '../../../Assets/Icons';
 import PopularVideos from '../../components/PopularVideo';
 import PopularVideoHeader from '../../components/PopularVideoHeader';
-import NewVideos from '../../components/NewVideos';
+import NewVideosCard from '../../components/NewVideosCard';
 import styles from './styles';
 
 const initialState = {
@@ -95,7 +95,11 @@ const Video = ({ navigation }) => {
           <FlatList
             style={styles.spacing}
             ListHeaderComponent={
-              <SectionHeader icon={videoIcon} name="New Videos" />
+              <SectionHeader
+                icon={videoIcon}
+                name="New Videos"
+                onPress={() => navigation.navigate('NewVideos')}
+              />
             }
             keyExtractor={() => randomize('Aa0!', 10)}
             data={state.latestVideos}
@@ -103,7 +107,7 @@ const Video = ({ navigation }) => {
               item: { poster, title, artist, likesCount, viewCount, duration },
             }) => {
               return (
-                <NewVideos
+                <NewVideosCard
                   poster={poster}
                   title={title}
                   artist={artist}
