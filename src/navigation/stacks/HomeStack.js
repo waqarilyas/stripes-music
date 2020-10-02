@@ -87,6 +87,14 @@ const HomeStack = () => {
       <Stack.Screen
         name="FavouriteArtistSeeAll"
         component={FavouriteArtistSeeAll}
+        options={({ navigation }) => ({
+          title: 'Favourite Artists',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: searchAndProfile,
+          headerStyle: styles.headerStyle,
+        })}
       />
       <Stack.Screen
         name="MusicPlayerFullscreen"

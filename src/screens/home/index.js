@@ -157,7 +157,11 @@ const Home = ({ navigation }) => {
       {/* Recent Played Section Ends Here*/}
 
       {/* Artists Section */}
-      <SectionHeader name="Favourite Artists" icon={artistIcon} />
+      <SectionHeader
+        name="Favourite Artists"
+        icon={artistIcon}
+        onPress={() => navigation.navigate('FavouriteArtistSeeAll')}
+      />
       {state.artists.length ? (
         <FlatList
           data={state.artists}
