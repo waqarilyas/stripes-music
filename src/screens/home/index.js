@@ -196,7 +196,11 @@ const Home = ({ navigation }) => {
 
       {/* The Best Playlists Section */}
 
-      <SectionHeader name="The Best Playlists" icon={iconsPlaylist} />
+      <SectionHeader
+        name="The Best Playlists"
+        icon={iconsPlaylist}
+        onPress={() => navigation.navigate('MusicScreenAllPlayLists')}
+      />
       {state.playlists.length ? (
         <FlatList
           data={state.playlists}
