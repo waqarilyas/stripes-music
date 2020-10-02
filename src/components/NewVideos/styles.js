@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 24,
+    alignItems: 'center',
   },
   icon: {
     resizeMode: 'contain',
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
+    alignItems: 'center',
   },
   background: {
     position: 'absolute',

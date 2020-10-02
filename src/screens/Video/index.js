@@ -21,7 +21,7 @@ const initialState = {
   latestVideos: [],
 };
 
-const Video = () => {
+const Video = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -62,7 +62,11 @@ const Video = () => {
 
       {/* Popular Now Videos */}
       <View style={styles.spacing}>
-        <SectionHeader icon={starIcon} name="Popular Now" />
+        <SectionHeader
+          icon={starIcon}
+          name="Popular Now"
+          onPress={() => navigation.navigate('VideoPopularNow')}
+        />
         {state.mostPopular.length ? (
           <ScrollView horizontal>
             <PopularVideoHeader
