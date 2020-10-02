@@ -1,57 +1,59 @@
 import { StyleSheet } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginBottom: 22,
-    justifyContent: 'space-between',
     flex: 1,
+    marginHorizontal: 12,
   },
   detail: {
     alignItems: 'flex-start',
     flexShrink: 1,
   },
   image: {
-    width: hp('18'),
-    height: hp('18'),
-    borderRadius: hp('1'),
-    marginRight: hp('4'),
+    width: 130,
+    height: 130,
+    borderRadius: 8,
+    marginRight: 16,
   },
   title: {
     color: 'white',
-    fontSize: hp('2.5'),
+    fontSize: 16,
     fontWeight: 'bold',
+    lineHeight: 26,
   },
   subtitle: {
-    color: '#6D676C',
+    color: 'gray',
     fontWeight: 'bold',
-    fontSize: hp('2'),
-    marginBottom: hp('2'),
+    fontSize: 14,
+    marginTop: 4,
   },
   viewButton: {
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: hp('1'),
+    borderRadius: 10,
+    marginTop: 12,
   },
   viewButtonText: {
     color: 'black',
-    paddingHorizontal: hp('5'),
+    paddingHorizontal: 22,
     fontWeight: 'bold',
-    paddingVertical: hp('0.5'),
+    paddingVertical: 8,
   },
   background: {
-    backgroundColor: '#6D676C',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     position: 'absolute',
-    bottom: 5,
-    right: 5,
-    paddingHorizontal: hp('2'),
-    borderRadius: hp('1'),
+    bottom: 12,
+    right: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 4,
   },
   duration: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 10,
   },
 });
 

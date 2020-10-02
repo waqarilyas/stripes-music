@@ -4,14 +4,13 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
     height: hp('22'),
     width: hp('15'),
     marginHorizontal: hp('1'),
     marginTop: hp('1'),
   },
   image: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     justifyContent: 'center',
     height: hp('15'),
     width: hp('15'),

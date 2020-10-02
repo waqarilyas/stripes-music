@@ -1,18 +1,19 @@
-import React, { useEffect, useReducer } from 'react';
-import { FlatList, View, ScrollView } from 'react-native';
 import randomize from 'randomatic';
+import React, { useEffect, useReducer } from 'react';
+import { FlatList, ScrollView } from 'react-native';
 
-import styles from './styles';
 import Block from '../../components/Block';
+import SeeAll from '../../components/SeeAll';
 import SongCard from '../../components/SongCard';
-import { getCollection } from '../../utils/Firebase';
 import reducer from '../../hooks/useReducer';
+import { getCollection } from '../../utils/Firebase';
+import styles from './styles';
 
 const initialValues = {
   songs: [],
 };
 
-const ForYouSongs = () => {
+const ForYouSongs = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialValues);
 
   useEffect(() => {
@@ -27,19 +28,27 @@ const ForYouSongs = () => {
         <FlatList
           ListHeaderComponent={<></>}
           contentContainerStyle={styles.contentContainerStyle}
-          numColumns={Math.ceil(10 / 4)}
+          numColumns={Math.ceil(8 / 2)}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={state.songs}
-          renderItem={({ item: { title, arts, artist } }) => {
-            return (
-              <SongCard
-                key={randomize('Aa0!', 10)}
-                title={title}
-                arts={arts}
-                artist={artist}
-              />
-            );
+          data={[...state.songs, { seeAll: true }]}
+          renderItem={({ item: { title, arts, artist, seeAll } }) => {
+            if (seeAll) {
+              return (
+                <SeeAll
+                  onPress={() => navigation.navigate('ForYouAudioSeeAll')}
+                />
+              );
+            } else {
+              return (
+                <SongCard
+                  key={randomize('Aa0!', 10)}
+                  title={title}
+                  arts={arts}
+                  artist={artist}
+                />
+              );
+            }
           }}
           ListFooterComponent={<></>}
         />

@@ -24,12 +24,17 @@ const styles = StyleSheet.create({
   },
   seeAll: {
     color: 'white',
-    fontSize: hp('2'),
+    fontSize: 12,
   },
   background: {
     padding: 12,
     backgroundColor: 'rgba(33, 33, 33, 0.5)',
     borderRadius: hp('1'),
+  },
+  centerComponent: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 22,
   },
 });
 
