@@ -1,13 +1,38 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useReducer } from 'react';
+import { FlatList, View } from 'react-native';
+import { Divider } from 'react-native-elements';
+import SongItem from '../../components/SongItem';
 
 import styles from './styles';
-import Block from '../../components/Block';
+import { getOrderedCollections } from '../../utils/Firebase';
+import reducer from '../../hooks/useReducer';
+import randomize from 'randomatic';
+
+const initialState = {
+  songs: [],
+};
 
 const MostPlayedSeeAll = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    getOrderedCollections('songs', 'likesCount', 'desc', (collection) =>
+      dispatch({ songs: collection }),
+    );
+  }, []);
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>MostPlayedSeeAll Screen</Text>
+    <View style={styles.container}>
+      {state.songs.length > 0 && (
+        <FlatList
+          data={state.songs}
+          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+          keyExtractor={() => randomize('Aa!0', 10)}
+          renderItem={({ item: { title, artist } }) => (
+            <SongItem title={title} author={artist} />
+          )}
+        />
+      )}
     </View>
   );
 };

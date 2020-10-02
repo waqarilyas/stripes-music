@@ -1,37 +1,30 @@
-import React, { useEffect, useReducer } from 'react';
-import {
-  View,
-  FlatList,
-  ScrollView,
-  ActivityIndicator,
-  SafeAreaView,
-} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import randomize from 'randomatic';
-
-import styles from './styles';
+import React, { useEffect, useReducer } from 'react';
+import { ActivityIndicator, FlatList, ScrollView, View } from 'react-native';
+import {
+  artistIcon,
+  iconsPlaylist,
+  musicIcon,
+  playIcon,
+} from '../../../Assets/Icons';
+import ArtistsImage from '../../components/ArtistsImage';
+import BestPlaylistsCard from '../../components/BestPlaylistsCard';
 import Block from '../../components/Block';
+import Button from '../../components/Button';
 import HomeTopSlider from '../../components/HomeTopSlider';
 import SectionHeader from '../../components/SectionHeader';
 import SongCard from '../../components/SongCard';
-import ForYouTabs from '../../navigation/tabs/ForYouTabs';
 import SongCardListView from '../../components/SongCardListView';
-import ArtistsImage from '../../components/ArtistsImage';
-import BestPlaylistsCard from '../../components/BestPlaylistsCard';
-
-import {
-  musicIcon,
-  iconsPlaylist,
-  artistIcon,
-  playIcon,
-} from '../../../Assets/Icons';
-import Button from '../../components/Button';
 import reducer from '../../hooks/useReducer';
+import ForYouTabs from '../../navigation/tabs/ForYouTabs';
 import {
   getCollection,
   getOrderedCollection,
   getQueriedCollection,
 } from '../../utils/Firebase';
+import styles from './styles';
+
 // import { Add } from './utils';
 
 const pattern = 'Aa0!';
@@ -93,8 +86,6 @@ const Home = ({ navigation }) => {
 
       {state.banner.length ? (
         <FlatList
-          ListHeaderComponent={<></>}
-          ListFooterComponent={<></>}
           data={state.banner}
           horizontal
           keyExtractor={() => randomize(pattern, count)}
@@ -121,8 +112,6 @@ const Home = ({ navigation }) => {
 
       {state.songs.length ? (
         <FlatList
-          ListHeaderComponent={<></>}
-          ListFooterComponent={<></>}
           data={state.songs}
           horizontal
           keyExtractor={() => randomize(pattern, count)}
@@ -146,7 +135,7 @@ const Home = ({ navigation }) => {
       </View>
 
       {/* Recent Played Section */}
-      <ScrollView horizontal>
+      <ScrollView>
         {state.recentlyPlayed.length ? (
           <FlatList
             ListHeaderComponent={
