@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
     marginLeft: hp('2'),
   },
   video: {
-    width: hp('24'),
-    height: hp('14'),
+    width: 180,
+    height: 120,
     borderRadius: hp('1'),
   },
   title: {
@@ -23,24 +23,24 @@ const styles = StyleSheet.create({
   },
   artist: {
     color: 'gray',
-    fontSize: hp('1.8'),
-    fontWeight: 'bold',
-    marginTop: hp('0.5'),
+    fontSize: 14,
+    marginTop: 6,
   },
   views: {
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 24,
+    marginTop: 12,
+    alignItems: 'center',
   },
   icon: {
     resizeMode: 'contain',
-    width: hp('2'),
-    height: hp('2'),
+    width: 16,
+    height: 16,
+    tintColor: 'rgba(255, 255, 255, 0.3)',
   },
   viewCount: {
-    color: 'gray',
+    color: 'rgba(255, 255, 255, 0.3)',
     marginLeft: hp('1'),
-    fontSize: hp('2'),
+    fontSize: 12,
   },
   likes: {
     flexDirection: 'row',

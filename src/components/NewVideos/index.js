@@ -4,6 +4,7 @@ import { Image } from 'react-native-elements';
 
 import { heartGrayIcon, eyeIcon } from '../../../Assets/Icons';
 import styles from './styles';
+import { thousandSeprator } from '../../utils/Helpers';
 
 const NewVideos = ({
   poster,
@@ -31,13 +32,7 @@ const NewVideos = ({
         <View style={styles.views}>
           <Image source={eyeIcon} style={styles.icon} />
           <Text numberOfLines={1} style={styles.viewCount}>
-            {viewCount}
-          </Text>
-        </View>
-        <View style={styles.likes}>
-          <Image source={heartGrayIcon} style={styles.icon} />
-          <Text numberOfLines={1} style={styles.viewCount}>
-            {likesCount}
+            {thousandSeprator(viewCount)}
           </Text>
         </View>
       </View>

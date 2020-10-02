@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import News from '../../screens/News';
 import NewsDetails from '../../screens/NewsDetails';
 import { searchIcon, backIcon, menudots } from '../../../Assets/Icons';
+import TabsMainHeader from '../../components/TabsMainHeader';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,7 @@ const NewsStack = ({ navigation, route: { name } }) => {
           header: () => <TabsMainHeader navigation={navigation} name={name} />,
         }}
       />
-      <stack.Screen
+      <Stack.Screen
         name="NewsDetails"
         component={NewsDetails}
         options={{
