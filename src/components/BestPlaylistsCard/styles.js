@@ -44,13 +44,18 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontWeight: 'bold',
-    fontSize: hp('2'),
+    fontSize: 16,
     marginTop: hp('2'),
     color: 'white',
   },
   text: {
-    color: 'gray',
-    marginTop: hp('1'),
+    color: 'white',
+    fontSize: 10,
+    backgroundColor: 'rgb(44, 151, 75)',
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 5,
+    paddingVertical: 3,
   },
 });
 export default styles;

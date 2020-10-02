@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import TabsMainHeader from '../../components/TabsMainHeader';
 
 import News from '../../screens/News';
 import NewsDetails from '../../screens/NewsDetails';

@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Image } from 'react-native-elements';
 
-import { heartGrayIcon, eyeIcon } from '../../../Assets/Icons';
+import { eyeIcon } from '../../../Assets/Icons';
 import styles from './styles';
 import { thousandSeprator } from '../../utils/Helpers';
 
-const NewVideos = ({
+const NewVideoscard = ({
   poster,
   title,
   artist,
@@ -35,8 +35,14 @@ const NewVideos = ({
             {thousandSeprator(viewCount)}
           </Text>
         </View>
+        {/* <View style={styles.likes}>
+          <Image source={heartGrayIcon} style={styles.icon} />
+          <Text numberOfLines={1} style={styles.viewCount}>
+            {likesCount}
+          </Text>
+        </View> */}
       </View>
     </View>
   );
 };
-export default NewVideos;
+export default NewVideoscard;

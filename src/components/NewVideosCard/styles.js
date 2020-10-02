@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
+    alignItems: 'center',
   },
   background: {
     position: 'absolute',

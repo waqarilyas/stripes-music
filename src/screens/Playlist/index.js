@@ -53,12 +53,12 @@ const Playlist = ({ navigation }) => {
           <Text style={styles.followText}>68,679</Text>
           <Text style={styles.followSubtext}>Following</Text>
         </View>
-        <View style={styles.followButton}>
+        {/* <View style={styles.followButton}>
           <Text style={styles.followButtonText}>Follow</Text>
-        </View>
+        </View> */}
       </View>
 
-      <SectionHeader name="Own Playlist" icon={musicIcon} />
+      <SectionHeader name="My Playlists" icon={musicIcon} />
 
       <FlatList
         data={data}
@@ -69,27 +69,9 @@ const Playlist = ({ navigation }) => {
             <BestPlaylistsCard
               imgUrl={img}
               songCount={1000}
-              title="title"
+              title="Title"
               viewCount={1000}
-            />
-          );
-        }}
-      />
-
-      <SectionHeader name="Recent Played" icon={playIcon} />
-
-      <FlatList
-        // ListHeaderComponent={
-        //   <SectionHeader name="Recent Played" icon={playIcon} />
-        // }
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return (
-            <SongCardListView
-              title="Song Name"
-              artist="Artist Name"
-              arts="Arts"
+              playlistType="Public"
             />
           );
         }}
@@ -102,10 +84,24 @@ const Playlist = ({ navigation }) => {
         horizontal
         renderItem={() => {
           return (
-            <ArtistsImage
-              imgUrl={img}
-              // firstName="Artist"
-              // lastName="Name"
+            <ArtistsImage imgUrl={img} firstName="Kanye" lastName="West" />
+          );
+        }}
+      />
+
+      <SectionHeader name="Recent Played" icon={playIcon} />
+      <FlatList
+        // ListHeaderComponent={
+        //   <SectionHeader name="Recent Played" icon={playIcon} />
+        // }
+        data={data}
+        keyExtractor={(item) => item}
+        renderItem={() => {
+          return (
+            <SongCardListView
+              title="Song Name"
+              artist="Artist Name"
+              arts="Arts"
             />
           );
         }}
