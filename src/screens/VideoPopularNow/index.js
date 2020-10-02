@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 
 import styles from './styles';
-import NewVideos from '../../components/NewVideos';
+import NewVideosCard from '../../components/NewVideosCard';
 import Block from '../../components/Block';
 
 const img =
@@ -24,7 +24,7 @@ const VideoPopularNow = () => {
         keyExtractor={(item) => item}
         renderItem={() => {
           return (
-            <NewVideos
+            <NewVideosCard
               poster={img}
               title="Title Here"
               artist="Author"

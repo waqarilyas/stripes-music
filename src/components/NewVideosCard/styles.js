@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   artist: {
     color: 'gray',
-    fontSize: hp('1.8'),
+    fontSize: 14,
     fontWeight: 'bold',
     marginTop: hp('0.5'),
   },
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     alignItems: 'center',
+    bottom: 0,
   },
   icon: {
     resizeMode: 'contain',

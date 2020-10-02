@@ -5,7 +5,7 @@ import { Image } from 'react-native-elements';
 import { heartGrayIcon, eyeIcon } from '../../../Assets/Icons';
 import styles from './styles';
 
-const NewVideos = ({
+const NewVideoscard = ({
   poster,
   title,
   artist,
@@ -34,14 +34,14 @@ const NewVideos = ({
             {viewCount}
           </Text>
         </View>
-        <View style={styles.likes}>
+        {/* <View style={styles.likes}>
           <Image source={heartGrayIcon} style={styles.icon} />
           <Text numberOfLines={1} style={styles.viewCount}>
             {likesCount}
           </Text>
-        </View>
+        </View> */}
       </View>
     </View>
   );
 };
-export default NewVideos;
+export default NewVideoscard;
