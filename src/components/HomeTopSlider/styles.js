@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     margin: hp('1'),
   },
   image: {
-    resizeMode: 'cover',
+    // resizeMode: 'cover',
     justifyContent: 'center',
     height: hp('20'),
     width: hp('34'),

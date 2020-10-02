@@ -21,9 +21,9 @@ const TabsMainHeader = ({ navigation, name }) => {
       leftComponent={<LeftComponent />}
       centerComponent={{
         text: name,
-        style: { color: 'white', fontWeight: 'bold', fontSize: hp('3') },
+        style: { color: 'white', fontWeight: 'bold', fontSize: 18 },
       }}
-      rightComponent={{ icon: 'search', color: '#fff', size: hp('4') }}
+      rightComponent={{ icon: 'search', color: 'white', size: hp('4') }}
       containerStyle={styles.headerContainer}
       leftContainerStyle={{ marginLeft: hp('1') }}
       rightContainerStyle={{ marginRight: hp('1') }}

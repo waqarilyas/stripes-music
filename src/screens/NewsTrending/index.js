@@ -8,9 +8,7 @@ import { getOrderedCollections } from '../../utils/Firebase';
 import reducer from '../../hooks/useReducer';
 import dayjs from 'dayjs';
 
-const initialState = {
-  news: [],
-};
+const initialState = { news: [] };
 
 const NewsTrending = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
