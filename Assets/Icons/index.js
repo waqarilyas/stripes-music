@@ -46,7 +46,6 @@ export const newsComment = require('./icons-news-34x34-white.png');
 export const newsLike = require('./icons-like-45x45-white.png');
 export const newsShare = require('./icons-news-34x34-white.png');
 export const searchIcon = require('./search-icon.png');
-<<<<<<< HEAD
 export const eyeIconWhite = require('./icons-eye-34x34-white.png');
 export const eyeIconBlack = require('./icons-eye-34x34-black.png');
 export const likeIconWhite = require('./icons-like-14x13-grey_light_empty.png');
@@ -55,7 +54,6 @@ export const shareIconWhite = require('./icons-share-26x26-white.png');
 export const shareIconBlack = require('./icons-share-28x28-black.png');
 export const newLikeIconWhite = require('./thumbs-up-hand-symbol.png');
 export const locationIcon = require('./location.png');
-=======
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');
@@ -68,4 +66,3 @@ export const likePressedIcon = require('./icon-like-pressed-3x.png');
 // Share icons
 export const shareIcon = require('./icon-share-3x.png');
 export const sharePressedIcon = require('./icon-share-pressed-3x.png');
->>>>>>> a1a0afbb6520a8c1667eefc11146061116d9809f

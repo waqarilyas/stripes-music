@@ -22,22 +22,6 @@ const NewsLatest = ({ navigation }) => {
   }, []);
 
   return (
-<<<<<<< HEAD
-    <Block>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('NewsDetails')}>
-              <NewsCard />
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </Block>
-=======
     <View style={styles.container}>
       {state.news.length > 0 && (
         <FlatList
@@ -71,7 +55,6 @@ const NewsLatest = ({ navigation }) => {
         />
       )}
     </View>
->>>>>>> a1a0afbb6520a8c1667eefc11146061116d9809f
   );
 };
 
