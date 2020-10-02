@@ -10,7 +10,8 @@ import auth from '@react-native-firebase/auth';
 
 import { UserProvider } from './src/context/UserContext';
 import AuthStack from './src/navigation/stacks/AuthenticationStack';
-import MainDrawer from './src/navigation/drawer/MainDrawer';
+
+import MainAppStack from './src/navigation/stacks/MainAppStack';
 import reducer from './src/hooks/useReducer';
 
 const initialState = { user: null };
@@ -24,7 +25,6 @@ const App = () => {
 
   useEffect(() => {
     const authSubsriber = auth().onAuthStateChanged(onAuthStateChanged);
-
     return authSubsriber;
   }, []);
 
@@ -36,7 +36,7 @@ const App = () => {
           <AuthStack />
         ) : (
           <UserProvider>
-            <MainDrawer />
+            <MainAppStack />
           </UserProvider>
         )}
       </NavigationContainer>

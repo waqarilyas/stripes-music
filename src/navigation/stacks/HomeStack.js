@@ -1,4 +1,6 @@
 import React from 'react';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../../screens/Home';
@@ -16,11 +18,29 @@ import MusicScreenAllPlayLists from '../../screens/MusicScreenAllPlaylists';
 import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
 import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
-import TabsMainHeader from '../../components/TabsMainHeader';
-import { Image, TouchableOpacity } from 'react-native';
-import { backIcon } from '../../../Assets/Icons';
+import { backIcon, searchIcon } from '../../../Assets/Icons';
 
 const Stack = createStackNavigator();
+
+const search = () => <Image source={searchIcon} style={styles.icon} />;
+const back = (navigation) => (
+  <TouchableOpacity onPress={() => navigation.goBack()}>
+    <Image source={backIcon} style={styles.back} />
+  </TouchableOpacity>
+);
+
+const searchAndProfile = () => {
+  return (
+    <View style={styles.container}>
+      <Avatar
+        rounded
+        containerStyle={styles.avatar}
+        source={require('../../../Assets/Images/songCover5.jpg')}
+      />
+      <Image source={searchIcon} style={styles.icon} />
+    </View>
+  );
+};
 
 const HomeStack = () => {
   return (
@@ -28,11 +48,26 @@ const HomeStack = () => {
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{
+          title: 'Browse',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerRight: search,
+          headerStyle: styles.headerStyle,
+        }}
+      />
+      <Stack.Screen
+        name="ForYouSeeAll"
+        component={ForYouSeeAll}
         options={({ navigation }) => ({
-          header: () => <TabsMainHeader navigation={navigation} name="Home" />,
+          title: 'For You',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: searchAndProfile,
+          headerStyle: styles.headerStyle,
         })}
       />
-      <Stack.Screen name="ForYouSeeAll" component={ForYouSeeAll} />
       <Stack.Screen name="ArtistsSeeAll" component={ArtistsSeeAll} />
       <Stack.Screen name="Artist" component={Artist} />
       <Stack.Screen name="ArtistNews" component={ArtistNews} />
@@ -43,26 +78,10 @@ const HomeStack = () => {
         component={MostPlayedSeeAll}
         options={({ navigation }) => ({
           headerTitle: 'Most Player',
-          headerTitleStyle: {
-            color: 'white',
-          },
-          headerTitleAlign: 'left',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={backIcon} />
-            </TouchableOpacity>
-          ),
-          headerLeftContainerStyle: {
-            marginLeft: 18,
-          },
-          headerStyle: {
-            backgroundColor: 'black',
-            borderBottomWidth: 0,
-            elevation: 0,
-            height: 80,
-            shadowOpacity: 0,
-          },
-          cardShadowEnabled: false,
+          headerTitleStyle: styles.headerTitleStyle,
+          headerTitleAlign: 'center',
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
         })}
       />
       <Stack.Screen
@@ -90,5 +109,36 @@ const HomeStack = () => {
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    resizeMode: 'contain',
+    marginRight: 18,
+  },
+  back: {
+    resizeMode: 'contain',
+    marginLeft: 18,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  avatar: {
+    resizeMode: 'contain',
+    marginRight: 8,
+  },
+  headerStyle: {
+    backgroundColor: 'black',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
+  headerTitleStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 22,
+  },
+});
 
 export default HomeStack;
