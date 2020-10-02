@@ -1,4 +1,6 @@
 import React from 'react';
+import { View, Image } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../../screens/Home';
@@ -16,18 +18,101 @@ import MusicScreenAllPlayLists from '../../screens/MusicScreenAllPlaylists';
 import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
 import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
-import TabsMainHeader from '../../components/TabsMainHeader';
+import { backIcon, menudots, searchIcon } from '../../../Assets/Icons';
 
 const Stack = createStackNavigator();
 
 const HomeStack = ({ navigation, route: { name } }) => {
   return (
     <Stack.Navigator
-      screenOptions={{
-        header: () => <TabsMainHeader navigation={navigation} name={name} />,
-      }}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="ForYouSeeAll" component={ForYouSeeAll} />
+      screenOptions={
+        {
+          // header: () => <TabsMainHeader navigation={navigation} name={name} />,
+        }
+      }>
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: 'Browse',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 22,
+          },
+          headerRight: () => (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Image
+                source={searchIcon}
+                style={{
+                  resizeMode: 'contain',
+                  height: 20,
+                  widthwidth: 20,
+                  marginHorizontal: 5,
+                }}
+              />
+            </View>
+          ),
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ForYouSeeAll"
+        component={ForYouSeeAll}
+        options={{
+          title: 'For You',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 22,
+          },
+          headerLeft: () => (
+            <Image
+              source={backIcon}
+              style={{
+                resizeMode: 'contain',
+                height: 20,
+                widthwidth: 20,
+                marginLeft: 10,
+              }}
+            />
+          ),
+          headerRight: () => (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Avatar
+                rounded
+                source={require('../../../Assets/Images/songCover5.jpg')}
+              />
+              <Image
+                source={searchIcon}
+                style={{
+                  resizeMode: 'contain',
+                  height: 20,
+                  widthwidth: 20,
+                  marginHorizontal: 5,
+                }}
+              />
+            </View>
+          ),
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+        }}
+      />
       <Stack.Screen name="ArtistsSeeAll" component={ArtistsSeeAll} />
       <Stack.Screen name="Artist" component={Artist} />
       <Stack.Screen name="ArtistNews" component={ArtistNews} />

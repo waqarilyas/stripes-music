@@ -9,9 +9,9 @@ import { menuIcon } from '../../../Assets/Icons';
 const TabsMainHeader = ({ navigation, name }) => {
   const LeftComponent = () => {
     return (
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Image source={menuIcon} />
-      </TouchableOpacity>
+      // <TouchableOpacity onPress={() => navigation.openDrawer()}>
+      <Image source={menuIcon} />
+      // </TouchableOpacity>
     );
   };
 

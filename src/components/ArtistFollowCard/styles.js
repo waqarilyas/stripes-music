@@ -1,18 +1,23 @@
 import { StyleSheet } from 'react-native';
+
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
-  titleText: {
+  title: {
     color: 'white',
-    textAlign: 'center',
-    marginVertical: hp('4'),
-    fontSize: hp('2.5'),
   },
-  topTextContainer: {
-    marginHorizontal: hp('3'),
+  subtitle: {
+    color: '#767175',
+  },
+  container: {
+    width: '100%',
+  },
+  followButton: {
+    backgroundColor: '#F5138E',
+    height: hp('5'),
   },
 });
 

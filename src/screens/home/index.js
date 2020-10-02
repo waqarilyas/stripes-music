@@ -139,7 +139,7 @@ const Home = ({ navigation }) => {
         <SectionHeader
           name="For You"
           icon={musicIcon}
-          navigateTo="ForYouSeeAll"
+          onPress={() => navigation.navigate('ForYouSeeAll')}
           navigation={navigation}
         />
         <ForYouTabs />

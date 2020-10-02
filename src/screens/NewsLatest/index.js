@@ -19,7 +19,12 @@ const NewsLatest = ({ navigation }) => {
         data={data}
         keyExtractor={(item) => item}
         renderItem={() => {
-          return <NewsCard />;
+          return (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('NewsDetails')}>
+              <NewsCard />
+            </TouchableOpacity>
+          );
         }}
       />
     </Block>
