@@ -5,7 +5,13 @@ import { Image } from 'react-native-elements';
 import styles from './styles';
 import { userIcon } from '../../../Assets/Icons';
 
-const BestPlaylistsCard = ({ imgUrl, songCount, title, viewCount }) => {
+const BestPlaylistsCard = ({
+  imgUrl,
+  songCount,
+  title,
+  viewCount,
+  playlistType,
+}) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: imgUrl }} style={styles.image}>
@@ -14,10 +20,7 @@ const BestPlaylistsCard = ({ imgUrl, songCount, title, viewCount }) => {
         </View>
       </Image>
       <Text style={styles.cardTitle}>{title}</Text>
-      <View style={styles.bottom}>
-        <Image source={userIcon} style={styles.icon} />
-        <Text style={styles.text}>{viewCount}</Text>
-      </View>
+      <Text style={styles.text}>{playlistType}</Text>
     </View>
   );
 };
