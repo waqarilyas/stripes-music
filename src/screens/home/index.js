@@ -165,7 +165,7 @@ const Home = ({ navigation }) => {
 
       {/* Recent Played Section Ends Here*/}
 
-      {/* Artists Section */}
+      {/* Favorite Artists Section */}
       <SectionHeader
         name="Favourite Artists"
         icon={artistIcon}
@@ -176,12 +176,15 @@ const Home = ({ navigation }) => {
           data={state.artists}
           keyExtractor={() => randomize(pattern, count)}
           horizontal
-          renderItem={({ item: { imgUrl, firstName, lastName } }) => {
+          renderItem={({
+            item: { imgUrl, firstName, lastName, followerCount },
+          }) => {
             return (
               <ArtistsImage
                 imgUrl={imgUrl}
                 firstName={firstName}
                 lastName={lastName}
+                followerCount={followerCount}
               />
             );
           }}
