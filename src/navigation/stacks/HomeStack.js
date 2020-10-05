@@ -54,7 +54,7 @@ const HomeStack = () => {
         component={Home}
         options={{
           title: 'Browse',
-          headerTitleAlign: 'center',
+          headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: search,
           headerStyle: styles.headerStyle,
