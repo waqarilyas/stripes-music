@@ -6,7 +6,6 @@ import TabsMainHeader from '../../components/TabsMainHeader';
 import News from '../../screens/News';
 import NewsDetails from '../../screens/NewsDetails';
 import { searchIcon, backIcon, menudots } from '../../../Assets/Icons';
-import TabsMainHeader from '../../components/TabsMainHeader';
 
 const Stack = createStackNavigator();
 
