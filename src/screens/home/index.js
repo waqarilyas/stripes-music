@@ -138,7 +138,11 @@ const Home = ({ navigation }) => {
         {state.recentlyPlayed.length ? (
           <FlatList
             ListHeaderComponent={
-              <SectionHeader name="Recent Played" icon={playIcon} />
+              <SectionHeader
+                name="Recent Played"
+                icon={playIcon}
+                onPress={() => navigation.navigate('RecentPlayedSeeAll')}
+              />
             }
             data={state.recentlyPlayed}
             keyExtractor={() => randomize(pattern, count)}

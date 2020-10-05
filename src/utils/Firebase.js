@@ -90,6 +90,28 @@ export const getQueriedCollection = (
     });
 };
 
+export const getQueriedCollections = (
+  collection,
+  field,
+  query,
+  value,
+  callback,
+) => {
+  let data = [];
+  firestore()
+    .collection(collection)
+    .where(field, query, value)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
+    });
+};
+
 export const getUserProfile = (uid, callback) => {
   firestore()
     .collection('users')
