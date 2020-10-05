@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
 
 import styles from './styles';
 import ArtistSeeAllScreenCard from '../../components/ArtistSeeAllScreenCard';
 import Block from '../../components/Block';
 
-const FavouriteArtistSeeAll = () => {
+const FavouriteArtistSeeAll = ({ navigation }) => {
   const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
   return (
     <Block>
@@ -15,7 +15,11 @@ const FavouriteArtistSeeAll = () => {
         keyExtractor={(item) => item}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         renderItem={() => {
-          return <ArtistSeeAllScreenCard />;
+          return (
+            <TouchableOpacity onPress={() => navigation.navigate('Artist')}>
+              <ArtistSeeAllScreenCard />
+            </TouchableOpacity>
+          );
         }}
       />
     </Block>

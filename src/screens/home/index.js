@@ -17,7 +17,7 @@ import SectionHeader from '../../components/SectionHeader';
 import SongCard from '../../components/SongCard';
 import SongCardListView from '../../components/SongCardListView';
 import reducer from '../../hooks/useReducer';
-import ForYouTabs from '../../navigation/tabs/ForYouTabs';
+import ForYouTabs from '../../navigation/Tabs/ForYouTabs';
 import {
   getCollection,
   getOrderedCollection,
