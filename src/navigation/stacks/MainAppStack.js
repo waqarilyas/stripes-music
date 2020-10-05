@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import MainTabs from '../tabs/MainTabs';
+import MainTabs from '../Tabs/MainTabs';
 import AccountSettingStack from './AccountSettingStack';
 
 const Stack = createStackNavigator();

@@ -1,21 +1,30 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 
-import ArtistsTabs from '../../navigation/tabs/ArtistsTabs';
+import ArtistsTabs from '../../navigation/Tabs/ArtistsTabs';
+import Block from '../../components/Block';
+import styles from './styles';
 
 const Artist = () => {
   return (
-    <View
-      style={{
-        backgroundColor: 'black',
-        flex: 1,
-        marginTop: 20,
-      }}>
-      <Text style={{ color: 'white', alignSelf: 'center' }}>
-        Artist Details
-      </Text>
+    <Block>
+      <View style={styles.container}>
+        <Avatar
+          size={RFValue(120)}
+          rounded
+          source={require('../../../Assets/Images/songCover5.jpg')}
+        />
+        <View style={styles.containerRight}>
+          <Text style={styles.title}>Bithika Abhedanando</Text>
+          <Text style={styles.subtitle}>999,999 Listeners</Text>
+        </View>
+
+        <Text style={styles.followButtontext}>Follow</Text>
+      </View>
       <ArtistsTabs />
-    </View>
+    </Block>
   );
 };
 

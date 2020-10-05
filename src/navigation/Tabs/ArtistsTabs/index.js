@@ -1,6 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Text, View } from 'react-native';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 
 import ArtistNews from '../../../screens/ArtistNews';
 import ArtistPopular from '../../../screens/ArtistPopular';
@@ -16,7 +17,7 @@ const ArtistsTabs = () => {
           activeTintColor: 'white',
           inactiveTintColor: '#616161',
           labelStyle: {
-            fontSize: 15,
+            fontSize: RFValue(15),
           },
           indicatorStyle: {
             backgroundColor: 'white',
@@ -25,11 +26,9 @@ const ArtistsTabs = () => {
             backgroundColor: 'black',
           },
         }}>
-        <MusicTabs.Screen name="Reviews">
-          {(props) => <ArtistNews {...props} />}
-        </MusicTabs.Screen>
-        <MusicTabs.Screen name="Related" component={() => <ArtistPopular />} />
-        <MusicTabs.Screen name="Listen" component={() => <ArtistReleases />} />
+        <MusicTabs.Screen name="News" component={ArtistNews} />
+        <MusicTabs.Screen name="Popular" component={ArtistPopular} />
+        <MusicTabs.Screen name="Releases" component={ArtistReleases} />
       </MusicTabs.Navigator>
     </View>
   );
