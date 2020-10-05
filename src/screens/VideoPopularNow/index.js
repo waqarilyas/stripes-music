@@ -1,41 +1,50 @@
-import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { useEffect, useReducer } from 'react';
+import { View, FlatList } from 'react-native';
+import randomize from 'randomatic';
 
 import styles from './styles';
 import NewVideosCard from '../../components/NewVideosCard';
-import Block from '../../components/Block';
+import { getOrderedCollections } from '../../utils/Firebase';
+import reducer from '../../hooks/useReducer';
+import { Divider } from 'react-native-paper';
 
-const img =
-  'https://firebasestorage.googleapis.com/v0/b/musicapp-956bc.appspot.com/o/artists%2Fkanye-west.jpg?alt=media&token=786c40c8-e4f1-4377-87b7-8cdc54cc2db1';
-
-const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const initialState = {
+  videos: [],
+};
 
 const VideoPopularNow = () => {
-  return (
-    <Block>
-      <View style={styles.topTabs}>
-        <Text style={styles.item}>13 Songs</Text>
-        <Text style={styles.item}>45 min</Text>
-        <Text style={styles.buttonText}>Play All</Text>
-      </View>
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return (
-            <NewVideosCard
-              poster={img}
-              title="Title Here"
-              artist="Author"
-              viewCount={334168}
-              likesCount={28742}
-              duration="09:00"
-            />
-          );
-        }}
-      />
-    </Block>
+  useEffect(() => {
+    getOrderedCollections('videos', 'createdAt', 'desc', (collection) => {
+      dispatch({ videos: collection });
+    });
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      {state.videos.length ? (
+        <FlatList
+          style={styles.list}
+          data={state.videos}
+          keyExtractor={() => randomize('Aa0!', 10)}
+          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+          renderItem={({
+            item: { poster, title, artist, viewCount, duration },
+          }) => {
+            return (
+              <NewVideosCard
+                poster={poster}
+                title={title}
+                artist={artist}
+                viewCount={viewCount}
+                duration={duration}
+              />
+            );
+          }}
+        />
+      ) : null}
+    </View>
   );
 };
 

@@ -46,8 +46,19 @@ const VideoStack = () => {
           headerStyle: styles.headerStyle,
         }}
       />
+      <Stack.Screen
+        name="VideoPopularNow"
+        component={VideoPopularNow}
+        options={({ navigation }) => ({
+          title: 'Popular Now',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: search,
+          headerStyle: styles.headerStyle,
+        })}
+      />
       <Stack.Screen name="NewVideos" component={NewVideos} />
-      <Stack.Screen name="VideoPopularNow" component={VideoPopularNow} />
     </Stack.Navigator>
   );
 };

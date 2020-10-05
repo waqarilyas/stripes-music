@@ -14,6 +14,7 @@ import PopularVideos from '../../components/PopularVideo';
 import PopularVideoHeader from '../../components/PopularVideoHeader';
 import NewVideosCard from '../../components/NewVideosCard';
 import styles from './styles';
+import { Divider } from 'react-native-elements';
 
 const initialState = {
   videos: [],
@@ -74,7 +75,7 @@ const Video = ({ navigation }) => {
               title={state.mostPopular[0].title}
             />
             <FlatList
-              numColumns={Math.ceil(data.length / 2)}
+              numColumns={Math.ceil(data.length / 4)}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               data={state.mostPopular}
@@ -90,10 +91,11 @@ const Video = ({ navigation }) => {
       </View>
 
       {/* New Videos */}
-      <ScrollView>
+      <View style={styles.newVideosContainer}>
         {state.latestVideos.length ? (
           <FlatList
             style={styles.spacing}
+            ItemSeparatorComponent={() => <Divider style={styles.divider} />}
             ListHeaderComponent={
               <SectionHeader
                 icon={videoIcon}
@@ -122,7 +124,7 @@ const Video = ({ navigation }) => {
         ) : (
           <ActivityIndicator color="white" />
         )}
-      </ScrollView>
+      </View>
     </Block>
   );
 };

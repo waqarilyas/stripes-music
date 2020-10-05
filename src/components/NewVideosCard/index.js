@@ -6,14 +6,7 @@ import { eyeIcon } from '../../../Assets/Icons';
 import styles from './styles';
 import { thousandSeprator } from '../../utils/Helpers';
 
-const NewVideoscard = ({
-  poster,
-  title,
-  artist,
-  viewCount,
-  likesCount,
-  duration,
-}) => {
+const NewVideoscard = ({ poster, title, artist, viewCount, duration }) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: poster }} style={styles.video}>
@@ -35,12 +28,6 @@ const NewVideoscard = ({
             {thousandSeprator(viewCount)}
           </Text>
         </View>
-        {/* <View style={styles.likes}>
-          <Image source={heartGrayIcon} style={styles.icon} />
-          <Text numberOfLines={1} style={styles.viewCount}>
-            {likesCount}
-          </Text>
-        </View> */}
       </View>
     </View>
   );
