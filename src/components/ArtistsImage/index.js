@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Badge } from 'react-native-elements';
 
 import styles from './styles';
 
-const ArtistsImage = ({ imgUrl, firstName, lastName }) => {
+const ArtistsImage = ({ imgUrl, firstName, lastName, followerCount }) => {
   return (
     <View style={styles.container}>
       <Avatar rounded source={{ uri: imgUrl }} size="large" />
@@ -12,18 +12,25 @@ const ArtistsImage = ({ imgUrl, firstName, lastName }) => {
         {firstName} {lastName}
       </Text>
 
-      {/* <Badge
-        status="error"
-        containerStyle={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          borderWidth: 0,
-          elevation: 0,
-        }}
-        badgeStyle={{ backgroundColor: '#F5138E' }}
-        value="9"
-      /> */}
+      {followerCount !== 0 ? (
+        followerCount >= 100 ? (
+          <Badge
+            status="error"
+            containerStyle={styles.badgeContainer}
+            textStyle={styles.badgeText}
+            badgeStyle={styles.badgeStyle}
+            value="99+"
+          />
+        ) : (
+          <Badge
+            status="error"
+            containerStyle={styles.badgeContainer}
+            textStyle={styles.badgeText}
+            badgeStyle={styles.badgeStyle}
+            value={followerCount}
+          />
+        )
+      ) : null}
     </View>
   );
 };

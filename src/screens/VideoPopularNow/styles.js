@@ -1,23 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  topTabs: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 22,
+  container: {
+    backgroundColor: 'black',
+    flex: 1,
   },
-  item: {
-    color: 'grey',
-    fontWeight: 'bold',
+  list: {
+    marginTop: 22,
   },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    paddingVertical: 3,
-    paddingHorizontal: 18,
-    backgroundColor: '#1C1C1C',
-    borderRadius: 5,
+  divider: {
+    backgroundColor: 'transparent',
+    marginVertical: 8,
   },
 });
 
