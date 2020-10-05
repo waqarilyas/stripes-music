@@ -1,11 +1,7 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import MusicPlayerFullScreenHeader from '../../components/MusicPlayerFullScreenHeader';
-import { WhiteMinimizeIcon } from '../../../Assets/Icons';
 import NowPlayingTabs from '../../navigation/tabs/NowPlayingTabs';
-import Block from '../../components/Block';
-import styles from './styles';
 
 const MusicPlayerFullscreen = ({ navigation }) => {
   return (
