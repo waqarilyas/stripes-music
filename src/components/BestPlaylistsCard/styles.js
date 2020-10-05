@@ -33,14 +33,13 @@ const styles = StyleSheet.create({
   },
   bottom: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    marginTop: 6,
   },
   icon: {
-    width: hp('2'),
-    height: hp('2'),
-    marginTop: hp('1'),
+    width: 16,
+    height: 16,
     marginRight: hp('1'),
+    tintColor: 'gray',
   },
   cardTitle: {
     fontWeight: 'bold',
@@ -50,12 +49,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 10,
-    backgroundColor: 'rgb(44, 151, 75)',
-    borderRadius: 5,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 5,
-    paddingVertical: 3,
+    fontSize: 12,
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
 });
 export default styles;

@@ -198,7 +198,7 @@ const Home = ({ navigation }) => {
       {/* The Best Playlists Section */}
 
       <SectionHeader
-        name="The Best Playlists"
+        name="Best Playlists"
         icon={iconsPlaylist}
         onPress={() => navigation.navigate('MusicScreenAllPlayLists')}
       />

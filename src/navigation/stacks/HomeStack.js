@@ -25,11 +25,13 @@ import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlay
 const Stack = createStackNavigator();
 
 const search = () => <Image source={searchIcon} style={styles.icon} />;
-const back = (navigation) => (
-  <TouchableOpacity onPress={() => navigation.goBack()}>
-    <Image source={backIcon} style={styles.back} />
-  </TouchableOpacity>
-);
+const back = (navigation) => {
+  return (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Image source={backIcon} style={styles.back} />
+    </TouchableOpacity>
+  );
+};
 
 const searchAndProfile = () => {
   return (
@@ -115,8 +117,8 @@ const HomeStack = () => {
         component={FavouriteArtistSeeAll}
         options={({ navigation }) => ({
           title: 'Favourite Artists',
-          headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
+          headerTitleAlign: 'center',
           headerLeft: () => back(navigation),
           headerRight: searchAndProfile,
           headerStyle: styles.headerStyle,
@@ -131,6 +133,14 @@ const HomeStack = () => {
       <Stack.Screen
         name="MusicScreenAllPlayLists"
         component={MusicScreenAllPlayLists}
+        options={({ navigation }) => ({
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: search,
+          headerStyle: styles.headerStyle,
+        })}
       />
       <Stack.Screen
         name="MusicScreenCreateNewPlaylist"
