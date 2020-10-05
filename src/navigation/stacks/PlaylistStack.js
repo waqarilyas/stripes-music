@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Playlist from '../../screens/Playlist';
+import ProfileScreen from '../../screens/ProfileScreen';
 import Artist from '../../screens/Artist';
-import { searchIcon, backIcon, menudots } from '../../../Assets/Icons';
+import { searchIcon, backIcon } from '../../../Assets/Icons';
 
 const stack = createStackNavigator();
 
@@ -13,7 +13,7 @@ const PlaylistStack = () => {
     <stack.Navigator>
       <stack.Screen
         name="Playlist"
-        component={Playlist}
+        component={ProfileScreen}
         options={{
           title: '',
           headerLeft: () => (

@@ -5,7 +5,6 @@ import { Avatar } from 'react-native-elements';
 import styles from './styles';
 import SectionHeader from '../../components/SectionHeader';
 import Block from '../../components/Block';
-import SongCard from '../../components/SongCard';
 import ArtistsImage from '../../components/ArtistsImage';
 import {
   musicIcon,
@@ -16,13 +15,7 @@ import {
 import BestPlaylistsCard from '../../components/BestPlaylistsCard';
 import SongCardListView from '../../components/SongCardListView';
 
-{
-  /* <TouchableOpacity onPress={() => navigation.navigate('Artist')}>
-        <Text style={{ color: 'white' }}>Go to Artist Details</Text>
-      </TouchableOpacity> */
-}
-
-const Playlist = ({ navigation }) => {
+const ProfileScreen = ({ navigation }) => {
   const data = ['1', '2', '3', '4', '5', '6', '7'];
 
   const img =
@@ -110,4 +103,4 @@ const Playlist = ({ navigation }) => {
   );
 };
 
-export default Playlist;
+export default ProfileScreen;
