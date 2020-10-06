@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import styles from './styles';
 import SectionHeader from '../../components/SectionHeader';
 import Block from '../../components/Block';
-import ProfileArtist from '../../components/ProfileArtist';
+import ArtistsImage from '../../components/ArtistsImage';
 import {
   musicIcon,
   playIcon,
@@ -15,7 +15,11 @@ import {
 } from '../../../Assets/Icons';
 import ProfilePlaylists from '../../components/ProfilePlaylists';
 import SongCardListView from '../../components/SongCardListView';
-import { getUserProfile, getUserSubCollections } from '../../utils/Firebase';
+import {
+  getQueriedCollections,
+  getUserProfile,
+  getUserSubCollections,
+} from '../../utils/Firebase';
 import reducer from '../../hooks/useReducer';
 import { thousandSeprator } from '../../utils/Helpers';
 import randomize from 'randomatic';
@@ -38,15 +42,17 @@ const ProfileScreen = ({ navigation }) => {
     getUserSubCollections(uid, 'playlists', (documents) =>
       dispatch({ playlists: documents }),
     );
-    getUserSubCollections(uid, 'artists', (documents) =>
-      dispatch({ artists: documents }),
+    getQueriedCollections(
+      'artists',
+      'followedBy',
+      'array-contains',
+      uid,
+      (documents) => dispatch({ artists: documents }),
     );
     getUserSubCollections(uid, 'history', (document) =>
       dispatch({ history: document }),
     );
   }, []);
-
-  const data = ['1', '2', '3', '4', '5', '6', '7'];
 
   return (
     <Block>
@@ -71,8 +77,11 @@ const ProfileScreen = ({ navigation }) => {
       </View>
       {/* <Button onPress={Add} text="Add History" /> */}
 
-      <SectionHeader name="My Playlists" icon={musicIcon} />
-
+      <SectionHeader
+        name="My Playlists"
+        icon={musicIcon}
+        onPress={() => navigation.navigate('ProfilePlaylists')}
+      />
       {state.playlists.length ? (
         <FlatList
           data={state.playlists}
@@ -99,21 +108,38 @@ const ProfileScreen = ({ navigation }) => {
         <ActivityIndicator color="white" />
       )}
 
-      <SectionHeader name="Favorite Artists" icon={iconsPlaylist} />
+      <SectionHeader
+        name="Favorite Artists"
+        icon={iconsPlaylist}
+        onPress={() => navigation.navigate('ProfileArtists')}
+      />
       {state.artists.length ? (
         <FlatList
           data={state.artists}
           keyExtractor={() => randomize('Aa!0', 10)}
           horizontal
-          renderItem={({ item: { fullName, image } }) => {
-            return <ProfileArtist name={fullName} image={image} />;
+          renderItem={({
+            item: { imgUrl, firstName, lastName, followerCount },
+          }) => {
+            return (
+              <ArtistsImage
+                imgUrl={imgUrl}
+                firstName={firstName}
+                lastName={lastName}
+                followerCount={followerCount}
+              />
+            );
           }}
         />
       ) : (
         <ActivityIndicator color="white" />
       )}
 
-      <SectionHeader name="Recent Played" icon={playIcon} />
+      <SectionHeader
+        name="Recently Played"
+        icon={playIcon}
+        onPress={() => navigation.navigate('ProfileRecentlyPlayed')}
+      />
       {state.history.length ? (
         <FlatList
           data={state.history}

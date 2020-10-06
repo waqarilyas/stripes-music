@@ -4,6 +4,9 @@ import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ProfileScreen from '../../screens/ProfileScreen';
+import ProfilePlaylistsSeeAll from '../../screens/ProfilePlaylistsSeeAll';
+import ProfileArtistsSeeAll from '../../screens/ProfileArtistsSeeAll';
+import ProfileRecentlyPlayedSeeAll from '../../screens/ProfileRecentlyPlayedSeeAll';
 import Artist from '../../screens/Artist';
 import { searchIcon, backIcon } from '../../../Assets/Icons';
 
@@ -42,6 +45,36 @@ const ProfileStack = () => {
           headerRight: search,
           headerStyle: styles.headerStyle,
         }}
+      />
+      <Stack.Screen
+        name="ProfilePlaylists"
+        component={ProfilePlaylistsSeeAll}
+        options={({ navigation }) => ({
+          title: '',
+          headerRight: search,
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="ProfileArtists"
+        component={ProfileArtistsSeeAll}
+        options={({ navigation }) => ({
+          title: '',
+          headerRight: search,
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="ProfileRecentlyPlayed"
+        component={ProfileRecentlyPlayedSeeAll}
+        options={({ navigation }) => ({
+          title: '',
+          headerRight: search,
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
       />
       <Stack.Screen name="Artist" component={Artist} />
     </Stack.Navigator>
