@@ -7,9 +7,7 @@ import { Avatar } from 'react-native-elements';
 import Community from '../../screens/Community';
 import NewMessage from '../../screens/NewMessage';
 import MessageDetail from '../../screens/MessageDetail';
-import TabsMainHeader from '../../components/TabsMainHeader';
 import { backIcon, menudots } from '../../../Assets/Icons';
-import styles from '../../screens/ForgotPassword/styles';
 
 const HeaderLeft = ({ navigation }) => {
   return (
@@ -47,17 +45,17 @@ const HeaderRight = () => {
   );
 };
 
-const stack = createStackNavigator();
+const Stack = createStackNavigator();
 
 const CommunityStack = ({ navigation }) => {
   return (
-    <stack.Navigator>
-      <stack.Screen
+    <Stack.Navigator>
+      <Stack.Screen
         name="Community"
         component={Community}
         options={{ headerShown: false }}
       />
-      <stack.Screen
+      <Stack.Screen
         name="NewMessage"
         component={NewMessage}
         options={{
@@ -75,7 +73,7 @@ const CommunityStack = ({ navigation }) => {
           containerStyle: {},
         }}
       />
-      <stack.Screen
+      <Stack.Screen
         name="MessageDetail"
         component={MessageDetail}
         options={{
@@ -93,7 +91,7 @@ const CommunityStack = ({ navigation }) => {
           containerStyle: {},
         }}
       />
-    </stack.Navigator>
+    </Stack.Navigator>
   );
 };
 

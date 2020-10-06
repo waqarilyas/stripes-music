@@ -11,10 +11,10 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     resizeMode: 'contain',
-    height: hp('8'),
-    width: hp('8'),
+    height: 75,
+    width: 75,
     overflow: 'hidden',
-    borderRadius: hp('1'),
+    borderRadius: 8,
   },
   subtitle: {
     color: 'gray',

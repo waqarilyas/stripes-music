@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AccountSetting from '../../screens/AccountSetting';
-import Profile from '../../screens/Profile';
+import ProfileScreen from '../../screens/ProfileScreen';
 import ChangePassword from '../../screens/ChangePassword';
 import NotificationSetting from '../../screens/NotificationSetting';
 import SubscriptionStack from '../stacks/SubscriptionStack';
@@ -14,7 +14,7 @@ const AccountSettingStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="AccountSetting" component={AccountSetting} />
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen
         name="NotificationSetting"
