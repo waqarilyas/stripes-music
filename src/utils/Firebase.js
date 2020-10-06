@@ -124,6 +124,23 @@ export const getUserProfile = (uid, callback) => {
     });
 };
 
+export const getPlaylists = (uid, callback) => {
+  let data = [];
+  firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('playlists')
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
+    });
+};
+
 export const getDocument = (collection, id, callback) => {
   firestore()
     .collection(collection)
@@ -133,5 +150,22 @@ export const getDocument = (collection, id, callback) => {
       if (document.exists) {
         callback(document);
       }
+    });
+};
+
+export const getUserSubCollections = (uid, subCollectionId, callback) => {
+  let data = [];
+  firestore()
+    .collection('users')
+    .doc(uid)
+    .collection(subCollectionId)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
     });
 };
