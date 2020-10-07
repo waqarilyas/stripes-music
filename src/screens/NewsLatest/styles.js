@@ -5,6 +5,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
+  listSpacing: {
+    marginHorizontal: 12,
+  },
 });
 
 export default styles;

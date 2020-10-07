@@ -1,25 +1,32 @@
 import { StyleSheet } from 'react-native';
 
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
 const styles = StyleSheet.create({
   container: {
-    padding: hp('0.8'),
-    marginVertical: hp('2'),
-  },
-
-  text: {
-    color: '#A09C9F',
-    marginBottom: hp('2'),
-  },
-  subtitle: {
-    color: '#A09C9F',
-  },
-  cardBottom: {
     flexDirection: 'row',
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+  },
+  extra: {
+    flexDirection: 'row',
+    marginBottom: 2,
     justifyContent: 'space-between',
-    alignItems: 'center',
     width: '100%',
+  },
+  detail: {
+    flexShrink: 1,
+    marginLeft: 12,
+  },
+  comment: {
+    lineHeight: 20,
+  },
+  time: {
+    color: 'rgba(0, 0, 0, 0.3)',
+    fontSize: 12,
+  },
+  author: {
+    color: 'rgba(0, 0, 0, 1)',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

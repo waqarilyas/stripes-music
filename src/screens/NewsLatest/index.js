@@ -27,6 +27,7 @@ const NewsLatest = ({ navigation }) => {
         <FlatList
           ListEmptyComponent={<ActivityIndicator />}
           data={state.news}
+          style={styles.listSpacing}
           keyExtractor={() => randomize('Aa0!', 10)}
           renderItem={({
             item: {
@@ -37,9 +38,10 @@ const NewsLatest = ({ navigation }) => {
               likeCount,
               shareCount,
               commentCount,
+              id,
             },
           }) => {
-            const date = dayjs(createdAt.seconds).format('DD MMMM, YYYY');
+            const date = dayjs(createdAt.toDate()).format('DD MMMM, YYYY');
             return (
               <NewsCard
                 title={title}
@@ -49,6 +51,8 @@ const NewsLatest = ({ navigation }) => {
                 likeCount={likeCount}
                 shareCount={shareCount}
                 commentCount={commentCount}
+                nav={navigation}
+                newsId={id}
               />
             );
           }}

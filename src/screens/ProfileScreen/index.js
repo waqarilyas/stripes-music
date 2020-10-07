@@ -23,8 +23,6 @@ import {
 import reducer from '../../hooks/useReducer';
 import { thousandSeprator } from '../../utils/Helpers';
 import randomize from 'randomatic';
-// import { Add } from './utils';
-// import Button from '../../components/Button';
 
 const initialState = {
   user: {},
@@ -75,7 +73,6 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.followSubtext}>Following</Text>
         </View>
       </View>
-      {/* <Button onPress={Add} text="Add History" /> */}
 
       <SectionHeader
         name="My Playlists"

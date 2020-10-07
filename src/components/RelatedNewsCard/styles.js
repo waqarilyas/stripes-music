@@ -4,34 +4,33 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
-    padding: hp('0.8'),
-    backgroundColor: 'black',
     flexDirection: 'row',
-    justifyContent: 'center',
-    flex: 1,
-    marginVertical: hp('2'),
+    marginVertical: 12,
+  },
+  textContainer: {
+    backgroundColor: 'black',
+    paddingHorizontal: 14,
+    flexShrink: 1,
   },
   image: {
-    resizeMode: 'contain',
-    height: hp('12'),
-    width: hp('18'),
     overflow: 'hidden',
-    borderRadius: hp('5'),
-    flex: 1,
+    borderRadius: 10,
+    height: 75,
+    width: 120,
   },
   title: {
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    lineHeight: 22,
     color: 'white',
-    fontWeight: 'bold',
-    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: '600',
     marginBottom: hp('1'),
   },
   subtitle: {
-    color: '#A09C9F',
-  },
-  textContainer: {
-    justifyContent: 'space-between',
-    flex: 2,
-    paddingHorizontal: hp('1'),
+    color: 'gray',
+    fontSize: 12,
+    lineHeight: 20,
   },
 });
 
