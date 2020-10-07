@@ -148,7 +148,7 @@ export const getDocument = (collection, id, callback) => {
     .get()
     .then((document) => {
       if (document.exists) {
-        callback(document);
+        callback(document.data());
       }
     });
 };

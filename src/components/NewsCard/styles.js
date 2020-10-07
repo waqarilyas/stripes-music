@@ -11,11 +11,11 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   image: {
-    resizeMode: 'contain',
-    height: 85,
+    resizeMode: 'cover',
+    height: 100,
     width: 130,
     overflow: 'hidden',
-    borderRadius: 16,
+    borderRadius: 12,
   },
   title: {
     color: 'white',
@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
   description: {
     color: 'gray',
     lineHeight: 20,
+    fontWeight: '500',
+    fontSize: 14,
     marginVertical: 16,
   },
   container: {
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   divider: {
-    backgroundColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     marginBottom: 12,
   },
   icon: {

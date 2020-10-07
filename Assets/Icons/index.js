@@ -63,6 +63,7 @@ export const commentPressedIcon = require('./icon-comment-pressed-3x.png');
 export const likeIcon = require('./icon-like-3x.png');
 export const likePressedIcon = require('./icon-like-pressed-3x.png');
 export const redLikeIcon = require('./icons-like-45x45-rose.png');
+
 // Share icons
 export const shareIcon = require('./icon-share-3x.png');
 export const sharePressedIcon = require('./icon-share-pressed-3x.png');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Image, Text, Divider } from 'react-native-elements';
 
 import styles from './styles';
@@ -13,9 +13,13 @@ const NewsCard = ({
   likeCount,
   shareCount,
   commentCount,
+  nav,
+  newsId,
 }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => nav.navigate('NewsDetails', { newsId })}>
       <View style={styles.inner}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.textInner}>
@@ -56,7 +60,7 @@ const NewsCard = ({
           <Text style={styles.readText}>Read</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

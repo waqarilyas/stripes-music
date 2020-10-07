@@ -14,7 +14,6 @@ function NewsTabs() {
         inactiveTintColor: 'gray',
         labelStyle: {
           fontSize: 16,
-          textTransform: 'capitalize',
           fontWeight: 'bold',
         },
         indicatorStyle: {
