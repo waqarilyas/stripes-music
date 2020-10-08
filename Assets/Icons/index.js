@@ -54,6 +54,10 @@ export const shareIconWhite = require('./icons-share-26x26-white.png');
 export const shareIconBlack = require('./icons-share-28x28-black.png');
 export const newLikeIconWhite = require('./thumbs-up-hand-symbol.png');
 export const locationIcon = require('./location.png');
+export const downIcon = require('./downArrow.png');
+export const upOutlineIcon = require('./up-arrow-outline.png');
+export const downOutlineIcon = require('./down-arrow-outline.png');
+export const modalCloseIcon = require('./modal-close-button.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');

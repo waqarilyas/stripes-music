@@ -1,0 +1,244 @@
+import React, { useEffect, useReducer, useState } from 'react';
+import {
+  Modal,
+  SafeAreaView,
+  View,
+  Text,
+  StatusBar,
+  Image,
+  TextInput,
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+  TouchableHighlight,
+} from 'react-native';
+
+import Video from 'react-native-video';
+import randomize from 'randomatic';
+import dayjs from 'dayjs';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import LinearGradient from 'react-native-linear-gradient';
+
+import {
+  commentIcon,
+  videoIcon,
+  eyeIcon,
+  modalCloseIcon,
+} from '../../../Assets/Icons';
+import { thousandSeprator } from '../../utils/Helpers';
+import SectionHeader from '../../components/SectionHeader';
+import { getCollection } from '../../utils/Firebase';
+import reducer from '../../hooks/useReducer';
+import NewVideosCard from '../../components/NewVideosCard';
+import { Divider } from 'react-native-elements';
+import NewsCommentCard from '../../components/NewsCommentCard';
+import styles from './styles';
+const profilePic =
+  'https://res.cloudinary.com/practicaldev/image/fetch/s--ef-WXsPf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/8050/Mm3V3467.jpg';
+
+const initialState = {
+  videos: [],
+  comments: [],
+  data: {},
+};
+
+const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [commentText, setCommentText] = useState('');
+
+  useEffect(() => {
+    dispatch({ data: itemData });
+    getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
+
+    const listener = firestore()
+      .collection('videos')
+      .doc(state.data.id)
+      .collection('comments')
+      .onSnapshot((querySnapshot) => {
+        let allComments = [];
+        querySnapshot.forEach((doc) => {
+          allComments.push(doc.data());
+        });
+        dispatch({ comments: allComments });
+      });
+
+    return () => listener;
+  }, [state.data.id, itemData]);
+
+  const handleSubmit = () => {
+    if (commentText === '') {
+      return;
+    }
+    firestore()
+      .collection('videos')
+      .doc(state.data.id)
+      .collection('comments')
+      .add({
+        comment: commentText,
+        createdAt: firestore.FieldValue.serverTimestamp(),
+        id: '',
+        image: profilePic,
+        videoId: state.data.id,
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+        userId: auth().currentUser.uid,
+        username: 'Arslan Mushtaq',
+      })
+      .then((result) => {
+        const documentId = result.id;
+        result.update({
+          id: documentId,
+        });
+        setCommentText('');
+      })
+      .catch((err) => console.log('---------- ERROR ----------', err));
+  };
+
+  const [, setReference] = useState(null);
+  const [, setBuffering] = useState(null);
+  const [, setPlayerErr] = useState(null);
+  const [collapse, setCollapse] = useState(false);
+
+  return (
+    <Modal
+      animationType="slide"
+      visible={modalVisible}
+      onRequestClose={() => {
+        console.log('Modal has been closed');
+      }}>
+      <ScrollView>
+        <SafeAreaView style={styles.safeArea} />
+        <StatusBar barStyle="light-content" />
+        <View style={styles.container}>
+          {state.data ? (
+            <Video
+              source={{
+                uri: state.data.fileUrl,
+              }}
+              style={styles.backgroundVideo}
+              // paused
+              ref={(ref) => setReference(ref)}
+              onBuffer={(bufferData) => setBuffering(bufferData)}
+              onError={(err) => setPlayerErr(err)}
+              // controls
+            />
+          ) : (
+            <ActivityIndicator color="white" />
+          )}
+
+          <Text style={styles.title}>{state.data.title}</Text>
+          <View style={styles.subContainer}>
+            <Text style={styles.author}>{state.data.artist}</Text>
+            <View style={styles.rowContainer}>
+              <Image source={eyeIcon} style={styles.icon} />
+              <Text style={styles.count}>
+                {thousandSeprator(state.data.viewCount)}
+              </Text>
+            </View>
+          </View>
+
+          <Text style={styles.desc}>Description</Text>
+          <Text style={styles.description} numberOfLines={collapse ? 0 : 2}>
+            {state.data.description}
+          </Text>
+          <TouchableOpacity onPress={() => setCollapse(!collapse)}>
+            <Text style={styles.seeMore}>
+              {collapse ? 'See Less' : 'See More'}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.slideContainer}>
+            <FlatList
+              data={state.videos}
+              ListHeaderComponent={() => (
+                <SectionHeader icon={videoIcon} name="Related News" />
+              )}
+              ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+              keyExtractor={() => randomize('Aa0!', 10)}
+              renderItem={({
+                item,
+                item: {
+                  poster,
+                  title,
+                  artist,
+                  likesCount,
+                  viewCount,
+                  duration,
+                },
+              }) => {
+                return (
+                  <TouchableHighlight onPress={() => setItemData(item)}>
+                    <NewVideosCard
+                      poster={poster}
+                      title={title}
+                      artist={artist}
+                      likesCount={likesCount}
+                      viewCount={viewCount}
+                      duration={duration}
+                    />
+                  </TouchableHighlight>
+                );
+              }}
+            />
+          </View>
+
+          <SectionHeader
+            icon={commentIcon}
+            name="Comments"
+            isRequired={false}
+          />
+
+          <View style={styles.commentButton}>
+            <TextInput
+              style={styles.commentButtonText}
+              placeholder="Leave a comment"
+              placeholderTextColor="gray"
+              multiline
+              onChangeText={(input) => setCommentText(input)}
+            />
+          </View>
+          <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+            <Text style={styles.submitText}>Submit</Text>
+          </TouchableOpacity>
+
+          <View style={styles.commentSection}>
+            {state.comments ? (
+              <FlatList
+                style={styles.commentListStyle}
+                data={state.comments}
+                ItemSeparatorComponent={() => (
+                  <Divider style={styles.commentDivider} />
+                )}
+                keyExtractor={() => randomize('Aa0!', 10)}
+                renderItem={({
+                  item: { image, comment, username, createdAt },
+                }) => {
+                  return (
+                    <NewsCommentCard
+                      image={image}
+                      comment={comment}
+                      username={username}
+                      createdAt={createdAt && dayjs.unix(createdAt._seconds)}
+                    />
+                  );
+                }}
+              />
+            ) : (
+              <ActivityIndicator color="black" />
+            )}
+          </View>
+        </View>
+      </ScrollView>
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 1)']}
+        style={styles.closeContainer}>
+        <TouchableOpacity onPress={onPress}>
+          <Image source={modalCloseIcon} style={styles.closeIcon} />
+        </TouchableOpacity>
+      </LinearGradient>
+    </Modal>
+  );
+};
+
+export default VideoPlayerModal;

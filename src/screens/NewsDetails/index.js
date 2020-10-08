@@ -87,7 +87,6 @@ const NewsDetails = ({ route }) => {
       .catch((err) => console.log('---------- ERROR ----------', err));
   };
 
-  const data = [1, 2, 3, 4, 5, 6];
   return (
     <Block>
       <View style={styles.container}>
