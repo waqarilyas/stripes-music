@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     borderRadius: 12,
+    marginBottom: 24,
   },
   inputContainerStyle: {
     borderBottomWidth: 0,
@@ -45,6 +46,13 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: 'white',
+  },
+  seek: {
+    width: '85%',
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 0,
+    marginBottom: 24,
   },
   slideContainer: {
     flex: 1,
@@ -109,14 +117,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     justifyContent: 'space-between',
   },
-  backgroundVideo: {
-    height: 300,
-    marginVertical: 12,
-    borderRadius: 10,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
+
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',

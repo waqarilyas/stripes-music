@@ -80,17 +80,6 @@ const Video = ({ navigation }) => {
         <ActivityIndicator color="white" />
       )}
 
-      <Modal
-        animationType="slide"
-        visible={visible}
-        onRequestClose={() => {
-          console.log('Modal has been closed');
-        }}>
-        <View>
-          <Text>This is a full screen modal</Text>
-        </View>
-      </Modal>
-
       {/* Popular Now Videos */}
       <View style={styles.spacing}>
         <SectionHeader
@@ -100,18 +89,36 @@ const Video = ({ navigation }) => {
         />
         {state.mostPopular.length ? (
           <ScrollView horizontal>
-            <PopularVideoHeader
-              poster={state.mostPopular[0].poster}
-              title={state.mostPopular[0].title}
-            />
+            <TouchableHighlight
+              onPress={() => {
+                setItemData(state.mostPopular[0]);
+                setVisible(true);
+              }}>
+              <PopularVideoHeader
+                poster={state.mostPopular[0].poster}
+                title={state.mostPopular[0].title}
+              />
+            </TouchableHighlight>
             <FlatList
               numColumns={Math.ceil(data.length / 4)}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               data={state.mostPopular}
               keyExtractor={() => randomize('Aa0!', 10)}
-              renderItem={({ item: { poster } }) => {
-                return <PopularVideos poster={poster} />;
+              renderItem={({ item, item: { poster }, index }) => {
+                if (index === 0) {
+                  return null;
+                } else {
+                  return (
+                    <TouchableHighlight
+                      onPress={() => {
+                        setItemData(item);
+                        setVisible(true);
+                      }}>
+                      <PopularVideos poster={poster} />
+                    </TouchableHighlight>
+                  );
+                }
               }}
             />
           </ScrollView>
@@ -136,17 +143,24 @@ const Video = ({ navigation }) => {
             keyExtractor={() => randomize('Aa0!', 10)}
             data={state.latestVideos}
             renderItem={({
+              item,
               item: { poster, title, artist, likesCount, viewCount, duration },
             }) => {
               return (
-                <NewVideosCard
-                  poster={poster}
-                  title={title}
-                  artist={artist}
-                  likesCount={likesCount}
-                  viewCount={viewCount}
-                  duration={duration}
-                />
+                <TouchableHighlight
+                  onPress={() => {
+                    setItemData(item);
+                    setVisible(true);
+                  }}>
+                  <NewVideosCard
+                    poster={poster}
+                    title={title}
+                    artist={artist}
+                    likesCount={likesCount}
+                    viewCount={viewCount}
+                    duration={duration}
+                  />
+                </TouchableHighlight>
               );
             }}
             ListFooterComponent={<></>}

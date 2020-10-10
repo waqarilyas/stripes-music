@@ -13,20 +13,12 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-
-import Video from 'react-native-video';
 import randomize from 'randomatic';
 import dayjs from 'dayjs';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import LinearGradient from 'react-native-linear-gradient';
 
-import {
-  commentIcon,
-  videoIcon,
-  eyeIcon,
-  modalCloseIcon,
-} from '../../../Assets/Icons';
+import { commentIcon, videoIcon, eyeIcon } from '../../../Assets/Icons';
 import { thousandSeprator } from '../../utils/Helpers';
 import SectionHeader from '../../components/SectionHeader';
 import { getCollection } from '../../utils/Firebase';
@@ -35,6 +27,8 @@ import NewVideosCard from '../../components/NewVideosCard';
 import { Divider } from 'react-native-elements';
 import NewsCommentCard from '../../components/NewsCommentCard';
 import styles from './styles';
+import VideoPlayer from '../VideoPlayer';
+
 const profilePic =
   'https://res.cloudinary.com/practicaldev/image/fetch/s--ef-WXsPf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/8050/Mm3V3467.jpg';
 
@@ -95,37 +89,22 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
       .catch((err) => console.log('---------- ERROR ----------', err));
   };
 
-  const [, setReference] = useState(null);
-  const [, setBuffering] = useState(null);
-  const [, setPlayerErr] = useState(null);
   const [collapse, setCollapse] = useState(false);
 
   return (
     <Modal
       animationType="slide"
+      supportedOrientations={['portrait']}
       visible={modalVisible}
       onRequestClose={() => {
         console.log('Modal has been closed');
-      }}>
+      }}
+      style={{ flex: 1 }}>
       <ScrollView>
         <SafeAreaView style={styles.safeArea} />
         <StatusBar barStyle="light-content" />
         <View style={styles.container}>
-          {state.data ? (
-            <Video
-              source={{
-                uri: state.data.fileUrl,
-              }}
-              style={styles.backgroundVideo}
-              // paused
-              ref={(ref) => setReference(ref)}
-              onBuffer={(bufferData) => setBuffering(bufferData)}
-              onError={(err) => setPlayerErr(err)}
-              // controls
-            />
-          ) : (
-            <ActivityIndicator color="white" />
-          )}
+          <VideoPlayer fileUrl={state.data.fileUrl} onPress={onPress} />
 
           <Text style={styles.title}>{state.data.title}</Text>
           <View style={styles.subContainer}>
@@ -152,7 +131,7 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
             <FlatList
               data={state.videos}
               ListHeaderComponent={() => (
-                <SectionHeader icon={videoIcon} name="Related News" />
+                <SectionHeader icon={videoIcon} name="More Videos" />
               )}
               ItemSeparatorComponent={() => <Divider style={styles.divider} />}
               keyExtractor={() => randomize('Aa0!', 10)}
@@ -167,18 +146,22 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
                   duration,
                 },
               }) => {
-                return (
-                  <TouchableHighlight onPress={() => setItemData(item)}>
-                    <NewVideosCard
-                      poster={poster}
-                      title={title}
-                      artist={artist}
-                      likesCount={likesCount}
-                      viewCount={viewCount}
-                      duration={duration}
-                    />
-                  </TouchableHighlight>
-                );
+                if (item.id === state.data.id) {
+                  return null;
+                } else {
+                  return (
+                    <TouchableHighlight onPress={() => setItemData(item)}>
+                      <NewVideosCard
+                        poster={poster}
+                        title={title}
+                        artist={artist}
+                        likesCount={likesCount}
+                        viewCount={viewCount}
+                        duration={duration}
+                      />
+                    </TouchableHighlight>
+                  );
+                }
               }}
             />
           </View>
@@ -230,13 +213,6 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
           </View>
         </View>
       </ScrollView>
-      <LinearGradient
-        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 1)']}
-        style={styles.closeContainer}>
-        <TouchableOpacity onPress={onPress}>
-          <Image source={modalCloseIcon} style={styles.closeIcon} />
-        </TouchableOpacity>
-      </LinearGradient>
     </Modal>
   );
 };

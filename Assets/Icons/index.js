@@ -27,7 +27,10 @@ export const whiteHeartIcon = require('./icons-like-45x45-white.png');
 export const userIcon = require('./icons-user-28x28-white.png');
 export const iconsPlaylist = require('./icons-playlist-45x45-white.png');
 export const artistIcon = require('./icons-userstar.png');
-export const playIcon = require('./icons-play-34x34-black.png');
+export const playIcon = require('./icons-play-xhd.png');
+export const fullscreenIcon = require('./icon-fullscreen-xhd.png');
+export const closeIcon = require('./icons-close-xhd.png');
+export const pauseIcon = require('./icons-pause-xhd.png');
 export const starIcon = require('./icons-star-18x18-white.png');
 export const videoIcon = require('./icons-video-34x34-v1-white.png');
 export const eyeIcon = require('./icons-eye-34x34-white.png');
@@ -58,6 +61,7 @@ export const downIcon = require('./downArrow.png');
 export const upOutlineIcon = require('./up-arrow-outline.png');
 export const downOutlineIcon = require('./down-arrow-outline.png');
 export const modalCloseIcon = require('./modal-close-button.png');
+export const muteIcon = require('./icons-mute-xhd.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');
