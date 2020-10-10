@@ -98,8 +98,7 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
       visible={modalVisible}
       onRequestClose={() => {
         console.log('Modal has been closed');
-      }}
-      style={{ flex: 1 }}>
+      }}>
       <ScrollView>
         <SafeAreaView style={styles.safeArea} />
         <StatusBar barStyle="light-content" />
