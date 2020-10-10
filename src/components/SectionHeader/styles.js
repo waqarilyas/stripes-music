@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
   containerStyle: {
     backgroundColor: 'black',
     justifyContent: 'space-around',
-    marginBottom: hp('2'),
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,

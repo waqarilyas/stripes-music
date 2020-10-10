@@ -1,12 +1,15 @@
-import React, { useEffect, useReducer } from 'react';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { View, ActivityIndicator } from 'react-native';
+import React, { useEffect, useReducer, useState } from 'react';
+import {
+  FlatList,
+  ScrollView,
+  TouchableHighlight,
+} from 'react-native-gesture-handler';
+import { View, Text, ActivityIndicator, Modal } from 'react-native';
 import randomize from 'randomatic';
 
 import Block from '../../components/Block';
 import VideoSlider from '../../components/VideosSlider';
 import { getCollection, getOrderedCollection } from '../../utils/Firebase';
-// import Add from './utils';
 import reducer from '../../hooks/useReducer';
 import SectionHeader from '../../components/SectionHeader';
 import { starIcon, videoIcon } from '../../../Assets/Icons';
@@ -15,6 +18,7 @@ import PopularVideoHeader from '../../components/PopularVideoHeader';
 import NewVideosCard from '../../components/NewVideosCard';
 import styles from './styles';
 import { Divider } from 'react-native-elements';
+import VideoPlayerModal from '../../components/VideoPlayerModal';
 
 const initialState = {
   videos: [],
@@ -24,6 +28,8 @@ const initialState = {
 
 const Video = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [visible, setVisible] = useState(false);
+  const [itemData, setItemData] = useState({});
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   useEffect(() => {
@@ -45,15 +51,28 @@ const Video = ({ navigation }) => {
 
   return (
     <Block>
+      <VideoPlayerModal
+        modalVisible={visible}
+        onPress={() => setVisible(false)}
+        itemData={itemData}
+        setItemData={setItemData}
+      />
+
       {/* Video Slider */}
       {state.videos.length ? (
         <FlatList
           data={state.videos}
           horizontal
           keyExtractor={() => randomize('Aa0!', 10)}
-          renderItem={({ item: { poster, title, artist } }) => {
+          renderItem={({ item, item: { poster, title, artist } }) => {
             return (
-              <VideoSlider poster={poster} title={title} artist={artist} />
+              <TouchableHighlight
+                onPress={() => {
+                  setItemData(item);
+                  setVisible(true);
+                }}>
+                <VideoSlider poster={poster} title={title} artist={artist} />
+              </TouchableHighlight>
             );
           }}
         />
@@ -70,18 +89,36 @@ const Video = ({ navigation }) => {
         />
         {state.mostPopular.length ? (
           <ScrollView horizontal>
-            <PopularVideoHeader
-              poster={state.mostPopular[0].poster}
-              title={state.mostPopular[0].title}
-            />
+            <TouchableHighlight
+              onPress={() => {
+                setItemData(state.mostPopular[0]);
+                setVisible(true);
+              }}>
+              <PopularVideoHeader
+                poster={state.mostPopular[0].poster}
+                title={state.mostPopular[0].title}
+              />
+            </TouchableHighlight>
             <FlatList
               numColumns={Math.ceil(data.length / 4)}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               data={state.mostPopular}
               keyExtractor={() => randomize('Aa0!', 10)}
-              renderItem={({ item: { poster } }) => {
-                return <PopularVideos poster={poster} />;
+              renderItem={({ item, item: { poster }, index }) => {
+                if (index === 0) {
+                  return null;
+                } else {
+                  return (
+                    <TouchableHighlight
+                      onPress={() => {
+                        setItemData(item);
+                        setVisible(true);
+                      }}>
+                      <PopularVideos poster={poster} />
+                    </TouchableHighlight>
+                  );
+                }
               }}
             />
           </ScrollView>
@@ -106,17 +143,24 @@ const Video = ({ navigation }) => {
             keyExtractor={() => randomize('Aa0!', 10)}
             data={state.latestVideos}
             renderItem={({
+              item,
               item: { poster, title, artist, likesCount, viewCount, duration },
             }) => {
               return (
-                <NewVideosCard
-                  poster={poster}
-                  title={title}
-                  artist={artist}
-                  likesCount={likesCount}
-                  viewCount={viewCount}
-                  duration={duration}
-                />
+                <TouchableHighlight
+                  onPress={() => {
+                    setItemData(item);
+                    setVisible(true);
+                  }}>
+                  <NewVideosCard
+                    poster={poster}
+                    title={title}
+                    artist={artist}
+                    likesCount={likesCount}
+                    viewCount={viewCount}
+                    duration={duration}
+                  />
+                </TouchableHighlight>
               );
             }}
             ListFooterComponent={<></>}
