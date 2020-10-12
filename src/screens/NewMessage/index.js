@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { FlatList, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import randomize from 'randomatic';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import Block from '../../components/Block';
 import ArtistsImageWithName from '../../components/ArtistImageWithName';
@@ -29,6 +30,13 @@ const NewMessage = ({ navigation }) => {
       });
   }, []);
 
+  const handleSubmit = async (item) => {
+    navigation.navigate('MessageDetail', {
+      passedId: item.id,
+      name: `${item.firstName} ${item.lastName}`,
+    });
+  };
+
   return (
     <Block>
       <Text style={styles.intro}>Select an artist to chat with</Text>
@@ -37,10 +45,7 @@ const NewMessage = ({ navigation }) => {
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item, item: { imgUrl, firstName, lastName } }) => {
           return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('MessageDetail');
-              }}>
+            <TouchableOpacity onPress={() => handleSubmit(item)}>
               <ArtistsImageWithName
                 imgUrl={imgUrl}
                 firstName={firstName}

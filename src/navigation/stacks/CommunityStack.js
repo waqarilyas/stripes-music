@@ -9,45 +9,9 @@ import NewMessage from '../../screens/NewMessage';
 import MessageDetail from '../../screens/MessageDetail';
 import { backIcon, menudots, searchIcon } from '../../../Assets/Icons';
 
-const HeaderLeft = ({ navigation }) => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image
-          source={backIcon}
-          style={{
-            resizeMode: 'contain',
-            height: hp('3'),
-            width: hp('3'),
-          }}
-        />
-      </TouchableOpacity>
-      <Avatar
-        rounded
-        source={require('../../../Assets/Images/songCover1.jpg')}
-      />
-    </View>
-  );
-};
-const HeaderRight = () => {
-  return (
-    <View>
-      <Image
-        source={menudots}
-        style={{ resizeMode: 'contain', height: hp('3'), width: hp('3') }}
-      />
-    </View>
-  );
-};
-
 const Stack = createStackNavigator();
 
-const CommunityStack = ({ navigation }) => {
+const CommunityStack = () => {
   const search = () => <Image source={searchIcon} style={styles.icon} />;
   const back = (navigation) => {
     return (

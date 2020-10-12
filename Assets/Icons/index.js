@@ -62,6 +62,8 @@ export const upOutlineIcon = require('./up-arrow-outline.png');
 export const downOutlineIcon = require('./down-arrow-outline.png');
 export const modalCloseIcon = require('./modal-close-button.png');
 export const muteIcon = require('./icons-mute-xhd.png');
+export const deleteIcon = require('./icon-delete.png');
+export const emptyChatIcon = require('./icon-empty-chat.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');

@@ -18,61 +18,77 @@ const MessageDetail = ({ route, navigation }) => {
 
   const uid = auth().currentUser.uid;
   const passedId = route.params.passedId;
-  const docId = route.params.docId;
 
   const [messages, setMessages] = useState([]);
+  const [artist, setArtist] = useState({});
   const localUser = useUser();
 
   useEffect(() => {
+    const chatId =
+      uid < passedId ? uid.concat('**', passedId) : passedId.concat('**', uid);
+
     const getData = async () => {
-      const chatId =
-        uid < passedId
-          ? uid.concat('**', passedId)
-          : passedId.concat('**', uid);
-      firestore()
+      const chatMessages = firestore()
         .collection('chats')
         .doc(chatId)
         .collection('messages')
-        .orderBy('createdAt', 'desc')
-        .onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
-          if (!snapshot.empty && snapshot?.docs) {
-            var msg = snapshot.docs.map((doc) => {
-              if (
-                doc.exists &&
-                doc.data() !== null &&
-                doc.data()?.createdAt !== null
-              ) {
-                const {
-                  text,
-                  createdAt,
-                  user: { name, _id, avatar },
-                } = doc.data();
+        .orderBy('createdAt', 'desc');
 
-                var data = {
-                  _id: doc.id,
-                  text: text || '',
-                  image: '',
-                  createdAt:
-                    createdAt.toDate() ||
-                    firestore.FieldValue.serverTimestamp(),
-                  user: {
-                    name: name || '',
-                    _id: _id || '',
-                    avatar: avatar || '',
-                  },
-                };
+      chatMessages.onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
+        if (!snapshot.empty && snapshot?.docs) {
+          var msg = snapshot.docs.map((doc) => {
+            if (
+              doc.exists &&
+              doc.data() !== null &&
+              doc.data()?.createdAt !== null
+            ) {
+              const {
+                text,
+                createdAt,
+                user: { name, _id, avatar },
+              } = doc.data();
 
-                return data;
-              } else {
-                return {};
-              }
-            });
-            setMessages(msg);
-          }
-        });
+              var data = {
+                _id: doc.id,
+                text,
+                createdAt: createdAt.toDate(),
+                user: { name, _id, avatar },
+              };
+
+              return data;
+            } else {
+              return {};
+            }
+          });
+          setMessages(msg);
+        }
+      });
     };
 
+    const getArtist = async () => {
+      const artistDocument = firestore().collection('artists').doc(passedId);
+      await artistDocument.get().then((value) => {
+        if (value.exists) {
+          setArtist(value.data());
+        }
+      });
+    };
+
+    firestore()
+      .collection('chats')
+      .doc(chatId)
+      .get()
+      .then((rootSnapshot) => {
+        if (rootSnapshot.exists) {
+          const readStatus = {};
+          readStatus[`${uid}`] = true;
+          rootSnapshot.ref.set({ readStatus }, { merge: true });
+        }
+      });
+
+    getArtist();
     const unsubscribe = getData();
+
     return () => unsubscribe;
   }, [passedId, uid]);
 
@@ -81,33 +97,69 @@ const MessageDetail = ({ route, navigation }) => {
       uid < passedId ? uid.concat('**', passedId) : passedId.concat('**', uid);
     const text = msg[0].text;
 
-    // update chat message collection
-    await firestore()
+    let readStatus = {};
+    readStatus[`${uid}`] = true;
+    readStatus[`${passedId}`] = false;
+
+    // Update recent messages
+    const chatCollection = firestore().collection('chats').doc(chatId);
+    chatCollection.set(
+      {
+        artist: {
+          avatar: artist.imgUrl,
+          id: artist.id,
+          name: `${artist.firstName} ${artist.lastName}`,
+        },
+        members: [artist.id, uid],
+        readStatus,
+        recentMessage: {
+          createdAt: firestore.FieldValue.serverTimestamp(),
+          text,
+        },
+      },
+      { merge: true },
+    );
+
+    // Add messages as documents to Chat collection
+    const messageCollection = firestore()
       .collection('chats')
       .doc(chatId)
-      .collection('messages')
-      .add({
-        text,
-        createdAt: firestore.FieldValue.serverTimestamp(),
-        user: {
-          _id: auth().currentUser.uid,
-          name: localUser.fullName,
-        },
-      });
+      .collection('messages');
+    await messageCollection.add({
+      text,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+      user: {
+        _id: auth().currentUser.uid,
+        name: localUser.fullName,
+        avatar: localUser.profilePicture,
+      },
+    });
 
-    // Save recent message
-    await firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('inbox')
-      .doc(docId)
-      .set(
-        {
-          text,
-          updatedAt: firestore.FieldValue.serverTimestamp(),
-        },
-        { merge: true },
-      );
+    // Update recent messages in user chat document
+    // await userInboxDocument.set({
+    //   artist: {
+    //     avatar: artist.imgUrl,
+    //     name: `${artist.firstName} ${artist.lastName}`,
+    //     artistId: artist.id,
+    //   },
+    //   readStatus,
+    //   createdAt: firestore.FieldValue.serverTimestamp(),
+    //   text,
+    //   updatedAt: firestore.FieldValue.serverTimestamp(),
+    // });
+
+    // Update recent messages in user artist document
+    // await artistInboxDocument.set({
+    //   artist: {
+    //     avatar: artist.imgUrl,
+    //     name: `${artist.firstName} ${artist.lastName}`,
+    //     artistId: artist.id,
+    //   },
+    //   readStatus,
+    //   text,
+    //   createdAt: firestore.FieldValue.serverTimestamp(),
+    //   updatedAt: firestore.FieldValue.serverTimestamp(),
+    // });
   };
 
   const renderSend = (props) => {
