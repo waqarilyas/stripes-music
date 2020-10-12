@@ -1,33 +1,38 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { ListItem, Avatar, Badge, withBadge } from 'react-native-elements';
+import { Text, StyleSheet } from 'react-native';
+import { ListItem, Avatar } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import dayjs from 'dayjs';
 
 // import styles from './styles';
+let placeholder =
+  'https://journeypurebowlinggreen.com/wp-content/uploads/2018/05/placeholder-person.jpg';
 
-const ChatCard = ({ name, avatar }) => {
+const ChatCard = ({ name, avatar, createdAt, message, status }) => {
   return (
     <ListItem containerStyle={styles.container}>
-      <Avatar rounded source={{ uri: avatar }} size="medium" />
+      <Avatar
+        rounded
+        source={{ uri: avatar }}
+        size="medium"
+        containerStyle={{
+          ...styles.iconStyle,
+          borderColor: status ? 'transparent' : 'purple',
+        }}
+      />
       <ListItem.Content>
         <ListItem.Title numberOfLines={1} style={styles.title}>
           {name}
         </ListItem.Title>
-        <ListItem.Subtitle numberOfLines={1} style={styles.message}>
-          Message Text Here...
+        <ListItem.Subtitle
+          numberOfLines={1}
+          style={status ? styles.message : styles.unreadMessage}>
+          {message}
         </ListItem.Subtitle>
       </ListItem.Content>
-      <View>
-        <Text style={styles.time}>09:45 AM</Text>
-        <Badge
-          rounded
-          value="99"
-          status="success"
-          textStyle={styles.badgeText}
-          badgeStyle={styles.badge}
-          containerStyle={styles.badgeContainer}
-        />
-      </View>
+      <Text style={styles.time}>
+        {dayjs(createdAt._seconds).format('hh:mm A')}
+      </Text>
     </ListItem>
   );
 };
@@ -46,13 +51,25 @@ const styles = StyleSheet.create({
     fontSize: hp('1.7'),
     marginTop: hp('1'),
   },
+  unreadMessage: {
+    color: 'gray',
+    fontSize: hp('1.7'),
+    fontWeight: 'bold',
+    marginTop: hp('1'),
+  },
   time: {
     color: 'gray',
-    fontSize: hp('1.5'),
-    marginBottom: hp('1'),
+    fontSize: hp('1.3'),
     fontWeight: 'bold',
+    height: '100%',
   },
-  badgeContainer: { alignSelf: 'flex-end' },
+  badgeContainer: {
+    alignSelf: 'flex-end',
+  },
+  iconStyle: {
+    borderWidth: 2,
+    borderColor: 'white',
+  },
   badge: {
     backgroundColor: '#41D47B',
     height: 25,
