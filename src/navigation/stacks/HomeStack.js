@@ -4,31 +4,34 @@ import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../../screens/Home';
-import ForYouAudioSeeAll from '../../screens/ForYouAudioSeeAll';
-import ForYouPlaylistSeeAll from '../../screens/ForYouPlaylistSeeAll';
-import MostPlayedSeeAll from '../../screens/MostPlayedSeeAll';
-import ArtistNews from '../../screens/ArtistNews';
-import ArtistPopular from '../../screens/ArtistPopular';
-import ArtistReleases from '../../screens/ArtistReleases';
 import Artist from '../../screens/Artist';
+import ForYouTabs from '../tabs/ForYouTabs';
+import ArtistNews from '../../screens/ArtistNews';
+import NowPlayingTabs from '../tabs/NowPlayingTabs';
+import ArtistPopular from '../../screens/ArtistPopular';
+import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
+import ArtistReleases from '../../screens/ArtistReleases';
+import { backIcon, searchIcon } from '../../../Assets/Icons';
+import MostPlayedSeeAll from '../../screens/MostPlayedSeeAll';
+import ForYouAudioSeeAll from '../../screens/ForYouAudioSeeAll';
+import RecentPlayedSeeAll from '../../screens/RecentPlayedSeeAll';
+import ForYouPlaylistSeeAll from '../../screens/ForYouPlaylistSeeAll';
 import FavouriteArtistSeeAll from '../../screens/FavouriteArtistSeeAll';
 import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
-import NowPlayingTabs from '../Tabs/NowPlayingTabs';
-import ForYouTabs from '../Tabs/ForYouTabs';
 import MusicScreenAllPlayLists from '../../screens/MusicScreenAllPlaylists';
-import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
-import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
-import { backIcon, searchIcon } from '../../../Assets/Icons';
+import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
 
 const Stack = createStackNavigator();
 
 const search = () => <Image source={searchIcon} style={styles.icon} />;
-const back = (navigation) => (
-  <TouchableOpacity onPress={() => navigation.goBack()}>
-    <Image source={backIcon} style={styles.back} />
-  </TouchableOpacity>
-);
+const back = (navigation) => {
+  return (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Image source={backIcon} style={styles.back} />
+    </TouchableOpacity>
+  );
+};
 
 const searchAndProfile = () => {
   return (
@@ -51,7 +54,7 @@ const HomeStack = () => {
         component={Home}
         options={{
           title: 'Browse',
-          headerTitleAlign: 'center',
+          headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: search,
           headerStyle: styles.headerStyle,
@@ -81,6 +84,18 @@ const HomeStack = () => {
           headerStyle: styles.headerStyle,
         })}
       />
+      <Stack.Screen
+        name="RecentPlayedSeeAll"
+        component={RecentPlayedSeeAll}
+        options={({ navigation }) => ({
+          title: 'Recently Played',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: search,
+          headerStyle: styles.headerStyle,
+        })}
+      />
       <Stack.Screen name="ArtistsSeeAll" component={ArtistsSeeAll} />
       <Stack.Screen name="Artist" component={Artist} />
       <Stack.Screen name="ArtistNews" component={ArtistNews} />
@@ -90,7 +105,7 @@ const HomeStack = () => {
         name="MostPlayedSeeAll"
         component={MostPlayedSeeAll}
         options={({ navigation }) => ({
-          headerTitle: 'Most Player',
+          headerTitle: 'Most Played',
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: 'center',
           headerLeft: () => back(navigation),
@@ -102,8 +117,8 @@ const HomeStack = () => {
         component={FavouriteArtistSeeAll}
         options={({ navigation }) => ({
           title: 'Favourite Artists',
-          headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
+          headerTitleAlign: 'center',
           headerLeft: () => back(navigation),
           headerRight: searchAndProfile,
           headerStyle: styles.headerStyle,
@@ -121,6 +136,14 @@ const HomeStack = () => {
       <Stack.Screen
         name="MusicScreenAllPlayLists"
         component={MusicScreenAllPlayLists}
+        options={({ navigation }) => ({
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: search,
+          headerStyle: styles.headerStyle,
+        })}
       />
       <Stack.Screen
         name="MusicScreenCreateNewPlaylist"

@@ -1,37 +1,67 @@
-import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { useEffect, useReducer, useState } from 'react';
+import { View, FlatList, TouchableHighlight } from 'react-native';
+import randomize from 'randomatic';
 
 import styles from './styles';
 import NewVideosCard from '../../components/NewVideosCard';
-import Block from '../../components/Block';
+import { getOrderedCollections } from '../../utils/Firebase';
+import reducer from '../../hooks/useReducer';
+import VideoPlayerModal from '../../components/VideoPlayerModal';
+import { Divider } from 'react-native-elements';
 
-const img =
-  'https://firebasestorage.googleapis.com/v0/b/musicapp-956bc.appspot.com/o/artists%2Fkanye-west.jpg?alt=media&token=786c40c8-e4f1-4377-87b7-8cdc54cc2db1';
-
-const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const initialState = {
+  videos: [],
+};
 
 const NewVideos = () => {
-  return (
-    <Block>
-      <Text style={styles.title}>New Videos</Text>
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [visible, setVisible] = useState(false);
+  const [itemData, setItemData] = useState({});
 
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return (
-            <NewVideosCard
-              poster={img}
-              title="Title Here"
-              artist="Author"
-              viewCount={334168}
-              likesCount={28742}
-              duration="09:00"
-            />
-          );
-        }}
+  useEffect(() => {
+    getOrderedCollections('videos', 'createdAt', 'desc', (collection) => {
+      dispatch({ videos: collection });
+    });
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <VideoPlayerModal
+        modalVisible={visible}
+        onPress={() => setVisible(false)}
+        itemData={itemData}
+        setItemData={setItemData}
       />
-    </Block>
+
+      {state.videos.length ? (
+        <FlatList
+          style={styles.list}
+          data={state.videos}
+          keyExtractor={() => randomize('Aa0!', 10)}
+          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+          renderItem={({
+            item,
+            item: { poster, title, artist, viewCount, duration },
+          }) => {
+            return (
+              <TouchableHighlight
+                onPress={() => {
+                  setItemData(item);
+                  setVisible(true);
+                }}>
+                <NewVideosCard
+                  poster={poster}
+                  title={title}
+                  artist={artist}
+                  viewCount={viewCount}
+                  duration={duration}
+                />
+              </TouchableHighlight>
+            );
+          }}
+        />
+      ) : null}
+    </View>
   );
 };
 

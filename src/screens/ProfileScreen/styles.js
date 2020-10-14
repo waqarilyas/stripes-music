@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
+  profilePictureContainer: {
+    width: 125,
+    height: 125,
+  },
   pageTop: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    marginHorizontal: 12,
   },
   artistName: {
     color: 'white',
@@ -21,33 +22,29 @@ const styles = StyleSheet.create({
   subtitleView: {
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: '',
+    marginTop: 12,
   },
   pageTopNameView: {
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginLeft: 16,
   },
   locationIcon: {
     resizeMode: 'contain',
-    height: hp('3'),
-    width: hp('3'),
-    marginRight: hp('2'),
-  },
-  followersView: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: hp('3'),
-  },
-  followers: {
-    justifyContent: 'center',
+    height: 24,
+    width: 24,
+    marginRight: 6,
   },
   followText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: hp('2.5'),
+    fontSize: 20,
+    marginTop: 12,
   },
   followSubtext: {
-    color: 'white',
     color: '#928989',
+    marginTop: 6,
+    fontSize: 12,
   },
   followButtonText: {
     color: 'white',
@@ -55,10 +52,13 @@ const styles = StyleSheet.create({
   followButton: {
     backgroundColor: '#403336',
     paddingHorizontal: hp('5'),
-    // paddingVertical: hp('1'),
     borderRadius: 3,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  divider: {
+    backgroundColor: 'transparent',
+    marginHorizontal: 8,
   },
 });
 

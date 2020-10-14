@@ -90,6 +90,28 @@ export const getQueriedCollection = (
     });
 };
 
+export const getQueriedCollections = (
+  collection,
+  field,
+  query,
+  value,
+  callback,
+) => {
+  let data = [];
+  firestore()
+    .collection(collection)
+    .where(field, query, value)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
+    });
+};
+
 export const getUserProfile = (uid, callback) => {
   firestore()
     .collection('users')
@@ -102,6 +124,23 @@ export const getUserProfile = (uid, callback) => {
     });
 };
 
+export const getPlaylists = (uid, callback) => {
+  let data = [];
+  firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('playlists')
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
+    });
+};
+
 export const getDocument = (collection, id, callback) => {
   firestore()
     .collection(collection)
@@ -109,7 +148,24 @@ export const getDocument = (collection, id, callback) => {
     .get()
     .then((document) => {
       if (document.exists) {
-        callback(document);
+        callback(document.data());
       }
+    });
+};
+
+export const getUserSubCollections = (uid, subCollectionId, callback) => {
+  let data = [];
+  firestore()
+    .collection('users')
+    .doc(uid)
+    .collection(subCollectionId)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          data.push(document.data());
+        }
+      });
+      callback(data);
     });
 };

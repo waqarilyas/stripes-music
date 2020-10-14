@@ -304,7 +304,11 @@ const Home = ({ navigation }) => {
         {state.recentlyPlayed.length ? (
           <FlatList
             ListHeaderComponent={
-              <SectionHeader name="Recent Played" icon={playIcon} />
+              <SectionHeader
+                name="Recent Played"
+                icon={playIcon}
+                onPress={() => navigation.navigate('RecentPlayedSeeAll')}
+              />
             }
             data={state.recentlyPlayed}
             keyExtractor={() => randomize(pattern, count)}
@@ -327,7 +331,7 @@ const Home = ({ navigation }) => {
 
       {/* Recent Played Section Ends Here*/}
 
-      {/* Artists Section */}
+      {/* Favorite Artists Section */}
       <SectionHeader
         name="Favourite Artists"
         icon={artistIcon}
@@ -338,12 +342,15 @@ const Home = ({ navigation }) => {
           data={state.artists}
           keyExtractor={() => randomize(pattern, count)}
           horizontal
-          renderItem={({ item: { imgUrl, firstName, lastName } }) => {
+          renderItem={({
+            item: { imgUrl, firstName, lastName, followerCount },
+          }) => {
             return (
               <ArtistsImage
                 imgUrl={imgUrl}
                 firstName={firstName}
                 lastName={lastName}
+                followerCount={followerCount}
               />
             );
           }}
@@ -357,7 +364,7 @@ const Home = ({ navigation }) => {
       {/* The Best Playlists Section */}
 
       <SectionHeader
-        name="The Best Playlists"
+        name="Best Playlists"
         icon={iconsPlaylist}
         onPress={() => navigation.navigate('MusicScreenAllPlayLists')}
       />

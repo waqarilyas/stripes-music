@@ -5,26 +5,32 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: hp('1'),
+    paddingHorizontal: 12,
   },
   image: {
-    height: hp('12'),
-    width: hp('20'),
+    height: 120,
+    width: 200,
     overflow: 'hidden',
-    borderRadius: hp('1'),
-    marginVertical: hp('3'),
+    borderRadius: 12,
+    marginVertical: 18,
   },
   title: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
   },
   date: {
-    color: '#8D888C',
-    fontSize: hp('1.5'),
+    color: 'gray',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 8,
+    textTransform: 'uppercase',
   },
   blog: {
-    color: '#F8F7F8',
-    fontSize: hp('1.9'),
+    color: 'white',
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: 'auto',
   },
   titleView: {
     alignItems: 'center',
@@ -33,10 +39,11 @@ const styles = StyleSheet.create({
   },
   authorView: {
     flexDirection: 'row',
-    marginVertical: hp('2'),
+    marginTop: 24,
   },
   postBy: {
-    color: '#8D888C',
+    color: 'gray',
+    fontWeight: 'bold',
   },
   authorName: {
     color: 'white',
@@ -44,22 +51,49 @@ const styles = StyleSheet.create({
   },
   commentButton: {
     backgroundColor: '#31282F',
-    width: '90%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: hp('3'),
-    marginVertical: hp('3'),
-    borderRadius: hp('3'),
+    paddingVertical: 22,
+    marginVertical: 22,
+    borderRadius: 12,
   },
   commentButtonText: {
-    color: '#6F696D',
+    color: 'white',
     fontWeight: 'bold',
-    fontSize: hp('2.5'),
+    fontSize: 18,
+    width: '100%',
+    textAlign: 'center',
+    paddingHorizontal: 22,
   },
   commentSection: {
     backgroundColor: 'white',
     width: '100%',
-    borderRadius: hp('4'),
+    borderRadius: 12,
+  },
+  inputContainerStyle: {
+    borderBottomWidth: 0,
+  },
+  submit: {
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    marginTop: 22,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    borderRadius: 12,
+  },
+  submitText: {
+    color: 'white',
+  },
+  realtedNewsContainer: {
+    flex: 1,
+  },
+  commentDivider: {
+    marginVertical: 12,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  commentListStyle: {
+    marginVertical: 32,
+    marginHorizontal: 12,
   },
 });
 

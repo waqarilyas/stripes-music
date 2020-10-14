@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: hp('3'),
   },
   detail: {
     flexDirection: 'column',
@@ -22,23 +21,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   artist: {
-    color: 'gray',
-    fontSize: 14,
+    color: 'white',
+    fontSize: 12,
     marginTop: 6,
   },
   views: {
     flexDirection: 'row',
-    marginTop: 12,
+    marginTop: 6,
     alignItems: 'center',
   },
   icon: {
     resizeMode: 'contain',
     width: 16,
     height: 16,
-    tintColor: 'rgba(255, 255, 255, 0.3)',
+    tintColor: 'rgba(255, 255, 255, 0.5)',
   },
   viewCount: {
-    color: 'rgba(255, 255, 255, 0.3)',
+    color: 'rgba(255, 255, 255, 0.5)',
     marginLeft: hp('1'),
     fontSize: 12,
   },
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
   },
   duration: {
     color: 'white',
-    fontSize: hp('1.5'),
+    fontSize: 10,
     padding: 6,
   },
 });

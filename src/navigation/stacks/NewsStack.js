@@ -1,67 +1,81 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import TabsMainHeader from '../../components/TabsMainHeader';
 
 import News from '../../screens/News';
 import NewsDetails from '../../screens/NewsDetails';
-import { searchIcon, backIcon, menudots } from '../../../Assets/Icons';
+import { searchIcon, backIcon } from '../../../Assets/Icons';
 
 const Stack = createStackNavigator();
 
-const NewsStack = ({ navigation, route: { name } }) => {
+const NewsStack = () => {
+  const search = () => <Image source={searchIcon} style={styles.icon} />;
+  const back = (navigation) => {
+    return (
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Image source={backIcon} style={styles.back} />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="News"
         component={News}
         options={{
-          header: () => <TabsMainHeader navigation={navigation} name={name} />,
+          title: 'News',
+          headerTitleAlign: 'left',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerRight: search,
+          headerStyle: styles.headerStyle,
         }}
       />
       <Stack.Screen
         name="NewsDetails"
         component={NewsDetails}
-        options={{
+        options={({ navigation }) => ({
           title: '',
-          headerLeft: () => (
-            <Image
-              source={backIcon}
-              style={{
-                resizeMode: 'contain',
-                height: 20,
-                widthwidth: 20,
-                marginLeft: 10,
-              }}
-            />
-          ),
-          headerRight: () => (
-            <View style={{ flexDirection: 'row' }}>
-              <Image
-                source={searchIcon}
-                style={{
-                  resizeMode: 'contain',
-                  height: 20,
-                  widthwidth: 20,
-                }}
-              />
-              <Image
-                source={menudots}
-                style={{
-                  resizeMode: 'contain',
-                  height: 20,
-                  widthwidth: 20,
-                }}
-              />
-            </View>
-          ),
-          headerStyle: {
-            backgroundColor: 'black',
-          },
-        }}
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerRight: search,
+          headerStyle: styles.headerStyle,
+        })}
       />
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    resizeMode: 'contain',
+    marginRight: 18,
+  },
+  back: {
+    resizeMode: 'contain',
+    marginLeft: 18,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  avatar: {
+    resizeMode: 'contain',
+    marginRight: 8,
+  },
+  headerStyle: {
+    backgroundColor: 'black',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
+  headerTitleStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 22,
+  },
+});
 
 export default NewsStack;

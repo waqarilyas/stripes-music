@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 //local imports
 import HomeStack from '../../stacks/HomeStack';
 import VideoStack from '../../stacks/VideoStack';
-import PlaylistStack from '../../stacks/PlaylistStack';
+import ProfileStack from '../../stacks/ProfileStack';
 import NewsStack from '../../stacks/NewsStack';
 import CommunityStack from '../../stacks/CommunityStack';
 import {
@@ -51,7 +51,7 @@ const MainTabs = () => {
             iconName = focused ? tab1White : tab1Grey;
           } else if (route.name === 'Videos') {
             iconName = focused ? tab2White : tab2Grey;
-          } else if (route.name === 'Playlist') {
+          } else if (route.name === 'Profile') {
             iconName = focused ? tab3White : tab3Grey;
           } else if (route.name === 'Community') {
             iconName = focused ? tab4White : tab4Grey;
@@ -64,7 +64,7 @@ const MainTabs = () => {
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Videos" component={VideoStack} />
-      <Tab.Screen name="Playlist" component={PlaylistStack} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
       <Tab.Screen name="Community" component={CommunityStack} />
       <Tab.Screen name="News" component={NewsStack} />
     </Tab.Navigator>

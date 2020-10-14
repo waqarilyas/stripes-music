@@ -1,9 +1,8 @@
 import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    backgroundColor: 'black',
   },
-
   title: {
     color: 'white',
     fontWeight: 'bold',
@@ -11,6 +10,9 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: 'grey',
+    fontSize: 14,
+    marginTop: 6,
+    fontWeight: 'bold',
   },
   icon: {
     resizeMode: 'contain',

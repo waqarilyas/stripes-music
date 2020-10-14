@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 
-import ArtistsTabs from '../../navigation/Tabs/ArtistsTabs';
+import ArtistsTabs from '../../navigation/tabs/ArtistsTabs';
 import Block from '../../components/Block';
 import styles from './styles';
 

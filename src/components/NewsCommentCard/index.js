@@ -1,35 +1,46 @@
-import React from 'react';
-import { View, Text, Image } from 'react-native';
-import { ListItem, Avatar, Divider } from 'react-native-elements';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import dayjs from 'dayjs';
 
 import styles from './styles';
-import {
-  newsComment,
-  newsLike,
-  newsShare,
-  sendIcon,
-} from '../../../Assets/Icons';
 
-const NewsCommentCard = ({ title, image }) => {
-  const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+const relativeTime = require('dayjs/plugin/relativeTime');
+const updateLocale = require('dayjs/plugin/updateLocale');
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'seconds ago',
+    m: 'minute ago',
+    mm: '%d mins ago',
+    h: 'an hour ago',
+    hh: '%d hours ago',
+    d: 'day ago',
+    dd: '%d days ago',
+    M: 'month ago',
+    MM: '%d months ago',
+    y: 'year ago',
+    yy: '%d years ago',
+  },
+});
+
+const NewsCommentCard = ({ image, comment, username, createdAt }) => {
   return (
     <View style={styles.container}>
-      <ListItem>
-        <Avatar
-          rounded
-          source={require('../../../Assets/Images/songCover4.jpg')}
-        />
-        <ListItem.Content>
-          <ListItem.Title style={styles.title}>
-            A Long Title Goes Here,Another songs from this singer. I am enjoying
-            it and you should too!
-          </ListItem.Title>
-          <View style={styles.cardBottom}>
-            <Text style={styles.subtitle}>Amelia</Text>
-            <Text style={styles.subtitle}>1 month ago</Text>
-          </View>
-        </ListItem.Content>
-      </ListItem>
+      <Avatar size="medium" rounded source={{ uri: image }} />
+      <View style={styles.detail}>
+        <View style={styles.extra}>
+          <Text style={styles.author}>{username}</Text>
+          <Text style={styles.time}>
+            {dayjs().from(dayjs(createdAt), true)}
+          </Text>
+        </View>
+        <Text style={styles.comment}>{comment}</Text>
+      </View>
     </View>
   );
 };
