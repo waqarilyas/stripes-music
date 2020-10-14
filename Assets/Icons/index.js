@@ -54,6 +54,7 @@ export const shareIconWhite = require('./icons-share-26x26-white.png');
 export const shareIconBlack = require('./icons-share-28x28-black.png');
 export const newLikeIconWhite = require('./thumbs-up-hand-symbol.png');
 export const locationIcon = require('./location.png');
+export const pauseIcon = require('./pause.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');
@@ -66,3 +67,22 @@ export const redLikeIcon = require('./icons-like-45x45-rose.png');
 // Share icons
 export const shareIcon = require('./icon-share-3x.png');
 export const sharePressedIcon = require('./icon-share-pressed-3x.png');
+
+//slider icons
+
+export const slider1 = require('./slider1.png');
+export const slider2 = require('./slider2.png');
+export const slider3 = require('./slider3.png');
+
+export const downIcon = require('./downArrow.png');
+export const pauseButton = require('./pauseButton.png');
+export const playButton = require('./playButton.png');
+export const playlist = require('./playlist.png');
+export const speaker = require('./speakers.png');
+export const swapIcon = require('./exchange.png');
+export const shuffleIcon = require('./shuffle.png');
+export const deleteIcon = require('./delete.png');
+export const muteIcon = require('./mute.png');
+export const queueIcon = require('./queue.png');
+export const tickIcon = require('./tick.png');
+export const noInternetIcon = require('./no-network-icon.png');

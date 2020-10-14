@@ -7,6 +7,8 @@ import React, { useEffect, useReducer } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import { Provider } from 'react-redux';
+import { store } from './src/Redux/store';
 
 import { UserProvider } from './src/context/UserContext';
 import AuthStack from './src/navigation/stacks/AuthenticationStack';
@@ -31,17 +33,20 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="black" />
-      <NavigationContainer>
-        {state.user === null ? (
-          <AuthStack />
-        ) : (
-          <UserProvider>
-            <MainAppStack />
-          </UserProvider>
-        )}
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          {state.user === null ? (
+            <AuthStack />
+          ) : (
+            <UserProvider>
+              <MainAppStack />
+            </UserProvider>
+          )}
+        </NavigationContainer>
+      </Provider>
     </>
   );
 };
 
+// TrackPlayer.getInstance();
 export default App;

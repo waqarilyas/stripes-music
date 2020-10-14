@@ -33,7 +33,6 @@ const ForYouPlaylistSeeAll = () => {
         keyExtractor={() => randomize('Aa10!', 10)}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         renderItem={({ item: { image, title, duration, author } }) => {
-          console.log(image);
           return (
             <ForYouPlaylistCard
               image={image}

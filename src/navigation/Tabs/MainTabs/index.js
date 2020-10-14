@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useSelector } from 'react-redux';
 
 //local imports
 import HomeStack from '../../stacks/HomeStack';
@@ -24,10 +26,22 @@ import {
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabs = () => {
+  const miniModalOpen = useSelector((state) => state.root.audio.miniModalOpen);
   return (
     <Tab.Navigator
       labeled={false}
-      barStyle={{ backgroundColor: 'black' }}
+      barStyle={
+        miniModalOpen
+          ? {
+              height: RFValue(80),
+              marginTop: RFValue(80),
+              backgroundColor: 'black',
+            }
+          : {
+              height: RFValue(80),
+              backgroundColor: 'black',
+            }
+      }
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
