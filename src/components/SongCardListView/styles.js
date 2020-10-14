@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  cardImage: {
-    resizeMode: 'contain',
-    height: 75,
-    width: 75,
+  image: {
+    resizeMode: 'cover',
+    height: hp('10'),
+    width: hp('10'),
     overflow: 'hidden',
-    borderRadius: 8,
+    borderRadius: 10,
   },
   subtitle: {
     color: 'gray',
@@ -23,6 +23,12 @@ const styles = StyleSheet.create({
   duration: {
     color: 'gray',
     fontWeight: 'bold',
+  },
+  tintedIcon: {
+    tintColor: '#e81093',
+  },
+  icon: {
+    tintColor: 'gray',
   },
   likeImage: {
     resizeMode: 'contain',

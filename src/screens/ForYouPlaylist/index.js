@@ -34,7 +34,7 @@ const ForYouPlaylist = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             data={[...state.playlists, { seeAll: true }]}
-            renderItem={({ item: { title, image, seeAll } }) => {
+            renderItem={({ item: { title, image, seeAll, songs } }) => {
               if (seeAll) {
                 return (
                   <SeeAll
@@ -42,7 +42,13 @@ const ForYouPlaylist = ({ navigation }) => {
                   />
                 );
               } else {
-                return <PlaylistCard title={title} image={image} />;
+                return (
+                  <PlaylistCard
+                    title={title}
+                    image={image}
+                    songsCount={songs.length}
+                  />
+                );
               }
             }}
             ListFooterComponent={<></>}

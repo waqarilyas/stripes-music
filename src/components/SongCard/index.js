@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { Image } from 'react-native-elements';
+import { View, Text, ActivityIndicator, Image } from 'react-native';
 
 import styles from './styles';
 
@@ -13,10 +12,10 @@ const SongCard = ({ title, artist, arts }) => {
         PlaceholderContent={<ActivityIndicator color="white" />}
       />
       <View style={styles.cardText}>
-        <Text numberOfLines={1} style={styles.cardHeader}>
+        <Text numberOfLines={1} style={styles.title}>
           {title}
         </Text>
-        <Text style={styles.cardSubHeader}>{artist}</Text>
+        <Text style={styles.artist}>{artist}</Text>
       </View>
     </View>
   );

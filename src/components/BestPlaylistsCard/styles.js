@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: hp('18'),
     width: hp('18'),
+    overflow: 'hidden',
     borderRadius: hp('1'),
   },
   noSongs: {

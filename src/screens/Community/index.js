@@ -28,7 +28,6 @@ const Community = ({ navigation }) => {
   useEffect(() => {
     const listener = firestore()
       .collection('chats')
-      // .orderBy('recentMessage.createdAt')
       .where('members', 'array-contains', uid)
       .onSnapshot((snapshot) => {
         let documents = [];

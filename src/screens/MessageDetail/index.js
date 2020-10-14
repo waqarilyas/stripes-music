@@ -134,32 +134,6 @@ const MessageDetail = ({ route, navigation }) => {
         avatar: localUser.profilePicture,
       },
     });
-
-    // Update recent messages in user chat document
-    // await userInboxDocument.set({
-    //   artist: {
-    //     avatar: artist.imgUrl,
-    //     name: `${artist.firstName} ${artist.lastName}`,
-    //     artistId: artist.id,
-    //   },
-    //   readStatus,
-    //   createdAt: firestore.FieldValue.serverTimestamp(),
-    //   text,
-    //   updatedAt: firestore.FieldValue.serverTimestamp(),
-    // });
-
-    // Update recent messages in user artist document
-    // await artistInboxDocument.set({
-    //   artist: {
-    //     avatar: artist.imgUrl,
-    //     name: `${artist.firstName} ${artist.lastName}`,
-    //     artistId: artist.id,
-    //   },
-    //   readStatus,
-    //   text,
-    //   createdAt: firestore.FieldValue.serverTimestamp(),
-    //   updatedAt: firestore.FieldValue.serverTimestamp(),
-    // });
   };
 
   const renderSend = (props) => {

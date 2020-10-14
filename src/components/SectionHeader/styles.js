@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,
+    marginBottom: hp('2'),
   },
   rightText: {
     color: 'white',
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
   seeAll: {
     color: 'white',
     fontSize: 12,
+    fontWeight: 'bold',
   },
   background: {
     padding: 12,

@@ -1,23 +1,19 @@
 import { StyleSheet } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'black',
   },
   title: {
     color: 'white',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  subtitle: {
-    color: 'grey',
-    fontSize: 14,
-    marginTop: 6,
-    fontWeight: 'bold',
+    fontWeight: '500',
+    fontSize: hp('2'),
   },
   icon: {
     resizeMode: 'contain',
-    height: 20,
-    width: 20,
+    height: hp('3'),
+    width: hp('3'),
   },
 });
 export default styles;
