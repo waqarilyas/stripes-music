@@ -28,8 +28,8 @@ const MostPlayedSeeAll = () => {
           data={state.songs}
           ItemSeparatorComponent={() => <Divider style={styles.divider} />}
           keyExtractor={() => randomize('Aa!0', 10)}
-          renderItem={({ item: { title, artist } }) => (
-            <SongItem title={title} author={artist} />
+          renderItem={({ item: { title, artist, arts } }) => (
+            <SongItem title={title} author={artist} arts={arts} />
           )}
         />
       )}

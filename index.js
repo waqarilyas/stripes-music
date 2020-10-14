@@ -6,6 +6,7 @@ import App from './App';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import TrackPlayer from 'react-native-track-player';
 
 GoogleSignin.configure({
   webClientId:
@@ -13,3 +14,4 @@ GoogleSignin.configure({
 });
 
 AppRegistry.registerComponent(appName, () => App);
+// TrackPlayer.registerPlaybackService(() => require('./service.js'));

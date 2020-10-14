@@ -13,6 +13,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     marginHorizontal: 14,
   },
+  overlay: {
+    backgroundColor: '#212121',
+    height: '50%',
+    width: '80%',
+    borderRadius: hp('2'),
+    paddingHorizontal: hp('2'),
+  },
+  overlayHeader: {
+    fontSize: hp('2'),
+    alignSelf: 'center',
+    paddingVertical: hp('2'),
+    color: 'white',
+  },
+  checkboxContainer: {
+    backgroundColor: 'black',
+  },
+  checkboxInput: {
+    fontSize: hp('2'),
+    color: 'white',
+    marginRight: hp('10'),
+  },
 });
 
 export default styles;
