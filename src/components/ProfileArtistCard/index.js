@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-elements';
 
 import styles from './styles';
 
-const ProfileArtist = ({ name, image }) => {
+const ProfileArtistCard = ({ name, image }) => {
   return (
     <View style={styles.container}>
       <Avatar rounded source={{ uri: image }} size="large" />
@@ -15,4 +15,4 @@ const ProfileArtist = ({ name, image }) => {
   );
 };
 
-export default ProfileArtist;
+export default ProfileArtistCard;

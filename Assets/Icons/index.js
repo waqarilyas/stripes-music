@@ -67,6 +67,8 @@ export const emptyChatIcon = require('./icon-empty-chat.png');
 export const mostPlayedHome = require('./icon-most-played-home.png');
 export const recentlyPlayedHome = require('./icon-recently-played.png');
 export const emptyArtist = require('./icon-empty-artist.png');
+export const profilePicPlaceholder = require('./icon-profile-placeholder.jpg');
+export const imagePlaceholder = require('./icon-picture-placeholder.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');

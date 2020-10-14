@@ -1,43 +1,80 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { Image } from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import randomize from 'randomatic';
+import React, { useEffect, useReducer } from 'react';
+import { FlatList } from 'react-native';
+import { Divider } from 'react-native-elements';
+import { iconsPlaylist, musicIcon } from '../../../Assets/Icons';
+import reducer from '../../hooks/useReducer';
+import EmptyProfileCard from '../EmptyProfileCard';
+import ProfilePlaylistsCard from '../ProfilePlaylistsCard';
+import SectionHeader from '../SectionHeader';
 
-import styles from './styles';
-import { thousandSeprator } from '../../utils/Helpers';
-import { eyeIcon } from '../../../Assets/Icons';
+const initialState = {
+  playlists: [],
+};
 
-const ProfilePlaylists = ({
-  imgUrl,
-  songCount,
-  title,
-  isPrivate,
-  viewCount,
-}) => {
+const ProfilePlaylists = ({ navigation, styles }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    const uid = auth().currentUser.uid;
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .limit(10)
+      .get()
+      .then((documents) => {
+        let data = [];
+        documents.forEach((document) => {
+          if (document.exists) {
+            data.push(document.data());
+          }
+        });
+        dispatch({ playlists: data });
+      });
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: imgUrl }} style={styles.image}>
-        <View style={styles.badge}>
-          <Text style={styles.noSongs}>{songCount} SONGS</Text>
-        </View>
-      </Image>
-      <Text style={styles.title}>{title}</Text>
-
-      {isPrivate ? (
-        <View style={styles.privateContainer}>
-          <Text style={styles.status}>Private</Text>
-        </View>
-      ) : (
-        <>
-          <View style={styles.publicContainer}>
-            <Text style={styles.status}>Public</Text>
-          </View>
-          <View style={styles.viewCountContainer}>
-            <Image style={styles.icon} source={eyeIcon} />
-            <Text style={styles.viewCount}>{thousandSeprator(viewCount)}</Text>
-          </View>
-        </>
-      )}
-    </View>
+    <>
+      <SectionHeader
+        name="My Playlists"
+        icon={musicIcon}
+        onPress={() => navigation.navigate('ProfilePlaylists')}
+        isRequired={state.playlists.length > 5}
+      />
+      <FlatList
+        data={state.playlists}
+        keyExtractor={(item) => item.id}
+        horizontal
+        contentContainerStyle={{ width: '100%' }}
+        ListEmptyComponent={
+          <EmptyProfileCard
+            text="No playlists created yet. Create one"
+            icon={iconsPlaylist}
+            buttonTitle="CREATE PLAYLIST"
+            onPress={() => navigation.navigate('CreateNewPlaylist')}
+          />
+        }
+        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({
+          item: { image, title, songs, isPrivate, viewCount },
+        }) => {
+          return (
+            <ProfilePlaylistsCard
+              imgUrl={image}
+              songCount={songs.length}
+              title={title}
+              isPrivate={isPrivate}
+              viewCount={viewCount}
+            />
+          );
+        }}
+      />
+    </>
   );
 };
 

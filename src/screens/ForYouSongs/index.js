@@ -32,7 +32,7 @@ const ForYouSongs = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={[...state.songs, { seeAll: true }]}
-          renderItem={({ item: { title, arts, artist, seeAll } }) => {
+          renderItem={({ item: { title, artwork, artist, seeAll } }) => {
             if (seeAll) {
               return (
                 <SeeAll
@@ -44,7 +44,7 @@ const ForYouSongs = ({ navigation }) => {
                 <SongCard
                   key={randomize('Aa0!', 10)}
                   title={title}
-                  arts={arts}
+                  artwork={artwork}
                   artist={artist}
                 />
               );

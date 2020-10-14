@@ -3,12 +3,13 @@ import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import ProfileScreen from '../../screens/ProfileScreen';
-import ProfilePlaylistsSeeAll from '../../screens/ProfilePlaylistsSeeAll';
-import ProfileArtistsSeeAll from '../../screens/ProfileArtistsSeeAll';
-import ProfileRecentlyPlayedSeeAll from '../../screens/ProfileRecentlyPlayedSeeAll';
 import Artist from '../../screens/Artist';
+import ProfileScreen from '../../screens/ProfileScreen';
 import { searchIcon, backIcon } from '../../../Assets/Icons';
+import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
+import ProfileArtistsSeeAll from '../../screens/ProfileArtistsSeeAll';
+import ProfilePlaylistsSeeAll from '../../screens/ProfilePlaylistsSeeAll';
+import ProfileRecentlyPlayedSeeAll from '../../screens/ProfileRecentlyPlayedSeeAll';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,17 @@ const ProfileStack = () => {
         options={({ navigation }) => ({
           title: '',
           headerRight: search,
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="CreateNewPlaylist"
+        component={CreateNewPlaylist}
+        options={({ navigation }) => ({
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
           headerStyle: styles.headerStyle,
         })}

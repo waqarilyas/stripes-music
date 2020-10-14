@@ -3,7 +3,6 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   seeAllContainer: {
-    backgroundColor: 'rgba(21, 21, 21, 0.5)',
     height: hp('15'),
     width: hp('15'),
     marginHorizontal: 8,

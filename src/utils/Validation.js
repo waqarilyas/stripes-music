@@ -22,4 +22,11 @@ const ForgotPasswordVS = yup.object().shape({
   email: yup.string().required().email().label('Email'),
 });
 
-export { LoginVS, SignUpVS, ForgotPasswordVS };
+const CreatePlaylistVS = yup.object().shape({
+  title: yup
+    .string()
+    .required('Playlist title cannot be empty')
+    .label('Playlist'),
+});
+
+export { LoginVS, SignUpVS, ForgotPasswordVS, CreatePlaylistVS };

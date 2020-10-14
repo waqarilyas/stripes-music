@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   centerComponent: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: hp('2.4'),
   },
 });
 

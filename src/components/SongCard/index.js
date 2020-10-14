@@ -3,11 +3,11 @@ import { View, Text, ActivityIndicator, Image } from 'react-native';
 
 import styles from './styles';
 
-const SongCard = ({ title, artist, arts }) => {
+const SongCard = ({ title, artwork, artist }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: arts[0] }}
+        source={{ uri: artwork }}
         style={styles.image}
         PlaceholderContent={<ActivityIndicator color="white" />}
       />

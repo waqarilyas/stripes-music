@@ -37,7 +37,7 @@ const HomeMostPlayed = ({ navigation }) => {
       <FlatList
         data={state.songs}
         horizontal
-        contentContainerStyle={{ height: '100%', width: '100%' }}
+        contentContainerStyle={{ width: '100%' }}
         ListEmptyComponent={emptyCard}
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item: { title, artist, arts } }) => {
