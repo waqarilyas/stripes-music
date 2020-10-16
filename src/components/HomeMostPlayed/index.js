@@ -1,31 +1,15 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
-import randomize from 'randomatic';
-
-import SectionHeader from '../SectionHeader';
-import { musicIcon, mostPlayedHome } from '../../../Assets/Icons';
-import { getOrderedCollection } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-import SongCard from '../SongCard';
+import { mostPlayedHome, musicIcon } from '../../../Assets/Icons';
 import EmptyCard from '../EmptyCard';
-
-const initialState = {
-  songs: [],
-};
+import SectionHeader from '../SectionHeader';
+import SongCard from '../SongCard';
 
 const emptyCard = () => {
   return <EmptyCard text="No Songs Played" icon={mostPlayedHome} />;
 };
 
-const HomeMostPlayed = ({ navigation }) => {
-  useEffect(() => {
-    getOrderedCollection('songs', 'playCount', 'desc', 10, (collection) =>
-      dispatch({ songs: collection }),
-    );
-  }, []);
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+const HomeMostPlayed = ({ navigation, data }) => {
   return (
     <>
       <SectionHeader
@@ -35,13 +19,13 @@ const HomeMostPlayed = ({ navigation }) => {
       />
 
       <FlatList
-        data={state.songs}
+        data={data}
         horizontal
-        contentContainerStyle={{ width: '100%' }}
+        contentContainerStyle={data.length > 0 ? null : { flex: 1 }}
         ListEmptyComponent={emptyCard}
-        keyExtractor={() => randomize('Aa0!', 10)}
-        renderItem={({ item: { title, artist, arts } }) => {
-          return <SongCard title={title} artist={artist} arts={arts} />;
+        keyExtractor={(item) => item.id}
+        renderItem={({ item: { title, artist, artwork } }) => {
+          return <SongCard title={title} artist={artist} artwork={artwork} />;
         }}
       />
     </>

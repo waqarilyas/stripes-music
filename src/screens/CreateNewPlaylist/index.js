@@ -1,39 +1,45 @@
+import Checkbox from '@react-native-community/checkbox';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import { Formik } from 'formik';
 import React, { useState } from 'react';
 import {
-  Image,
   KeyboardAvoidingView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
-  TextInput,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import { Formik } from 'formik';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-import Checkbox from '@react-native-community/checkbox';
-
 import ImagePicker from 'react-native-image-picker';
-import { imagePlaceholder, edit } from '../../../Assets/Icons';
-import styles from './styles';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
+
+import { imagePlaceholder } from '../../../Assets/Icons';
 import Button from '../../components/Button';
 import { CreatePlaylistVS } from '../../utils/Validation';
-import { heightPercentageToDP } from 'react-native-responsive-screen';
+import styles from './styles';
 
 const initValues = {
   title: '',
+  err: '',
 };
 
-const CreateNewPlaylist = () => {
-  const [fileUri, SetFileuri] = useState(null);
+const CreateNewPlaylist = ({ navigation }) => {
+  const [fileUri, setFileuri] = useState(null);
+  const [ext, setExt] = useState('');
   const [privacy, setPrivacy] = useState(false);
+  const uid = auth().currentUser.uid;
 
   const chooseImage = () => {
-    let options = {
+    const options = {
       title: 'Select Playlist Artwork',
       takePhotoButtonTitle: null,
       mediaType: 'photo',
-      quality: 1.0,
+      maxWidth: 800,
+      maxHeight: 800,
+      quality: 1,
+      allowsEditing: true,
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -41,43 +47,105 @@ const CreateNewPlaylist = () => {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log(response.uri);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        SetFileuri(response.uri);
+        const splittedUri = response.uri.split('.');
+        const extension = splittedUri[splittedUri.length - 1];
+        setExt(extension);
+        setFileuri(decodeURI(response.uri));
       }
     });
   };
 
   const createNewPlaylist = (values, action) => {
+    const title = values.title;
+    const finalTitle = title.toLowerCase().split(' ').join('-');
+
+    if (fileUri) {
+      uploadImageToStorage(finalTitle, title, action);
+    } else {
+      uploadDataToFirestore(title);
+    }
+  };
+
+  const uploadImageToStorage = (finalTitle, title, action) => {
+    const storageRef = storage().ref('users/');
+    const path = `${uid}/playlists/${finalTitle}/${finalTitle}.${ext}`;
+    const uploadTask = storageRef.child(path).putFile(fileUri);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+        switch (snapshot.state) {
+          case storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            break;
+          case storage.TaskState.CANCELLED:
+          case storage.TaskState.ERROR:
+            action.setSubmitting(false);
+            action.setErrors({
+              err: 'Failed to create a playlist. Try again.',
+            });
+            break;
+          case storage.TaskState.RUNNING:
+            console.log('Upload is running');
+            break;
+        }
+      }, // Failed Listener
+      (_err) => {
+        action.setSubmitting(false);
+        action.setErrors({
+          err: 'Failed to create a playlist. Try again.',
+        });
+      }, // Successful Listener
+      () => {
+        console.log('------ SUCCESSFULLY UPLOADED PICTURE ------');
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+          console.log('File available at', downloadUrl);
+          uploadDataToFirestore(title, downloadUrl);
+        });
+      },
+    );
+  };
+
+  const uploadDataToFirestore = (title, imageUrl = '') => {
     const playlist = {
       createdAt: firestore.FieldValue.serverTimestamp(),
       updatedAt: firestore.FieldValue.serverTimestamp(),
       duration: '0H',
       id: '',
-      image: fileUri === null ? '' : fileUri,
+      image: imageUrl,
       isPrivate: privacy,
       songs: [],
-      title: values.title,
+      title,
+      viewCount: privacy ? null : 0,
     };
 
-    console.log(playlist);
-
-    // const title = values.title;
-    // const uid = auth().currentUser.uid;
-    // firestore().collection('users').doc(uid).collection('playlists').add({
-    // })
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .add(playlist)
+      .then((ref) => {
+        ref.set(
+          {
+            id: ref.id,
+          },
+          { merge: true },
+        );
+      })
+      .then(() => navigation.goBack());
   };
 
   return (
     <>
       <View style={styles.overlay}>
         <KeyboardAvoidingView>
-          <Text style={styles.overlayHeader}>Create Playlist</Text>
-          <Text style={styles.subtitle}>Create a new playlist</Text>
+          <Text style={styles.overlayHeader}>Create New Playlist</Text>
           <View style={styles.profileContainer}>
             <TouchableOpacity onPress={chooseImage}>
               <Avatar
@@ -87,11 +155,9 @@ const CreateNewPlaylist = () => {
                 containerStyle={{ alignSelf: 'center' }}
                 onPress={chooseImage}
               />
-
-              <Text style={styles.optional}>Optional</Text>
-              <View style={styles.edit}>
-                <Image source={edit} style={styles.imageEdit} />
-              </View>
+              <Text style={styles.optional}>
+                Select Profile Picture (Optional)
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -132,6 +198,9 @@ const CreateNewPlaylist = () => {
                   onPress={handleSubmit}
                   isSubmitting={isSubmitting}
                 />
+                <Text style={styles.error}>
+                  {touched.err && errors.err ? errors.err : ''}
+                </Text>
               </>
             )}
           </Formik>

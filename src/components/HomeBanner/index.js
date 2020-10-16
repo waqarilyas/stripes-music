@@ -1,33 +1,40 @@
-import React, { useEffect, useReducer } from 'react';
-import { FlatList } from 'react-native';
-import randomize from 'randomatic';
+import firestore from '@react-native-firebase/firestore';
+import React from 'react';
+import { FlatList, TouchableOpacity } from 'react-native';
 
 import HomeTopSlider from '../HomeTopSlider';
-import { getCollection } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
 
-const initialState = {
-  banner: [],
-};
+const HomeBanner = ({ data }) => {
+  const addViewCount = (id) => {
+    const postReference = firestore().collection('songs').doc(id);
 
-const HomeBanner = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+    return firestore().runTransaction(async (transaction) => {
+      const postSnapshot = await transaction.get(postReference);
 
-  useEffect(() => {
-    getCollection('songs', 10, (collection) =>
-      dispatch({ banner: collection }),
-    );
-  }, []);
+      if (!postReference) {
+        throw 'Post does not exist';
+      }
+
+      await transaction.update(postReference, {
+        playCount: postSnapshot.data().playCount + 1,
+      });
+    });
+  };
 
   return (
     <FlatList
-      data={state.banner}
+      data={data}
       horizontal
-      onScrollToIndexFailed={(info) => console.log(info)}
-      keyExtractor={() => randomize('Aa0!', 10)}
-      renderItem={({ item: { arts, title, description } }) => {
+      keyExtractor={(item) => item.id}
+      renderItem={({ item: { id, artwork, title, description } }) => {
         return (
-          <HomeTopSlider arts={arts} title={title} description={description} />
+          <TouchableOpacity onPress={() => addViewCount(id)}>
+            <HomeTopSlider
+              artwork={artwork}
+              title={title}
+              description={description}
+            />
+          </TouchableOpacity>
         );
       }}
     />

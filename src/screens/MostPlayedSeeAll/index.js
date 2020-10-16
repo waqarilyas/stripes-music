@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from 'react';
 import { FlatList, View } from 'react-native';
 import { Divider } from 'react-native-elements';
 import SongItem from '../../components/SongItem';
-import randomize from 'randomatic';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -19,7 +18,7 @@ const MostPlayedSeeAll = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getOrderedCollections('songs', 'likesCount', 'desc', (collection) =>
+    getOrderedCollections('songs', 'playCount', 'desc', (collection) =>
       dispatch({ songs: collection }),
     );
 
@@ -48,7 +47,7 @@ const MostPlayedSeeAll = () => {
                 id={id}
                 title={title}
                 author={artist}
-                image={artwork[0]}
+                image={artwork}
                 isFavorite={isFavorite}
               />
             );

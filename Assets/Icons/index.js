@@ -1,15 +1,20 @@
+// Home tab icon
 export const tab1White = require('./tab1-white.png');
 export const tab1Grey = require('./tab1-grey.png');
 
+// Video tab icon
 export const tab2White = require('./tab2-white.png');
 export const tab2Grey = require('./tab2-grey.png');
 
+// Profile tab icon
 export const tab3White = require('./tab3-white.png');
 export const tab3Grey = require('./tab3-grey.png');
 
+// Chat tab icon
 export const tab4White = require('./tab4-white.png');
 export const tab4Grey = require('./tab4-grey.png');
 
+// News tab icon
 export const tab5White = require('./tab5-white.png');
 export const tab5Grey = require('./tab5-grey.png');
 
@@ -69,6 +74,9 @@ export const recentlyPlayedHome = require('./icon-recently-played.png');
 export const emptyArtist = require('./icon-empty-artist.png');
 export const profilePicPlaceholder = require('./icon-profile-placeholder.jpg');
 export const imagePlaceholder = require('./icon-picture-placeholder.png');
+export const playlistDefault = require('./icon-playlist-default.jpg');
+export const createPlaylistIcon = require('./icons-create-playlist.png');
+export const editProfileIcon = require('./icons-edit-profile-edit.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');

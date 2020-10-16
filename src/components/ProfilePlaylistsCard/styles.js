@@ -8,9 +8,10 @@ const styles = StyleSheet.create({
   },
   image: {
     justifyContent: 'center',
-    height: 145,
-    width: 145,
+    height: hp('18'),
+    width: hp('18'),
     borderRadius: hp('1'),
+    overflow: 'hidden',
   },
   noSongs: {
     color: 'white',
@@ -63,8 +64,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     resizeMode: 'contain',
-    width: 12,
-    height: 12,
+    width: hp('2'),
+    height: hp('2'),
     tintColor: 'gray',
   },
 });

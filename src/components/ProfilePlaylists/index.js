@@ -1,10 +1,10 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import randomize from 'randomatic';
 import React, { useEffect, useReducer } from 'react';
 import { FlatList } from 'react-native';
 import { Divider } from 'react-native-elements';
-import { iconsPlaylist, musicIcon } from '../../../Assets/Icons';
+
+import { iconsPlaylist } from '../../../Assets/Icons';
 import reducer from '../../hooks/useReducer';
 import EmptyProfileCard from '../EmptyProfileCard';
 import ProfilePlaylistsCard from '../ProfilePlaylistsCard';
@@ -19,39 +19,41 @@ const ProfilePlaylists = ({ navigation, styles }) => {
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
-    firestore()
+    const listener = firestore()
       .collection('users')
       .doc(uid)
       .collection('playlists')
-      .limit(10)
-      .get()
-      .then((documents) => {
+      .orderBy('createdAt', 'asc')
+      .onSnapshot((querySnapshot) => {
         let data = [];
-        documents.forEach((document) => {
+        querySnapshot.docs.forEach((document) => {
           if (document.exists) {
             data.push(document.data());
           }
         });
         dispatch({ playlists: data });
       });
+
+    return () => listener;
   }, []);
 
   return (
     <>
       <SectionHeader
         name="My Playlists"
-        icon={musicIcon}
+        icon={iconsPlaylist}
         onPress={() => navigation.navigate('ProfilePlaylists')}
         isRequired={state.playlists.length > 5}
       />
       <FlatList
         data={state.playlists}
+        extraData={state.playlists.length}
         keyExtractor={(item) => item.id}
         horizontal
-        contentContainerStyle={{ width: '100%' }}
+        contentContainerStyle={state.playlists.length > 0 ? null : { flex: 1 }}
         ListEmptyComponent={
           <EmptyProfileCard
-            text="No playlists created yet. Create one"
+            text="No playlists created"
             icon={iconsPlaylist}
             buttonTitle="CREATE PLAYLIST"
             onPress={() => navigation.navigate('CreateNewPlaylist')}

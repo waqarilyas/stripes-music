@@ -1,25 +1,20 @@
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
 import { Image } from 'react-native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
-//local imports
-import HomeStack from '../../stacks/HomeStack';
-import VideoStack from '../../stacks/VideoStack';
-import ProfileStack from '../../stacks/ProfileStack';
-import NewsStack from '../../stacks/NewsStack';
-import CommunityStack from '../../stacks/CommunityStack';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 import {
-  tab1White,
   tab1Grey,
-  tab2White,
   tab2Grey,
-  tab3White,
   tab3Grey,
-  tab4White,
   tab4Grey,
-  tab5White,
   tab5Grey,
 } from '../../../../Assets/Icons';
+import CommunityStack from '../../stacks/CommunityStack';
+//local imports
+import HomeStack from '../../stacks/HomeStack';
+import NewsStack from '../../stacks/NewsStack';
+import ProfileStack from '../../stacks/ProfileStack';
+import VideoStack from '../../stacks/VideoStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -29,23 +24,40 @@ const MainTabs = () => {
       labeled={false}
       barStyle={{ backgroundColor: 'black' }}
       initialRouteName="Home"
+      activeColor="#FFFFFF"
+      inactiveColor="#616161"
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
+        tabBarIcon: ({ color }) => {
           let iconName;
 
-          if (route.name === 'Home') {
-            iconName = focused ? tab1White : tab1Grey;
-          } else if (route.name === 'Videos') {
-            iconName = focused ? tab2White : tab2Grey;
-          } else if (route.name === 'Profile') {
-            iconName = focused ? tab3White : tab3Grey;
-          } else if (route.name === 'Community') {
-            iconName = focused ? tab4White : tab4Grey;
-          } else if (route.name === 'News') {
-            iconName = focused ? tab5White : tab5Grey;
+          switch (route.name) {
+            case 'Home':
+              iconName = tab1Grey;
+              break;
+            case 'Videos':
+              iconName = tab2Grey;
+              break;
+            case 'Profile':
+              iconName = tab3Grey;
+              break;
+            case 'Community':
+              iconName = tab4Grey;
+              break;
+            case 'News':
+              iconName = tab5Grey;
+              break;
           }
 
-          return <Image source={iconName} />;
+          return (
+            <Image
+              source={iconName}
+              style={{
+                tintColor: color,
+                width: heightPercentageToDP('3'),
+                height: heightPercentageToDP('3'),
+              }}
+            />
+          );
         },
       })}>
       <Tab.Screen name="Home" component={HomeStack} />

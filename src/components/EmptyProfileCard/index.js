@@ -14,10 +14,10 @@ const EmptyCard = ({ icon, text, buttonTitle, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    paddingVertical: hp('4'),
+    paddingVertical: hp('3'),
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   text: {
     marginTop: hp('3'),
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     marginBottom: hp('1'),
   },
   icon: {
-    height: hp('6'),
-    width: hp('6'),
+    height: hp('5'),
+    width: hp('5'),
   },
 });
 

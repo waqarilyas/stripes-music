@@ -1,10 +1,15 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Image } from 'react-native-elements';
+import {
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
 
 import styles from './styles';
 import { thousandSeprator } from '../../utils/Helpers';
-import { eyeIcon } from '../../../Assets/Icons';
+import { playlistDefault, eyeIcon } from '../../../Assets/Icons';
 
 const ProfilePlaylistsCard = ({
   imgUrl,
@@ -15,12 +20,16 @@ const ProfilePlaylistsCard = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: imgUrl }} style={styles.image}>
+      <ImageBackground
+        source={imgUrl === '' ? playlistDefault : { uri: imgUrl }}
+        style={styles.image}>
         <View style={styles.badge}>
           <Text style={styles.noSongs}>{songCount} SONGS</Text>
         </View>
-      </Image>
-      <Text style={styles.title}>{title}</Text>
+      </ImageBackground>
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
 
       {isPrivate ? (
         <View style={styles.privateContainer}>

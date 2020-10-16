@@ -13,6 +13,7 @@ import ProfileFavoriteSongs from '../../components/ProfileFavoriteSongs';
 import reducer from '../../hooks/useReducer';
 import { thousandSeprator } from '../../utils/Helpers';
 import styles from './styles';
+import ProfileActionBar from '../../components/ProfileActionBar';
 
 const initialState = {
   user: {},
@@ -64,6 +65,7 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </View>
 
+      <ProfileActionBar navigation={navigation} />
       <ProfilePlaylists navigation={navigation} styles={styles} />
       <ProfileFavoriteSongs navigation={navigation} />
       <ProfileArtists navigation={navigation} />

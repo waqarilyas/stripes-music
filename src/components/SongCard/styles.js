@@ -20,11 +20,12 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: hp('2'),
+    fontSize: hp('1.6'),
   },
   artist: {
     color: '#787878',
     fontSize: hp('1.5'),
+    marginTop: hp('0.6'),
   },
   cardText: {
     marginTop: hp('2'),

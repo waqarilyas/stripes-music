@@ -4,10 +4,10 @@ import { Text, View, ImageBackground } from 'react-native';
 
 import styles from './styles.js';
 
-const HomeTopSlider = ({ arts, title, description }) => {
+const HomeTopSlider = ({ artwork, title, description }) => {
   return (
     <View style={styles.container}>
-      <ImageBackground source={{ uri: arts[0] }} style={styles.image}>
+      <ImageBackground source={{ uri: artwork }} style={styles.image}>
         <View style={styles.text}>
           <Text style={styles.songName}>{title}</Text>
           <Text numberOfLines={1} style={styles.subText}>
