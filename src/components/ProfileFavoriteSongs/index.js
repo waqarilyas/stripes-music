@@ -36,11 +36,10 @@ const ProfileFavoriteSongs = ({ navigation }) => {
         name="Favorite Songs"
         icon={musicIcon}
         onPress={() => navigation.navigate('ProfileArtists')}
-        isRequired={state.favSongs.length > 5}
+        // isRequired={state.favSongs.length > 5}
       />
       <FlatList
         data={state.favSongs}
-        extraData={state.favSongs.length}
         keyExtractor={(item) => item.id}
         horizontal
         contentContainerStyle={{ width: '100%' }}

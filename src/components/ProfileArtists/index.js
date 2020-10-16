@@ -36,7 +36,7 @@ const ProfileArtists = ({ navigation }) => {
         name="Favorite Artists"
         icon={iconsPlaylist}
         onPress={() => navigation.navigate('ProfileArtists')}
-        isRequired={state.favArtists.length > 5}
+        // isRequired={state.favArtists.length > 5}
       />
       <FlatList
         data={state.favArtists}

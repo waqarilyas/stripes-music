@@ -31,10 +31,7 @@ const MainDrawer = ({ navigation }) => {
           component={AccountSettingStack}
         />
       </Drawer.Navigator>
-      <View style={{ backgroundColor: 'red' }}>
-        {/* <MusicPlayerModal navigation={navigation} />
-        <MusicPlayerFullscreen /> */}
-      </View>
+      <View style={{ backgroundColor: 'red' }}></View>
     </>
   );
 };

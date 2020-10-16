@@ -24,7 +24,7 @@ const ProfilePlaylists = ({ navigation, styles }) => {
       .doc(uid)
       .collection('playlists')
       .orderBy('createdAt', 'asc')
-      .onSnapshot((querySnapshot) => {
+      .onSnapshot({ includeMetadataChanges: true }, (querySnapshot) => {
         let data = [];
         querySnapshot.docs.forEach((document) => {
           if (document.exists) {
@@ -68,7 +68,7 @@ const ProfilePlaylists = ({ navigation, styles }) => {
           return (
             <ProfilePlaylistsCard
               imgUrl={image}
-              songCount={songs.length}
+              // songCount={songs.length ? songs.length : 0}
               title={title}
               isPrivate={isPrivate}
               viewCount={viewCount}

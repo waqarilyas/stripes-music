@@ -1,7 +1,15 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
 import { Image } from 'react-native';
-import { heightPercentageToDP } from 'react-native-responsive-screen';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useSelector } from 'react-redux';
+
+//local imports
+import HomeStack from '../../stacks/HomeStack';
+import VideoStack from '../../stacks/VideoStack';
+import ProfileStack from '../../stacks/ProfileStack';
+import NewsStack from '../../stacks/NewsStack';
+import CommunityStack from '../../stacks/CommunityStack';
 import {
   tab1Grey,
   tab2Grey,
@@ -9,20 +17,27 @@ import {
   tab4Grey,
   tab5Grey,
 } from '../../../../Assets/Icons';
-import CommunityStack from '../../stacks/CommunityStack';
-//local imports
-import HomeStack from '../../stacks/HomeStack';
-import NewsStack from '../../stacks/NewsStack';
-import ProfileStack from '../../stacks/ProfileStack';
-import VideoStack from '../../stacks/VideoStack';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabs = () => {
+  const miniModalOpen = useSelector((state) => state.root.audio.miniModalOpen);
   return (
     <Tab.Navigator
       labeled={false}
-      barStyle={{ backgroundColor: 'black' }}
+      barStyle={
+        miniModalOpen
+          ? {
+              height: RFValue(80),
+              marginTop: RFValue(80),
+              backgroundColor: 'black',
+            }
+          : {
+              height: RFValue(80),
+              backgroundColor: 'black',
+            }
+      }
       initialRouteName="Home"
       activeColor="#FFFFFF"
       inactiveColor="#616161"
@@ -53,8 +68,8 @@ const MainTabs = () => {
               source={iconName}
               style={{
                 tintColor: color,
-                width: heightPercentageToDP('3'),
-                height: heightPercentageToDP('3'),
+                width: hp('3'),
+                height: hp('3'),
               }}
             />
           );

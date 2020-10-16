@@ -11,7 +11,6 @@ import ProfilePlaylists from '../../components/ProfilePlaylists';
 import ProfileRecentlyPlayed from '../../components/ProfileRecentlyPlayed';
 import ProfileFavoriteSongs from '../../components/ProfileFavoriteSongs';
 import reducer from '../../hooks/useReducer';
-import { thousandSeprator } from '../../utils/Helpers';
 import styles from './styles';
 import ProfileActionBar from '../../components/ProfileActionBar';
 
@@ -35,35 +34,42 @@ const ProfileScreen = ({ navigation }) => {
       .get()
       .then((document) => {
         if (document.exists) {
+          console.log(document.data());
           const user = document.data();
-          const artists = document.data().artistFollowing;
-          const artistLength = artists.length;
-          dispatch({
-            user: user,
-            artistFollowing: artistLength,
-          });
+          if (user.artistFollowing) {
+            const artists = user.artistFollowing.length;
+            console.log(artists);
+            dispatch({
+              user: user,
+              artistFollowing: artists,
+            });
+          } else {
+            dispatch({ user: user });
+          }
         }
       });
   }, []);
 
   return (
     <Block>
-      <View style={styles.pageTop}>
-        <Avatar
-          rounded
-          containerStyle={styles.profilePictureContainer}
-          overlayContainerStyle={styles.profilePicOverlayContainer}
-          source={{ uri: state.user.profilePicture }}
-          renderPlaceholderContent={<ProfilePicPlaceholder />}
-        />
-        <View style={styles.pageTopNameView}>
-          <Text style={styles.artistName}>{state.user.fullName}</Text>
-          <View>
-            <Text style={styles.followText}>{state.artistFollowing}</Text>
-            <Text style={styles.followSubtext}>Following</Text>
+      {state.user && (
+        <View style={styles.pageTop}>
+          <Avatar
+            rounded
+            containerStyle={styles.profilePictureContainer}
+            overlayContainerStyle={styles.profilePicOverlayContainer}
+            source={{ uri: state.user.profilePicture }}
+            renderPlaceholderContent={<ProfilePicPlaceholder />}
+          />
+          <View style={styles.pageTopNameView}>
+            <Text style={styles.artistName}>{state.user.fullName}</Text>
+            <View>
+              <Text style={styles.followText}>{state.artistFollowing}</Text>
+              <Text style={styles.followSubtext}>Following</Text>
+            </View>
           </View>
         </View>
-      </View>
+      )}
 
       <ProfileActionBar navigation={navigation} />
       <ProfilePlaylists navigation={navigation} styles={styles} />

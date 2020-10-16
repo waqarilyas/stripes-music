@@ -127,6 +127,9 @@ const HomeStack = () => {
       <Stack.Screen
         name="MusicPlayerFullscreen"
         component={MusicPlayerFullscreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen name="NowPlayingTabs" component={NowPlayingTabs} />
       <Stack.Screen name="ForYouTabs" component={ForYouTabs} />

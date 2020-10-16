@@ -72,34 +72,25 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
-
-
 	<key>CFBundleURLTypes</key>
 	<array>
-
 		<dict>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>fb523894798484633</string>
-		</array>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb523894798484633</string>
+			</array>
 		</dict>
-
 		<dict>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>com.googleusercontent.apps.91986739524-m8l74tsu9rld6ln011vm8hudktvinu2e</string>
-		</array>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.91986739524-m8l74tsu9rld6ln011vm8hudktvinu2e</string>
+			</array>
 		</dict>
-
 	</array>
-
 	<key>FacebookAppID</key>
 	<string>523894798484633</string>
-
 	<key>FacebookDisplayName</key>
 	<string>MusicApp</string>
-
-
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

@@ -90,3 +90,19 @@ export const redLikeIcon = require('./icons-like-45x45-rose.png');
 // Share icons
 export const shareIcon = require('./icon-share-3x.png');
 export const sharePressedIcon = require('./icon-share-pressed-3x.png');
+
+//slider icons
+
+export const slider1 = require('./slider1.png');
+export const slider2 = require('./slider2.png');
+export const slider3 = require('./slider3.png');
+
+export const pauseButton = require('./pauseButton.png');
+export const playButton = require('./playButton.png');
+export const playlist = require('./playlist.png');
+export const speaker = require('./speakers.png');
+export const swapIcon = require('./exchange.png');
+export const shuffleIcon = require('./shuffle.png');
+export const queueIcon = require('./queue.png');
+export const tickIcon = require('./tick.png');
+export const noInternetIcon = require('./no-network-icon.png');
