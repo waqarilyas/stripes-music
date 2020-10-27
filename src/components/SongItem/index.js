@@ -1,54 +1,65 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import {
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native-gesture-handler';
-import { Overlay, Avatar, CheckBox } from 'react-native-elements';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Avatar, CheckBox, Overlay } from 'react-native-elements';
+import {
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import {
-  tickIcon,
-  queueIcon,
+  heartGrayIcon,
   playlist,
   plusIcon,
-  heartGrayIcon,
+  queueIcon,
+  tickIcon,
 } from '../../../Assets/Icons';
-import { RFValue } from 'react-native-responsive-fontsize';
 import SongCardListView from '../../components/SongCardListView';
 
-const SongItem = ({ title, author, image, id, isFavorite, duration }) => {
+const SongItem = ({ title, author, image, id, duration }) => {
   const [visible, setVisible] = useState(false);
   const [addToQueue, setAddToQueue] = useState(false);
   const [checked, setChecked] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
-  const [favorite, setFavorite] = useState(isFavorite);
+  const [favorite, setFavorite] = useState(false);
+  const uid = auth().currentUser.uid;
+
+  useEffect(() => {
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs')
+      .doc(id)
+      .onSnapshot((document) => {
+        if (document.exists) {
+          const isFavorite = document.data().isFavorite;
+          setFavorite(isFavorite);
+        }
+      });
+
+    return () => listener;
+  }, []);
 
   const handleFavorite = async () => {
-    setFavorite(!favorite);
-    const uid = auth().currentUser.uid;
-    const userDoc = firestore().collection('users').doc(uid);
-    await userDoc.get().then((document) => {
-      if (document.exists) {
-        if (favorite) {
-          document.ref.set(
-            {
-              favoriteSongs: firestore.FieldValue.arrayRemove(id),
-            },
-            { merge: true },
-          );
-        } else {
-          document.ref.set(
-            {
-              favoriteSongs: firestore.FieldValue.arrayUnion(id),
-            },
-            { merge: true },
-          );
-        }
-      }
-    });
+    // setFavorite(!favorite);
+    const userFavDoc = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs');
+    await userFavDoc.doc(id).set(
+      {
+        title,
+        author,
+        image,
+        id,
+        isFavorite: !favorite,
+        duration,
+      },
+      { merge: true },
+    );
   };
 
   const toggleOverlay = () => {
@@ -108,7 +119,7 @@ const SongItem = ({ title, author, image, id, isFavorite, duration }) => {
               data="Title"
               keyExtractor={() => randomize('Aa0!', 10)}
               renderItem={({ item }) => {
-                return ( */}
+              return ( */}
 
                 <CheckBox
                   title="Title"

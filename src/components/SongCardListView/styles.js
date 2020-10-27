@@ -3,7 +3,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
   },
   title: {
     fontWeight: 'bold',
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
   duration: {
     color: 'gray',
     fontWeight: 'bold',
+    paddingHorizontal: hp('1.5'),
   },
   tintedIcon: {
     tintColor: '#e81093',

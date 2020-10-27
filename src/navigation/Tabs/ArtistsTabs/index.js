@@ -7,12 +7,12 @@ import ArtistNews from '../../../screens/ArtistNews';
 import ArtistPopular from '../../../screens/ArtistPopular';
 import ArtistReleases from '../../../screens/ArtistReleases';
 
-const MusicTabs = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 const ArtistsTabs = () => {
   return (
     <View style={{ flex: 1 }}>
-      <MusicTabs.Navigator
+      <Tab.Navigator
         tabBarOptions={{
           activeTintColor: 'white',
           inactiveTintColor: '#616161',
@@ -26,10 +26,10 @@ const ArtistsTabs = () => {
             backgroundColor: 'black',
           },
         }}>
-        <MusicTabs.Screen name="News" component={ArtistNews} />
-        <MusicTabs.Screen name="Popular" component={ArtistPopular} />
-        <MusicTabs.Screen name="Releases" component={ArtistReleases} />
-      </MusicTabs.Navigator>
+        <Tab.Screen name="News" component={ArtistNews} />
+        <Tab.Screen name="Popular" component={ArtistPopular} />
+        <Tab.Screen name="Releases" component={ArtistReleases} />
+      </Tab.Navigator>
     </View>
   );
 };

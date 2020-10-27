@@ -1,26 +1,15 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
 import randomize from 'randomatic';
 
 import SectionHeader from '../SectionHeader';
 import { iconsPlaylist } from '../../../Assets/Icons';
-import { getOrderedCollection } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-import BestPlaylistsCard from '../BestPlaylistsCard';
 
-const initialState = {
-  playlists: [],
-};
+import BestPlaylistsCard from '../BestPlaylistsCard';
+import { useSelector } from 'react-redux';
 
 const HomeBestPlaylists = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    // Get Playlists
-    getOrderedCollection('playlists', 'viewCount', 'desc', 8, (collection) =>
-      dispatch({ playlists: collection }),
-    );
-  }, []);
+  const { bestPlaylists } = useSelector((state) => state.root.firebase);
 
   return (
     <>
@@ -30,7 +19,7 @@ const HomeBestPlaylists = ({ navigation }) => {
         onPress={() => navigation.navigate('MusicScreenAllPlayLists')}
       />
       <FlatList
-        data={state.playlists}
+        data={bestPlaylists}
         keyExtractor={() => randomize('Aa!0', 10)}
         horizontal
         renderItem={({ item: { image, songs, title, viewCount } }) => {

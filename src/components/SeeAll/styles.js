@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   text: {
     color: 'white',
@@ -17,8 +18,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: hp('4'),
+    height: hp('4'),
     marginBottom: 16,
   },
 });

@@ -40,6 +40,7 @@ const MainTabs = () => {
       }
       initialRouteName="Home"
       activeColor="#FFFFFF"
+      style={{ backgroundColor: 'black' }}
       inactiveColor="#616161"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {

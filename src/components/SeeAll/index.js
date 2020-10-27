@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Image, Text } from 'react-native';
+import { TouchableOpacity, Image, Text, ImageBackground } from 'react-native';
 
 import styles from './styles';
 import { sendIcon } from '../../../Assets/Icons';

@@ -1,10 +1,9 @@
 import firestore from '@react-native-firebase/firestore';
 import React, { useState } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native';
 import { ListItem, Text } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
-import { heartGrayIcon } from '../../../Assets/Icons';
 import { convertToMinutes } from '../../utils/Helpers';
 import styles from './styles';
 
@@ -12,7 +11,7 @@ const SongCardListView = ({
   id,
   title,
   artist,
-  arts,
+  artwork,
   duration,
   isFavorite,
 }) => {
@@ -45,20 +44,13 @@ const SongCardListView = ({
 
   return (
     <ListItem containerStyle={styles.container}>
-      <Image source={{ uri: arts[0] }} style={styles.image} />
+      <Image source={{ uri: artwork }} style={styles.image} />
       <ListItem.Content>
         <ListItem.Title numberOfLines={1} style={styles.title}>
           {title}
         </ListItem.Title>
         <ListItem.Subtitle style={styles.subtitle}>{artist}</ListItem.Subtitle>
       </ListItem.Content>
-
-      <TouchableOpacity onPress={handleFavorite}>
-        <Image
-          source={heartGrayIcon}
-          style={favorite ? styles.tintedIcon : styles.icon}
-        />
-      </TouchableOpacity>
       <Text style={styles.duration}>{convertToMinutes(duration)}</Text>
     </ListItem>
   );

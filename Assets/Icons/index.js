@@ -77,7 +77,9 @@ export const imagePlaceholder = require('./icon-picture-placeholder.png');
 export const playlistDefault = require('./icon-playlist-default.jpg');
 export const createPlaylistIcon = require('./icons-create-playlist.png');
 export const editProfileIcon = require('./icons-edit-profile-edit.png');
+export const musicSeeAllIcon = require('./icon-music-banner-see-all.png');
 
+export const sliderPlaceholder = require('../Images/songCover4.jpg');
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');
 export const commentPressedIcon = require('./icon-comment-pressed-3x.png');

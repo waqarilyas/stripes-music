@@ -1,18 +1,35 @@
-import React, { useEffect, useReducer, useState, useCallback } from 'react';
-import { ScrollView, RefreshControl } from 'react-native';
-import { useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
 
-import reducer from '../../hooks/useReducer';
+import styles from './styles';
 import Button from '../../components/Button';
+import reducer from '../../hooks/useReducer';
 import HomeBanner from '../../components/HomeBanner';
 import HomeForYou from '../../components/HomeForYou';
 import HomeMostPlayed from '../../components/HomeMostPlayed';
 import HomeRecentPlayed from '../../components/HomeRecentPlayed';
+import {
+  getSongs,
+  getMostPlayed,
+  getMostPlayedSongs,
+  getPlaylists,
+  getAllSongs,
+  getAllPlaylists,
+  getAlbums,
+  getAllAlbums,
+  getHistory,
+  getAllHistory,
+  getTopArtists,
+  getTopAllArtists,
+  getBestPlaylists,
+  getAllBestPlaylists,
+} from '../../Redux/Reducers/firebaseSlice';
 import HomeBestPlaylists from '../../components/HomeBestPlaylists';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
-import { getCollection, getOrderedCollection } from '../../utils/Firebase';
+import HomeTopArtists from '../../components/HomeTopArtists';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -23,17 +40,15 @@ const wait = (timeout) => {
 const initialState = {
   banner: [],
   songs: [],
-  recentlyPlayed: [],
-  artists: [],
-  playlists: [],
-  userPlaylists: [],
 };
 
 const Home = ({ navigation }) => {
+  const disp = useDispatch();
+
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [checked, setChecked] = useState(false);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
   const playlist = useSelector((state) => state.root.audio.playlist);
+  const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedSong, setSelectedSong] = useState({});
 
@@ -41,95 +56,92 @@ const Home = ({ navigation }) => {
     setVisible(!visible);
   };
 
-  // const dispatch = useDispatch();
   const handleSignOut = () => {
     auth().signOut();
   };
 
   useEffect(() => {
-    // Get Albums
-    getCollection('songs', 10, (collection) =>
-      dispatch({ banner: collection }),
-    );
-
-    getOrderedCollection('songs', 'playCount', 'desc', 10, (collection) =>
-      dispatch({ songs: collection }),
-    );
-  }, []);
+    disp(getSongs());
+    disp(getAllSongs());
+    disp(getMostPlayed());
+    disp(getMostPlayedSongs());
+    disp(getAlbums());
+    disp(getAllAlbums());
+    disp(getAllPlaylists());
+    disp(getHistory());
+    disp(getAllHistory());
+    disp(getTopArtists());
+    disp(getTopAllArtists());
+    disp(getBestPlaylists());
+    disp(getAllBestPlaylists());
+  }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    handleData();
+
+    disp(getSongs());
+    disp(getMostPlayed());
+    disp(getPlaylists());
+
     wait(2000).then(() => setRefreshing(false));
-    // Get Playlists
-    getOrderedCollection('playlists', 'viewCount', 'desc', 8, (collection) =>
-      dispatch({ playlists: collection }),
-    );
+  }, [disp]);
 
-    // Get User Playlists
-    firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('playlists')
-      .get()
-      .then((documents) => {
-        let allUserPlaylists = [];
-        documents.forEach((document) => {
-          if (document.exists) {
-            allUserPlaylists.push(document.data());
-          }
-        });
-        dispatch({ userPlaylists: allUserPlaylists });
-      });
-  }, []);
-
-  const onAddToPlaylist = (id, song) => {
-    console.log('on add to playlist called');
-    const uid = auth().currentUser.uid;
-    firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('playlists')
-      .doc(id)
-      .collection('songs')
-      .doc(song.id)
-      .set(song)
-      .then(() => {
-        console.log('added to playlist');
-      });
-  };
+  // const onAddToPlaylist = (id, song) => {
+  //   console.log('on add to playlist called');
+  //   const uid = auth().currentUser.uid;
+  //   firestore()
+  //     .collection('users')
+  //     .doc(uid)
+  //     .collection('playlists')
+  //     .doc(id)
+  //     .collection('songs')
+  //     .doc(song.id)
+  //     .set(song)
+  //     .then(() => {
+  //       console.log('added to playlist');
+  //     });
+  // };
 
   return (
     <ScrollView
-      style={{ backgroundColor: 'black', flex: 1 }}
+      style={styles.container}
       refreshControl={
         <RefreshControl
+          style={{ backgroundColor: 'black' }}
           refreshing={refreshing}
           onRefresh={onRefresh}
           tintColor="white"
+          progressBackgroundColor="transparent"
         />
       }>
-      {/* Songs Slider Section */}
-      <HomeBanner data={state.banner} />
+      <ImageBackground style={{ height: '100%' }} blurRadius={20}>
+        <LinearGradient colors={['black', '#0F2027', 'black']}>
+          {/* Songs Slider Section */}
+          <HomeBanner />
 
-      {/* Most Played Section */}
-      <HomeMostPlayed navigation={navigation} data={state.songs} />
+          {/* Most Played Section */}
+          <HomeMostPlayed navigation={navigation} />
 
-      {/* For You section */}
-      <HomeForYou />
+          {/* For You section */}
+          <HomeForYou />
 
-      {/* Recent Played Section */}
-      <HomeRecentPlayed navigation={navigation} />
+          {/* Recent Played Section */}
+          <HomeRecentPlayed navigation={navigation} />
 
-      {/* Favorite Artists Section */}
-      <HomeFavoriteArtists navigation={navigation} />
+          {/* Favorite Artists Section */}
+          <HomeTopArtists navigation={navigation} />
 
-      {/* The Best Playlists Section */}
-      <HomeBestPlaylists navigation={navigation} />
+          {/* Favorite Artists Section */}
+          <HomeFavoriteArtists navigation={navigation} />
 
-      <Button text="Sign Out" onPress={handleSignOut} />
+          {/* The Best Playlists Section */}
+          <HomeBestPlaylists navigation={navigation} />
+
+          <Button text="Sign Out" onPress={handleSignOut} />
+        </LinearGradient>
+      </ImageBackground>
     </ScrollView>
   );
 };

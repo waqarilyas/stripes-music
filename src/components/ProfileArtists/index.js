@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import SectionHeader from '../SectionHeader';
-import ArtistsImage from '../ArtistsImage';
+import ArtistsHorizontalCard from '../ArtistsHorizontalCard';
 import reducer from '../../hooks/useReducer';
 import { emptyArtist, iconsPlaylist } from '../../../Assets/Icons';
 import EmptyProfileCard from '../EmptyProfileCard';
@@ -52,7 +52,7 @@ const ProfileArtists = ({ navigation }) => {
           />
         }
         renderItem={({ item: { image, name } }) => {
-          return <ArtistsImage name={name} image={image} />;
+          return <ArtistsHorizontalCard name={name} image={image} />;
         }}
       />
     </>

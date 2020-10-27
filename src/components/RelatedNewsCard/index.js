@@ -11,7 +11,7 @@ const RelatedNewsCard = ({ title, image, description }) => {
         <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>
-        <Text style={styles.subtitle} numberOfLines={4}>
+        <Text style={styles.subtitle} numberOfLines={3}>
           {description}
         </Text>
       </View>

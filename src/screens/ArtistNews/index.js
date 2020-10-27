@@ -1,22 +1,32 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
+import { FlatList, View } from 'react-native';
 
-import styles from './styles';
-import Block from '../../components/Block';
 import RelatedNewsCard from '../../components/RelatedNewsCard';
+import styles from './styles';
+import { Divider } from 'react-native-elements';
 
 const ArtistNews = () => {
-  const data = ['1', '2', '3', '4', '5', '6', '7'];
+  const artistNews = useSelector((state) => state.root.firebase.artistNews);
+
   return (
-    <Block>
+    <View style={styles.container}>
       <FlatList
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return <RelatedNewsCard />;
+        data={artistNews}
+        style={styles.list}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        renderItem={({ item: { title, imgUrl, description } }) => {
+          return (
+            <RelatedNewsCard
+              title={title || 'Title'}
+              image={imgUrl || ''}
+              description={description || 'Description'}
+            />
+          );
         }}
       />
-    </Block>
+    </View>
   );
 };
 

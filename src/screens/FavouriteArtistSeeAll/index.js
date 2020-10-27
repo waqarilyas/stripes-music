@@ -1,71 +1,58 @@
-import React, { useReducer, useEffect } from 'react';
-import { FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, View } from 'react-native';
 import { Divider } from 'react-native-elements';
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
-import Block from '../../components/Block';
-import reducer from '../../hooks/useReducer';
+import { removeFromFavorites } from '../../Redux/Reducers/firebaseSlice';
+import { addToList } from '../../Redux/Reducers/helperSlice';
 import ArtistSeeAllScreenCard from '../../components/ArtistSeeAllScreenCard';
-
-const initialState = {
-  favArtists: [],
-};
+import { useDispatch, useSelector } from 'react-redux';
 
 const FavouriteArtistSeeAll = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const uid = auth().currentUser.uid;
+  const dispatch = useDispatch();
+  const { list } = useSelector((state) => state.root.helpers);
 
   useEffect(() => {
-    // Get Artists
-    firestore()
+    const uid = auth().currentUser.uid;
+    const listener = firestore()
       .collection('users')
       .doc(uid)
-      .get()
-      .then((document) => {
-        if (document.exists) {
-          const favoriteArtists = document.data().favoriteArtists;
-          console.log(favoriteArtists);
-          dispatch({ favArtists: favoriteArtists });
-        }
+      .collection('favArtists')
+      .where('isFavorite', '==', true)
+      .onSnapshot((querySnapshot) => {
+        let data = [];
+        querySnapshot.docs.forEach((document) => {
+          if (document.exists) {
+            let response = document.data();
+            response.updatedAt = JSON.stringify(response.updatedAt);
+            data.push(response);
+          }
+        });
+        dispatch(addToList(data));
       });
-  }, [uid]);
 
-  const handleFav = async (item, index) => {
-    let temp = state.favArtists;
-    temp.splice(index, 1);
-    dispatch({ favArtists: [...temp] });
-    console.log(temp);
-    firestore()
-      .collection('users')
-      .doc(uid)
-      .set(
-        {
-          favoriteArtists: firestore.FieldValue.arrayRemove(item),
-        },
-        { merge: true },
-      );
-  };
+    return () => listener;
+  }, []);
 
   return (
-    <Block>
+    <View style={styles.container}>
       <FlatList
-        data={[...state.favArtists]}
-        // extraData={state.favArtists.length}
-        keyExtractor={(item) => item.id}
+        data={list}
+        keyExtractor={(item) => item.artistId}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-        renderItem={({ item, index }) => {
+        renderItem={({ item: { name, avatar, artistId } }) => {
           return (
             <ArtistSeeAllScreenCard
-              avatar={item.avatar}
-              name={item.name}
-              onFavPress={() => handleFav(item, index)}
+              avatar={avatar}
+              name={name}
+              onFavPress={() => dispatch(removeFromFavorites(artistId))}
             />
           );
         }}
       />
-    </Block>
+    </View>
   );
 };
 

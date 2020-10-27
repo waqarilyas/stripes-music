@@ -4,10 +4,10 @@ import { Image } from 'react-native-elements';
 
 import styles from './styles';
 
-const ForYouAudioCard = ({ arts, title, artist }) => {
+const ForYouAudioCard = ({ artwork, title, artist }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: arts }} style={styles.image} />
+      <Image source={{ uri: artwork }} style={styles.image} />
       <View style={styles.detail}>
         <Text style={styles.title} numberOfLines={2}>
           {title}

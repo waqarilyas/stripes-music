@@ -1,39 +1,42 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
-import randomize from 'randomatic';
+import { useDispatch, useSelector } from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import SectionHeader from '../SectionHeader';
 import { emptyArtist, artistIcon } from '../../../Assets/Icons';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-import reducer from '../../hooks/useReducer';
-import ArtistsImage from '../ArtistsImage';
+import ArtistsHorizontalCard from '../ArtistsHorizontalCard';
 import EmptyCard from '../EmptyCard';
-
-const initialState = {
-  favoriteArtists: [],
-};
+import { LOG } from '../../utils/Constants';
 
 const emptyCard = () => {
   return <EmptyCard text="No Favorite Artists." icon={emptyArtist} />;
 };
 
 const HomeFavoriteArtists = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [list, setList] = useState([]);
 
   useEffect(() => {
-    // Get Artists
     const uid = auth().currentUser.uid;
-    firestore()
+    const listener = firestore()
       .collection('users')
       .doc(uid)
-      .get()
-      .then((document) => {
-        if (document.exists) {
-          const favoriteArtists = document.data().favoriteArtists;
-          dispatch({ favoriteArtists });
-        }
+      .collection('favArtists')
+      .where('isFavorite', '==', true)
+      .onSnapshot((querySnapshot) => {
+        let data = [];
+        querySnapshot.docs.forEach((document) => {
+          if (document.exists) {
+            let response = document.data();
+            response.updatedAt = JSON.stringify(response.updatedAt);
+            data.push(response);
+          }
+        });
+        setList(data);
       });
+
+    return () => listener;
   }, []);
 
   return (
@@ -44,13 +47,13 @@ const HomeFavoriteArtists = ({ navigation }) => {
         onPress={() => navigation.navigate('FavouriteArtistSeeAll')}
       />
       <FlatList
-        data={state.favoriteArtists}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ height: '100%', width: '100%' }}
-        horizontal
+        data={list}
+        contentContainerStyle={list.length > 0 ? null : { flex: 1 }}
         ListEmptyComponent={emptyCard}
+        keyExtractor={(item) => item.id}
+        horizontal
         renderItem={({ item: { name, avatar } }) => {
-          return <ArtistsImage name={name} avatar={avatar} />;
+          return <ArtistsHorizontalCard name={name} avatar={avatar} />;
         }}
       />
     </>

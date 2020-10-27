@@ -6,7 +6,7 @@ import {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
     justifyContent: 'space-around',
     elevation: 0,
     shadowOpacity: 0,

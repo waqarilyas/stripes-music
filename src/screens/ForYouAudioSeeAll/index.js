@@ -1,44 +1,33 @@
-import React, { useEffect, useReducer } from 'react';
-import { Text, FlatList } from 'react-native';
+import React from 'react';
+import { View, Text, FlatList } from 'react-native';
 import { Divider } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 
 import styles from './styles';
-import Block from '../../components/Block';
 import ForYouAudioCard from '../../components/ForYouAudioCard';
-import { getCollections } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-import randomize from 'randomatic';
-
-const initialState = {
-  songs: [],
-};
 
 const ForYouAudioSeeAll = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    getCollections('songs', (collection) => {
-      dispatch({ songs: collection });
-    });
-  }, []);
+  const { allSongs } = useSelector((state) => state.root.firebase);
 
   return (
-    <Block>
-      <Text style={styles.titleText}>
-        A collection of music recommended just for you. We hope you like it!
-      </Text>
-
+    <View style={styles.container}>
+      <View style={styles.topView}>
+        <Text style={styles.title}>Songs For You</Text>
+        <Text style={styles.subtitle}>
+          A collection of music recommended just for you. We hope you like it!
+        </Text>
+      </View>
       <FlatList
-        data={state.songs}
-        keyExtractor={() => randomize('Aa10!', 10)}
+        data={allSongs}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-        renderItem={({ item: { arts, title, artist } }) => {
+        renderItem={({ item: { artwork, title, artist } }) => {
           return (
-            <ForYouAudioCard arts={arts[0]} title={title} artist={artist} />
+            <ForYouAudioCard artwork={artwork} title={title} artist={artist} />
           );
         }}
       />
-    </Block>
+    </View>
   );
 };
 

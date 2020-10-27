@@ -1,13 +1,11 @@
-import React from 'react';
-import { Image, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Avatar } from 'react-native-elements';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { backIcon, searchIcon } from '../../../Assets/Icons';
 import Community from '../../screens/Community';
-import NewMessage from '../../screens/NewMessage';
 import MessageDetail from '../../screens/MessageDetail';
-import { backIcon, menudots, searchIcon } from '../../../Assets/Icons';
+import NewMessage from '../../screens/NewMessage';
 
 const Stack = createStackNavigator();
 

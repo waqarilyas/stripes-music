@@ -26,7 +26,7 @@ const App = () => {
     dispatch({ user: result });
   };
 
-  const setup = () => {
+  const SetupAudioPlayer = () => {
     TrackPlayer.setupPlayer({});
     TrackPlayer.updateOptions({
       stopWithApp: true,
@@ -46,6 +46,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    SetupAudioPlayer();
     const authSubsriber = auth().onAuthStateChanged(onAuthStateChanged);
     return authSubsriber;
   }, []);
