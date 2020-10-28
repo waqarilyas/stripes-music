@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
@@ -11,7 +12,8 @@ import {
   View,
 } from 'react-native';
 import { CheckBox, Divider, Overlay } from 'react-native-elements';
-import { useDispatch, useSelector } from 'react-redux';
+import TrackPlayer from 'react-native-track-player';
+import { useDispatch } from 'react-redux';
 import {
   artistIcon,
   iconsPlaylist,
@@ -26,15 +28,15 @@ import SectionHeader from '../../components/SectionHeader';
 import SongCard from '../../components/SongCard';
 import SongCardListView from '../../components/SongCardListView';
 import reducer from '../../hooks/useReducer';
-import ForYouTabs from '../../navigation/Tabs/ForYouTabs';
+import ForYouTabs from '../../navigation/tabs/ForYouTabs';
 import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
 import {
   getCollection,
   getOrderedCollection,
   getQueriedCollection,
+  uploadDataToStorage,
 } from '../../utils/Firebase';
 import styles from './styles';
-import TrackPlayer from 'react-native-track-player';
 // import { Add } from './utils';
 
 const pattern = 'Aa0!';
@@ -52,8 +54,6 @@ const initialState = {
 const Home = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [checked, setChecked] = useState(false);
-  const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
-  const playlist = useSelector((state) => state.root.audio.playlist);
   const [visible, setVisible] = useState(false);
   const [selectedSong, setSelectedSong] = useState({});
 
@@ -85,7 +85,20 @@ const Home = ({ navigation }) => {
     });
   };
 
+  const isConnected = async () => {
+    const response = await NetInfo.fetch();
+    console.log(response.isConnected);
+    !response.isConnected && navigation.navigate('NoInternet');
+  };
+
+  isConnected();
   useEffect(() => {
+    uploadDataToStorage('artists', 'artists');
+    uploadDataToStorage('playlists', 'playlists');
+    uploadDataToStorage('songs', 'songs');
+    uploadDataToStorage('videos', 'videos');
+    uploadDataToStorage('albums', 'albums');
+
     setup();
     // Get Albums
     getCollection('songs', 10, (collection) =>
@@ -137,17 +150,7 @@ const Home = ({ navigation }) => {
       });
   }, []);
 
-  // if (isFullScreen) {
-  //   navigation.navigate('MusicPlayerFullscreen');
-  // }
-
-  // const OverlayExample = () => {
-  //   return (
-
-  //   );
-  // };
   const onAddToPlaylist = (id, song) => {
-    console.log('on add to playlist called');
     const uid = auth().currentUser.uid;
     firestore()
       .collection('users')
@@ -162,6 +165,7 @@ const Home = ({ navigation }) => {
       });
   };
 
+  console.log('-=--==-=-=-=-', state);
   return (
     <Block>
       {/* Album Slider Section */}
@@ -222,10 +226,10 @@ const Home = ({ navigation }) => {
           }) => {
             return (
               <TouchableOpacity
-                // onLongPress={() => {
-                //   setSelectedSong(item);
-                //   toggleOverlay();
-                // }}
+                onLongPress={() => {
+                  setSelectedSong(item);
+                  toggleOverlay();
+                }}
                 onPress={() => {
                   disp(
                     changeSong({
@@ -266,15 +270,27 @@ const Home = ({ navigation }) => {
           keyExtractor={() => randomize(pattern, count)}
           renderItem={({
             item,
-            item: { title, artist, arts, fileUrl, duration, id },
+            item: { title, artist, arts, url, duration, id, artwork },
           }) => {
             return (
               <TouchableOpacity
-                onPress={() =>
+                onLongPress={() => {
+                  setSelectedSong(item);
+                  toggleOverlay();
+                }}
+                onPress={() => {
                   disp(
-                    changeSong({ title, artist, arts, fileUrl, duration, id }),
-                  )
-                }>
+                    changeSong({
+                      title,
+                      artist,
+                      artwork,
+                      url,
+                      duration,
+                      id,
+                    }),
+                  );
+                  disp(fullScreenChange(true));
+                }}>
                 <SongCard
                   title={title}
                   artist={artist}
@@ -313,14 +329,35 @@ const Home = ({ navigation }) => {
             data={state.recentlyPlayed}
             keyExtractor={() => randomize(pattern, count)}
             ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-            renderItem={({ item: { title, artist, arts, duration } }) => {
+            renderItem={({
+              item: { title, artist, arts, duration, artwork, url, id },
+            }) => {
               return (
-                <SongCardListView
-                  title={title}
-                  artist={artist}
-                  arts={arts}
-                  duration={duration}
-                />
+                <TouchableOpacity
+                  onLongPress={() => {
+                    setSelectedSong(item);
+                    toggleOverlay();
+                  }}
+                  onPress={() => {
+                    disp(
+                      changeSong({
+                        title,
+                        artist,
+                        artwork,
+                        url,
+                        duration,
+                        id,
+                      }),
+                    );
+                    disp(fullScreenChange(true));
+                  }}>
+                  <SongCardListView
+                    title={title}
+                    artist={artist}
+                    arts={arts}
+                    duration={duration}
+                  />
+                </TouchableOpacity>
               );
             }}
           />

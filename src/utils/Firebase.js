@@ -1,4 +1,110 @@
 import firestore from '@react-native-firebase/firestore';
+import axios from 'axios';
+
+// Songs upload
+export const uploadDataToStorage = async (collection, engineName, callback) => {
+  let documentsData = [];
+
+  await firestore()
+    .collection(collection)
+    .get()
+    .then((documents) => {
+      documents.forEach((document) => {
+        if (document.exists) {
+          switch (collection) {
+            case 'songs':
+              const audio = {
+                artist: document.data().artist,
+                artwork: document.data().artwork,
+                duration: document.data().duration,
+                id: document.data().id,
+                title: document.data().title,
+              };
+              documentsData.push(audio);
+              break;
+            case 'videos':
+              const video = {
+                artist: document.data().artist,
+                poster: document.data().poster,
+                duration: document.data().duration,
+                id: document.data().id,
+                title: document.data().title,
+              };
+              documentsData.push(video);
+              break;
+            case 'playlists':
+              const playlist = {
+                author: document.data().author,
+                duration: document.data().duration,
+                id: document.data().id,
+                title: document.data().title,
+                image: document.data().image,
+              };
+
+              documentsData.push(playlist);
+              break;
+            case 'artists':
+              const artists = {
+                firstname: document.data().firstName,
+                lastname: document.data().lastName,
+                image: document.data().imgUrl,
+                followercount: document.data().followerCount,
+              };
+              documentsData.push(artists);
+              break;
+            case 'albums':
+              const albums = {
+                author: document.data().author,
+                duration: document.data().duration,
+                image: document.data().imgUrl,
+                songcount: document.data().songCount,
+                title: document.data().title,
+              };
+              documentsData.push(albums);
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    });
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer private-s18ijwj2r5ccjkfczo7awhhh',
+  };
+
+  axios
+    .post(
+      `https://host-vgzu6u.api.swiftype.com/api/as/v1/engines/${engineName}/documents`,
+      documentsData,
+      {
+        headers: headers,
+      },
+    )
+    .then((response) => {
+      // console.log('----------- RESPONSE------------- ', response);
+    })
+    .catch((error) => {
+      console.log('-----POST ERROR------', engineName, ':', error);
+    });
+};
+
+export const getSearchData = async (searchValue, engineName, callback) => {
+  axios
+    .get(
+      `https://host-vgzu6u.api.swiftype.com/api/as/v1/engines/${engineName}/search?query=${searchValue}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer private-s18ijwj2r5ccjkfczo7awhhh',
+        },
+      },
+    )
+    .then((response) => callback(response.data))
+    .catch((err) => console.log(err));
+};
+// Songs upload ends here
 
 export const getCollection = (collection, limit, callback) => {
   let data = [];

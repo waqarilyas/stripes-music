@@ -1,9 +1,17 @@
-import React, { useEffect, useReducer } from 'react';
-import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
-import { Avatar, Divider } from 'react-native-elements';
+import React, { useEffect, useReducer, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import { Avatar, Divider, Overlay } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
+import Dialog from '../../components/Dialog';
 import SectionHeader from '../../components/SectionHeader';
 import Block from '../../components/Block';
 import ArtistsImage from '../../components/ArtistsImage';
@@ -33,6 +41,7 @@ const initialState = {
 
 const ProfileScreen = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [settingVisible, setSettingVisible] = useState(false);
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
@@ -54,6 +63,7 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <Block>
+      {settingVisible ? <Dialog /> : null}
       <View style={styles.pageTop}>
         <Avatar
           rounded
@@ -73,13 +83,16 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.followSubtext}>Following</Text>
         </View>
       </View>
+      <TouchableOpacity onPress={() => setSettingVisible(!settingVisible)}>
+        <Text style={styles.editProfile}>Edit Your Profile</Text>
+      </TouchableOpacity>
 
       <SectionHeader
         name="My Playlists"
         icon={musicIcon}
         onPress={() => navigation.navigate('ProfilePlaylists')}
       />
-      {state.playlists.length ? (
+      {state.playlists.length > 0 ? (
         <FlatList
           data={state.playlists}
           keyExtractor={() => randomize('Aa0!', 10)}
@@ -88,7 +101,7 @@ const ProfileScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           renderItem={({
-            item: { image, title, songs, isPrivate, viewCount },
+            item: { image, title, songs = 0, isPrivate, viewCount },
           }) => {
             return (
               <ProfilePlaylists

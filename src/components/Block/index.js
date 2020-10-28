@@ -6,15 +6,17 @@ import styles from './styles';
 
 const Block = ({ children }) => {
   return (
-    <View style={styles.container}>
+    <>
       <SafeAreaView />
-      <ScrollView
-        showsHorizontalScrollIndicato={false}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled>
-        {children}
-      </ScrollView>
-    </View>
+      <View style={styles.container}>
+        <ScrollView
+          showsHorizontalScrollIndicato={false}
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled>
+          {children}
+        </ScrollView>
+      </View>
+    </>
   );
 };
 

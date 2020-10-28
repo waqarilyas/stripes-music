@@ -30,7 +30,7 @@ export const artistIcon = require('./icons-userstar.png');
 export const playIcon = require('./icons-play-xhd.png');
 export const fullscreenIcon = require('./icon-fullscreen-xhd.png');
 export const closeIcon = require('./icons-close-xhd.png');
-export const pauseIcon = require('./icons-pause-xhd.png');
+// export const pauseIcon = require('./icons-pause-xhd.png');
 export const starIcon = require('./icons-star-18x18-white.png');
 export const videoIcon = require('./icons-video-34x34-v1-white.png');
 export const eyeIcon = require('./icons-eye-34x34-white.png');
@@ -62,7 +62,7 @@ export const downIcon = require('./downArrow.png');
 export const upOutlineIcon = require('./up-arrow-outline.png');
 export const downOutlineIcon = require('./down-arrow-outline.png');
 export const modalCloseIcon = require('./modal-close-button.png');
-export const muteIcon = require('./icons-mute-xhd.png');
+// export const muteIcon = require('./icons-mute-xhd.png');
 
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');
@@ -83,7 +83,6 @@ export const slider1 = require('./slider1.png');
 export const slider2 = require('./slider2.png');
 export const slider3 = require('./slider3.png');
 
-export const downIcon = require('./downArrow.png');
 export const pauseButton = require('./pauseButton.png');
 export const playButton = require('./playButton.png');
 export const playlist = require('./playlist.png');
@@ -95,3 +94,20 @@ export const muteIcon = require('./mute.png');
 export const queueIcon = require('./queue.png');
 export const tickIcon = require('./tick.png');
 export const noInternetIcon = require('./no-network-icon.png');
+
+export const signout = require('./sign-out.png');
+export const backbutton = require('./backbutton.png');
+export const camera = require('./camera.png');
+export const edit = require('./edit.png');
+export const copy = require('./copy.png');
+export const tick = require('./tick.png');
+export const tick2 = require('./tick2.png');
+export const picker = require('./picker.png');
+export const downpicker = require('./picker2.png');
+export const plus = require('./plus.png');
+export const profilePhoto = require('./profile.png');
+export const options = require('./options.png');
+export const cancelIcon = require('./cancel.png');
+export const clockIcon = require('./wall-clock.png');
+export const songCountIcon = require('./vynil.png');
+export const hourGlassIcon = require('./hourglass.png');
