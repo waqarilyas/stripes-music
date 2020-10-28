@@ -35,13 +35,16 @@ const back = (navigation) => {
   );
 };
 
+const placeholder =
+  'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';
+
 const searchAndProfile = (navigation, profilePicture) => {
   return (
     <View style={styles.container}>
       <Avatar
         rounded
         containerStyle={styles.avatar}
-        source={{ uri: profilePicture }}
+        source={{ uri: profilePicture || placeholder }}
         onPress={() => navigation.navigate('Profile')}
       />
       <Image source={searchIcon} style={styles.icon} />
@@ -50,7 +53,7 @@ const searchAndProfile = (navigation, profilePicture) => {
 };
 
 const HomeStack = () => {
-  const { profilePicture } = useUser();
+  const user = useUser();
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -72,7 +75,7 @@ const HomeStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, profilePicture),
+          headerRight: () => searchAndProfile(navigation, user.profilePicture),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -84,7 +87,7 @@ const HomeStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, profilePicture),
+          headerRight: () => searchAndProfile(navigation, user.profilePicture),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -96,7 +99,7 @@ const HomeStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, profilePicture),
+          headerRight: () => searchAndProfile(navigation, user.profilePicture),
           headerStyle: styles.headerStyle,
         })}
       />

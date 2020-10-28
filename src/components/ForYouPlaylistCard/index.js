@@ -1,17 +1,16 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Image } from 'react-native-elements';
+import { View, Text, ImageBackground } from 'react-native';
 
 import styles from './styles';
 
 const ForYouPlaylistCard = ({ image, title, duration, author }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: image }} style={styles.image}>
+      <ImageBackground source={{ uri: image }} style={styles.image}>
         <View style={styles.background}>
           <Text style={styles.duration}>{duration}</Text>
         </View>
-      </Image>
+      </ImageBackground>
       <View style={styles.detail}>
         <Text style={styles.title} numberOfLines={2}>
           {title}
