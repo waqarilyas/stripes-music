@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
@@ -104,6 +105,7 @@ const Home = ({ navigation }) => {
   //     });
   // };
 
+  console.log('-=--==-=-=-=-', state);
   return (
     <ScrollView
       style={styles.container}

@@ -70,6 +70,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     marginHorizontal: 8,
   },
+  editProfile: {
+    color: 'black',
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    paddingVertical: hp('1'),
+    paddingHorizontal: hp('4'),
+    marginVertical: hp('3'),
+    fontWeight: 'bold',
+    borderRadius: hp('1'),
+  },
 });
 
 export default styles;

@@ -8,8 +8,12 @@ import { searchIcon, backIcon } from '../../../Assets/Icons';
 
 const Stack = createStackNavigator();
 
-const NewsStack = () => {
-  const search = () => <Image source={searchIcon} style={styles.icon} />;
+const NewsStack = ({ navigation }) => {
+  const search = (navigation) => (
+    <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+      <Image source={searchIcon} style={styles.icon} />
+    </TouchableOpacity>
+  );
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -23,13 +27,13 @@ const NewsStack = () => {
       <Stack.Screen
         name="News"
         component={News}
-        options={{
+        options={({ navigation }) => ({
           title: 'News',
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
-        }}
+        })}
       />
       <Stack.Screen
         name="NewsDetails"
@@ -39,7 +43,7 @@ const NewsStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />

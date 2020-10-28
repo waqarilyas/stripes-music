@@ -24,7 +24,11 @@ const findChatId = (userId, passedId) => {
 const Community = ({ navigation }) => {
   const uid = auth().currentUser.uid;
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [searchVisible, setSearchVisible] = useState(false);
 
+  const toggleSearch = () => {
+    setSearchVisible(!searchVisible);
+  };
   useEffect(() => {
     const listener = firestore()
       .collection('chats')
@@ -84,9 +88,31 @@ const Community = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <ChatScreenHeader navigation={navigation} navigateTo="NewMessage" />
-      <Text style={styles.title}>Messages</Text>
+    <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={searchVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}>
+        <View style={styles.topSearchContainer}>
+          <View style={styles.searchWithClose}>
+            <View style={styles.searchContainer}>
+              <Image source={searchIcon} style={styles.searchIcon} />
+              <TextInput
+                placeholder="Search..."
+                style={styles.textInput}
+                textStyle={{ color: 'white' }}
+                placeholderTextColor="#918E96"
+              />
+            </View>
+            <Text style={styles.closeButton} onPress={() => toggleSearch()}>
+              Close
+            </Text>
+          </View>
+        </View>
+      </Modal>
 
       <FlatList
         data={state.inbox}
@@ -112,7 +138,7 @@ const Community = ({ navigation }) => {
           );
         }}
       />
-    </View>
+    </>
   );
 };
 

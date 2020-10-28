@@ -115,5 +115,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow Access For Camera</string>
 </dict>
 </plist>

@@ -23,10 +23,15 @@ import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
 import MusicScreenAllPlayLists from '../../screens/MusicScreenAllPlaylists';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
 import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
+import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
 
 const Stack = createStackNavigator();
 
-const search = () => <Image source={searchIcon} style={styles.icon} />;
+const search = (navigation) => (
+  <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+    <Image source={searchIcon} style={styles.icon} />
+  </TouchableOpacity>
+);
 const back = (navigation) => {
   return (
     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -47,7 +52,9 @@ const searchAndProfile = (navigation, profilePicture) => {
         source={{ uri: profilePicture || placeholder }}
         onPress={() => navigation.navigate('Profile')}
       />
-      <Image source={searchIcon} style={styles.icon} />
+      <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+        <Image source={searchIcon} style={styles.icon} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -59,13 +66,13 @@ const HomeStack = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
+        options={({ navigation }) => ({
           title: 'Browse',
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
-        }}
+        })}
       />
       <Stack.Screen
         name="ForYouAudioSeeAll"
@@ -111,7 +118,7 @@ const HomeStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -138,6 +145,17 @@ const HomeStack = () => {
       />
       <Stack.Screen name="ArtistNews" component={ArtistNews} />
       <Stack.Screen name="ArtistPopular" component={ArtistPopular} />
+      <Stack.Screen
+        name="CreateNewPlaylist"
+        component={CreateNewPlaylist}
+        options={({ navigation }) => ({
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
       <Stack.Screen name="ArtistReleases" component={ArtistReleases} />
       <Stack.Screen
         name="MostPlayedSeeAll"
@@ -158,7 +176,7 @@ const HomeStack = () => {
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: 'center',
           headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, profilePicture),
+          headerRight: () => searchAndProfile(navigation, user.profilePicture),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -180,7 +198,7 @@ const HomeStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />

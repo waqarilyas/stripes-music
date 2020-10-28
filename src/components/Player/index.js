@@ -147,7 +147,6 @@ const Player = ({ screen }) => {
     } else {
       skipTrack();
     }
-    // dispatch(pushToPlaylist(currentSong));
   }, [currentSong]);
 
   return (

@@ -10,11 +10,21 @@ import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
 import ProfileArtistsSeeAll from '../../screens/ProfileArtistsSeeAll';
 import ProfilePlaylistsSeeAll from '../../screens/ProfilePlaylistsSeeAll';
 import ProfileRecentlyPlayedSeeAll from '../../screens/ProfileRecentlyPlayedSeeAll';
+import AccountSetting from '../../screens/AccountSetting';
+import ChangePassword from '../../screens/ChangePassword';
+import NotificationSetting from '../../screens/NotificationSetting';
+import SubscriptionStack from '../stacks/SubscriptionStack';
+import TellAFriend from '../../screens/TellAFriend';
+import EditProfile from '../../screens/EditProfile';
 
 const Stack = createStackNavigator();
 
 const ProfileStack = () => {
-  const search = () => <Image source={searchIcon} style={styles.icon} />;
+  const search = (navigation) => (
+    <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+      <Image source={searchIcon} style={styles.icon} />
+    </TouchableOpacity>
+  );
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -41,18 +51,18 @@ const ProfileStack = () => {
       <Stack.Screen
         name="Playlist"
         component={ProfileScreen}
-        options={{
+        options={({ navigation }) => ({
           title: '',
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
-        }}
+        })}
       />
       <Stack.Screen
         name="ProfilePlaylists"
         component={ProfilePlaylistsSeeAll}
         options={({ navigation }) => ({
           title: '',
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerLeft: () => back(navigation),
           headerStyle: styles.headerStyle,
         })}
@@ -73,7 +83,7 @@ const ProfileStack = () => {
         component={ProfileArtistsSeeAll}
         options={({ navigation }) => ({
           title: '',
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerLeft: () => back(navigation),
           headerStyle: styles.headerStyle,
         })}
@@ -83,12 +93,64 @@ const ProfileStack = () => {
         component={ProfileRecentlyPlayedSeeAll}
         options={({ navigation }) => ({
           title: '',
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerLeft: () => back(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
       <Stack.Screen name="Artist" component={Artist} />
+      <Stack.Screen name="AccountSetting" component={AccountSetting} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={({ navigation }) => ({
+          title: 'Change Password',
+          headerTitleStyle: { color: 'white' },
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="NotificationSetting"
+        component={NotificationSetting}
+        options={({ navigation }) => ({
+          title: 'Notification Setting',
+          headerTitleStyle: { color: 'white' },
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="Subscriptions"
+        component={SubscriptionStack}
+        options={({ navigation }) => ({
+          title: 'Edit Your Subscription',
+          headerTitleStyle: { color: 'white' },
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="TellAFriend"
+        component={TellAFriend}
+        options={({ navigation }) => ({
+          title: 'Tell A Friend',
+          headerTitleStyle: { color: 'white' },
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={({ navigation }) => ({
+          title: 'Edit Profile',
+          headerTitleStyle: { color: 'white' },
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
     </Stack.Navigator>
   );
 };

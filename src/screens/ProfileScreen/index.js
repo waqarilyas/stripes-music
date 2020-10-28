@@ -25,6 +25,7 @@ const ProfilePicPlaceholder = () => {
 
 const ProfileScreen = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [settingVisible, setSettingVisible] = useState(false);
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
