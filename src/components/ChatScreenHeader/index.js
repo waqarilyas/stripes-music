@@ -16,7 +16,7 @@ const LeftComponent = ({ navigateTo, navigation }) => {
     </TouchableOpacity>
   );
 };
-const RightComponent = () => {
+const RightComponent = ({ toggleSearch }) => {
   return (
     <View style={styles.rightContainer}>
       <Avatar
@@ -25,15 +25,17 @@ const RightComponent = () => {
         source={require('../../../Assets/Images/songCover1.jpg')}
         containerStyle={styles.avatar}
       />
-      <Image
-        source={require('../../../Assets/Icons/search-icon.png')}
-        style={styles.search}
-      />
+      <TouchableOpacity onPress={() => toggleSearch()}>
+        <Image
+          source={require('../../../Assets/Icons/search-icon.png')}
+          style={styles.search}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
-const ChatScreenHeader = ({ navigation, navigateTo }) => {
+const ChatScreenHeader = ({ navigation, navigateTo, toggleSearch }) => {
   return (
     <Header
       barStyle="light-content"
@@ -42,7 +44,7 @@ const ChatScreenHeader = ({ navigation, navigateTo }) => {
       leftComponent={
         <LeftComponent navigateTo={navigateTo} navigation={navigation} />
       }
-      rightComponent={<RightComponent />}
+      rightComponent={<RightComponent toggleSearch={toggleSearch} />}
     />
   );
 };

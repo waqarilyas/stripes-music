@@ -14,7 +14,6 @@ import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   muteIcon,
   noInternetIcon,
@@ -32,10 +31,14 @@ import {
   heartIcon,
 } from '../../../Assets/Icons';
 import FullScreenPlaylistCard from '../../components/FullScreenPlaylistCard';
-import { fullScreenChange } from '../../Redux/Reducers/audioSlice';
 import AudioPlayerSlider from '../AudioPlayerSlider';
 import styles from './styles';
-import { pushToPlaylist } from '../../Redux/Reducers/audioSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  pushToPlaylist,
+  changeSong,
+  fullScreenChange,
+} from '../../Redux/Reducers/audioSlice';
 
 // control Buttons for mini player
 function ControlButton({ title, icon, onPress }) {
@@ -322,7 +325,10 @@ export const Player = ({ screen }) => {
                   <FlatList
                     data={queue}
                     keyExtractor={() => randomize('Aa!0', 10)}
-                    renderItem={({ item }) => {
+                    renderItem={({
+                      item,
+                      item: { title, artist, artwork, url, duration, id },
+                    }) => {
                       return <FullScreenPlaylistCard item={item} />;
                     }}
                   />

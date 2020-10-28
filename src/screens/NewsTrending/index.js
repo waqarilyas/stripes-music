@@ -35,6 +35,7 @@ const NewsTrending = ({ navigation }) => {
               likeCount,
               shareCount,
               commentCount,
+              id,
             },
           }) => {
             const date = dayjs(createdAt.seconds).format('DD MMMM, YYYY');
@@ -47,6 +48,8 @@ const NewsTrending = ({ navigation }) => {
                 likeCount={likeCount}
                 shareCount={shareCount}
                 commentCount={commentCount}
+                nav={navigation}
+                newsId={id}
               />
             );
           }}

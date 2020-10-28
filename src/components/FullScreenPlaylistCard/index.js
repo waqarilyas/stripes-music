@@ -33,7 +33,6 @@ const FullScreenPlaylistCard = ({ item }) => {
         <TouchableOpacity onPress={() => dispatch(removeFromPlaylist(item))}>
           <Image source={deleteIcon} style={styles.deleteIcon} />
         </TouchableOpacity>
-        {/* <Image source={} /> */}
       </ListItem>
     </View>
   );

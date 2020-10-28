@@ -109,5 +109,7 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow Access For Camera</string>
 </dict>
 </plist>

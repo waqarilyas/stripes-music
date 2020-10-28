@@ -11,7 +11,11 @@ import VideoPopularNow from '../../screens/VideoPopularNow';
 const Stack = createStackNavigator();
 
 const VideoStack = () => {
-  const search = () => <Image source={searchIcon} style={styles.icon} />;
+  const search = (navigation) => (
+    <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+      <Image source={searchIcon} style={styles.icon} />
+    </TouchableOpacity>
+  );
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -38,13 +42,13 @@ const VideoStack = () => {
       <Stack.Screen
         name="Videos"
         component={Video}
-        options={{
+        options={({ navigation }) => ({
           title: 'Videos',
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
-        }}
+        })}
       />
       <Stack.Screen
         name="VideoPopularNow"
@@ -54,7 +58,7 @@ const VideoStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -66,7 +70,7 @@ const VideoStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
