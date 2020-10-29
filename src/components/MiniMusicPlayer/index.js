@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
-import TrackPlayer, {
-  usePlaybackState,
-  useTrackPlayerEvents,
-} from 'react-native-track-player';
+
+import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 
 import {
   pauseIcon,

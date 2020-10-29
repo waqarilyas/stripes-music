@@ -1,12 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  Animated,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { View, TouchableOpacity, Image, Text, Animated } from 'react-native';
 import { Slider } from 'react-native-elements';
 import Video from 'react-native-video';
 
@@ -19,6 +12,8 @@ import {
   pauseIcon,
 } from '../../../Assets/Icons';
 import { convertToMinutes } from '../../utils/Helpers';
+import { useDispatch } from 'react-redux';
+import { displayVideoModal } from '../../Redux/Reducers/helperSlice';
 
 const initialState = {
   paused: true,
@@ -31,6 +26,7 @@ const initialState = {
 };
 
 const VideoPlayer = ({ fileUrl, onPress }) => {
+  const disp = useDispatch();
   const videoPlayer = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [finished, setFinished] = useState(false);
@@ -105,7 +101,11 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
               {convertToMinutes(Math.floor(state.duration))}
             </Text>
           </View>
-          <TouchableOpacity style={styles.closeContainer} onPress={onPress}>
+          <TouchableOpacity
+            style={styles.closeContainer}
+            onPress={() => {
+              disp(displayVideoModal(false));
+            }}>
             <Image source={closeIcon} style={styles.closeIcon} />
           </TouchableOpacity>
           <TouchableOpacity

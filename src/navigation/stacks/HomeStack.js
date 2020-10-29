@@ -71,6 +71,7 @@ const HomeStack = () => {
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: () => search(navigation),
+          headerLeft: null,
           headerStyle: styles.headerStyle,
         })}
       />

@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Slider } from 'react-native-elements';
-import { RFValue } from 'react-native-responsive-fontsize';
 import TrackPlayer, { useTrackPlayerProgress } from 'react-native-track-player';
 
 import { convertToMinutes } from '../../utils/Helpers';
@@ -17,8 +16,8 @@ const MiniPlayerSlider = ({ progressData }) => {
         maximumTrackTintColor="grey"
         minimumTrackTintColor="#CA01A1"
         step={1}
-        thumbStyle={styles.thumbStyle}
         style={styles.trackStyle}
+        thumbStyle={styles.thumbStyle}
       />
     </View>
   );
@@ -39,7 +38,6 @@ const FullScreenSlider = ({ progressData }) => {
         onValueChange={(value) => TrackPlayer.seekTo(value)}
         maximumTrackTintColor="grey"
         minimumTrackTintColor="#CA01A1"
-        step={1}
         thumbStyle={styles.thumbStyle}
         style={styles.fullScreenTrackStyle}
       />
@@ -74,6 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
+    width: '100%',
   },
   timer: {
     color: 'grey',
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   timerContainer: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',

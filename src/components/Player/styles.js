@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: RFValue(16),
+    marginHorizontal: RFValue(12),
   },
   swapIcon: {
     resizeMode: 'contain',

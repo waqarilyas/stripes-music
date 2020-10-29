@@ -12,6 +12,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: 'center',
   },
+  topView: {
+    alignItems: 'center',
+    flexShrink: 1,
+    marginVertical: 12,
+  },
   subtitle: {
     color: 'white',
     textAlign: 'center',

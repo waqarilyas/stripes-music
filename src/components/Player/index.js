@@ -65,6 +65,8 @@ const Player = ({ screen }) => {
 
   const dispatch = useDispatch();
 
+  LOG('QUEUE', queue);
+
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
@@ -281,29 +283,30 @@ const Player = ({ screen }) => {
             {/* Playlists Start here */}
             {isVisible ? (
               <>
-                <ScrollView>
-                  <View style={styles.playlistsHeader}>
-                    <Text style={styles.upNext}>UP NEXT</Text>
-                    <View style={styles.headerRight}>
-                      <Image source={swapIcon} style={styles.swapIcon} />
-                      <View style={styles.randomButton}>
-                        <Image
-                          source={shuffleIcon}
-                          style={styles.shuffleIcon}
-                        />
-                        <Text style={styles.randomButtonText}>Random</Text>
-                      </View>
+                <View style={styles.playlistsHeader}>
+                  <Text style={styles.upNext}>UP NEXT</Text>
+                  <View style={styles.headerRight}>
+                    <Image source={swapIcon} style={styles.swapIcon} />
+                    <View style={styles.randomButton}>
+                      <Image source={shuffleIcon} style={styles.shuffleIcon} />
+                      <Text style={styles.randomButtonText}>Random</Text>
                     </View>
                   </View>
-                  <FlatList
-                    data={queue}
-                    ListEmptyComponent={<EmptyPlaylist />}
-                    keyExtractor={() => randomize('Aa0!', 10)}
-                    renderItem={({ item }) => {
-                      return <FullScreenPlaylistCard item={item} />;
-                    }}
-                  />
-                </ScrollView>
+                </View>
+                <View>
+                  <View style={{ flex: 1 }}>
+                    <ScrollView>
+                      <FlatList
+                        data={queue}
+                        ListEmptyComponent={<EmptyPlaylist />}
+                        keyExtractor={() => randomize('Aa0!', 10)}
+                        renderItem={({ item }) => {
+                          return <FullScreenPlaylistCard item={item} />;
+                        }}
+                      />
+                    </ScrollView>
+                  </View>
+                </View>
               </>
             ) : null}
             {/* Playlists End here */}

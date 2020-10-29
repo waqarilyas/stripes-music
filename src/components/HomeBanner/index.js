@@ -62,7 +62,7 @@ const HomeBanner = () => {
         url,
         duration,
         id,
-        createdAt: firestore.FieldValue.serverTimestamp(),
+        createdAt: +new Date(),
       };
       dispatch(changeSong(result));
       dispatch(pushToPlaylist(result));
@@ -81,19 +81,7 @@ const HomeBanner = () => {
       showsHorizontalScrollIndicator={false}
       data={[...songs, { seeAll: true }]}
       keyExtractor={(item) => item.id}
-      renderItem={({
-        item,
-        item: {
-          id,
-          artist,
-          artwork,
-          title,
-          url,
-          duration,
-          description,
-          seeAll,
-        },
-      }) => {
+      renderItem={({ item, item: { artwork, title, description, seeAll } }) => {
         if (seeAll) {
           return (
             <TouchableOpacity>
@@ -111,10 +99,7 @@ const HomeBanner = () => {
         }
 
         return (
-          <TouchableOpacity
-            onPress={() => {
-              playSong(item);
-            }}>
+          <TouchableOpacity onPress={() => playSong(item)}>
             <HomeTopSlider
               artwork={artwork}
               title={title}

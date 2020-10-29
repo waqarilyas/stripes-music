@@ -1,37 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  FlatList,
-} from 'react-native';
-import { Divider } from 'react-native-elements';
-import { useSelector, useDispatch } from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import randomize from 'randomatic';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, TextInput, View } from 'react-native';
+import { Divider } from 'react-native-elements';
 
-import styles from './styles';
-import Block from '../../components/Block';
 import {
-  clockIcon,
-  searchIcon,
   artistIcon,
-  iconsPlaylist,
   musicIcon,
   playIcon,
+  searchIcon,
   videoIcon,
 } from '../../../Assets/Icons';
-import { getSearchData } from '../../utils/Firebase';
+import AlbumsSearchCard from '../../components/AlbumsSearchCard';
+import ArtistsHorizontalCard from '../../components/ArtistsHorizontalCard';
+import Block from '../../components/Block';
+import ForYouPlaylistCard from '../../components/ForYouPlaylistCard';
+import NewVideosCard from '../../components/NewVideosCard';
 import SectionHeader from '../../components/SectionHeader';
 import SongCard from '../../components/SongCard';
-import NewVideosCard from '../../components/NewVideosCard';
-import ForYouPlaylistCard from '../../components/ForYouPlaylistCard';
-import ArtistsImage from '../../components/ArtistsImage';
-import AlbumsSearchCard from '../../components/AlbumsSearchCard';
-
-import randomize from 'randomatic';
+import { getSearchData } from '../../utils/Firebase';
+import styles from './styles';
 
 const SearchResultsScreen = ({ route, navigation }) => {
   const { selected } = route.params;
@@ -200,11 +189,9 @@ const SearchResultsScreen = ({ route, navigation }) => {
             horizontal
             renderItem={({ item }) => {
               return (
-                <ArtistsImage
-                  imgUrl={item.image.raw}
-                  firstName={item.firstname.raw}
-                  lastName={item.lastname.raw}
-                  followerCount={item.followercount.raw}
+                <ArtistsHorizontalCard
+                  avatar={item.image.raw}
+                  name={`${item.firstname.raw} ${item.lastname.raw}`}
                 />
               );
             }}

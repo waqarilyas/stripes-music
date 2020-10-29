@@ -2,23 +2,22 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Subscriptions from '../../screens/Subscriptions';
-import YourSubscriptions from '../../screens/YourSubscriptions';
+
 import EditYourSubscription from '../../screens/EditYourSubscription';
 import ViewNewOffers from '../../screens/ViewNewOffers';
 
-const stack = createStackNavigator();
+const Stack = createStackNavigator();
 
 const SubscriptionStack = () => {
   return (
-    <stack.Navigator>
-      <stack.Screen name="Subscriptions" component={Subscriptions} />
-      <stack.Screen name="YourSubscriptions" component={YourSubscriptions} />
-      <stack.Screen
+    <Stack.Navigator>
+      <Stack.Screen name="Subscriptions" component={Subscriptions} />
+      <Stack.Screen
         name="EditYourSubscription"
         component={EditYourSubscription}
       />
-      <stack.Screen name="ViewNewOffers" component={ViewNewOffers} />
-    </stack.Navigator>
+      <Stack.Screen name="ViewNewOffers" component={ViewNewOffers} />
+    </Stack.Navigator>
   );
 };
 

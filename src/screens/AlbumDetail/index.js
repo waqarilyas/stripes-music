@@ -30,7 +30,9 @@ const AlbumDetail = () => {
   const handleAddToPlaylist = async () => {
     try {
       dispatch(changeSong(albumSongs[0]));
-      dispatch(pushToPlaylist(albumSongs));
+      albumSongs.forEach((song) => {
+        dispatch(pushToPlaylist(song));
+      });
       await TrackPlayer.add(albumSongs);
       dispatch(fullScreenChange(true));
     } catch (err) {

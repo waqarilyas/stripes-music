@@ -27,10 +27,14 @@ import {
   getTopAllArtists,
   getBestPlaylists,
   getAllBestPlaylists,
+  getVideos,
+  getPopularVideos,
+  getLatestVideos,
 } from '../../Redux/Reducers/firebaseSlice';
 import HomeBestPlaylists from '../../components/HomeBestPlaylists';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
 import HomeTopArtists from '../../components/HomeTopArtists';
+import { LOG } from '../../utils/Constants';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -75,6 +79,9 @@ const Home = ({ navigation }) => {
     disp(getTopAllArtists());
     disp(getBestPlaylists());
     disp(getAllBestPlaylists());
+    disp(getVideos());
+    disp(getPopularVideos());
+    disp(getLatestVideos());
   }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -105,7 +112,6 @@ const Home = ({ navigation }) => {
   //     });
   // };
 
-  console.log('-=--==-=-=-=-', state);
   return (
     <ScrollView
       style={styles.container}

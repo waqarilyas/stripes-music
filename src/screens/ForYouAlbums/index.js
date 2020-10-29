@@ -1,13 +1,16 @@
 import React from 'react';
 import { FlatList, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './styles';
 
 import SeeAll from '../../components/SeeAll';
 import PlaylistCard from '../../components/PlaylistCard';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getAnAlbum, getAlbumSongs } from '../../Redux/Reducers/firebaseSlice';
 
 const ForYouAlbums = ({ navigation }) => {
+  const dispatch = useDispatch();
   const { albums } = useSelector((state) => state.root.firebase);
 
   return (
@@ -19,7 +22,7 @@ const ForYouAlbums = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         data={[...albums, { seeAll: true }]}
-        renderItem={({ item: { title, imgUrl, seeAll, songCount } }) => {
+        renderItem={({ item: { id, title, imgUrl, seeAll, songCount } }) => {
           if (seeAll) {
             return (
               <SeeAll
@@ -28,11 +31,18 @@ const ForYouAlbums = ({ navigation }) => {
             );
           } else {
             return (
-              <PlaylistCard
-                title={title}
-                image={imgUrl}
-                songsCount={songCount}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(getAnAlbum(id));
+                  dispatch(getAlbumSongs(id));
+                  navigation.navigate('AlbumDetail');
+                }}>
+                <PlaylistCard
+                  title={title}
+                  image={imgUrl}
+                  songsCount={songCount}
+                />
+              </TouchableOpacity>
             );
           }
         }}

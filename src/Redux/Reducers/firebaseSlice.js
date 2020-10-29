@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { LOG } from '../../utils/Constants';
 
 export const getSongs = createAsyncThunk('firebase/getSongs', async () => {
   let data = [];
@@ -386,6 +385,57 @@ export const getAllBestPlaylists = createAsyncThunk(
   },
 );
 
+export const getVideos = createAsyncThunk('firebase/getVideos', async () => {
+  let data = [];
+  const path = firestore().collection('videos');
+  const documents = await path.limit(6).get();
+  documents.forEach((document) => {
+    if (document.exists) {
+      let response = document.data();
+      response.createdAt = JSON.stringify(response.createdAt);
+      response.updatedAt = JSON.stringify(response.updatedAt);
+      data.push(response);
+    }
+  });
+  return data;
+});
+
+export const getPopularVideos = createAsyncThunk(
+  'firebase/getPopularVideos',
+  async () => {
+    let data = [];
+    const path = firestore().collection('videos');
+    const documents = await path.orderBy('viewCount', 'desc').limit(6).get();
+    documents.forEach((document) => {
+      if (document.exists) {
+        let response = document.data();
+        response.createdAt = JSON.stringify(response.createdAt);
+        response.updatedAt = JSON.stringify(response.updatedAt);
+        data.push(response);
+      }
+    });
+    return data;
+  },
+);
+
+export const getLatestVideos = createAsyncThunk(
+  'firebase/getLatestVideos',
+  async () => {
+    let data = [];
+    const path = firestore().collection('videos');
+    const documents = await path.orderBy('createdAt', 'desc').limit(6).get();
+    documents.forEach((document) => {
+      if (document.exists) {
+        let response = document.data();
+        response.createdAt = JSON.stringify(response.createdAt);
+        response.updatedAt = JSON.stringify(response.updatedAt);
+        data.push(response);
+      }
+    });
+    return data;
+  },
+);
+
 const firebaseSlice = createSlice({
   name: 'firebase',
   initialState: {
@@ -414,6 +464,11 @@ const firebaseSlice = createSlice({
     favoriteSongList: [],
     bestPlaylists: [],
     allBestPlaylists: [],
+    videos: [],
+    popularVideos: [],
+    allPopularVideos: [],
+    latestVideos: [],
+    allLatestVideos: [],
   },
   extraReducers: {
     // User data
@@ -552,6 +607,24 @@ const firebaseSlice = createSlice({
     [getAllBestPlaylists.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.allBestPlaylists = action.payload;
+    },
+
+    // Get Videos
+    [getVideos.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.videos = action.payload;
+    },
+
+    // Get Popular Video
+    [getPopularVideos.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.popularVideos = action.payload;
+    },
+
+    // Get Latest Videos
+    [getLatestVideos.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.latestVideos = action.payload;
     },
   },
 });

@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: 'black',
-    flex: 1,
   },
   heading: {
     color: 'white',
@@ -19,7 +18,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   list: {
-    flex: 1,
+    // height: '100%',
   },
   divider: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',

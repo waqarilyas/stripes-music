@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ImageBackground } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import styles from './styles';
 
@@ -18,9 +19,9 @@ const ForYouPlaylistCard = ({ image, title, duration, author }) => {
         <Text style={styles.subtitle} numberOfLines={1}>
           {author}
         </Text>
-        <View style={styles.viewButton}>
+        <TouchableOpacity style={styles.viewButton}>
           <Text style={styles.viewButtonText}>Play</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
