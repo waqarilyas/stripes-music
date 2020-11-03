@@ -13,3 +13,9 @@ export const KFormatter = (num = 0) => {
     ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + 'k'
     : Math.sign(num) * Math.abs(num);
 };
+
+export const customDocId = (uid, passedId) => {
+  return uid < passedId
+    ? uid.concat('**', passedId)
+    : passedId.concat('**', uid);
+};

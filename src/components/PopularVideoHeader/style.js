@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     marginVertical: hp('1'),
     marginHorizontal: hp('1'),
     borderRadius: hp('2'),
+    overflow: 'hidden',
   },
   view: {
     height: '100%',

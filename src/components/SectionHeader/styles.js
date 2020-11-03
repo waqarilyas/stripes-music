@@ -6,11 +6,12 @@ import {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
     justifyContent: 'space-around',
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,
+    marginBottom: hp('2'),
   },
   rightText: {
     color: 'white',
@@ -20,10 +21,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: hp('3'),
     width: hp('3'),
+    tintColor: 'white',
   },
   seeAll: {
     color: 'white',
     fontSize: 12,
+    fontWeight: 'bold',
   },
   background: {
     padding: 12,
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
   centerComponent: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: hp('2.4'),
   },
 });
 

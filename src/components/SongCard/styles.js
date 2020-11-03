@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
-    height: hp('22'),
+    height: hp('23'),
     width: hp('15'),
     marginHorizontal: hp('1'),
     marginTop: hp('1'),
@@ -17,15 +17,15 @@ const styles = StyleSheet.create({
     borderRadius: hp('1'),
     overflow: 'hidden',
   },
-  cardHeader: {
+  title: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: hp('1.6'),
   },
-  cardSubHeader: {
+  artist: {
     color: '#787878',
-    marginTop: hp('0.5'),
-    fontSize: 12,
+    fontSize: hp('1.5'),
+    marginTop: hp('0.6'),
   },
   cardText: {
     marginTop: hp('2'),

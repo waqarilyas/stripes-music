@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { LOG } from '../../utils/Constants';
 
 export const audioSlice = createSlice({
   name: 'audio',
@@ -6,6 +7,7 @@ export const audioSlice = createSlice({
     currentSong: {},
     isFullScreen: false,
     miniModalOpen: false,
+    initialPlay: true,
     playlist: [],
     bannerSongs: [],
   },
@@ -19,6 +21,9 @@ export const audioSlice = createSlice({
     changeToMiniModal: (state, action) => {
       state.miniModalOpen = action.payload;
     },
+    isInitialPlay: (state, action) => {
+      state.initialPlay = action.payload;
+    },
     pushToPlaylist: (state, action) => {
       state.playlist = [...state.playlist, action.payload];
     },
@@ -26,7 +31,6 @@ export const audioSlice = createSlice({
       const index = state.playlist.findIndex(
         (item) => item.id === action.payload.id,
       );
-      console.log(index);
       state.playlist.splice(index, 1);
     },
   },
@@ -37,6 +41,7 @@ export const {
   fullScreenChange,
   changeToMiniModal,
   pushToPlaylist,
+  isInitialPlay,
   removeFromPlaylist,
 } = audioSlice.actions;
 

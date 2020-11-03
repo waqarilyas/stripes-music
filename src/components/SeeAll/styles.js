@@ -1,15 +1,16 @@
 import { StyleSheet } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   seeAllContainer: {
-    backgroundColor: '#212121',
-    height: 122,
-    width: 122,
+    height: hp('15'),
+    width: hp('15'),
     marginHorizontal: 8,
     marginTop: 8,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   text: {
     color: 'white',
@@ -17,8 +18,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: hp('4'),
+    height: hp('4'),
     marginBottom: 16,
   },
 });

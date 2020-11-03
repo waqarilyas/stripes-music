@@ -1,44 +1,72 @@
-import React, { useEffect, useReducer } from 'react';
-import { Text, FlatList } from 'react-native';
+import React from 'react';
+import { View, Text, FlatList } from 'react-native';
 import { Divider } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './styles';
-import Block from '../../components/Block';
 import ForYouAudioCard from '../../components/ForYouAudioCard';
-import { getCollections } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-import randomize from 'randomatic';
-
-const initialState = {
-  songs: [],
-};
+import {
+  changeSong,
+  pushToPlaylist,
+  fullScreenChange,
+} from '../../Redux/Reducers/audioSlice';
+import {
+  addPlayCount,
+  addToRecentlyPlayed,
+} from '../../Redux/Reducers/firebaseSlice';
+import { LOG } from '../../utils/Constants';
+import TrackPlayer from 'react-native-track-player';
 
 const ForYouAudioSeeAll = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const dispatch = useDispatch();
+  const { allSongs } = useSelector((state) => state.root.firebase);
 
-  useEffect(() => {
-    getCollections('songs', (collection) => {
-      dispatch({ songs: collection });
-    });
-  }, []);
+  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+    try {
+      const result = {
+        title,
+        artist,
+        artwork,
+        url,
+        duration,
+        id,
+        createdAt: +new Date(),
+      };
+      dispatch(changeSong(result));
+      dispatch(pushToPlaylist(result));
+      await TrackPlayer.add(result);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
+    } catch (error) {
+      LOG('PLAY SONG', error);
+    }
+  };
 
   return (
-    <Block>
-      <Text style={styles.titleText}>
-        A collection of music recommended just for you. We hope you like it!
-      </Text>
-
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.title}>Songs For You</Text>
+        <Text style={styles.subtitle}>
+          A collection of music recommended just for you. We hope you like it!
+        </Text>
+      </View>
       <FlatList
-        data={state.songs}
-        keyExtractor={() => randomize('Aa10!', 10)}
+        data={allSongs}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-        renderItem={({ item: { arts, title, artist } }) => {
+        renderItem={({ item, item: { artwork, title, artist } }) => {
           return (
-            <ForYouAudioCard arts={arts[0]} title={title} artist={artist} />
+            <ForYouAudioCard
+              artwork={artwork}
+              title={title}
+              artist={artist}
+              onPress={() => playSong(item)}
+            />
           );
         }}
       />
-    </Block>
+    </View>
   );
 };
 

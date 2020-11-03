@@ -2,23 +2,27 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import MainTabs from '../tabs/MainTabs';
 import AccountSettingStack from './AccountSettingStack';
 import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
 import MusicPlayerModal from '../../screens/MusicPlayerModal';
-import YourSubscriptions from '../../screens/YourSubscriptions';
+import SubscriptionModal from '../../screens/SubscriptionModal';
 import SearchScreen from '../../screens/SearchScreen';
 import NoInternet from '../../screens/NoInternet';
 import SearchResultsScreen from '../../screens/SearchResultsSceen';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
+import SubscriptionModalScreen from '../../components/SubscriptionBottomSheet';
 
 const Stack = createStackNavigator();
 
-const MainAppStack = ({ navigation }) => {
+const MainAppStack = () => {
   const currentState = useSelector((state) => state.root.audio.miniModalOpen);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
+  const subsModal = useSelector(
+    (state) => state.root.helpers.subscriptionModal,
+  );
 
   const back = (navigation) => {
     return (
@@ -43,15 +47,14 @@ const MainAppStack = ({ navigation }) => {
 
   return (
     <>
+      {subsModal ? <SubscriptionModalScreen /> : null}
       <Stack.Navigator>
         <Stack.Screen
-          name="YourSubscriptions"
-          component={YourSubscriptions}
-          options={({ navigation }) => ({
-            title: 'Buy Subscription',
-            headerTitleStyle: styles.headerTitleStyle,
-            headerStyle: styles.headerStyle,
-          })}
+          name="MainTabs"
+          component={MainTabs}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="SearchScreen"
@@ -60,13 +63,7 @@ const MainAppStack = ({ navigation }) => {
             headerShown: false,
           })}
         />
-        <Stack.Screen
-          name="MainTabs"
-          component={MainTabs}
-          options={{
-            headerShown: false,
-          }}
-        />
+
         <Stack.Screen
           name="AccountSettingStack"
           component={AccountSettingStack}
@@ -91,6 +88,7 @@ const MainAppStack = ({ navigation }) => {
           })}
         />
       </Stack.Navigator>
+
       {currentState ? <MusicPlayerModal /> : null}
       {isFullScreen ? <MusicPlayerFullscreen /> : null}
     </>

@@ -1,7 +1,22 @@
 import firestore from '@react-native-firebase/firestore';
 import axios from 'axios';
 
-// Songs upload
+export const addPlayCount = async (id) => {
+  const songReference = firestore().collection('songs').doc(id);
+
+  return firestore().runTransaction(async (transaction) => {
+    const songSnapshot = await transaction.get(songReference);
+
+    if (!songSnapshot) {
+      throw 'Song does not exist!';
+    }
+
+    await transaction.update(songReference, {
+      playCount: songSnapshot.data().playCount + 1,
+    });
+  });
+};
+
 export const uploadDataToStorage = async (collection, engineName, callback) => {
   let documentsData = [];
 
@@ -104,7 +119,6 @@ export const getSearchData = async (searchValue, engineName, callback) => {
     .then((response) => callback(response.data))
     .catch((err) => console.log(err));
 };
-// Songs upload ends here
 
 export const getCollection = (collection, limit, callback) => {
   let data = [];

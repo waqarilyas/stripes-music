@@ -1,33 +1,66 @@
-import React, { useState } from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Avatar, CheckBox, Overlay } from 'react-native-elements';
 import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
+  ActivityIndicator,
   ScrollView,
-} from 'react-native';
-import { Button, Overlay, Avatar, CheckBox } from 'react-native-elements';
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-import randomize from 'randomatic';
 
-import { plusIcon, playlist, queueIcon, tickIcon } from '../../../Assets/Icons';
+import {
+  heartGrayIcon,
+  playlist,
+  plusIcon,
+  queueIcon,
+  tickIcon,
+} from '../../../Assets/Icons';
 import SongCardListView from '../../components/SongCardListView';
 
-const SongItem = ({
-  title,
-  author,
-  arts,
-  duration,
-  userPlaylists,
-  onAddToPlaylist,
-  item,
-}) => {
+const SongItem = ({ title, author, image, id, duration }) => {
   const [visible, setVisible] = useState(false);
   const [addToQueue, setAddToQueue] = useState(false);
   const [checked, setChecked] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const uid = auth().currentUser.uid;
+
+  useEffect(() => {
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs')
+      .doc(id)
+      .onSnapshot((document) => {
+        if (document.exists) {
+          const isFavorite = document.data().isFavorite;
+          setFavorite(isFavorite);
+        }
+      });
+
+    return () => listener;
+  }, []);
+
+  const handleFavorite = async () => {
+    // setFavorite(!favorite);
+    const userFavDoc = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs');
+    await userFavDoc.doc(id).set(
+      {
+        title,
+        author,
+        image,
+        id,
+        isFavorite: !favorite,
+        duration,
+      },
+      { merge: true },
+    );
+  };
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -35,7 +68,7 @@ const SongItem = ({
 
   return (
     <>
-      {visible ? (
+      {visible && (
         <Overlay
           isVisible={visible}
           ListEmptyComponent={() => <ActivityIndicator color="black" />}
@@ -46,7 +79,7 @@ const SongItem = ({
           <SongCardListView
             title={title}
             artist={author}
-            arts={arts}
+            arts={image}
             duration={duration}
           />
 
@@ -73,12 +106,10 @@ const SongItem = ({
               )}
             </TouchableOpacity>
           </View>
-          {playlistOpen ? (
+          {playlistOpen && (
             <View
               style={{
-                flex: 1,
                 backgroundColor: '#373737',
-                // height: '30%',
                 position: 'relative',
                 flex: 3,
               }}>
@@ -88,7 +119,7 @@ const SongItem = ({
               data="Title"
               keyExtractor={() => randomize('Aa0!', 10)}
               renderItem={({ item }) => {
-                return ( */}
+              return ( */}
 
                 <CheckBox
                   title="Title"
@@ -110,26 +141,47 @@ const SongItem = ({
               }}
             /> */}
             </View>
-          ) : null}
+          )}
         </Overlay>
-      ) : null}
+      )}
 
       <View style={styles.container}>
+        <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={1}>
+            {title}
+          </Text>
           <Text style={styles.author}>{author}</Text>
         </View>
-        <TouchableOpacity onPress={() => toggleOverlay()}>
-          <Image source={plusIcon} style={styles.add} />
-        </TouchableOpacity>
+        <View style={styles.iconContainer}>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={() => toggleOverlay()}>
+            <Image source={plusIcon} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={handleFavorite}>
+            <Image
+              source={heartGrayIcon}
+              style={favorite ? styles.favoriteIcon : styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
 };
+const icon = {
+  resizeMode: 'contain',
+  tintColor: 'gray',
+  width: 18,
+  height: 18,
+  paddingHorizontal: 20,
+};
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
     flexDirection: 'row',
     marginVertical: 16,
     justifyContent: 'space-between',
@@ -138,16 +190,38 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: 'column',
+    flexShrink: 1,
+    width: '100%',
   },
   title: {
     color: 'white',
+    fontWeight: 'bold',
     fontSize: 14,
-    fontWeight: '500',
   },
   author: {
     color: 'gray',
-    marginTop: 6,
+    marginTop: 2,
     fontSize: 12,
+  },
+  icon: {
+    ...icon,
+  },
+  favoriteIcon: {
+    ...icon,
+    tintColor: '#e81093',
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    height: 75,
+    width: 75,
+    borderRadius: 12,
+    resizeMode: 'cover',
+    marginRight: 12,
   },
   add: {
     resizeMode: 'contain',
@@ -157,7 +231,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   overlay: {
-    // height: '50%',
     width: '90%',
     backgroundColor: '#212121',
     flex: 0.4,

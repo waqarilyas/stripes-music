@@ -1,55 +1,59 @@
 import randomize from 'randomatic';
 import React, { useEffect, useState } from 'react';
 import {
-  Dimensions,
   FlatList,
   Image,
+  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
+  heartIcon,
   muteIcon,
   noInternetIcon,
   pauseButton,
-  pauseIcon,
   playButton,
   playlist,
   shuffleIcon,
-  slider2,
   speaker,
   swapIcon,
   whiteNext,
-  whitePlayIcon,
   whitePrev,
-  heartIcon,
 } from '../../../Assets/Icons';
 import FullScreenPlaylistCard from '../../components/FullScreenPlaylistCard';
+import { isInitialPlay } from '../../Redux/Reducers/audioSlice';
+import { LOG } from '../../utils/Constants';
 import AudioPlayerSlider from '../AudioPlayerSlider';
+import MiniMusicPlayer from '../MiniMusicPlayer';
 import styles from './styles';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  pushToPlaylist,
-  changeSong,
-  fullScreenChange,
-} from '../../Redux/Reducers/audioSlice';
 
-// control Buttons for mini player
-function ControlButton({ title, icon, onPress }) {
+// Control Buttons for mini player
+const ControlButton = ({ icon, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <Image style={styles.controlIcon} source={icon} />
     </TouchableOpacity>
   );
-}
+};
 
-export const Player = ({ screen }) => {
+const EmptyPlaylist = () => {
+  return (
+    <View style={styles.error}>
+      <Image source={noInternetIcon} style={styles.errorImg} />
+      <Text style={styles.errorMsg}>Queue is Empty</Text>
+    </View>
+  );
+};
+
+const Player = ({ screen }) => {
   const playbackState = usePlaybackState();
   const [isVisible, setIsVisible] = useState(false);
   const [isMute, setIsMute] = useState(false);
@@ -57,13 +61,13 @@ export const Player = ({ screen }) => {
 
   const currentSong = useSelector((state) => state.root.audio.currentSong);
   const queue = useSelector((state) => state.root.audio.playlist);
+  const firstTime = useSelector((state) => state.root.audio.initialPlay);
 
   const dispatch = useDispatch();
 
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
-      const { title, artist, artwork } = track || {};
       setCurrentTrack(track);
     }
   });
@@ -75,7 +79,7 @@ export const Player = ({ screen }) => {
       const track = await TrackPlayer.getTrack(trackid);
       setCurrentTrack(track);
     } catch (err) {
-      console.log('Skip to next: ', err);
+      LOG('SKIP TO NEXT', err);
     }
   };
 
@@ -86,7 +90,7 @@ export const Player = ({ screen }) => {
       const track = await TrackPlayer.getTrack(trackid);
       setCurrentTrack(track);
     } catch (err) {
-      console.log('Skip to previous: ', err);
+      LOG('SKIP TO PREVIOUS', err);
     }
   };
 
@@ -102,215 +106,181 @@ export const Player = ({ screen }) => {
     }
   };
 
-  // mini screen icons
-
-  var middleButtonText = whitePlayIcon;
-
-  if (
-    playbackState === TrackPlayer.STATE_PLAYING ||
-    playbackState === TrackPlayer.STATE_BUFFERING
-  ) {
-    middleButtonText = pauseIcon;
-  }
-  // mini screen icons end here
-
-  //full screen icons
-  var fullscreenMiddleButtonText = playButton;
+  // full screen icons
+  let fullscreenMiddleButtonText = playButton;
   if (
     playbackState === TrackPlayer.STATE_PLAYING ||
     playbackState === TrackPlayer.STATE_BUFFERING
   ) {
     fullscreenMiddleButtonText = pauseButton;
   }
-  //full screen icons end here
 
   const mute = async () => {
-    setIsMute(!isMute);
-    isMute ? await TrackPlayer.setVolume(0) : await TrackPlayer.setVolume(1);
+    try {
+      setIsMute(!isMute);
+      isMute ? await TrackPlayer.setVolume(0) : await TrackPlayer.setVolume(1);
+    } catch (err) {
+      LOG('MUTE ERROR', err);
+    }
   };
 
-  const obj = {
-    artist: currentSong.artist,
-    id: currentSong.id,
-    artwork: currentSong.artwork[0],
-    url: currentSong.url,
-    title: currentSong.title,
+  const skipTrack = async () => {
+    try {
+      await TrackPlayer.skip(currentSong.id);
+      await TrackPlayer.play();
+    } catch (err) {
+      LOG('SKIP TRACK', err);
+    }
   };
 
-  const getCurrentTrack = () => {
-    setCurrentTrack(obj);
-  };
-
-  const addToQueue = async () => {
-    await TrackPlayer.add(obj);
-    await TrackPlayer.skip(currentSong.id);
+  // Function is called initially when
+  // the first song is played
+  const playSong = async () => {
     await TrackPlayer.play();
   };
 
   useEffect(() => {
-    getCurrentTrack();
-    addToQueue();
-    dispatch(pushToPlaylist(currentSong));
-  }, []);
+    setCurrentTrack(currentSong);
+    if (firstTime) {
+      playSong();
+      dispatch(isInitialPlay(false));
+    } else {
+      skipTrack();
+    }
+  }, [currentSong]);
 
   return (
     <>
-      {/*  mini Player */}
+      {/*  Mini Player */}
       {screen === 'miniplayer' ? (
-        <View style={styles.container}>
-          <View style={styles.imageContainer}>
-            <Avatar
-              size="large"
-              rounded
-              onPress={() => dispatch(fullScreenChange(true))}
-              avatarStyle={styles.cover}
-              source={{ uri: currentTrack.artwork }}
-            />
-          </View>
-          <View style={styles.containerRight}>
-            <AudioPlayerSlider screen="miniplayer" />
-            <View style={styles.playerBottom}>
-              <View style={styles.artistContainer}>
-                <Text style={styles.title} numberOfLines={1}>
-                  {currentTrack.title}
-                </Text>
-                <Text style={styles.artist}>{currentTrack.artist}</Text>
-              </View>
-
-              <View style={styles.controls}>
-                <ControlButton
-                  icon={whitePrev}
-                  onPress={() => skipToPrevious()}
-                />
-                <ControlButton
-                  icon={middleButtonText}
-                  onPress={() => togglePlayback()}
-                />
-                <ControlButton icon={whiteNext} onPress={() => skipToNext()} />
-              </View>
-            </View>
-          </View>
-        </View>
+        <MiniMusicPlayer currentTrack={currentTrack} />
       ) : null}
       {/* mini Player ends here */}
 
       {/* full screen player starts here */}
       {screen === 'fullscreen' ? (
-        <View style={styles.fullscreenContainer}>
-          <View
-            style={
-              isVisible
-                ? styles.playlistOpenCorousalContainer
-                : styles.corousalContainer
-            }>
-            {/* <FlatList
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={styles.fullscreenContainer}>
+            <View
+              style={
+                isVisible
+                  ? styles.playlistOpenCorousalContainer
+                  : styles.corousalContainer
+              }>
+              {/* <FlatList
               data={currentSong.artwork}
               horizontal
               keyExtractor={() => randomize('Aa0!', 10)}
               renderItem={({ item }) => {
                 return ( */}
-            <Image
-              source={{ uri: currentTrack.artwork }}
-              style={
-                isVisible
-                  ? styles.playlistOpenStyleForImage
-                  : styles.imageBackground
-              }
-            />
-            {/* );
+              <Image
+                source={{ uri: currentTrack.artwork }}
+                style={
+                  isVisible
+                    ? styles.playlistOpenStyleForImage
+                    : styles.imageBackground
+                }
+              />
+              {/* );
               }}
             /> */}
-          </View>
+            </View>
 
-          {/* {!isVisible ? (
+            {/* {!isVisible ? (
             <Image source={slider2} style={styles.sliderIcon} />
           ) : null} */}
 
-          <View
-            style={
-              isVisible
-                ? styles.playlistOpenTitleContainer
-                : styles.FullScreenTitleContainer
-            }>
-            <Text
-              style={isVisible ? styles.playlistOpenTitle : styles.FullTitle}
-              numberOfLines={2}>
-              {currentTrack.title}
-            </Text>
-            <Text style={styles.FullSubtitle}>{currentTrack.artist}</Text>
-          </View>
+            {/* Title & Artist */}
+            <View
+              style={
+                isVisible
+                  ? styles.playlistOpenTitleContainer
+                  : styles.FullScreenTitleContainer
+              }>
+              <Text
+                style={isVisible ? styles.playlistOpenTitle : styles.FullTitle}
+                numberOfLines={2}>
+                {currentTrack.title}
+              </Text>
+              <Text style={styles.FullSubtitle}>{currentTrack.artist}</Text>
+            </View>
 
-          <AudioPlayerSlider />
+            {/* Audio Player Slider */}
+            <AudioPlayerSlider />
 
-          <View style={styles.fullscreenControls}>
-            <TouchableOpacity onPress={() => skipToPrevious()}>
-              <Image
-                source={whitePrev}
-                style={
-                  isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
-                }
-              />
-            </TouchableOpacity>
+            <View style={styles.fullscreenControls}>
+              {/* Previous Button */}
+              <TouchableOpacity onPress={() => skipToPrevious()}>
+                <Image
+                  source={whitePrev}
+                  style={
+                    isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
+                  }
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => togglePlayback()}>
-              <Image
-                source={fullscreenMiddleButtonText}
-                style={
-                  isVisible
-                    ? styles.playlistOpenMiddleIcon
-                    : styles.fullscreenMiddleIcon
-                }
-              />
-            </TouchableOpacity>
+              {/* Previous Button */}
+              <TouchableOpacity onPress={() => togglePlayback()}>
+                <Image
+                  source={fullscreenMiddleButtonText}
+                  style={
+                    isVisible
+                      ? styles.playlistOpenMiddleIcon
+                      : styles.fullscreenMiddleIcon
+                  }
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => skipToNext()}>
-              <Image
-                source={whiteNext}
-                style={
-                  isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
-                }
-              />
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity onPress={() => skipToNext()}>
+                <Image
+                  source={whiteNext}
+                  style={
+                    isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
+                  }
+                />
+              </TouchableOpacity>
+            </View>
 
-          <View
-            style={
-              isVisible
-                ? styles.playlistOpenIconContainer
-                : styles.playlistIconsContainer
-            }>
-            <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
-              <Image
-                source={playlist}
-                style={
-                  isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
-                }
-              />
-            </TouchableOpacity>
+            <View
+              style={
+                isVisible
+                  ? styles.playlistOpenIconContainer
+                  : styles.playlistIconsContainer
+              }>
+              {/* Playlist icon */}
+              <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+                <Image
+                  source={playlist}
+                  style={
+                    isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
+                  }
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity>
-              <Image
-                source={heartIcon}
-                style={
-                  isVisible ? styles.playlistOpenHeartIcon : styles.heartIcon
-                }
-              />
-            </TouchableOpacity>
+              {/* Like icon */}
+              <TouchableOpacity>
+                <Image
+                  source={heartIcon}
+                  style={
+                    isVisible ? styles.playlistOpenHeartIcon : styles.heartIcon
+                  }
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={mute}>
-              <Image
-                source={isMute ? speaker : muteIcon}
-                style={
-                  isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
-                }
-              />
-            </TouchableOpacity>
-          </View>
+              {/* Mute icon */}
+              <TouchableOpacity onPress={mute}>
+                <Image
+                  source={isMute ? speaker : muteIcon}
+                  style={
+                    isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
+                  }
+                />
+              </TouchableOpacity>
+            </View>
 
-          {/* Playlists Start here */}
-          {isVisible ? (
-            <>
-              <ScrollView>
+            {/* Playlists Start here */}
+            {isVisible ? (
+              <>
                 <View style={styles.playlistsHeader}>
                   <Text style={styles.upNext}>UP NEXT</Text>
                   <View style={styles.headerRight}>
@@ -321,28 +291,25 @@ export const Player = ({ screen }) => {
                     </View>
                   </View>
                 </View>
-                {queue.length > 0 ? (
-                  <FlatList
-                    data={queue}
-                    keyExtractor={() => randomize('Aa!0', 10)}
-                    renderItem={({
-                      item,
-                      item: { title, artist, artwork, url, duration, id },
-                    }) => {
-                      return <FullScreenPlaylistCard item={item} />;
-                    }}
-                  />
-                ) : (
-                  <View style={styles.error}>
-                    <Image source={noInternetIcon} style={styles.errorImg} />
-                    <Text style={styles.errorMsg}>No Songs in queue yet! </Text>
+                <View>
+                  <View style={{ flex: 1 }}>
+                    <ScrollView>
+                      <FlatList
+                        data={queue}
+                        ListEmptyComponent={<EmptyPlaylist />}
+                        keyExtractor={() => randomize('Aa0!', 10)}
+                        renderItem={({ item }) => {
+                          return <FullScreenPlaylistCard item={item} />;
+                        }}
+                      />
+                    </ScrollView>
                   </View>
-                )}
-              </ScrollView>
-            </>
-          ) : null}
-          {/* Playlists End here */}
-        </View>
+                </View>
+              </>
+            ) : null}
+            {/* Playlists End here */}
+          </View>
+        </SafeAreaView>
       ) : null}
 
       {/* full screen player ends here */}

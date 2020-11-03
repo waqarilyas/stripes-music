@@ -50,13 +50,13 @@ const MusicPlayerFullscreen = ({ navigation, isVisible }) => {
   };
 
   return (
-    <SafeAreaView>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isVisible}
-        onRequestClose={() => {}}>
-        <FullScreenOverlay visible={visible} toggleOverlay={toggleOverlay} />
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={() => {}}>
+      <FullScreenOverlay visible={visible} toggleOverlay={toggleOverlay} />
+      <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => {
@@ -77,10 +77,9 @@ const MusicPlayerFullscreen = ({ navigation, isVisible }) => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* <NowPlayingTabs /> */}
-        <MusicPlayerRelated />
-      </Modal>
-    </SafeAreaView>
+      </SafeAreaView>
+      <MusicPlayerRelated />
+    </Modal>
   );
 };
 

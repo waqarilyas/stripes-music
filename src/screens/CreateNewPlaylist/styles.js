@@ -1,12 +1,41 @@
 import { StyleSheet } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   overlay: {
     backgroundColor: 'black',
     flex: 1,
-    paddingHorizontal: hp('2'),
     alignItems: 'center',
+  },
+  private: {
+    color: 'white',
+    alignSelf: 'center',
+    fontSize: hp('2'),
+    marginLeft: hp('2'),
+    fontWeight: 'bold',
+  },
+  privacyContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginVertical: hp('2'),
+  },
+  error: {
+    color: '#B22222',
+    marginVertical: hp('1'),
+    marginLeft: hp('1'),
+    alignSelf: 'center',
+  },
+  input: {
+    backgroundColor: '#1a1a1a',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: hp('1'),
+    padding: hp('2'),
+    color: 'white',
+    width: wp('60'),
   },
   overlayHeader: {
     fontSize: hp('3'),
@@ -18,13 +47,20 @@ const styles = StyleSheet.create({
   profileContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: hp('6'),
+    marginVertical: hp('4'),
+  },
+  optional: {
+    color: 'gray',
+    alignSelf: 'center',
+    marginTop: hp('3'),
+    fontSize: hp('1.6'),
+    fontStyle: 'italic',
   },
   camera: {
     alignItems: 'center',
     resizeMode: 'contain',
-    height: hp('5'),
-    width: hp('5'),
+    height: hp('20'),
+    width: wp('20'),
   },
   imageEdit: {
     height: hp('4.4%'),
@@ -56,13 +92,6 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: hp('2'),
-  },
-  createButton: {
-    backgroundColor: 'white',
-    paddingVertical: hp('1.5'),
-    paddingHorizontal: hp('10'),
-    borderRadius: hp('1'),
-    marginTop: hp('25'),
   },
 });
 

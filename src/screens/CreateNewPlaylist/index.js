@@ -1,32 +1,45 @@
+import Checkbox from '@react-native-community/checkbox';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import { Formik } from 'formik';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  TextInput,
   KeyboardAvoidingView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Divider, Overlay, Avatar } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 
-import { edit, camera } from '../../../Assets/Icons';
+import { imagePlaceholder } from '../../../Assets/Icons';
+import Button from '../../components/Button';
+import { CreatePlaylistVS } from '../../utils/Validation';
 import styles from './styles';
 
-const CreateNewPlaylist = () => {
-  const [visible, setVisible] = useState(false);
-  var [fileUri, SetFileuri] = useState(null);
+const initValues = {
+  title: '',
+  err: '',
+};
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
+const CreateNewPlaylist = ({ navigation }) => {
+  const [fileUri, setFileuri] = useState(null);
+  const [ext, setExt] = useState('');
+  const [privacy, setPrivacy] = useState(false);
+  const uid = auth().currentUser.uid;
 
   const chooseImage = () => {
-    let options = {
-      title: 'Select Avatar',
-      cameraType: 'front',
+    const options = {
+      title: 'Select Playlist Artwork',
+      takePhotoButtonTitle: null,
       mediaType: 'photo',
-      quality: 1.0,
+      maxWidth: 800,
+      maxHeight: 800,
+      quality: 1,
+      allowsEditing: true,
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -34,58 +47,164 @@ const CreateNewPlaylist = () => {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log(response.uri);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
       } else {
-        SetFileuri(response.uri);
+        const splittedUri = response.uri.split('.');
+        const extension = splittedUri[splittedUri.length - 1];
+        setExt(extension);
+        setFileuri(decodeURI(response.uri));
       }
     });
+  };
+
+  const createNewPlaylist = (values, action) => {
+    const title = values.title;
+    const finalTitle = title.toLowerCase().split(' ').join('-');
+
+    if (fileUri) {
+      uploadImageToStorage(finalTitle, title, action);
+    } else {
+      uploadDataToFirestore(title);
+    }
+  };
+
+  const uploadImageToStorage = (finalTitle, title, action) => {
+    const storageRef = storage().ref('users/');
+    const path = `${uid}/playlists/${finalTitle}/${finalTitle}.${ext}`;
+    const uploadTask = storageRef.child(path).putFile(fileUri);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+        switch (snapshot.state) {
+          case storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            break;
+          case storage.TaskState.CANCELLED:
+          case storage.TaskState.ERROR:
+            action.setSubmitting(false);
+            action.setErrors({
+              err: 'Failed to create a playlist. Try again.',
+            });
+            break;
+          case storage.TaskState.RUNNING:
+            console.log('Upload is running');
+            break;
+        }
+      }, // Failed Listener
+      (_err) => {
+        action.setSubmitting(false);
+        action.setErrors({
+          err: 'Failed to create a playlist. Try again.',
+        });
+      }, // Successful Listener
+      () => {
+        console.log('------ SUCCESSFULLY UPLOADED PICTURE ------');
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+          console.log('File available at', downloadUrl);
+          uploadDataToFirestore(title, downloadUrl);
+        });
+      },
+    );
+  };
+
+  const uploadDataToFirestore = (title, imageUrl = '') => {
+    const playlist = {
+      createdAt: firestore.FieldValue.serverTimestamp(),
+      updatedAt: firestore.FieldValue.serverTimestamp(),
+      duration: '0H',
+      id: '',
+      image: imageUrl,
+      isPrivate: privacy,
+      songs: [],
+      title,
+      viewCount: privacy ? null : 0,
+    };
+
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .add(playlist)
+      .then((ref) => {
+        ref.set(
+          {
+            id: ref.id,
+          },
+          { merge: true },
+        );
+      })
+      .then(() => navigation.goBack());
   };
 
   return (
     <>
       <View style={styles.overlay}>
         <KeyboardAvoidingView>
-          <Text style={styles.overlayHeader}>Create Playlist</Text>
-          <Text style={styles.subtitle}>
-            Enter your playlist name and select avatar
-          </Text>
+          <Text style={styles.overlayHeader}>Create New Playlist</Text>
           <View style={styles.profileContainer}>
             <TouchableOpacity onPress={chooseImage}>
-              {fileUri ? (
-                <Avatar
-                  rounded
-                  source={{ uri: fileUri }}
-                  size={100}
-                  containerStyle={{ alignSelf: 'center' }}
-                  onPress={chooseImage}
-                />
-              ) : (
-                <View style={styles.cameraIconContainer}>
-                  <Image source={camera} style={styles.camera} />
-                </View>
-              )}
-              <View style={styles.edit}>
-                <Image source={edit} style={styles.imageEdit} />
-              </View>
+              <Avatar
+                rounded
+                source={fileUri === null ? imagePlaceholder : { uri: fileUri }}
+                size={heightPercentageToDP('18')}
+                containerStyle={{ alignSelf: 'center' }}
+                onPress={chooseImage}
+              />
+              <Text style={styles.optional}>
+                Select Profile Picture (Optional)
+              </Text>
             </TouchableOpacity>
           </View>
 
-          <TextInput
-            style={styles.textInput}
-            multiline
-            placeholder="Enter Playlist name here"
-            placeholderTextColor="gray"
-            textAlign="center"
-          />
+          <Formik
+            initialValues={initValues}
+            onSubmit={(values, actions) => createNewPlaylist(values, actions)}
+            validationSchema={CreatePlaylistVS}>
+            {({
+              initialValues,
+              errors,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+            }) => (
+              <>
+                <TextInput
+                  placeholder="Playlist Title"
+                  placeholderTextColor="#515151"
+                  style={styles.input}
+                  defaultValue={initialValues.title}
+                  onChangeText={handleChange('title')}
+                />
+                <Text style={styles.error}>
+                  {touched.title && errors.title ? errors.title : ''}
+                </Text>
+                <View style={styles.privacyContainer}>
+                  <Checkbox
+                    value={privacy}
+                    onValueChange={(newValue) => setPrivacy(newValue)}
+                    onTintColor="#F5138E"
+                    onCheckColor="#F5138E"
+                  />
+                  <Text style={styles.private}>Private</Text>
+                </View>
+                <Button
+                  text="CREATE"
+                  onPress={handleSubmit}
+                  isSubmitting={isSubmitting}
+                />
+                <Text style={styles.error}>
+                  {touched.err && errors.err ? errors.err : ''}
+                </Text>
+              </>
+            )}
+          </Formik>
         </KeyboardAvoidingView>
-        <Text style={styles.createButton}>Create</Text>
       </View>
     </>
   );

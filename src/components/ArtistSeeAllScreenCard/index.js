@@ -1,25 +1,21 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { Avatar, ListItem } from 'react-native-elements';
 
 import styles from './styles';
 import { redLikeIcon } from '../../../Assets/Icons';
-import { thousandSeprator } from '../../utils/Helpers';
 
-const ArtistSeeAllScreenCard = ({ imgUrl, firstName, lastName, followers }) => {
+const ArtistSeeAllScreenCard = ({ avatar, name, onFavPress }) => {
   return (
     <View style={styles.container}>
       <ListItem containerStyle={styles.container}>
-        <Avatar rounded size="medium" source={{ uri: imgUrl }} />
+        <Avatar rounded size="medium" source={{ uri: avatar }} />
         <ListItem.Content>
-          <ListItem.Title style={styles.title}>
-            {firstName} {lastName}
-          </ListItem.Title>
-          <ListItem.Subtitle style={styles.subtitle}>
-            {thousandSeprator(followers)} followers
-          </ListItem.Subtitle>
+          <ListItem.Title style={styles.title}>{name}</ListItem.Title>
         </ListItem.Content>
-        <Image source={redLikeIcon} style={styles.icon} />
+        <TouchableOpacity onPress={onFavPress}>
+          <Image source={redLikeIcon} style={styles.icon} />
+        </TouchableOpacity>
       </ListItem>
     </View>
   );

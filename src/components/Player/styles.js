@@ -1,7 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-
-const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -12,10 +10,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: RFValue(80),
     alignItems: 'center',
-    paddingTop: RFValue(5),
-  },
-  cover: {
-    // color: 'grey',
   },
   title: {
     marginTop: 10,
@@ -26,7 +20,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   containerRight: {
-    alignItems: 'center',
     justifyContent: 'space-around',
     flex: 2,
     alignItems: 'stretch',
@@ -54,16 +47,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    // justifyContent: 'space-around',
     marginTop: RFValue(20),
-    // position: 'absolute',
-    // bottom: 0,
-    // width: '100%',
   },
   fullscreenIcon: {
     resizeMode: 'contain',
     height: RFValue(30),
     width: RFValue(30),
+    tintColor: 'white',
   },
   heartIcon: {
     resizeMode: 'contain',
@@ -86,13 +76,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: RFValue(20),
     marginVertical: RFValue(20),
   },
   upNext: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: RFValue(16),
+    marginHorizontal: RFValue(12),
   },
   swapIcon: {
     resizeMode: 'contain',
@@ -153,7 +143,7 @@ const styles = StyleSheet.create({
   },
   corousalContainer: {
     height: RFValue(200),
-    marginHorizontal: RFValue(50),
+    alignSelf: 'center',
   },
   sliderIcon: {
     alignSelf: 'center',
@@ -170,12 +160,6 @@ const styles = StyleSheet.create({
     height: RFValue(100),
     width: RFValue(100),
     alignSelf: 'center',
-  },
-
-  playlistOpenIcon: {
-    resizeMode: 'contain',
-    height: RFValue(20),
-    width: RFValue(20),
   },
   playlistOpenMiddleIcon: {
     resizeMode: 'contain',
@@ -209,7 +193,6 @@ const styles = StyleSheet.create({
   error: {
     alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
   },
   errorImg: {
     margin: RFValue(20),
@@ -227,6 +210,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: RFValue(20),
     width: RFValue(20),
+    tintColor: 'white',
   },
   playlistOpenHeartIcon: {
     resizeMode: 'contain',

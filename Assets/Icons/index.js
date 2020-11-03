@@ -1,15 +1,20 @@
+// Home tab icon
 export const tab1White = require('./tab1-white.png');
 export const tab1Grey = require('./tab1-grey.png');
 
+// Video tab icon
 export const tab2White = require('./tab2-white.png');
 export const tab2Grey = require('./tab2-grey.png');
 
+// Profile tab icon
 export const tab3White = require('./tab3-white.png');
 export const tab3Grey = require('./tab3-grey.png');
 
+// Chat tab icon
 export const tab4White = require('./tab4-white.png');
 export const tab4Grey = require('./tab4-grey.png');
 
+// News tab icon
 export const tab5White = require('./tab5-white.png');
 export const tab5Grey = require('./tab5-grey.png');
 
@@ -20,7 +25,7 @@ export const facebookIcon = require('./facebook-icon.png');
 export const googleIcon = require('./google-icon.png');
 export const backIcon = require('./back-icon.png');
 export const menuIcon = require('./menu-icon.png');
-export const musicIcon = require('./musicIcon.png');
+export const musicIcon = require('./icon-music.png');
 export const heartIcon = require('./icons-like-45x45-rose.png');
 export const heartGrayIcon = require('./icons-like-45x45-grey.png');
 export const whiteHeartIcon = require('./icons-like-45x45-white.png');
@@ -30,7 +35,7 @@ export const artistIcon = require('./icons-userstar.png');
 export const playIcon = require('./icons-play-xhd.png');
 export const fullscreenIcon = require('./icon-fullscreen-xhd.png');
 export const closeIcon = require('./icons-close-xhd.png');
-// export const pauseIcon = require('./icons-pause-xhd.png');
+export const pauseIcon = require('./icons-pause-xhd.png');
 export const starIcon = require('./icons-star-18x18-white.png');
 export const videoIcon = require('./icons-video-34x34-v1-white.png');
 export const eyeIcon = require('./icons-eye-34x34-white.png');
@@ -57,13 +62,25 @@ export const shareIconWhite = require('./icons-share-26x26-white.png');
 export const shareIconBlack = require('./icons-share-28x28-black.png');
 export const newLikeIconWhite = require('./thumbs-up-hand-symbol.png');
 export const locationIcon = require('./location.png');
-export const pauseIcon = require('./pause.png');
 export const downIcon = require('./downArrow.png');
 export const upOutlineIcon = require('./up-arrow-outline.png');
 export const downOutlineIcon = require('./down-arrow-outline.png');
 export const modalCloseIcon = require('./modal-close-button.png');
+export const muteIcon = require('./icons-mute-xhd.png');
+export const deleteIcon = require('./icon-delete.png');
+export const emptyChatIcon = require('./icon-empty-chat.png');
+export const mostPlayedHome = require('./icon-most-played-home.png');
+export const recentlyPlayedHome = require('./icon-recently-played.png');
+export const emptyArtist = require('./icon-empty-artist.png');
+export const profilePicPlaceholder = require('./icon-profile-placeholder.jpg');
+export const imagePlaceholder = require('./icon-picture-placeholder.png');
+export const playlistDefault = require('./icon-playlist-default.jpg');
+export const createPlaylistIcon = require('./icons-create-playlist.png');
+export const editProfileIcon = require('./icons-edit-profile-edit.png');
+export const musicSeeAllIcon = require('./icon-music-banner-see-all.png');
 // export const muteIcon = require('./icons-mute-xhd.png');
 
+export const sliderPlaceholder = require('../Images/songCover4.jpg');
 // Comment icons
 export const commentIcon = require('./icon-comment-3x.png');
 export const commentPressedIcon = require('./icon-comment-pressed-3x.png');
@@ -89,8 +106,6 @@ export const playlist = require('./playlist.png');
 export const speaker = require('./speakers.png');
 export const swapIcon = require('./exchange.png');
 export const shuffleIcon = require('./shuffle.png');
-export const deleteIcon = require('./delete.png');
-export const muteIcon = require('./mute.png');
 export const queueIcon = require('./queue.png');
 export const tickIcon = require('./tick.png');
 export const noInternetIcon = require('./no-network-icon.png');
@@ -111,3 +126,7 @@ export const cancelIcon = require('./cancel.png');
 export const clockIcon = require('./wall-clock.png');
 export const songCountIcon = require('./vynil.png');
 export const hourGlassIcon = require('./hourglass.png');
+export const musicHeartIcon = require('./icon-music-heart.png');
+export const topArtistIcon = require('./icon-top-artists.png');
+export const favoriteArtistIcon = require('./icon-favorite-artist.png');
+export const topAlbumsIcon = require('./icon-top-albums.png');

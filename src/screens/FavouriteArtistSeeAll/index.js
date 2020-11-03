@@ -1,58 +1,58 @@
-import React, { useReducer, useEffect } from 'react';
-import { FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, View } from 'react-native';
 import { Divider } from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
-import Block from '../../components/Block';
-import reducer from '../../hooks/useReducer';
-import { getQueriedCollections } from '../../utils/Firebase';
-import randomize from 'randomatic';
+import { removeFromFavorites } from '../../Redux/Reducers/firebaseSlice';
+import { addToList } from '../../Redux/Reducers/helperSlice';
 import ArtistSeeAllScreenCard from '../../components/ArtistSeeAllScreenCard';
-
-const initialState = {
-  artists: [],
-};
+import { useDispatch, useSelector } from 'react-redux';
 
 const FavouriteArtistSeeAll = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const dispatch = useDispatch();
+  const { list } = useSelector((state) => state.root.helpers);
 
   useEffect(() => {
-    // Get Artists
     const uid = auth().currentUser.uid;
-    getQueriedCollections(
-      'artists',
-      'favoriteOf',
-      'array-contains',
-      uid,
-      (collection) => {
-        dispatch({ artists: collection });
-      },
-    );
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favArtists')
+      .where('isFavorite', '==', true)
+      .onSnapshot((querySnapshot) => {
+        let data = [];
+        querySnapshot.docs.forEach((document) => {
+          if (document.exists) {
+            let response = document.data();
+            response.updatedAt = JSON.stringify(response.updatedAt);
+            data.push(response);
+          }
+        });
+        dispatch(addToList(data));
+      });
+
+    return () => listener;
   }, []);
 
   return (
-    <Block>
-      {state.artists.length ? (
-        <FlatList
-          data={state.artists}
-          keyExtractor={() => randomize('Aa0!', 10)}
-          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-          renderItem={({
-            item: { imgUrl, firstName, lastName, followerCount },
-          }) => {
-            return (
-              <ArtistSeeAllScreenCard
-                imgUrl={imgUrl}
-                firstName={firstName}
-                lastName={lastName}
-                followers={followerCount}
-              />
-            );
-          }}
-        />
-      ) : null}
-    </Block>
+    <View style={styles.container}>
+      <FlatList
+        data={list}
+        keyExtractor={(item) => item.artistId}
+        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        renderItem={({ item: { name, avatar, artistId } }) => {
+          return (
+            <ArtistSeeAllScreenCard
+              avatar={avatar}
+              name={name}
+              onFavPress={() => dispatch(removeFromFavorites(artistId))}
+            />
+          );
+        }}
+      />
+    </View>
   );
 };
 

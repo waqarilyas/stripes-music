@@ -3,8 +3,11 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   profilePictureContainer: {
-    width: 125,
-    height: 125,
+    width: hp('15'),
+    height: hp('15'),
+  },
+  profilePicOverlayContainer: {
+    borderRadius: hp('10'),
   },
   pageTop: {
     flexDirection: 'row',
@@ -12,12 +15,16 @@ const styles = StyleSheet.create({
   },
   artistName: {
     color: 'white',
-    fontSize: hp('3'),
-    fontWeight: 'bold',
+    fontSize: hp('2.5'),
+    fontWeight: '600',
   },
   subtitle: {
     color: '#928989',
     fontSize: hp('2'),
+  },
+  placeholder: {
+    width: hp('15'),
+    height: hp('15'),
   },
   subtitleView: {
     flexDirection: 'row',
@@ -25,9 +32,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   pageTopNameView: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginLeft: 16,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: '100%',
+    flexShrink: 1,
   },
   locationIcon: {
     resizeMode: 'contain',
@@ -38,12 +46,14 @@ const styles = StyleSheet.create({
   followText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: hp('2'),
     marginTop: 12,
+    alignSelf: 'center',
   },
   followSubtext: {
     color: '#928989',
     marginTop: 6,
+    alignSelf: 'center',
     fontSize: 12,
   },
   followButtonText: {

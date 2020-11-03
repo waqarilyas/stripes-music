@@ -4,7 +4,7 @@ import { Divider } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import randomize from 'randomatic';
 
-import ForYouPlaylistCard from '../../components/ForYouPlaylistCard';
+import AlbumSeeAllComponent from '../../components/AlbumSeeAllComponent';
 import styles from './styles';
 import reducer from '../../hooks/useReducer';
 import { getUserSubCollections } from '../../utils/Firebase';
@@ -36,7 +36,7 @@ const ProfilePlaylistSeeAll = () => {
           ItemSeparatorComponent={() => <Divider style={styles.divider} />}
           renderItem={({ item: { duration, title, author, image } }) => {
             return (
-              <ForYouPlaylistCard
+              <AlbumSeeAllComponent
                 image={image}
                 title={title}
                 duration={duration}

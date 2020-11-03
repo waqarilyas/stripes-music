@@ -2,8 +2,8 @@ import React, { useEffect, useReducer } from 'react';
 import { View, Text } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import { getDocument } from '../../utils/Firebase';
 
+import { getDocument } from '../../utils/Firebase';
 import styles from './styles';
 import reducer from '../../hooks/useReducer';
 

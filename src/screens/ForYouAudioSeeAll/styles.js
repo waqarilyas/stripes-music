@@ -1,7 +1,17 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  titleText: {
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
+  title: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  subtitle: {
     color: 'white',
     textAlign: 'center',
     marginVertical: 28,

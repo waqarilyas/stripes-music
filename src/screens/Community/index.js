@@ -1,93 +1,126 @@
-import randomize from 'randomatic';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Modal,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
+  Text,
+  FlatList,
+  Alert,
+  Modal,
+  Image,
+  TextInput,
 } from 'react-native';
 import { Divider } from 'react-native-elements';
-import { searchIcon } from '../../../Assets/Icons';
-import ChatCard from '../../components/ChatCard';
-import ChatScreenHeader from '../../components/ChatScreenHeader';
-import reducer from '../../hooks/useReducer';
-import { getCollection } from '../../utils/Firebase';
+import randomize from 'randomatic';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
 import styles from './styles';
+import ChatCard from '../../components/ChatCard';
+import reducer from '../../hooks/useReducer';
+import EmptyChatList from '../../components/EmptyChatList';
 
 const initialState = {
-  users: [],
+  inbox: [],
+};
+
+const findChatId = (userId, passedId) => {
+  return userId < passedId
+    ? userId.concat('**', passedId)
+    : passedId.concat('**', userId);
 };
 
 const Community = ({ navigation }) => {
+  const uid = auth().currentUser.uid;
   const [state, dispatch] = useReducer(reducer, initialState);
   const [searchVisible, setSearchVisible] = useState(false);
 
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
   };
+
   useEffect(() => {
-    getCollection('users', 100, (collection) =>
-      dispatch({ users: collection }),
+    const listener = firestore()
+      .collection('chats')
+      .where('members', 'array-contains', uid)
+      .onSnapshot((snapshot) => {
+        let documents = [];
+        snapshot.docs.forEach((document) => {
+          documents.push(document.data());
+        });
+        dispatch({ inbox: documents });
+      });
+
+    return () => listener;
+  }, [uid]);
+
+  const alertDelete = (id) =>
+    Alert.alert(
+      'Deleting Chat',
+      'Are you sure, you want to delete the chat?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () =>
+            handleDelete(id).then(async () => {
+              const chatId = findChatId(uid, id);
+              const chatDocument = firestore().collection('chats').doc(chatId);
+              await chatDocument
+                .delete()
+                .then(() => console.log('Document Deleted!'));
+            }),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true },
     );
-  }, []);
+
+  const handleDelete = async (id) => {
+    const chatId = findChatId(uid, id);
+    const messageCollections = await firestore()
+      .collection('chats')
+      .doc(chatId)
+      .collection('messages')
+      .get();
+
+    const batch = firestore().batch();
+
+    messageCollections.forEach((documentSnapshot) => {
+      batch.delete(documentSnapshot.ref);
+    });
+
+    return batch.commit();
+  };
 
   return (
     <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={searchVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-        }}>
-        <View style={styles.topSearchContainer}>
-          <View style={styles.searchWithClose}>
-            <View style={styles.searchContainer}>
-              <Image source={searchIcon} style={styles.searchIcon} />
-              <TextInput
-                placeholder="Search..."
-                style={styles.textInput}
-                textStyle={{ color: 'white' }}
-                placeholderTextColor="#918E96"
-              />
-            </View>
-            <Text style={styles.closeButton} onPress={() => toggleSearch()}>
-              Close
-            </Text>
-          </View>
-        </View>
-      </Modal>
-
-      <View style={styles.container}>
-        <ChatScreenHeader
-          navigation={navigation}
-          navigateTo="NewMessage"
-          toggleSearch={toggleSearch}
-        />
-        <Text style={styles.title}>Messages</Text>
-
-        {state.users.length ? (
-          <FlatList
-            data={state.users}
-            keyExtractor={() => randomize(10)}
-            ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-            renderItem={({ item: { fullName, profilePicture } }) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('MessageDetail')}>
-                  <ChatCard name={fullName} avatar={profilePicture} />
-                </TouchableOpacity>
-              );
-            }}
-          />
-        ) : (
-          <ActivityIndicator color="white" />
-        )}
-      </View>
+      <FlatList
+        data={state.inbox}
+        contentContainerStyle={{ height: '100%', backgroundColor: 'black' }}
+        keyExtractor={() => randomize(10)}
+        ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
+        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        renderItem={({ item }) => {
+          return (
+            <ChatCard
+              name={item.artist.name}
+              avatar={item.artist.avatar}
+              message={item.recentMessage.text}
+              status={item.readStatus[`${uid}`]}
+              onPress={() => {
+                navigation.navigate('MessageDetail', {
+                  passedId: item.artist.id,
+                  name: item.artist.name,
+                });
+              }}
+              onDeletePress={() => alertDelete(item.artist.id)}
+            />
+          );
+        }}
+      />
     </>
   );
 };

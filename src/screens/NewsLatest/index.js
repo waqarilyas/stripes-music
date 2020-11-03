@@ -1,48 +1,50 @@
-import React, { useEffect, useReducer } from 'react';
-import { ActivityIndicator, FlatList, View } from 'react-native';
-import randomize from 'randomatic';
+import React from 'react';
 import dayjs from 'dayjs';
+import randomize from 'randomatic';
+import {
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { getANews } from '../../Redux/Reducers/firebaseSlice';
 import NewsCard from '../../components/NewsCard';
 import styles from './styles';
-import { getOrderedCollections } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-
-const initialState = {
-  news: [],
-};
+import { LOG } from '../../utils/Constants';
 
 const NewsLatest = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    getOrderedCollections('news', 'createdAt', 'desc', (collection) =>
-      dispatch({ news: collection }),
-    );
-  }, []);
+  const dispatch = useDispatch();
+  const { allNews } = useSelector((state) => state.root.firebase);
+  LOG('RESPONSE', allNews);
 
   return (
     <View style={styles.container}>
-      {state.news.length > 0 && (
-        <FlatList
-          ListEmptyComponent={<ActivityIndicator />}
-          data={state.news}
-          style={styles.listSpacing}
-          keyExtractor={() => randomize('Aa0!', 10)}
-          renderItem={({
-            item: {
-              title,
-              imgUrl,
-              createdAt,
-              description,
-              likeCount,
-              shareCount,
-              commentCount,
-              id,
-            },
-          }) => {
-            const date = dayjs(createdAt.toDate()).format('DD MMMM, YYYY');
-            return (
+      <FlatList
+        ListEmptyComponent={<ActivityIndicator />}
+        data={allNews}
+        style={styles.listSpacing}
+        keyExtractor={(item) => item.id}
+        renderItem={({
+          item: {
+            title,
+            imgUrl,
+            createdAt,
+            description,
+            likeCount,
+            shareCount,
+            commentCount,
+            id,
+          },
+        }) => {
+          const date = dayjs(createdAt).format('DD MMMM, YYYY');
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(getANews(id));
+                navigation.navigate('NewsDetails');
+              }}>
               <NewsCard
                 title={title}
                 image={imgUrl}
@@ -51,13 +53,11 @@ const NewsLatest = ({ navigation }) => {
                 likeCount={likeCount}
                 shareCount={shareCount}
                 commentCount={commentCount}
-                nav={navigation}
-                newsId={id}
               />
-            );
-          }}
-        />
-      )}
+            </TouchableOpacity>
+          );
+        }}
+      />
     </View>
   );
 };

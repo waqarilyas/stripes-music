@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import { Image } from 'react-native-elements';
 
 import { eyeIcon } from '../../../Assets/Icons';
@@ -9,11 +9,11 @@ import { thousandSeprator } from '../../utils/Helpers';
 const NewVideoscard = ({ poster, title, artist, viewCount, duration }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: poster }} style={styles.video}>
+      <ImageBackground source={{ uri: poster }} style={styles.video}>
         <View style={styles.background}>
           <Text style={styles.duration}>{duration}</Text>
         </View>
-      </Image>
+      </ImageBackground>
       <View style={styles.detail}>
         <Text numberOfLines={1} style={styles.title}>
           {title}

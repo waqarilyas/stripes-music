@@ -5,23 +5,22 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginVertical: 12,
   },
   textContainer: {
     backgroundColor: 'black',
-    paddingHorizontal: 14,
+    paddingHorizontal: hp('1.5'),
     flexShrink: 1,
   },
   image: {
     overflow: 'hidden',
-    borderRadius: 10,
-    height: 75,
-    width: 120,
+    borderRadius: hp('1'),
+    height: '100%',
+    width: hp('16'),
   },
   title: {
     textTransform: 'uppercase',
     letterSpacing: 1,
-    lineHeight: 22,
+    lineHeight: 18,
     color: 'white',
     fontSize: 12,
     fontWeight: '600',

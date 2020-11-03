@@ -3,18 +3,18 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
+  },
+  image: {
+    resizeMode: 'cover',
+    height: hp('10'),
+    width: hp('10'),
+    overflow: 'hidden',
+    borderRadius: 10,
   },
   title: {
     fontWeight: 'bold',
     color: 'white',
-  },
-  cardImage: {
-    resizeMode: 'contain',
-    height: 75,
-    width: 75,
-    overflow: 'hidden',
-    borderRadius: 8,
   },
   subtitle: {
     color: 'gray',
@@ -23,11 +23,7 @@ const styles = StyleSheet.create({
   duration: {
     color: 'gray',
     fontWeight: 'bold',
-  },
-  likeImage: {
-    resizeMode: 'contain',
-    height: hp('2'),
-    width: hp('2'),
+    paddingHorizontal: hp('1.5'),
   },
 });
 

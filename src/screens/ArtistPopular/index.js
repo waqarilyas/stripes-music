@@ -1,23 +1,38 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
-import styles from './styles';
 import SongItem from '../../components/SongItem';
-import Block from '../../components/Block';
 
 const ArtistPopular = () => {
-  const data = ['1', '2', '3', '4', '5', '6', '7'];
+  const popularSongs = useSelector(
+    (state) => state.root.firebase.artistPopularSongs,
+  );
+
   return (
-    <Block>
+    <View style={styles.container}>
       <FlatList
-        data={data}
-        keyExtractor={(item) => item}
-        renderItem={() => {
-          return <SongItem title="Title" author="Author" />;
+        data={popularSongs}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item: { title, artist, artwork, id, duration } }) => {
+          return (
+            <SongItem
+              title={title}
+              author={artist}
+              image={artwork}
+              id={id}
+              duration={duration}
+            />
+          );
         }}
       />
-    </Block>
+    </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'black',
+  },
+});
 
 export default ArtistPopular;

@@ -54,7 +54,7 @@ const VideoStack = () => {
         name="VideoPopularNow"
         component={VideoPopularNow}
         options={({ navigation }) => ({
-          title: 'Popular Now',
+          title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),

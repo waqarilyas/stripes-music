@@ -1,53 +1,75 @@
-import React, { useEffect, useReducer } from 'react';
-import { View, FlatList } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import randomize from 'randomatic';
+import React from 'react';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 
-import { getQueriedCollections } from '../../utils/Firebase';
 import styles from './styles';
-import reducer from '../../hooks/useReducer';
 import SongCardListView from '../../components/SongCardListView';
-
-const initialState = {
-  recentlyPlayed: [],
-};
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  changeSong,
+  pushToPlaylist,
+  fullScreenChange,
+} from '../../Redux/Reducers/audioSlice';
+import {
+  addPlayCount,
+  addToRecentlyPlayed,
+} from '../../Redux/Reducers/firebaseSlice';
+import TrackPlayer from 'react-native-track-player';
+import { LOG } from '../../utils/Constants';
 
 const RecentPlayedSeeAll = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const dispatch = useDispatch();
+  const { allHistory } = useSelector((state) => state.root.firebase);
 
-  useEffect(() => {
-    // Get recently played songs
-    const uid = auth().currentUser.uid;
-    getQueriedCollections(
-      'songs',
-      'recentlyPlayedBy',
-      'array-contains',
-      uid,
-      (documents) => {
-        console.log(documents);
-        dispatch({ recentlyPlayed: documents });
-      },
-    );
-  }, []);
+  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+    try {
+      const result = {
+        title,
+        artist,
+        artwork,
+        url,
+        duration,
+        id,
+        createdAt: +new Date(),
+      };
+      dispatch(changeSong(result));
+      dispatch(pushToPlaylist(result));
+      await TrackPlayer.add(result);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
+    } catch (error) {
+      LOG('PLAY SONG', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {state.recentlyPlayed.length ? (
-        <FlatList
-          data={state.recentlyPlayed}
-          keyExtractor={() => randomize('Aa0!', 10)}
-          renderItem={({ item: { title, artist, arts, duration } }) => {
-            return (
+      <View style={styles.topView}>
+        <Text style={styles.title}>Recently Played</Text>
+        <Text style={styles.subtitle}>
+          Music recently played. History of your music is shown below
+        </Text>
+      </View>
+      <FlatList
+        data={allHistory}
+        keyExtractor={(item) => item.id}
+        renderItem={({
+          item,
+          item: { id, title, artist, artwork, duration },
+        }) => {
+          return (
+            <TouchableOpacity onPress={() => playSong(item)}>
               <SongCardListView
                 title={title}
                 artist={artist}
-                arts={arts}
+                artwork={artwork}
                 duration={duration}
+                id={id}
               />
-            );
-          }}
-        />
-      ) : null}
+            </TouchableOpacity>
+          );
+        }}
+      />
     </View>
   );
 };

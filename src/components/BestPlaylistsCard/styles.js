@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: hp('18'),
     width: hp('18'),
+    overflow: 'hidden',
     borderRadius: hp('1'),
   },
   noSongs: {
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     height: 16,
     marginRight: hp('1'),
     tintColor: 'gray',
+    resizeMode: 'contain',
   },
   cardTitle: {
     fontWeight: 'bold',

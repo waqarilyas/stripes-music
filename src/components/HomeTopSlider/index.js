@@ -4,13 +4,13 @@ import { Image } from 'react-native-elements';
 
 import styles from './styles.js';
 
-const HomeTopSlider = ({ arts, title, description }) => {
+const HomeTopSlider = ({ artwork, title, description }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: arts[0] }}
+        source={{ uri: artwork }}
         style={styles.image}
-        PlaceholderContent={<ActivityIndicator />}>
+        loadingIndicatorSource={<ActivityIndicator />}>
         <View style={styles.text}>
           <Text style={styles.songName}>{title}</Text>
           <Text numberOfLines={1} style={styles.subText}>

@@ -28,6 +28,8 @@ import { Divider } from 'react-native-elements';
 import NewsCommentCard from '../../components/NewsCommentCard';
 import styles from './styles';
 import VideoPlayer from '../VideoPlayer';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOG } from '../../utils/Constants';
 
 const profilePic =
   'https://res.cloudinary.com/practicaldev/image/fetch/s--ef-WXsPf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/8050/Mm3V3467.jpg';
@@ -35,20 +37,23 @@ const profilePic =
 const initialState = {
   videos: [],
   comments: [],
-  data: {},
 };
 
-const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
+const VideoPlayerModal = ({ onPress }) => {
+  const { videoModal, videoData } = useSelector(
+    (_state) => _state.root.helpers,
+  );
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
 
+  // LOG('VIDEO DATA', videoData);
+
   useEffect(() => {
-    dispatch({ data: itemData });
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
 
     const listener = firestore()
       .collection('videos')
-      .doc(state.data.id)
+      .doc(videoData.id)
       .collection('comments')
       .onSnapshot((querySnapshot) => {
         let allComments = [];
@@ -59,7 +64,7 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
       });
 
     return () => listener;
-  }, [state.data.id, itemData]);
+  }, [videoData.id]);
 
   const handleSubmit = () => {
     if (commentText === '') {
@@ -67,14 +72,14 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
     }
     firestore()
       .collection('videos')
-      .doc(state.data.id)
+      .doc(videoData.id)
       .collection('comments')
       .add({
         comment: commentText,
         createdAt: firestore.FieldValue.serverTimestamp(),
         id: '',
         image: profilePic,
-        videoId: state.data.id,
+        videoId: videoData.id,
         updatedAt: firestore.FieldValue.serverTimestamp(),
         userId: auth().currentUser.uid,
         username: 'Arslan Mushtaq',
@@ -86,39 +91,33 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
         });
         setCommentText('');
       })
-      .catch((err) => console.log('---------- ERROR ----------', err));
+      .catch((err) => LOG('ADD ERROR', err));
   };
 
   const [collapse, setCollapse] = useState(false);
 
   return (
-    <Modal
-      animationType="slide"
-      supportedOrientations={['portrait']}
-      visible={modalVisible}
-      onRequestClose={() => {
-        console.log('Modal has been closed');
-      }}>
+    <Modal animationType="slide" visible={videoModal}>
       <ScrollView>
         <SafeAreaView style={styles.safeArea} />
         <StatusBar barStyle="light-content" />
         <View style={styles.container}>
-          <VideoPlayer fileUrl={state.data.fileUrl} onPress={onPress} />
+          <VideoPlayer fileUrl={videoData.fileUrl} onPress={onPress} />
 
-          <Text style={styles.title}>{state.data.title}</Text>
+          <Text style={styles.title}>{videoData.title}</Text>
           <View style={styles.subContainer}>
-            <Text style={styles.author}>{state.data.artist}</Text>
+            <Text style={styles.author}>{videoData.artist}</Text>
             <View style={styles.rowContainer}>
               <Image source={eyeIcon} style={styles.icon} />
               <Text style={styles.count}>
-                {thousandSeprator(state.data.viewCount)}
+                {thousandSeprator(videoData.viewCount)}
               </Text>
             </View>
           </View>
 
           <Text style={styles.desc}>Description</Text>
           <Text style={styles.description} numberOfLines={collapse ? 0 : 2}>
-            {state.data.description}
+            {videoData.description}
           </Text>
           <TouchableOpacity onPress={() => setCollapse(!collapse)}>
             <Text style={styles.seeMore}>
@@ -145,11 +144,12 @@ const VideoPlayerModal = ({ itemData, modalVisible, onPress, setItemData }) => {
                   duration,
                 },
               }) => {
-                if (item.id === state.data.id) {
+                if (item.id === videoData.id) {
                   return null;
                 } else {
                   return (
-                    <TouchableHighlight onPress={() => setItemData(item)}>
+                    <TouchableHighlight
+                      onPress={() => console.log('OnPressed!')}>
                       <NewVideosCard
                         poster={poster}
                         title={title}

@@ -1,34 +1,45 @@
 import { StyleSheet } from 'react-native';
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     paddingVertical: RFValue(30),
+    backgroundColor: 'black',
+  },
+  containerRight: {
+    flexShrink: 1,
+    paddingHorizontal: RFValue(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    flex: 1,
+  },
+  avatarContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     color: 'white',
-    fontSize: RFValue(20),
+    fontSize: RFValue(18),
     fontWeight: 'bold',
     marginVertical: RFValue(5),
   },
   subtitle: {
     color: 'grey',
+    fontSize: RFValue(12),
   },
-  followButtontext: {
+  buttonContainer: {
+    backgroundColor: '#F5138E',
+    padding: RFValue(12),
+    marginTop: RFValue(18),
+    borderRadius: RFValue(8),
+  },
+  text: {
     color: 'white',
-    backgroundColor: '#372B2F',
-    position: 'absolute',
-    bottom: 5,
-    right: 0,
-    paddingHorizontal: RFValue(40),
-    paddingVertical: RFValue(10),
-    borderRadius: RFValue(10),
     fontWeight: 'bold',
-  },
-  containerRight: {
-    flexShrink: 1,
-    paddingHorizontal: RFValue(10),
+    letterSpacing: 1,
   },
 });
 
