@@ -15,7 +15,7 @@ import {
 import AlbumsSearchCard from '../../components/AlbumsSearchCard';
 import ArtistsHorizontalCard from '../../components/ArtistsHorizontalCard';
 import Block from '../../components/Block';
-import ForYouPlaylistCard from '../../components/ForYouPlaylistCard';
+import AlbumSeeAllComponent from '../../components/AlbumSeeAllComponent';
 import NewVideosCard from '../../components/NewVideosCard';
 import SectionHeader from '../../components/SectionHeader';
 import SongCard from '../../components/SongCard';
@@ -161,7 +161,7 @@ const SearchResultsScreen = ({ route, navigation }) => {
             ItemSeparatorComponent={() => <Divider style={styles.divider} />}
             renderItem={({ item }) => {
               return (
-                <ForYouPlaylistCard
+                <AlbumSeeAllComponent
                   image={item.image.raw}
                   title={item.title.raw}
                   duration={item.duration.raw}

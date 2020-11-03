@@ -13,17 +13,17 @@ import AlbumDetail from '../../screens/AlbumDetail';
 import ArtistPopular from '../../screens/ArtistPopular';
 import ArtistsSeeAll from '../../screens/ArtistsSeeAll';
 import ArtistReleases from '../../screens/ArtistReleases';
+import TopAlbumsSeeAll from '../../screens/TopAlbumsSeeAll';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import MostPlayedSeeAll from '../../screens/MostPlayedSeeAll';
+import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
 import ForYouAudioSeeAll from '../../screens/ForYouAudioSeeAll';
 import RecentPlayedSeeAll from '../../screens/RecentPlayedSeeAll';
 import ForYouAlbumsSeeAll from '../../screens/ForYouAlbumsSeeAll';
 import FavouriteArtistSeeAll from '../../screens/FavouriteArtistSeeAll';
 import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
-import MusicScreenAllPlayLists from '../../screens/MusicScreenAllPlaylists';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
 import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
-import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
 
 const Stack = createStackNavigator();
 
@@ -192,8 +192,8 @@ const HomeStack = () => {
       <Stack.Screen name="NowPlayingTabs" component={NowPlayingTabs} />
       <Stack.Screen name="ForYouTabs" component={ForYouTabs} />
       <Stack.Screen
-        name="MusicScreenAllPlayLists"
-        component={MusicScreenAllPlayLists}
+        name="TopAlbumsSeeAll"
+        component={TopAlbumsSeeAll}
         options={({ navigation }) => ({
           title: '',
           headerTitleAlign: 'center',

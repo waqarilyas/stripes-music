@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: hp('3'),
     width: hp('3'),
+    tintColor: 'white',
   },
   seeAll: {
     color: 'white',

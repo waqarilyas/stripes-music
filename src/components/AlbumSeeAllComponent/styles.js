@@ -1,4 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { sub } from 'react-native-reanimated';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
+const subtitle = {
+  color: 'gray',
+  fontSize: hp('1.5'),
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -15,6 +22,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 8,
     marginRight: 16,
+    overflow: 'hidden',
   },
   title: {
     color: 'white',
@@ -22,11 +30,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 26,
   },
-  subtitle: {
-    color: 'gray',
+  author: {
+    ...subtitle,
     fontWeight: 'bold',
-    fontSize: 14,
     marginTop: 4,
+  },
+  label: {
+    ...subtitle,
+    marginLeft: hp('1'),
   },
   viewButton: {
     backgroundColor: 'white',
@@ -54,6 +65,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 10,
+  },
+  icon: {
+    height: hp('2'),
+    width: hp('2'),
+    resizeMode: 'contain',
+    tintColor: 'gray',
+  },
+  iconWithLabel: {
+    flexDirection: 'row',
+    marginTop: hp('1'),
   },
 });
 

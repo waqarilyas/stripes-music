@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { Image, Text, Divider } from 'react-native-elements';
 
 import styles from './styles';
 import { likeIcon, commentIcon, shareIcon } from '../../../Assets/Icons';
+import { thousandSeprator } from '../../utils/Helpers';
 
 const NewsCard = ({
   title,
@@ -13,13 +14,9 @@ const NewsCard = ({
   likeCount,
   shareCount,
   commentCount,
-  nav,
-  newsId,
 }) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => nav.navigate('NewsDetails', { newsId })}>
+    <View style={styles.container}>
       <View style={styles.inner}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.textInner}>
@@ -38,21 +35,21 @@ const NewsCard = ({
           <View style={styles.iconContainer}>
             <Image source={likeIcon} style={styles.icon} />
             <Text numberOfLines={1} style={styles.bottomSectionNumber}>
-              {likeCount}
+              {thousandSeprator(likeCount)}
             </Text>
           </View>
 
           <View style={styles.iconContainer}>
             <Image source={commentIcon} style={styles.icon} />
             <Text numberOfLines={1} style={styles.bottomSectionNumber}>
-              {commentCount}
+              {thousandSeprator(commentCount)}
             </Text>
           </View>
 
           <View style={styles.iconContainer}>
             <Image source={shareIcon} style={styles.icon} />
             <Text numberOfLines={1} style={styles.bottomSectionNumber}>
-              {shareCount}
+              {thousandSeprator(shareCount)}
             </Text>
           </View>
         </View>
@@ -60,7 +57,7 @@ const NewsCard = ({
           <Text style={styles.readText}>Read</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

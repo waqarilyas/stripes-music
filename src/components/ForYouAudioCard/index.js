@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native-elements';
+import { LOG } from '../../utils/Constants';
 
 import styles from './styles';
 
-const ForYouAudioCard = ({ artwork, title, artist }) => {
+const ForYouAudioCard = ({ artwork, title, artist, onPress }) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: artwork }} style={styles.image} />
@@ -15,9 +16,9 @@ const ForYouAudioCard = ({ artwork, title, artist }) => {
         <Text style={styles.subtitle} numberOfLines={1}>
           {artist}
         </Text>
-        <View style={styles.viewButton}>
+        <TouchableOpacity style={styles.viewButton} onPress={onPress}>
           <Text style={styles.viewButtonText}>Play</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

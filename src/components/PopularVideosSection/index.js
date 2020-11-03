@@ -24,6 +24,14 @@ const PopularVideosSection = ({ navigation }) => {
     dispatch(setVideoData(first));
   };
 
+  const playVideo = (item) => {
+    const data = item;
+    data.createdAt = JSON.parse(data.createdAt);
+    data.updatedAt = JSON.parse(data.updatedAt);
+    dispatch(displayVideoModal(true));
+    dispatch(setVideoData(data));
+  };
+
   return (
     <View style={styles.spacing}>
       <SectionHeader
@@ -33,11 +41,13 @@ const PopularVideosSection = ({ navigation }) => {
       />
       <ScrollView horizontal>
         <TouchableOpacity onPress={() => playFirstVideo}>
-          <PopularVideoHeader
-            poster={popularVideos[0].poster}
-            title={popularVideos[0].title}
-            onPress={playFirstVideo}
-          />
+          {popularVideos.length > 0 ? (
+            <PopularVideoHeader
+              poster={popularVideos[0].poster}
+              title={popularVideos[0].title}
+              onPress={playFirstVideo}
+            />
+          ) : null}
         </TouchableOpacity>
 
         <FlatList
@@ -52,11 +62,7 @@ const PopularVideosSection = ({ navigation }) => {
               return null;
             } else {
               return (
-                <TouchableOpacity
-                  onPress={() => {
-                    dispatch(displayVideoModal(true));
-                    dispatch(setVideoData(data));
-                  }}>
+                <TouchableOpacity onPress={() => playVideo(item)}>
                   <PopularVideos poster={poster} />
                 </TouchableOpacity>
               );

@@ -5,15 +5,17 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
+    marginHorizontal: hp('1'),
   },
   detail: {
     flexDirection: 'column',
     marginLeft: hp('2'),
   },
   video: {
-    width: 180,
-    height: 120,
+    width: hp('20'),
+    height: hp('11'),
     borderRadius: hp('1'),
+    overflow: 'hidden',
   },
   title: {
     color: 'white',
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
   },
   artist: {
     color: 'white',
-    fontSize: 12,
+    fontSize: hp('1.5'),
     marginTop: 6,
   },
   views: {
@@ -51,8 +53,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
+    fontWeight: 'bold',
     backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: hp('1'),
+    borderRadius: hp('0.5'),
   },
   duration: {
     color: 'white',

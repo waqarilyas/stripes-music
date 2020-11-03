@@ -2,21 +2,20 @@ import React from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { artistIcon } from '../../../Assets/Icons';
+import { topArtistIcon } from '../../../Assets/Icons';
 import ArtistsHorizontalCard from '../ArtistsHorizontalCard';
 import SectionHeader from '../SectionHeader';
 import { getArtistId } from '../../Redux/Reducers/idsSlice';
 
 const HomeTopArtists = ({ navigation }) => {
-  const { artists } = useSelector((state) => state.root.firebase);
-
   const disp = useDispatch();
+  const { artists } = useSelector((state) => state.root.firebase);
 
   return (
     <>
       <SectionHeader
         name="Top Artists"
-        icon={artistIcon}
+        icon={topArtistIcon}
         onPress={() => navigation.navigate('ArtistsSeeAll')}
       />
       <FlatList

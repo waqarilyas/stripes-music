@@ -1,19 +1,21 @@
 import React from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import TrackPlayer from 'react-native-track-player';
 
 import SongCard from '../SongCard';
 import EmptyCard from '../EmptyCard';
 import SectionHeader from '../SectionHeader';
-import { mostPlayedHome, musicIcon } from '../../../Assets/Icons';
+import { mostPlayedHome, whitePlayIcon } from '../../../Assets/Icons';
 import {
   changeSong,
   pushToPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
+import {
+  addToRecentlyPlayed,
+  addPlayCount,
+} from '../../Redux/Reducers/firebaseSlice';
 import { LOG } from '../../utils/Constants';
 
 const emptyCard = () => {
@@ -23,31 +25,6 @@ const emptyCard = () => {
 const HomeMostPlayed = ({ navigation }) => {
   const dispatch = useDispatch();
   const { mostPlayed } = useSelector((state) => state.root.firebase);
-
-  const addViewCount = (id) => {
-    const postReference = firestore().collection('songs').doc(id);
-
-    return firestore().runTransaction(async (transaction) => {
-      const postSnapshot = await transaction.get(postReference);
-
-      if (!postReference) {
-        throw 'Post does not exist';
-      }
-
-      await transaction.update(postReference, {
-        playCount: postSnapshot.data().playCount + 1,
-      });
-    });
-  };
-
-  const addToRecentlyPlayed = async (result) => {
-    const uid = auth().currentUser.uid;
-    await firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('history')
-      .add(result);
-  };
 
   const playSong = async ({ title, artist, artwork, url, duration, id }) => {
     try {
@@ -64,8 +41,8 @@ const HomeMostPlayed = ({ navigation }) => {
       dispatch(pushToPlaylist(result));
       await TrackPlayer.add(result);
       dispatch(fullScreenChange(true));
-      addViewCount(id);
-      addToRecentlyPlayed(result);
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
     } catch (error) {
       LOG('PLAY SONG', error);
     }
@@ -75,7 +52,7 @@ const HomeMostPlayed = ({ navigation }) => {
     <>
       <SectionHeader
         name="Most Played"
-        icon={musicIcon}
+        icon={whitePlayIcon}
         onPress={() => navigation.navigate('MostPlayedSeeAll')}
       />
 

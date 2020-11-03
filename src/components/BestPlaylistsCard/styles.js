@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     height: 16,
     marginRight: hp('1'),
     tintColor: 'gray',
+    resizeMode: 'contain',
   },
   cardTitle: {
     fontWeight: 'bold',

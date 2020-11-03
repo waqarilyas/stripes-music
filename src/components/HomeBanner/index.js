@@ -17,6 +17,10 @@ import {
   pushToPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
+import {
+  addToRecentlyPlayed,
+  addPlayCount,
+} from '../../Redux/Reducers/firebaseSlice';
 import TrackPlayer from 'react-native-track-player';
 
 import HomeTopSlider from '../HomeTopSlider';
@@ -25,33 +29,7 @@ import { LOG } from '../../utils/Constants';
 
 const HomeBanner = () => {
   const { songs } = useSelector((state) => state.root.firebase);
-  // const currentSong = useSelector((state) => state.root.audio.currentSong);
   const dispatch = useDispatch();
-
-  const addViewCount = (id) => {
-    const postReference = firestore().collection('songs').doc(id);
-
-    return firestore().runTransaction(async (transaction) => {
-      const postSnapshot = await transaction.get(postReference);
-
-      if (!postReference) {
-        throw 'Post does not exist';
-      }
-
-      await transaction.update(postReference, {
-        playCount: postSnapshot.data().playCount + 1,
-      });
-    });
-  };
-
-  const addToRecentlyPlayed = async (result) => {
-    const uid = auth().currentUser.uid;
-    await firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('history')
-      .add(result);
-  };
 
   const playSong = async ({ title, artist, artwork, url, duration, id }) => {
     try {
@@ -68,8 +46,8 @@ const HomeBanner = () => {
       dispatch(pushToPlaylist(result));
       await TrackPlayer.add(result);
       dispatch(fullScreenChange(true));
-      addViewCount(id);
-      addToRecentlyPlayed(result);
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
     } catch (error) {
       LOG('PLAY SONG', error);
     }

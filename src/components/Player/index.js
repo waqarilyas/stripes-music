@@ -65,8 +65,6 @@ const Player = ({ screen }) => {
 
   const dispatch = useDispatch();
 
-  LOG('QUEUE', queue);
-
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
       const track = await TrackPlayer.getTrack(event.nextTrack);

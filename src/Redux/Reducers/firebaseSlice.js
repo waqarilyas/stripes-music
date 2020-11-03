@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { LOG } from '../../utils/Constants';
 
 export const getSongs = createAsyncThunk('firebase/getSongs', async () => {
   let data = [];
@@ -349,11 +350,11 @@ export const removeFromFavorites = createAsyncThunk(
   },
 );
 
-export const getBestPlaylists = createAsyncThunk(
-  'firebase/getBestPlaylists',
+export const getBestAlbums = createAsyncThunk(
+  'firebase/getBestAlbums',
   async () => {
     let data = [];
-    const path = firestore().collection('playlists');
+    const path = firestore().collection('albums');
     const documents = await path.orderBy('viewCount', 'desc').limit(6).get();
     documents.forEach((document) => {
       if (document.exists) {
@@ -367,11 +368,11 @@ export const getBestPlaylists = createAsyncThunk(
   },
 );
 
-export const getAllBestPlaylists = createAsyncThunk(
-  'firebase/getAllBestPlaylists',
+export const getAllBestAlbums = createAsyncThunk(
+  'firebase/getAllBestAlbums',
   async () => {
     let data = [];
-    const path = firestore().collection('playlists');
+    const path = firestore().collection('albums');
     const documents = await path.orderBy('viewCount', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
@@ -418,6 +419,24 @@ export const getPopularVideos = createAsyncThunk(
   },
 );
 
+export const getAllPopularVideos = createAsyncThunk(
+  'firebase/getAllPopularVideos',
+  async () => {
+    let data = [];
+    const path = firestore().collection('videos');
+    const documents = await path.orderBy('viewCount', 'desc').get();
+    documents.forEach((document) => {
+      if (document.exists) {
+        let response = document.data();
+        response.createdAt = JSON.stringify(response.createdAt);
+        response.updatedAt = JSON.stringify(response.updatedAt);
+        data.push(response);
+      }
+    });
+    return data;
+  },
+);
+
 export const getLatestVideos = createAsyncThunk(
   'firebase/getLatestVideos',
   async () => {
@@ -433,6 +452,147 @@ export const getLatestVideos = createAsyncThunk(
       }
     });
     return data;
+  },
+);
+
+export const getAllLatestVideos = createAsyncThunk(
+  'firebase/getAllLatestVideos',
+  async () => {
+    let data = [];
+    const path = firestore().collection('videos');
+    const documents = await path.orderBy('createdAt', 'desc').get();
+    documents.forEach((document) => {
+      if (document.exists) {
+        let response = document.data();
+        response.createdAt = JSON.stringify(response.createdAt);
+        response.updatedAt = JSON.stringify(response.updatedAt);
+        data.push(response);
+      }
+    });
+    return data;
+  },
+);
+
+export const addToRecentlyPlayed = createAsyncThunk(
+  'firebase/addToRecentlyPlayed',
+  async (result) => {
+    const uid = auth().currentUser.uid;
+    await firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('history')
+      .add(result);
+  },
+);
+
+export const addPlayCount = createAsyncThunk(
+  'firebase/addPlayCount',
+  async (id) => {
+    const songReference = firestore().collection('songs').doc(id);
+
+    return firestore().runTransaction(async (transaction) => {
+      const songSnapshot = await transaction.get(songReference);
+
+      if (!songSnapshot) {
+        throw 'Song does not exist!';
+      }
+
+      await transaction.update(songReference, {
+        playCount: songSnapshot.data().playCount + 1,
+      });
+    });
+  },
+);
+
+export const addAlbumViewCount = createAsyncThunk(
+  'firebase/addAlbumViewCount',
+  async (id) => {
+    const albumReference = firestore().collection('albums').doc(id);
+
+    return firestore().runTransaction(async (transaction) => {
+      const albumSnapshot = await transaction.get(albumReference);
+
+      if (!albumReference) {
+        throw 'Album does not exist';
+      }
+
+      await transaction.update(albumReference, {
+        viewCount: albumSnapshot.data().viewCount + 1,
+      });
+    });
+  },
+);
+
+export const addVideoViewCount = createAsyncThunk(
+  'firebase/addAlbumViewCount',
+  async (id) => {
+    const videoReference = firestore().collection('videos').doc(id);
+
+    return firestore().runTransaction(async (transaction) => {
+      const videoSnapshot = await transaction.get(videoReference);
+
+      if (!videoSnapshot) {
+        throw 'Album does not exist';
+      }
+
+      await transaction.update(videoSnapshot, {
+        viewCount: videoSnapshot.data().viewCount + 1,
+      });
+    });
+  },
+);
+
+export const addAlbumPlayCount = createAsyncThunk(
+  'firebase/addAlbumViewCount',
+  async (id) => {
+    const albumReference = firestore().collection('albums').doc(id);
+
+    return firestore().runTransaction(async (transaction) => {
+      const albumSnapshot = await transaction.get(albumReference);
+
+      if (!albumReference) {
+        throw 'Album does not exist';
+      }
+
+      await transaction.update(albumReference, {
+        playCount: albumSnapshot.data().playCount + 1,
+      });
+    });
+  },
+);
+
+export const getAllNews = createAsyncThunk('firebase/getAllNews', async () => {
+  let data = [];
+  const path = firestore().collection('news');
+  const documents = await path.orderBy('createdAt', 'desc').get();
+  documents.forEach((document) => {
+    if (document.exists) {
+      data.push(document.data());
+    }
+  });
+  return data;
+});
+
+export const getNews = createAsyncThunk('firebase/getNews', async () => {
+  let data = [];
+  const path = firestore().collection('news');
+  const documents = await path.orderBy('createdAt', 'desc').limit(5).get();
+  documents.forEach((document) => {
+    if (document.exists) {
+      data.push(document.data());
+    }
+  });
+  return data;
+});
+
+export const getANews = createAsyncThunk(
+  'firebase/getANews',
+  async (newsId) => {
+    const path = firestore().collection('news');
+    const document = await path.doc(newsId).get();
+    if (document.exists) {
+      return document.data();
+    }
   },
 );
 
@@ -462,13 +622,17 @@ const firebaseSlice = createSlice({
     artistPopularSongs: [],
     artistPlaylists: [],
     favoriteSongList: [],
-    bestPlaylists: [],
-    allBestPlaylists: [],
+    bestAlbums: [],
+    allBestAlbums: [],
     videos: [],
     popularVideos: [],
     allPopularVideos: [],
     latestVideos: [],
     allLatestVideos: [],
+    favoriteArtists: [],
+    allNews: [],
+    limitedNews: [],
+    news: {},
   },
   extraReducers: {
     // User data
@@ -598,15 +762,15 @@ const firebaseSlice = createSlice({
     },
 
     // Get Best Playlists
-    [getBestPlaylists.fulfilled]: (state, action) => {
+    [getBestAlbums.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      state.bestPlaylists = action.payload;
+      state.bestAlbums = action.payload;
     },
 
     // Get All Best Playlists
-    [getAllBestPlaylists.fulfilled]: (state, action) => {
+    [getAllBestAlbums.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      state.allBestPlaylists = action.payload;
+      state.allBestAlbums = action.payload;
     },
 
     // Get Videos
@@ -621,10 +785,32 @@ const firebaseSlice = createSlice({
       state.popularVideos = action.payload;
     },
 
+    // Get All Popular Video
+    [getAllPopularVideos.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.allPopularVideos = action.payload;
+    },
+
     // Get Latest Videos
     [getLatestVideos.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.latestVideos = action.payload;
+    },
+
+    // Get All News
+    [getAllNews.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.allNews = action.payload;
+    },
+
+    [getANews.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.news = action.payload;
+    },
+
+    [getNews.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.limitedNews = action.payload;
     },
   },
 });

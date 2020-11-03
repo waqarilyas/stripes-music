@@ -22,6 +22,7 @@ import {
   changeSong,
   pushToPlaylist,
 } from '../../Redux/Reducers/audioSlice';
+import { addAlbumPlayCount } from '../../Redux/Reducers/firebaseSlice';
 
 const AlbumDetail = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const AlbumDetail = () => {
       });
       await TrackPlayer.add(albumSongs);
       dispatch(fullScreenChange(true));
+      dispatch(addAlbumPlayCount(album.id));
     } catch (err) {
       LOG('ERROR', err);
     }

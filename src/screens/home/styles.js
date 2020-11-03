@@ -6,6 +6,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     flex: 1,
   },
+  refresh: {
+    backgroundColor: 'black',
+  },
+  background: {
+    height: '100%',
+    paddingHorizontal: hp('1'),
+  },
   bannerLoading: {
     color: 'white',
     height: hp('20'),

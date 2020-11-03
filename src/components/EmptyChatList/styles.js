@@ -19,6 +19,16 @@ const styles = StyleSheet.create({
     height: hp('22'),
     width: hp('22'),
   },
+  buttonContainer: {
+    backgroundColor: '#F5138E',
+    paddingHorizontal: hp('3'),
+    paddingVertical: hp('2'),
+    marginTop: hp('3'),
+    borderRadius: hp('3'),
+  },
+  titleStyle: {
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;

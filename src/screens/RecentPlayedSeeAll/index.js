@@ -1,12 +1,46 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 
 import styles from './styles';
 import SongCardListView from '../../components/SongCardListView';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  changeSong,
+  pushToPlaylist,
+  fullScreenChange,
+} from '../../Redux/Reducers/audioSlice';
+import {
+  addPlayCount,
+  addToRecentlyPlayed,
+} from '../../Redux/Reducers/firebaseSlice';
+import TrackPlayer from 'react-native-track-player';
+import { LOG } from '../../utils/Constants';
 
 const RecentPlayedSeeAll = () => {
+  const dispatch = useDispatch();
   const { allHistory } = useSelector((state) => state.root.firebase);
+
+  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+    try {
+      const result = {
+        title,
+        artist,
+        artwork,
+        url,
+        duration,
+        id,
+        createdAt: +new Date(),
+      };
+      dispatch(changeSong(result));
+      dispatch(pushToPlaylist(result));
+      await TrackPlayer.add(result);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
+    } catch (error) {
+      LOG('PLAY SONG', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -19,15 +53,20 @@ const RecentPlayedSeeAll = () => {
       <FlatList
         data={allHistory}
         keyExtractor={(item) => item.id}
-        renderItem={({ item: { id, title, artist, artwork, duration } }) => {
+        renderItem={({
+          item,
+          item: { id, title, artist, artwork, duration },
+        }) => {
           return (
-            <SongCardListView
-              title={title}
-              artist={artist}
-              artwork={artwork}
-              duration={duration}
-              id={id}
-            />
+            <TouchableOpacity onPress={() => playSong(item)}>
+              <SongCardListView
+                title={title}
+                artist={artist}
+                artwork={artwork}
+                duration={duration}
+                id={id}
+              />
+            </TouchableOpacity>
           );
         }}
       />

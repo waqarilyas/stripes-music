@@ -1,5 +1,13 @@
 import React, { useReducer, useEffect, useState } from 'react';
-import { View, Text, FlatList, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Alert,
+  Modal,
+  Image,
+  TextInput,
+} from 'react-native';
 import { Divider } from 'react-native-elements';
 import randomize from 'randomatic';
 import auth from '@react-native-firebase/auth';
@@ -7,7 +15,6 @@ import firestore from '@react-native-firebase/firestore';
 
 import styles from './styles';
 import ChatCard from '../../components/ChatCard';
-import ChatScreenHeader from '../../components/ChatScreenHeader';
 import reducer from '../../hooks/useReducer';
 import EmptyChatList from '../../components/EmptyChatList';
 
@@ -29,6 +36,7 @@ const Community = ({ navigation }) => {
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
   };
+
   useEffect(() => {
     const listener = firestore()
       .collection('chats')
@@ -89,36 +97,11 @@ const Community = ({ navigation }) => {
 
   return (
     <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={searchVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-        }}>
-        <View style={styles.topSearchContainer}>
-          <View style={styles.searchWithClose}>
-            <View style={styles.searchContainer}>
-              <Image source={searchIcon} style={styles.searchIcon} />
-              <TextInput
-                placeholder="Search..."
-                style={styles.textInput}
-                textStyle={{ color: 'white' }}
-                placeholderTextColor="#918E96"
-              />
-            </View>
-            <Text style={styles.closeButton} onPress={() => toggleSearch()}>
-              Close
-            </Text>
-          </View>
-        </View>
-      </Modal>
-
       <FlatList
         data={state.inbox}
-        contentContainerStyle={{ height: '100%' }}
+        contentContainerStyle={{ height: '100%', backgroundColor: 'black' }}
         keyExtractor={() => randomize(10)}
-        ListEmptyComponent={() => <EmptyChatList />}
+        ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         renderItem={({ item }) => {
           return (

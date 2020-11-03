@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import SectionHeader from '../SectionHeader';
-import { emptyArtist, artistIcon } from '../../../Assets/Icons';
+import { emptyArtist, favoriteArtistIcon } from '../../../Assets/Icons';
 import ArtistsHorizontalCard from '../ArtistsHorizontalCard';
 import EmptyCard from '../EmptyCard';
-import { LOG } from '../../utils/Constants';
 
 const emptyCard = () => {
   return <EmptyCard text="No Favorite Artists." icon={emptyArtist} />;
@@ -43,7 +41,7 @@ const HomeFavoriteArtists = ({ navigation }) => {
     <>
       <SectionHeader
         name="Favourite Artists"
-        icon={artistIcon}
+        icon={favoriteArtistIcon}
         onPress={() => navigation.navigate('FavouriteArtistSeeAll')}
       />
       <FlatList

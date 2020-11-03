@@ -1,47 +1,11 @@
-import firestore from '@react-native-firebase/firestore';
-import React, { useState } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
 import { ListItem, Text } from 'react-native-elements';
-import auth from '@react-native-firebase/auth';
 
 import { convertToMinutes } from '../../utils/Helpers';
 import styles from './styles';
 
-const SongCardListView = ({
-  id,
-  title,
-  artist,
-  artwork,
-  duration,
-  isFavorite,
-}) => {
-  const [favorite, setFavorite] = useState(isFavorite);
-
-  const handleFavorite = async () => {
-    setFavorite(!favorite);
-    const uid = auth().currentUser.uid;
-    const userDoc = firestore().collection('users').doc(uid);
-    await userDoc.get().then((document) => {
-      if (document.exists) {
-        if (favorite) {
-          document.ref.set(
-            {
-              favoriteSongs: firestore.FieldValue.arrayRemove(id),
-            },
-            { merge: true },
-          );
-        } else {
-          document.ref.set(
-            {
-              favoriteSongs: firestore.FieldValue.arrayUnion(id),
-            },
-            { merge: true },
-          );
-        }
-      }
-    });
-  };
-
+const SongCardListView = ({ title, artist, artwork, duration }) => {
   return (
     <ListItem containerStyle={styles.container}>
       <Image source={{ uri: artwork }} style={styles.image} />

@@ -14,27 +14,28 @@ import HomeMostPlayed from '../../components/HomeMostPlayed';
 import HomeRecentPlayed from '../../components/HomeRecentPlayed';
 import {
   getSongs,
-  getMostPlayed,
-  getMostPlayedSongs,
-  getPlaylists,
-  getAllSongs,
-  getAllPlaylists,
   getAlbums,
-  getAllAlbums,
+  getVideos,
   getHistory,
+  getAllSongs,
+  getPlaylists,
+  getAllAlbums,
+  getMostPlayed,
   getAllHistory,
   getTopArtists,
-  getTopAllArtists,
-  getBestPlaylists,
-  getAllBestPlaylists,
-  getVideos,
-  getPopularVideos,
+  getBestAlbums,
+  getAllPlaylists,
   getLatestVideos,
+  getTopAllArtists,
+  getAllBestAlbums,
+  getPopularVideos,
+  getMostPlayedSongs,
+  getAllPopularVideos,
+  getAllNews,
 } from '../../Redux/Reducers/firebaseSlice';
-import HomeBestPlaylists from '../../components/HomeBestPlaylists';
+import HomeTopAlbums from '../../components/HomeTopAlbums';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
 import HomeTopArtists from '../../components/HomeTopArtists';
-import { LOG } from '../../utils/Constants';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -77,11 +78,13 @@ const Home = ({ navigation }) => {
     disp(getAllHistory());
     disp(getTopArtists());
     disp(getTopAllArtists());
-    disp(getBestPlaylists());
-    disp(getAllBestPlaylists());
+    disp(getBestAlbums());
+    disp(getAllBestAlbums());
     disp(getVideos());
     disp(getPopularVideos());
     disp(getLatestVideos());
+    disp(getAllPopularVideos());
+    disp(getAllNews());
   }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -117,14 +120,14 @@ const Home = ({ navigation }) => {
       style={styles.container}
       refreshControl={
         <RefreshControl
-          style={{ backgroundColor: 'black' }}
+          style={styles.refresh}
           refreshing={refreshing}
           onRefresh={onRefresh}
           tintColor="white"
           progressBackgroundColor="transparent"
         />
       }>
-      <ImageBackground style={{ height: '100%' }} blurRadius={20}>
+      <ImageBackground style={styles.background} blurRadius={20}>
         <LinearGradient colors={['black', '#0F2027', 'black']}>
           {/* Songs Slider Section */}
           <HomeBanner />
@@ -145,7 +148,7 @@ const Home = ({ navigation }) => {
           <HomeFavoriteArtists navigation={navigation} />
 
           {/* The Best Playlists Section */}
-          <HomeBestPlaylists navigation={navigation} />
+          <HomeTopAlbums navigation={navigation} />
 
           <Button text="Sign Out" onPress={handleSignOut} />
         </LinearGradient>

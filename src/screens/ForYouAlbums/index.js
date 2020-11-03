@@ -7,7 +7,11 @@ import styles from './styles';
 import SeeAll from '../../components/SeeAll';
 import PlaylistCard from '../../components/PlaylistCard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getAnAlbum, getAlbumSongs } from '../../Redux/Reducers/firebaseSlice';
+import {
+  getAnAlbum,
+  getAlbumSongs,
+  addAlbumViewCount,
+} from '../../Redux/Reducers/firebaseSlice';
 
 const ForYouAlbums = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -17,7 +21,7 @@ const ForYouAlbums = ({ navigation }) => {
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
-        numColumns={Math.ceil(11 / 4)}
+        numColumns={Math.ceil(8 / 2)}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -35,6 +39,7 @@ const ForYouAlbums = ({ navigation }) => {
                 onPress={() => {
                   dispatch(getAnAlbum(id));
                   dispatch(getAlbumSongs(id));
+                  dispatch(addAlbumViewCount(id));
                   navigation.navigate('AlbumDetail');
                 }}>
                 <PlaylistCard

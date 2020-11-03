@@ -1,44 +1,43 @@
 import React from 'react';
-import { View, FlatList, Text } from 'react-native';
 import { Divider } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 
 import styles from './styles';
 import {
-  getAlbumSongs,
   getAnAlbum,
+  getAlbumSongs,
   addAlbumViewCount,
 } from '../../Redux/Reducers/firebaseSlice';
 import AlbumSeeAllComponent from '../../components/AlbumSeeAllComponent';
 
-const ForYouAlbumsSeeAll = ({ navigation }) => {
+const TopAlbumsSeeAll = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { allAlbums } = useSelector((state) => state.root.firebase);
+  const { allBestAlbums } = useSelector((state) => state.root.firebase);
 
   return (
     <View style={styles.container}>
       <View style={styles.topView}>
-        <Text style={styles.title}>Albums For You</Text>
+        <Text style={styles.title}>Top Albums</Text>
         <Text style={styles.subtitle}>
-          A collection of albums recommended just for you. We hope you like it!
+          A collection of top albums recommended just for you. Listen to albums
+          which the world loves.
         </Text>
       </View>
-
       <FlatList
-        data={allAlbums}
+        data={allBestAlbums}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         renderItem={({
           item: {
             id,
-            imgUrl,
-            title,
             duration,
+            title,
             author,
+            imgUrl,
+            viewCount,
             playCount,
             songCount,
-            viewCount,
           },
         }) => {
           return (
@@ -54,9 +53,9 @@ const ForYouAlbumsSeeAll = ({ navigation }) => {
                 title={title}
                 duration={duration}
                 author={author}
+                viewCount={viewCount}
                 playCount={playCount}
                 songCount={songCount}
-                viewCount={viewCount}
               />
             </TouchableOpacity>
           );
@@ -66,4 +65,4 @@ const ForYouAlbumsSeeAll = ({ navigation }) => {
   );
 };
 
-export default ForYouAlbumsSeeAll;
+export default TopAlbumsSeeAll;

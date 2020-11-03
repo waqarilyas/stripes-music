@@ -1,6 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { Button } from 'react-native-elements';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import Community from '../../screens/Community';
@@ -11,6 +13,16 @@ const Stack = createStackNavigator();
 
 const CommunityStack = () => {
   const search = () => <Image source={searchIcon} style={styles.icon} />;
+  const newMessage = (navigation) => (
+    <Button
+      type="solid"
+      title="New Message"
+      buttonStyle={styles.buttonContainer}
+      titleStyle={styles.titleStyle}
+      onPress={() => navigation.navigate('NewMessage')}
+    />
+  );
+
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -24,7 +36,14 @@ const CommunityStack = () => {
       <Stack.Screen
         name="Community"
         component={Community}
-        options={{ headerShown: false }}
+        options={({ navigation }) => ({
+          title: 'Chat',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerRight: search,
+          headerLeft: () => newMessage(navigation),
+          headerStyle: styles.headerStyle,
+        })}
       />
       <Stack.Screen
         name="NewMessage"
@@ -58,6 +77,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 22,
   },
+  text: {
+    color: 'white',
+  },
   headerStyle: {
     backgroundColor: 'black',
     elevation: 0,
@@ -71,6 +93,17 @@ const styles = StyleSheet.create({
   back: {
     resizeMode: 'contain',
     marginLeft: 18,
+  },
+  buttonContainer: {
+    backgroundColor: '#F5138E',
+    paddingHorizontal: hp('2'),
+    paddingVertical: hp('1'),
+    borderRadius: hp('1'),
+    marginStart: hp('2'),
+  },
+  titleStyle: {
+    fontWeight: 'bold',
+    fontSize: hp('1.5'),
   },
 });
 
