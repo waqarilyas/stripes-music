@@ -299,6 +299,7 @@ const Player = ({ screen }) => {
                         ListEmptyComponent={<EmptyPlaylist />}
                         keyExtractor={() => randomize('Aa0!', 10)}
                         renderItem={({ item }) => {
+                          console.log('---Flatlist Item----', item);
                           return <FullScreenPlaylistCard item={item} />;
                         }}
                       />

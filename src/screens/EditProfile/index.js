@@ -1,32 +1,59 @@
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import React, { useState } from 'react';
 import {
-  View,
-  Dimensions,
   Image,
   StyleSheet,
-  TextInput,
+  Switch,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import { Avatar, Overlay } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import ImagePicker from 'react-native-image-picker';
-import { Avatar, Badge } from 'react-native-elements';
-
+import { RFValue } from 'react-native-responsive-fontsize';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import { useDispatch, useSelector } from 'react-redux';
+import { camera, edit, tickIcon } from '../../../Assets/Icons';
 import Button from '../../components/Mybutton';
 import TextBox from '../../components/TextBox';
-import { edit, camera } from '../../../Assets/Icons';
+// import fileType from 'react-native-file-type';
+import { getUser } from '../../Redux/Reducers/firebaseSlice';
 
 const EditProfile = () => {
   const [fullName, setFullName] = useState('');
-  const [location, setLocation] = useState('');
-  const [bio, setBio] = useState('');
-  var [fileUri, SetFileuri] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [uploadErr, setUploadErr] = useState(false);
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
+  const [ext, setExt] = useState('');
+  var [fileUri, SetFileuri] = useState('');
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.root.firebase.user);
+  const uid = auth().currentUser.uid;
 
   const handleSubmit = () => {
+    setLoading(true);
     console.log(fullName);
-    console.log(location);
-    console.log(bio);
+
+    user.fullName === fullName || fullName === ''
+      ? setFullName(user.fullName)
+      : null;
+
+    updateProfiledata();
   };
 
   const chooseImage = () => {
@@ -34,7 +61,10 @@ const EditProfile = () => {
       title: 'Select Avatar',
       cameraType: 'front',
       mediaType: 'photo',
-      quality: 1.0,
+      maxWidth: 800,
+      maxHeight: 800,
+      allowsEditing: true,
+      quality: 1,
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -42,7 +72,7 @@ const EditProfile = () => {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log(response.uri);
+      // console.log(response.uri);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -51,72 +81,164 @@ const EditProfile = () => {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        SetFileuri(response.uri);
+        SetFileuri(decodeURI(response.uri));
+        const type = response.type.split('/');
+        setExt(type[1]);
       }
     });
   };
+  const updateProfiledata = () => {
+    if (fileUri) {
+      uploadImageToStorage(fullName);
+    } else {
+      uploadDataToFirestore(fullName);
+    }
+  };
 
+  const uploadImageToStorage = (title) => {
+    const storageRef = storage().ref('users/');
+    const path = `${uid}/${user.fullName}.${ext}`;
+
+    const uploadTask = storageRef.child(path).putFile(fileUri);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+        switch (snapshot.state) {
+          case storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            break;
+          case storage.TaskState.CANCELLED:
+            console.log('Upload is cancelled');
+            break;
+          case storage.TaskState.ERROR:
+            console.log('Failed to create a playlist. Try again.');
+
+            break;
+          case storage.TaskState.RUNNING:
+            console.log('Upload is running');
+            break;
+        }
+      }, // Failed Listener
+      (_err) => {
+        console.log('Error: ', _err);
+      }, // Successful Listener
+      () => {
+        console.log('------ SUCCESSFULLY UPLOADED PICTURE ------');
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+          setVisible(true);
+          console.log('File available at', downloadUrl);
+          uploadDataToFirestore(title, downloadUrl);
+          setLoading(false);
+        });
+      },
+    );
+  };
+
+  const uploadDataToFirestore = (title, imageUrl = user.profilePicture) => {
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .set(
+        {
+          profilePicture: imageUrl,
+          fullName: title,
+        },
+        {
+          merge: true,
+        },
+      )
+      .then((res) => {
+        dispatch(getUser());
+        setVisible(true);
+        setLoading(false);
+      });
+  };
+
+  if (visible) {
+    setInterval(function () {
+      setVisible(false);
+    }, 3000);
+  }
   return (
-    <View style={styles.maincontainer}>
-      <ScrollView>
-        <View style={styles.profileContainer}>
-          <TouchableOpacity
-            style={styles.profileTouchView}
-            onPress={chooseImage}>
-            {fileUri ? (
-              <Avatar
-                rounded
-                source={{ uri: fileUri }}
-                size="xlarge"
-                containerStyle={{ alignSelf: 'center' }}
-                onPress={chooseImage}
-              />
-            ) : (
-              <View style={styles.cameraIconContainer}>
-                <Image source={camera} style={styles.camera} />
-              </View>
-            )}
-            <View style={styles.edit}>
-              <Image source={edit} style={styles.imageEdit} />
-            </View>
-          </TouchableOpacity>
+    <>
+      <Overlay
+        isVisible={visible}
+        onBackdropPress={toggleOverlay}
+        overlayStyle={styles.overlay}>
+        <View style={styles.overlayContainer}>
+          <Image source={tickIcon} style={styles.tick} />
+          <Text style={styles.successMessage}>
+            Profile updated successfully!
+          </Text>
         </View>
+      </Overlay>
 
-        <View>
-          <TextBox
-            text="Full Name"
-            onChangeText={(input) => setFullName(input)}
-            contentType="name"
-          />
-          <TextBox
-            text="Location"
-            onChangeText={(input) => setLocation(input)}
-            contentType="location"
-          />
-          <View style={styles.bioContainer}>
-            <TextInput
-              style={styles.textInputstyle}
-              placeholder="Bio"
-              placeholderTextColor="#5E5A5E"
-              numberOfLines={5}
-              multiline
-              maxLength={160}
-              onChangeText={(input) => setBio(input)}
-              defaultValue=""
-              textContentType="none"
-            />
+      <View style={styles.maincontainer}>
+        <ScrollView>
+          <View style={styles.profileContainer}>
+            <TouchableOpacity
+              style={styles.profileTouchView}
+              onPress={chooseImage}>
+              {fileUri || user.profilePicture ? (
+                <Avatar
+                  rounded
+                  source={
+                    fileUri ? { uri: fileUri } : { uri: user.profilePicture }
+                  }
+                  size="xlarge"
+                  containerStyle={{ alignSelf: 'center' }}
+                  onPress={chooseImage}
+                />
+              ) : (
+                <View style={styles.cameraIconContainer}>
+                  <Image source={camera} style={styles.camera} />
+                </View>
+              )}
+              <View style={styles.edit}>
+                <Image source={edit} style={styles.imageEdit} />
+              </View>
+            </TouchableOpacity>
           </View>
-          <Button text="UPDATE PROFILE" onPress={handleSubmit} />
-          <View style={{ height: hp('10%') }}></View>
-        </View>
-      </ScrollView>
-    </View>
+
+          <View>
+            <TextBox
+              text="Enter Name"
+              defaultValue={user.fullName}
+              onChangeText={(input) => setFullName(input)}
+              contentType="name"
+            />
+
+            <View style={styles.notificationContainer}>
+              <Text style={styles.notifyText}>Notifications</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#36E76E' }}
+                thumbColor={isEnabled ? '#FFFFFF' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+              {/* </View> */}
+            </View>
+
+            <Button
+              text="UPDATE PROFILE"
+              onPress={handleSubmit}
+              loading={loading}
+            />
+            <View style={{ height: hp('10%') }}></View>
+          </View>
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   maincontainer: {
     backgroundColor: '#120810',
+    flex: 1,
   },
   profileContainer: {
     height: hp('25%'),
@@ -166,6 +288,43 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
     justifyContent: 'center',
     borderRadius: hp('10'),
+  },
+  notifyText: {
+    color: 'white',
+    fontSize: RFValue('16'),
+  },
+  notificationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+    width: '100%',
+    marginVertical: hp('2'),
+    paddingHorizontal: hp('4'),
+  },
+  overlay: {
+    backgroundColor: '#BBF5BB',
+    width: '80%',
+    paddingVertical: hp('3'),
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  successMessage: {
+    color: 'black',
+    fontSize: RFValue('14'),
+  },
+  overlayContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    // width: '100%',
+  },
+  tick: {
+    alignItems: 'center',
+    resizeMode: 'contain',
+    height: hp('4'),
+    width: hp('4'),
+    marginRight: hp('2'),
   },
 });
 

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import { Divider, Image } from 'react-native-elements';
 import { useSelector } from 'react-redux';
@@ -22,7 +23,11 @@ import {
   changeSong,
   pushToPlaylist,
 } from '../../Redux/Reducers/audioSlice';
-import { addAlbumPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import {
+  addAlbumPlayCount,
+  addToRecentlyPlayed,
+  addPlayCount,
+} from '../../Redux/Reducers/firebaseSlice';
 
 const AlbumDetail = () => {
   const dispatch = useDispatch();
@@ -39,6 +44,31 @@ const AlbumDetail = () => {
       dispatch(addAlbumPlayCount(album.id));
     } catch (err) {
       LOG('ERROR', err);
+    }
+  };
+
+  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+    try {
+      const result = {
+        title,
+        artist,
+        artwork,
+        url,
+        duration,
+        id,
+        createdAt: +new Date(),
+      };
+
+      console.log('-----Result------', result);
+
+      dispatch(changeSong(result));
+      dispatch(pushToPlaylist(result));
+      await TrackPlayer.add(result);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
+    } catch (error) {
+      LOG('PLAY SONG', error);
     }
   };
 
@@ -72,15 +102,20 @@ const AlbumDetail = () => {
           data={albumSongs}
           ItemSeparatorComponent={() => <Divider style={styles.divider} />}
           keyExtractor={(item) => item.id}
-          renderItem={({ item: { title, artist, artwork, id, duration } }) => {
+          renderItem={({
+            item,
+            item: { title, artist, artwork, id, duration, url },
+          }) => {
             return (
-              <SongItem
-                title={title}
-                author={artist}
-                image={artwork}
-                id={id}
-                duration={duration}
-              />
+              <TouchableOpacity onPress={() => playSong(item)}>
+                <SongItem
+                  title={title}
+                  author={artist}
+                  image={artwork}
+                  id={id}
+                  duration={duration}
+                />
+              </TouchableOpacity>
             );
           }}
         />

@@ -154,11 +154,11 @@ const SongItem = ({ title, author, image, id, duration }) => {
           <Text style={styles.author}>{author}</Text>
         </View>
         <View style={styles.iconContainer}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.iconContainer}
             onPress={() => toggleOverlay()}>
             <Image source={plusIcon} style={styles.icon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.iconContainer}
             onPress={handleFavorite}>

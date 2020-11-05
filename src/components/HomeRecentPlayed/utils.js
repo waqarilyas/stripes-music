@@ -9,7 +9,7 @@ const history = [
     artwork: [
       'https://musiccanada.files.wordpress.com/2018/11/drake.jpg?w=640',
     ],
-    createdAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: +new Date(),
     description:
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     duration: 184,
@@ -18,7 +18,7 @@ const history = [
     genreId: 'hip-hop',
     id: 'drake-elevate',
     title: 'Elevate',
-    updatedAt: firestore.FieldValue.serverTimestamp(),
+    updatedAt: +new Date(),
   },
   {
     album: 'drake-scorpion',
@@ -27,7 +27,7 @@ const history = [
     artwork: [
       'https://static.stereogum.com/uploads/2018/07/Drake-Nonstop-video-1532695625-640x404.jpg',
     ],
-    createdAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: +new Date(),
     description:
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     duration: 238,
@@ -36,7 +36,7 @@ const history = [
     genreId: 'hip-hop',
     id: 'drake-nonstop',
     title: 'Nonstop',
-    updatedAt: firestore.FieldValue.serverTimestamp(),
+    updatedAt: +new Date(),
   },
   {
     album: 'kanye-west-808s-and-heartbreak',
@@ -46,7 +46,7 @@ const history = [
       'https://1.bp.blogspot.com/_yHFrOtUsKOo/SVhdw6wDPqI/AAAAAAAAAHo/wlX3Ua70N04/w1200-h630-p-k-no-nu/Kanye+West+-+Amazing+(FanMade+Single+Cover)+Made+by+BS.jpg',
       'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1e3aa1bd-dddf-4989-b7ce-99fc35726cea/d2l3xe8-309aca9a-e486-4c46-8532-caa37484c6bf.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMWUzYWExYmQtZGRkZi00OTg5LWI3Y2UtOTlmYzM1NzI2Y2VhXC9kMmwzeGU4LTMwOWFjYTlhLWU0ODYtNGM0Ni04NTMyLWNhYTM3NDg0YzZiZi5qcGcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.v6pmBSfalgMwDpuA82890JLr7Tjyua6YaJJgk_55sv8',
     ],
-    createdAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: +new Date(),
     description:
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     duration: 230,
@@ -55,7 +55,7 @@ const history = [
     genreId: 'hip-hop',
     id: 'kanye-west-amazing',
     title: 'Amazing (Feat. Young Jeezy)',
-    updatedAt: firestore.FieldValue.serverTimestamp(),
+    updatedAt: +new Date(),
   },
 ];
 

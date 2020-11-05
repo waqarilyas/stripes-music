@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 
-const serverTimeStamp = firestore.FieldValue.serverTimestamp();
+const serverTimeStamp = +new Date();
 
 class ModelBase {
   constructor({ createdAt, updatedAt }) {

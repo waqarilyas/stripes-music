@@ -130,3 +130,6 @@ export const musicHeartIcon = require('./icon-music-heart.png');
 export const topArtistIcon = require('./icon-top-artists.png');
 export const favoriteArtistIcon = require('./icon-favorite-artist.png');
 export const topAlbumsIcon = require('./icon-top-albums.png');
+export const nextIcon = require('./next.png');
+export const optionsIcon = require('./icons-options-28x28-black.png');
+export const errIcon = require('./close.png');

@@ -28,6 +28,8 @@ target 'musicapp' do
 
   pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'musicappTests' do
     inherit! :complete
     # Pods for testing

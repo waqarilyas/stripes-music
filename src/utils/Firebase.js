@@ -97,9 +97,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
         headers: headers,
       },
     )
-    .then((response) => {
-      // console.log('----------- RESPONSE------------- ', response);
-    })
+    .then((response) => {})
     .catch((error) => {
       console.log('-----POST ERROR------', engineName, ':', error);
     });

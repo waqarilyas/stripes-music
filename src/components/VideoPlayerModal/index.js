@@ -76,11 +76,11 @@ const VideoPlayerModal = ({ onPress }) => {
       .collection('comments')
       .add({
         comment: commentText,
-        createdAt: firestore.FieldValue.serverTimestamp(),
+        createdAt: +new Date(),
         id: '',
         image: profilePic,
         videoId: videoData.id,
-        updatedAt: firestore.FieldValue.serverTimestamp(),
+        updatedAt: +new Date(),
         userId: auth().currentUser.uid,
         username: 'Arslan Mushtaq',
       })

@@ -114,8 +114,8 @@ const CreateNewPlaylist = ({ navigation }) => {
 
   const uploadDataToFirestore = (title, imageUrl = '') => {
     const playlist = {
-      createdAt: firestore.FieldValue.serverTimestamp(),
-      updatedAt: firestore.FieldValue.serverTimestamp(),
+      createdAt: +new Date(),
+      updatedAt: +new Date(),
       duration: '0H',
       id: '',
       image: imageUrl,

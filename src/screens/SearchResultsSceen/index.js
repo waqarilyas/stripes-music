@@ -78,7 +78,7 @@ const SearchResultsScreen = ({ route, navigation }) => {
     const path = firestore().collection('users').doc(uid);
     await path.collection('recentSearches').add({
       text,
-      createdAt: firestore.FieldValue.serverTimestamp(),
+      createdAt: +new Date(),
     });
   };
 

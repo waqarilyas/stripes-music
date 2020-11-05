@@ -1,37 +1,47 @@
 // Module imports
 
 import React from 'react';
-import { StyleSheet,Dimensions,View,TextInput}  from 'react-native'; 
+import { StyleSheet, Dimensions, View, TextInput } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 // Local imports
 //import styles from './styles'
 
-const deviceWidth=Dimensions.get('window').width;
-const deviceHeight=Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
-const TextBox = ({text, onChangeText, contentType}) => {
-    return (
-        <View style={styles.maincontainer}>
-            <TextInput style={styles.Textinputstyle} placeholder={text} placeholderTextColor ='#5E5A5E' onChangeText={onChangeText} defaultValue="" textContentType={contentType} />
-        </View>
-    );
-}
+const TextBox = ({ text, onChangeText, contentType, defaultValue }) => {
+  console.log(defaultValue);
+
+  return (
+    <View style={styles.maincontainer}>
+      <TextInput
+        autoCapitalize={false}
+        style={styles.Textinputstyle}
+        defaultValue={defaultValue}
+        placeholder={text}
+        placeholderTextColor="#5E5A5E"
+        onChangeText={onChangeText}
+        textContentType={contentType}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    maincontainer: {
-        alignItems:'center',
-        flex:1,
-        backgroundColor:'transparent',
-        marginVertical:deviceHeight/60,
-    },
-    Textinputstyle :{
-        backgroundColor:'#2c262b',
-        fontSize:14,
-        borderRadius:5,
-        color:'white',
-        paddingLeft:15,
-        width:wp('90%'),
-    },
-})
+  maincontainer: {
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'transparent',
+    marginVertical: deviceHeight / 60,
+  },
+  Textinputstyle: {
+    backgroundColor: '#2c262b',
+    fontSize: 14,
+    borderRadius: 5,
+    color: 'white',
+    paddingLeft: 15,
+    width: wp('90%'),
+  },
+});
 
 export default TextBox;

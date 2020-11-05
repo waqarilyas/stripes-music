@@ -66,11 +66,11 @@ const NewsDetails = () => {
 
     const data = {
       comment: commentText,
-      createdAt: firestore.FieldValue.serverTimestamp(),
+      createdAt: +new Date(),
       id: '',
       image: profilePic,
       postId: news.id,
-      updatedAt: firestore.FieldValue.serverTimestamp(),
+      updatedAt: +new Date(),
       userId: auth().currentUser.uid,
       username: 'Arslan Mushtaq',
     };

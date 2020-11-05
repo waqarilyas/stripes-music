@@ -15,8 +15,8 @@ const VideosBanner = () => {
 
   const playVideo = (item) => {
     const data = item;
-    data.createdAt = JSON.parse(data.createdAt);
-    data.updatedAt = JSON.parse(data.updatedAt);
+    // data.createdAt = JSON.parse(data.createdAt);
+    // data.updatedAt = JSON.parse(data.updatedAt);
     dispatch(displayVideoModal(true));
     dispatch(setVideoData(data));
   };

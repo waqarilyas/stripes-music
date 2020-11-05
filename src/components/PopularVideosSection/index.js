@@ -18,16 +18,12 @@ const PopularVideosSection = ({ navigation }) => {
 
   const playFirstVideo = () => {
     const first = popularVideos[0];
-    first.createdAt = JSON.parse(first.createdAt);
-    first.updatedAt = JSON.parse(first.updatedAt);
+
     dispatch(displayVideoModal(true));
     dispatch(setVideoData(first));
   };
 
   const playVideo = (item) => {
-    const data = item;
-    data.createdAt = JSON.parse(data.createdAt);
-    data.updatedAt = JSON.parse(data.updatedAt);
     dispatch(displayVideoModal(true));
     dispatch(setVideoData(data));
   };
@@ -56,8 +52,7 @@ const PopularVideosSection = ({ navigation }) => {
           keyExtractor={(item) => item.id}
           renderItem={({ item, item: { poster }, index }) => {
             const data = item;
-            item.createdAt = JSON.parse(data.createdAt);
-            item.updatedAt = JSON.parse(data.updatedAt);
+
             if (index === 0) {
               return null;
             } else {

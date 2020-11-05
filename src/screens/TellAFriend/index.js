@@ -1,18 +1,40 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
+import React from 'react';
+import { Image, Share, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-
-import Header from '../../components/Header';
-import Button from '../../components/Mybutton';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import { copy } from '../../../Assets/Icons';
 
 const TellaFriend = () => {
   const copyToClipboard = () => {
     Clipboard.setString('hello world');
   };
+
+  const onShare = async () => {
+    console.log('----Function called-----');
+    try {
+      const result = await Share.share({
+        message: 'Share Options',
+        url: 'https://www.google.com',
+        title: 'Share Music App',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View style={{ width: wp('90%') }}>
@@ -40,7 +62,9 @@ const TellaFriend = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <Button text="SHARE" />
+        <Text style={styles.shareButton} onPress={() => onShare()}>
+          SHARE
+        </Text>
       </View>
     </View>
   );
@@ -74,6 +98,15 @@ const styles = StyleSheet.create({
   copy: {
     width: wp('4%'),
     height: wp('4%)'),
+  },
+  shareButton: {
+    color: 'white',
+    alignSelf: 'center',
+    backgroundColor: 'grey',
+    marginTop: '12%',
+    paddingHorizontal: hp('4'),
+    paddingVertical: hp('1'),
+    borderRadius: hp('1'),
   },
 });
 export default TellaFriend;

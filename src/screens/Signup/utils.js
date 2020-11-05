@@ -8,21 +8,24 @@ const RegisterUser = async (values, actions) => {
     await auth()
       .createUserWithEmailAndPassword(values.email, values.password)
       .then((result) => {
-        firestore().collection('users').doc(result.user.uid).set({
-          id: result.user.uid,
-          fullName: values.name,
-          email: values.email,
-          isPaidUser: false,
-          isActive: false,
-          createdAt: firestore.FieldValue.serverTimestamp(),
-          updatedAt: firestore.FieldValue.serverTimestamp(),
-          subscribedAt: null,
-          fbAccessToken: '',
-          googleAccessToken: '',
-          fbUserId: '',
-          profilePicture: '',
-          isAdmin: false,
-        });
+        firestore()
+          .collection('users')
+          .doc(result.user.uid)
+          .set({
+            id: result.user.uid,
+            fullName: values.name,
+            email: values.email,
+            isPaidUser: false,
+            isActive: false,
+            createdAt: +new Date(),
+            updatedAt: +new Date(),
+            subscribedAt: null,
+            fbAccessToken: '',
+            googleAccessToken: '',
+            fbUserId: '',
+            profilePicture: '',
+            isAdmin: false,
+          });
       });
     console.log(values);
   } catch (authErrors) {
