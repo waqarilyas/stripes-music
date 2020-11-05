@@ -39,21 +39,24 @@ const onFacebookButtonPress = async () => {
         fbUserId: data.userID,
       });
     } else {
-      return firestore().collection('users').doc(response.user.uid).set({
-        id: response.user.uid,
-        fullName: response.user.displayName,
-        email: response.user.email,
-        isPaidUser: false,
-        isActive: false,
-        createdAt: firestore.FieldValue.serverTimestamp(),
-        updatedAt: firestore.FieldValue.serverTimestamp(),
-        subscribedAt: null,
-        fbAccessToken: data.accessToken,
-        googleAccessToken: '',
-        fbUserId: data.userID,
-        profilePicture: '',
-        isAdmin: false,
-      });
+      return firestore()
+        .collection('users')
+        .doc(response.user.uid)
+        .set({
+          id: response.user.uid,
+          fullName: response.user.displayName,
+          email: response.user.email,
+          isPaidUser: false,
+          isActive: false,
+          createdAt: +new Date(),
+          updatedAt: +new Date(),
+          subscribedAt: null,
+          fbAccessToken: data.accessToken,
+          googleAccessToken: '',
+          fbUserId: data.userID,
+          profilePicture: '',
+          isAdmin: false,
+        });
     }
   } catch (err) {
     console.log(err);

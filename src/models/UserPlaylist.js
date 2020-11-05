@@ -2,8 +2,8 @@ import firestore from '@react-native-firebase/firestore';
 
 export class UserPlaylist {
   constructor(updatedAt, duration, id, image, isPrivate, songs, title) {
-    this.createdAt = firestore.FieldValue.serverTimestamp();
-    this.updatedAt = updatedAt || firestore.FieldValue.serverTimestamp();
+    this.createdAt = +new Date();
+    this.updatedAt = updatedAt || +new Date();
     this.duration = duration || '0H';
     this.id = id || '';
     this.image = image || '';

@@ -48,7 +48,7 @@ const MainAppStack = () => {
   return (
     <>
       {subsModal ? <SubscriptionModalScreen /> : null}
-      <Stack.Navigator>
+      <Stack.Navigator headerMode="none">
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}
@@ -67,6 +67,9 @@ const MainAppStack = () => {
         <Stack.Screen
           name="AccountSettingStack"
           component={AccountSettingStack}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="NoInternet"

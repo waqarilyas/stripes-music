@@ -2,6 +2,18 @@ import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { useDispatch } from 'react-redux';
+import RNIap, {
+  InAppPurchase,
+  PurchaseError,
+  SubscriptionPurchase,
+  acknowledgePurchaseAndroid,
+  consumePurchaseAndroid,
+  finishTransaction,
+  finishTransactionIOS,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+  requestSubscription,
+} from 'react-native-iap';
 
 import SubscriptionModal from '../../screens/SubscriptionModal';
 import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';

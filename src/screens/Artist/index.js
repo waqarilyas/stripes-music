@@ -57,7 +57,7 @@ const Artist = ({ route }) => {
           userId: uid,
           username: auth().currentUser.displayName,
           avatar: user.profilePicture,
-          updatedAt: firestore.FieldValue.serverTimestamp(),
+          updatedAt: +new Date(),
           isFollowing: !status,
         },
         { merge: true },
@@ -71,7 +71,7 @@ const Artist = ({ route }) => {
         {
           artistId: artist.id,
           name: `${artist.firstName} ${artist.lastName}`,
-          updatedAt: firestore.FieldValue.serverTimestamp(),
+          updatedAt: +new Date(),
           isFollowing: !status,
           avatar: artist.imgUrl,
         },

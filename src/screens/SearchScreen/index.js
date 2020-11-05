@@ -10,13 +10,38 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import dayjs from 'dayjs';
+import moment from 'moment';
+
+const relativeTime = require('dayjs/plugin/relativeTime');
+const updateLocale = require('dayjs/plugin/updateLocale');
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'seconds ago',
+    m: 'minute ago',
+    mm: '%d mins ago',
+    h: 'an hour ago',
+    hh: '%d hours ago',
+    d: 'day ago',
+    dd: '%d days ago',
+    M: 'month ago',
+    MM: '%d months ago',
+    y: 'year ago',
+    yy: '%d years ago',
+  },
+});
 
 import { clockIcon, searchIcon, hourGlassIcon } from '../../../Assets/Icons';
 import RecentSearchesCard from '../../components/RecentSearchesCard';
 import SearchScreenButton from '../../components/SearchScreenButton';
+
 import styles from './styles';
 
-const data = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const SearchScreen = ({ navigation }) => {
   const [searchHistory, setSearchHistory] = useState([]);
   const [selected, setSelected] = useState({
@@ -126,6 +151,11 @@ const SearchScreen = ({ navigation }) => {
             data={searchHistory}
             keyExtractor={() => randomize('Aa0!', 10)}
             renderItem={({ item }) => {
+              const tm = moment(item.createdAt).format(
+                'MMMM Do YYYY, h:mm:ss a',
+              );
+              const created = dayjs().from(dayjs(item.createdAt), true);
+              console.log('---created---', tm);
               return (
                 <RecentSearchesCard
                   title={item.text}
@@ -146,71 +176,5 @@ const SearchScreen = ({ navigation }) => {
     </>
   );
 };
-
-// const SearchScreen = () => {
-//   return (
-//     <ReactiveBase
-//       app="good-books-ds"
-//       credentials="nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d">
-//       <ScrollView>
-//         <View style={styles.container}>
-//           <DataSearch
-//             componentId="searchbox"
-//             dataField={[
-//               'original_title',
-//               'original_title.search',
-//               'authors',
-//               'authors.search',
-//             ]}
-//             placeholder="Search for books"
-//           />
-//           <ReactiveList
-//             componentId="results"
-//             dataField="original_title"
-//             size={7}
-//             showResultStats={false}
-//             pagination={true}
-//             react={{
-//               and: 'searchbox',
-//             }}
-//             onData={(res) => (
-//               <View style={styles.result}>
-//                 <Image source={{ uri: res.image }} style={styles.image} />
-//                 <View style={styles.item}>
-//                   <Text style={styles.title}>{res.original_title}</Text>
-//                   <Text>{res.authors}</Text>
-//                 </View>
-//               </View>
-//             )}
-//           />
-//         </View>
-//       </ScrollView>
-//     </ReactiveBase>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 10,
-//     marginTop: 25,
-//   },
-//   image: {
-//     width: 100,
-//     height: 100,
-//   },
-//   result: {
-//     flexDirection: 'row',
-//     width: '100%',
-//     margin: 5,
-//     alignItems: 'center',
-//   },
-//   item: {
-//     flexDirection: 'column',
-//     paddingLeft: 10,
-//   },
-//   title: {
-//     fontWeight: 'bold',
-//   },
-// });
 
 export default SearchScreen;

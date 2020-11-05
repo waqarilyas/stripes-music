@@ -7,8 +7,8 @@ const comments = [
     username: 'Harper Singh',
     userId: 'qGrBKwgj1chfE2GndamoqUoYW2Y2',
     postId: 'test-news-01',
-    createdAt: firestore.FieldValue.serverTimestamp(),
-    updatedAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: +new Date(),
+    updatedAt: +new Date(),
   },
   {
     id: 'comment-02',
@@ -16,8 +16,8 @@ const comments = [
     username: 'Cater Johns',
     userId: 'NLG6sCsRXmZx87QwaF3c9UtmEG63',
     postId: 'test-news-01',
-    createdAt: firestore.FieldValue.serverTimestamp(),
-    updatedAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: +new Date(),
+    updatedAt: +new Date(),
   },
   {
     id: 'comment-03',
@@ -25,8 +25,8 @@ const comments = [
     username: 'Andrey Mills',
     userId: 'HWYld9ztj2bZCAZ4rfqtwXsV5LO2',
     postId: 'test-news-01',
-    createdAt: firestore.FieldValue.serverTimestamp(),
-    updatedAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: +new Date(),
+    updatedAt: +new Date(),
   },
 ];
 

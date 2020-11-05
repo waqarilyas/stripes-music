@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import { Image, Text, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
-import { profilePicPlaceholder } from '../../../Assets/Icons';
+import { profilePicPlaceholder, menuIcon } from '../../../Assets/Icons';
 import Block from '../../components/Block';
 import ProfileArtists from '../../components/ProfileArtists';
 import ProfilePlaylists from '../../components/ProfilePlaylists';
@@ -25,7 +25,6 @@ const ProfilePicPlaceholder = () => {
 
 const ProfileScreen = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [settingVisible, setSettingVisible] = useState(false);
 
   useEffect(() => {
     const uid = auth().currentUser.uid;

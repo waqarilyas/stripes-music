@@ -9,10 +9,7 @@ export const getSongs = createAsyncThunk('firebase/getSongs', async () => {
   const documents = await path.limit(6).get();
   documents.forEach((document) => {
     if (document.exists) {
-      let response = document.data();
-      response.createdAt = JSON.stringify(response.createdAt);
-      response.updatedAt = JSON.stringify(response.updatedAt);
-      data.push(response);
+      data.push(document.data());
     }
   });
   return data;
@@ -26,10 +23,7 @@ export const getAllSongs = createAsyncThunk(
     const documents = await path.get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -55,10 +49,7 @@ export const getMostPlayed = createAsyncThunk(
     const documents = await path.orderBy('playCount', 'desc').limit(6).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -73,10 +64,7 @@ export const getMostPlayedSongs = createAsyncThunk(
     const documents = await path.orderBy('playCount', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -89,10 +77,7 @@ export const getAlbums = createAsyncThunk('firebase/getAlbums', async () => {
   const documents = await path.limit(5).get();
   documents.forEach((document) => {
     if (document.exists) {
-      let response = document.data();
-      response.createdAt = JSON.stringify(response.createdAt);
-      response.updatedAt = JSON.stringify(response.updatedAt);
-      data.push(response);
+      data.push(document.data());
     }
   });
   return data;
@@ -106,10 +91,7 @@ export const getAllAlbums = createAsyncThunk(
     const documents = await path.get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -122,10 +104,7 @@ export const getAnAlbum = createAsyncThunk(
     const path = firestore().collection('albums');
     const document = await path.doc(albumId).get();
     if (document.exists) {
-      let response = document.data();
-      response.createdAt = JSON.stringify(response.createdAt);
-      response.updatedAt = JSON.stringify(response.updatedAt);
-      return response;
+      data.push(document.data());
     }
   },
 );
@@ -155,10 +134,7 @@ export const getPlaylists = createAsyncThunk(
     const documents = await path.limit(6).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -171,10 +147,7 @@ export const getAPlaylist = createAsyncThunk(
     const path = firestore().collection('playlists');
     const document = await path.doc(playlistId).get();
     if (document.exists) {
-      let response = document.data();
-      response.createdAt = JSON.stringify(response.createdAt);
-      response.updatedAt = JSON.stringify(response.updatedAt);
-      return response;
+      data.push(document.data());
     }
   },
 );
@@ -187,10 +160,7 @@ export const getAllPlaylists = createAsyncThunk(
     const documents = await path.get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -205,10 +175,7 @@ export const getArtistNews = createAsyncThunk(
     const documents = await path.where('artistId', '==', artistId).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -223,10 +190,7 @@ export const getArtistPopularSongs = createAsyncThunk(
     const documents = await path.where('artistId', '==', artistId).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -250,10 +214,7 @@ export const getArtistPlaylists = createAsyncThunk(
     const documents = await path.where('authorId', '==', artistId).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -267,9 +228,7 @@ export const getHistory = createAsyncThunk('firebase/getHistory', async () => {
   const documents = await path.orderBy('createdAt', 'desc').limit(5).get();
   documents.forEach((document) => {
     if (document.exists) {
-      let response = document.data();
-      response.createdAt = JSON.stringify(response.createdAt);
-      data.push(response);
+      data.push(document.data());
     }
   });
   return data;
@@ -284,9 +243,7 @@ export const getAllHistory = createAsyncThunk(
     const documents = await path.orderBy('createdAt', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -304,10 +261,7 @@ export const getTopArtists = createAsyncThunk(
       .get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -322,10 +276,7 @@ export const getTopAllArtists = createAsyncThunk(
     const documents = await path.orderBy('followerCount', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -358,10 +309,7 @@ export const getBestAlbums = createAsyncThunk(
     const documents = await path.orderBy('viewCount', 'desc').limit(6).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -376,10 +324,7 @@ export const getAllBestAlbums = createAsyncThunk(
     const documents = await path.orderBy('viewCount', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -392,10 +337,7 @@ export const getVideos = createAsyncThunk('firebase/getVideos', async () => {
   const documents = await path.limit(6).get();
   documents.forEach((document) => {
     if (document.exists) {
-      let response = document.data();
-      response.createdAt = JSON.stringify(response.createdAt);
-      response.updatedAt = JSON.stringify(response.updatedAt);
-      data.push(response);
+      data.push(document.data());
     }
   });
   return data;
@@ -409,10 +351,7 @@ export const getPopularVideos = createAsyncThunk(
     const documents = await path.orderBy('viewCount', 'desc').limit(6).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -427,10 +366,7 @@ export const getAllPopularVideos = createAsyncThunk(
     const documents = await path.orderBy('viewCount', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -445,10 +381,7 @@ export const getLatestVideos = createAsyncThunk(
     const documents = await path.orderBy('createdAt', 'desc').limit(6).get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -463,10 +396,7 @@ export const getAllLatestVideos = createAsyncThunk(
     const documents = await path.orderBy('createdAt', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
-        let response = document.data();
-        response.createdAt = JSON.stringify(response.createdAt);
-        response.updatedAt = JSON.stringify(response.updatedAt);
-        data.push(response);
+        data.push(document.data());
       }
     });
     return data;
@@ -638,7 +568,7 @@ const firebaseSlice = createSlice({
     // User data
     [getUser.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      state.songs = action.payload;
+      state.user = action.payload;
     },
 
     // Songs Collections

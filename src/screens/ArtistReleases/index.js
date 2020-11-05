@@ -9,6 +9,8 @@ import styles from './styles';
 const ArtistReleases = ({ navigation }) => {
   const playlists = useSelector((state) => state.root.firebase.artistPlaylists);
 
+  console.log('----PLAYLIST: -----', playlists, '---------');
+
   return (
     <View style={styles.container}>
       <FlatList

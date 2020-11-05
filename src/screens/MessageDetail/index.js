@@ -113,7 +113,7 @@ const MessageDetail = ({ route, navigation }) => {
         members: [artist.id, uid],
         readStatus,
         recentMessage: {
-          createdAt: firestore.FieldValue.serverTimestamp(),
+          createdAt: +new Date(),
           text,
         },
       },
@@ -127,7 +127,7 @@ const MessageDetail = ({ route, navigation }) => {
       .collection('messages');
     await messageCollection.add({
       text,
-      createdAt: firestore.FieldValue.serverTimestamp(),
+      createdAt: +new Date(),
       user: {
         _id: auth().currentUser.uid,
         name: localUser.fullName,

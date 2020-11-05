@@ -4,6 +4,18 @@ import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
+import RNIap, {
+  InAppPurchase,
+  PurchaseError,
+  SubscriptionPurchase,
+  acknowledgePurchaseAndroid,
+  consumePurchaseAndroid,
+  finishTransaction,
+  finishTransactionIOS,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+  requestSubscription,
+} from 'react-native-iap';
 
 import styles from './styles';
 import Button from '../../components/Button';
@@ -32,6 +44,7 @@ import {
   getMostPlayedSongs,
   getAllPopularVideos,
   getAllNews,
+  getUser,
 } from '../../Redux/Reducers/firebaseSlice';
 import HomeTopAlbums from '../../components/HomeTopAlbums';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
@@ -85,9 +98,13 @@ const Home = ({ navigation }) => {
     disp(getLatestVideos());
     disp(getAllPopularVideos());
     disp(getAllNews());
+    disp(getUser());
   }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);
+  const value = requestSubscription('1Month');
+
+  console.log('--Purchase value-----', value);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -98,22 +115,6 @@ const Home = ({ navigation }) => {
 
     wait(2000).then(() => setRefreshing(false));
   }, [disp]);
-
-  // const onAddToPlaylist = (id, song) => {
-  //   console.log('on add to playlist called');
-  //   const uid = auth().currentUser.uid;
-  //   firestore()
-  //     .collection('users')
-  //     .doc(uid)
-  //     .collection('playlists')
-  //     .doc(id)
-  //     .collection('songs')
-  //     .doc(song.id)
-  //     .set(song)
-  //     .then(() => {
-  //       console.log('added to playlist');
-  //     });
-  // };
 
   return (
     <ScrollView

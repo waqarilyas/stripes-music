@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Subscriptions from '../../screens/Subscriptions';
 
 import EditYourSubscription from '../../screens/EditYourSubscription';
-import ViewNewOffers from '../../screens/ViewNewOffers';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +15,6 @@ const SubscriptionStack = () => {
         name="EditYourSubscription"
         component={EditYourSubscription}
       />
-      <Stack.Screen name="ViewNewOffers" component={ViewNewOffers} />
     </Stack.Navigator>
   );
 };

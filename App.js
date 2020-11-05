@@ -10,6 +10,7 @@ import auth from '@react-native-firebase/auth';
 import { Provider } from 'react-redux';
 import { store } from './src/Redux/store';
 import TrackPlayer from 'react-native-track-player';
+import SplashScreen from 'react-native-splash-screen';
 
 import { UserProvider } from './src/context/UserContext';
 import AuthStack from './src/navigation/stacks/AuthenticationStack';
@@ -46,6 +47,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    setTimeout(() => SplashScreen.hide(), 2000);
     SetupAudioPlayer();
     const authSubsriber = auth().onAuthStateChanged(onAuthStateChanged);
     return authSubsriber;

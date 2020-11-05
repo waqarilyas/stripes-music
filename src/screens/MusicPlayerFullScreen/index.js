@@ -2,27 +2,31 @@ import React, { useState } from 'react';
 import {
   Image,
   Modal,
+  SafeAreaView,
+  Share,
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView,
-  Share,
-  Platform,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+
 import { downIcon, plusIcon, shareIcon } from '../../../Assets/Icons';
+import FullScreenOverlay from '../../components/FullScreenOverlay';
 import {
   changeToMiniModal,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
-import { useDispatch } from 'react-redux';
-
 import MusicPlayerRelated from '../MusicPlayerRelated';
 import styles from './styles';
-import FullScreenOverlay from '../../components/FullScreenOverlay';
 
-const MusicPlayerFullscreen = ({ navigation, isVisible }) => {
+const MusicPlayerFullscreen = ({ isVisible }) => {
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
+
+  // const navigation = useNavigation();
+
+  // console.log('-------navigation:----', navigation);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -48,6 +52,8 @@ const MusicPlayerFullscreen = ({ navigation, isVisible }) => {
       console.log(error);
     }
   };
+
+  // const navigation = useNavigation()
 
   return (
     <Modal
