@@ -90,8 +90,10 @@ const EditProfile = () => {
   const updateProfiledata = () => {
     if (fileUri) {
       uploadImageToStorage(fullName);
+      dispatch(getUser());
     } else {
       uploadDataToFirestore(fullName);
+      dispatch(getUser());
     }
   };
 

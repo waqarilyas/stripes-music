@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -8,6 +9,7 @@ const styles = StyleSheet.create({
     bottom: RFValue(85),
     alignItems: 'center',
     paddingHorizontal: RFValue(6),
+    // backgroundColor: 'grey',
   },
   songArt: {
     padding: RFValue(8),
@@ -45,6 +47,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: RFValue(20),
     width: RFValue(20),
+  },
+  closeIconContainer: {
+    // position: 'absolute',
+    // right: 0,
+    // top: 0,
+  },
+  close: {
+    resizeMode: 'contain',
+    height: hp('2'),
+    width: hp('2'),
   },
 });
 

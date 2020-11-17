@@ -48,7 +48,7 @@ const ProfileArtists = ({ navigation }) => {
             icon={emptyArtist}
             text="No Favorite Artists"
             buttonTitle="SHOW ARTIST LIST"
-            onPress={() => console.log('Navigate to Artist List')}
+            onPress={() => navigation.navigate('ArtistsSeeAll')}
           />
         }
         renderItem={({ item: { image, name } }) => {

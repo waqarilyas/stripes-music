@@ -41,13 +41,15 @@ const NewsDetails = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
 
+  console.log('-------News ID-------', news);
+
   useEffect(() => {
     getCollection('news', 5, (documents) =>
       dispatch({ relatedNews: documents }),
     );
     const listener = firestore()
       .collection('comments')
-      .where('postId', '==', news.id)
+      .where('postId', '==', news.id || '')
       .onSnapshot((querySnapshot) => {
         let allComments = [];
         querySnapshot.forEach((doc) => {
@@ -119,7 +121,6 @@ const NewsDetails = () => {
           viewCount={news.viewCount}
           likeCount={news.likeCount}
         />
-
         <View style={styles.commentButton}>
           <TextInput
             style={styles.commentButtonText}

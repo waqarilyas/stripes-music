@@ -159,7 +159,7 @@ const SearchScreen = ({ navigation }) => {
               return (
                 <RecentSearchesCard
                   title={item.text}
-                  createdAt={item.createdAt.toDate()}
+                  createdAt={item.createdAt}
                 />
               );
             }}

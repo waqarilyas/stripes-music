@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import MainTabs from '../tabs/MainTabs';
+import MainTabs from '../Tabs/MainTabs';
 import { tab1White, tab1Grey } from '../../../Assets/Icons';
 import AccountSettingStack from '../stacks/AccountSettingStack';
 

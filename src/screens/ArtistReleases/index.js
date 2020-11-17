@@ -2,14 +2,14 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Divider } from 'react-native-elements';
+import EmptyArtistProfileCard from '../../components/EmptyArtistProfileCard';
 
 import ArtistPlaylistsCard from '../../components/ArtistPlaylistsCard';
+import { mostPlayedHome } from '../../../Assets/Icons';
 import styles from './styles';
 
 const ArtistReleases = ({ navigation }) => {
   const playlists = useSelector((state) => state.root.firebase.artistPlaylists);
-
-  console.log('----PLAYLIST: -----', playlists, '---------');
 
   return (
     <View style={styles.container}>
@@ -18,6 +18,14 @@ const ArtistReleases = ({ navigation }) => {
         style={styles.list}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        ListEmptyComponent={
+          <EmptyArtistProfileCard
+            text="NO RELEASES YET!"
+            icon={mostPlayedHome}
+            onPress={() => navigation.navigate('News')}
+            buttonTitle=""
+          />
+        }
         renderItem={({ item: { image, title, duration, author } }) => {
           return (
             <ArtistPlaylistsCard

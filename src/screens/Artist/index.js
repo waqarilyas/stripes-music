@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import ArtistsTabs from '../../navigation/tabs/ArtistsTabs';
+import ArtistsTabs from '../../navigation/Tabs/ArtistsTabs';
 import styles from './styles';
 import {
   getArtist,

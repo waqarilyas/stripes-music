@@ -10,9 +10,13 @@ import {
   whitePlayIcon,
   whiteNext,
   whitePrev,
+  closeIcon,
 } from '../../../Assets/Icons';
 import AudioPlayerSlider from '../AudioPlayerSlider';
-import { fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import {
+  fullScreenChange,
+  changeToMiniModal,
+} from '../../Redux/Reducers/audioSlice';
 import styles from './styles';
 
 function ControlButton({ icon, onPress }) {
@@ -27,6 +31,8 @@ const MiniMusicPlayer = ({ currentTrack }) => {
   const [, setCurrentTrack] = useState([]);
   const playbackState = usePlaybackState();
   const dispatch = useDispatch();
+
+  console.log('----Music player state-------', playbackState);
 
   //
   let middleButtonText = whitePlayIcon;
@@ -100,6 +106,14 @@ const MiniMusicPlayer = ({ currentTrack }) => {
           </View>
         </View>
       </View>
+      <TouchableOpacity
+        style={styles.closeIconContainer}
+        onPress={() => {
+          TrackPlayer.reset();
+          dispatch(changeToMiniModal(false));
+        }}>
+        <Image source={closeIcon} style={styles.close} />
+      </TouchableOpacity>
     </View>
   );
 };

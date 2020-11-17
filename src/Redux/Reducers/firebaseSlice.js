@@ -178,6 +178,8 @@ export const getArtistNews = createAsyncThunk(
         data.push(document.data());
       }
     });
+
+    console.log('--------Data from firebase slice---------', data);
     return data;
   },
 );

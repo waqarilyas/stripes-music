@@ -1,67 +1,56 @@
-import React, { useRef, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useRef, useEffect, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  TextInputComponent,
+  Text,
+  Modal,
+} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { Overlay } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
-import RNIap, {
-  InAppPurchase,
-  PurchaseError,
-  SubscriptionPurchase,
-  acknowledgePurchaseAndroid,
-  consumePurchaseAndroid,
-  finishTransaction,
-  finishTransactionIOS,
-  purchaseErrorListener,
-  purchaseUpdatedListener,
-  requestSubscription,
-} from 'react-native-iap';
 
-import SubscriptionModal from '../../screens/SubscriptionModal';
+import SubscriptionModalComponent from '../SubscriptionModalComponent';
 import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const SubscriptionModalScreen = () => {
   const dispatch = useDispatch();
-  const refRBSheet = useRef();
+  const [visible, setVisible] = useState(true);
+  const toggleModal = () => {
+    setVisible(!visible);
+  };
 
-  useEffect(() => {
-    refRBSheet.current.open();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
-    <View style={styles.container}>
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressBack={true}
-        keyboardAvoidingViewEnabled={true}
-        onClose={() => dispatch(displaySubscriptionScreen(false))}
-        customStyles={{
-          wrapper: {
-            backgroundColor: 'transparent',
-          },
-          draggableIcon: {
-            backgroundColor: 'gray',
-            width: '30%',
-          },
-          container: {
-            flex: 2,
-            borderTopLeftRadius: RFValue('24'),
-            borderTopRightRadius: RFValue('24'),
-          },
-        }}>
-        <SubscriptionModal />
-      </RBSheet>
-    </View>
+    <Overlay
+      isVisible={true}
+      overlayStyle={styles.Overlay}
+      animationType="slide"
+      backdropStyle={{ backgroundColor: 'transparent' }}>
+      <SubscriptionModalComponent />
+    </Overlay>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-  },
   customStyles: {},
+
+  container: {
+    backgroundColor: 'red',
+    borderRadius: hp('3'),
+  },
+  Overlay: {
+    height: '80%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderRadius: hp('3'),
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    // flex: 1,
+  },
 });
 
 export default SubscriptionModalScreen;

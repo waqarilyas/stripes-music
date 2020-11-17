@@ -54,6 +54,7 @@ const ProfileStack = () => {
         options={({ navigation }) => ({
           title: '',
           headerRight: () => search(navigation),
+          headerLeft: '',
           headerStyle: styles.headerStyle,
         })}
       />

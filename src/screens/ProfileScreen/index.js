@@ -3,6 +3,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { Image, Text, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 
 import { profilePicPlaceholder, menuIcon } from '../../../Assets/Icons';
 import Block from '../../components/Block';
@@ -25,6 +26,9 @@ const ProfilePicPlaceholder = () => {
 
 const ProfileScreen = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const user = useSelector((state) => state.root.firebase.user);
+
+  console.log('-------USer-----', user);
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
@@ -52,17 +56,17 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <Block>
-      {state.user && (
+      {user && (
         <View style={styles.pageTop}>
           <Avatar
             rounded
             containerStyle={styles.profilePictureContainer}
             overlayContainerStyle={styles.profilePicOverlayContainer}
-            source={{ uri: state.user.profilePicture }}
+            source={{ uri: user.profilePicture }}
             renderPlaceholderContent={<ProfilePicPlaceholder />}
           />
           <View style={styles.pageTopNameView}>
-            <Text style={styles.artistName}>{state.user.fullName}</Text>
+            <Text style={styles.artistName}>{user.fullName}</Text>
             <View>
               <Text style={styles.followText}>{state.artistFollowing}</Text>
               <Text style={styles.followSubtext}>Following</Text>
@@ -75,7 +79,7 @@ const ProfileScreen = ({ navigation }) => {
       <ProfilePlaylists navigation={navigation} styles={styles} />
       <ProfileFavoriteSongs navigation={navigation} />
       <ProfileArtists navigation={navigation} />
-      <ProfileRecentlyPlayed />
+      <ProfileRecentlyPlayed navigation={navigation} />
     </Block>
   );
 };

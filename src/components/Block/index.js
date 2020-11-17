@@ -7,7 +7,7 @@ import styles from './styles';
 const Block = ({ children }) => {
   return (
     <>
-      <SafeAreaView />
+      <SafeAreaView style={{ backgroundColor: 'black' }} />
       <View style={styles.container}>
         <ScrollView
           showsHorizontalScrollIndicato={false}

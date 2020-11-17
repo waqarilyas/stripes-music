@@ -47,6 +47,7 @@ const VideoStack = () => {
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: () => search(navigation),
+          headerLeft: '',
           headerStyle: styles.headerStyle,
         })}
       />

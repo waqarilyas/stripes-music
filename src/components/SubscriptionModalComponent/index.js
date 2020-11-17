@@ -1,19 +1,20 @@
 import React from 'react';
 import {
-  View,
-  Text,
   Image,
-  TouchableOpacity,
-  Modal,
   SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Divider } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-
-import styles from './styles';
+import { useDispatch } from 'react-redux';
 import { tick2 } from '../../../Assets/Icons';
+import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
+import styles from './styles';
 
-const SubscriptionModal = ({ navigation }) => {
+const SubscriptionModalComponent = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <View> */}
@@ -49,7 +50,7 @@ const SubscriptionModal = ({ navigation }) => {
       </LinearGradient>
       <TouchableOpacity
         style={styles.freeContainer}
-        onPress={() => navigation.navigate('MainTabs')}>
+        onPress={() => dispatch(displaySubscriptionScreen(false))}>
         <Text style={styles.title}>Free - $0.00</Text>
         <View style={styles.item}>
           <Image source={tick2} style={styles.tick} />
@@ -71,4 +72,4 @@ const SubscriptionModal = ({ navigation }) => {
   );
 };
 
-export default SubscriptionModal;
+export default SubscriptionModalComponent;

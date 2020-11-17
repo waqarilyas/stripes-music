@@ -22,6 +22,7 @@ const TextBox = ({ text, onChangeText, contentType, defaultValue }) => {
         placeholderTextColor="#5E5A5E"
         onChangeText={onChangeText}
         textContentType={contentType}
+        multiline
       />
     </View>
   );
@@ -39,8 +40,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderRadius: 5,
     color: 'white',
-    paddingLeft: 15,
-    width: wp('90%'),
+    paddingHorizontal: 15,
+    width: '90%',
+    paddingVertical: wp('2'),
   },
 });
 

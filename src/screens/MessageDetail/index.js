@@ -28,7 +28,7 @@ const MessageDetail = ({ route, navigation }) => {
       uid < passedId ? uid.concat('**', passedId) : passedId.concat('**', uid);
 
     const getData = async () => {
-      const chatMessages = firestore()
+      const chatMessages = await firestore()
         .collection('chats')
         .doc(chatId)
         .collection('messages')
@@ -48,12 +48,14 @@ const MessageDetail = ({ route, navigation }) => {
                 user: { name, _id, avatar },
               } = doc.data();
 
-              var data = {
+              console.log('-------CREATED AT------', createdAt);
+              let data = {
                 _id: doc.id,
                 text,
-                createdAt: createdAt.toDate(),
+                createdAt: createdAt,
                 user: { name, _id, avatar },
               };
+              console.log('------DATA-------', data);
 
               return data;
             } else {
@@ -110,6 +112,11 @@ const MessageDetail = ({ route, navigation }) => {
           id: artist.id,
           name: `${artist.firstName} ${artist.lastName}`,
         },
+        user: {
+          avatar: localUser.profilePicture,
+          id: auth().currentUser.uid,
+          name: localUser.fullName,
+        },
         members: [artist.id, uid],
         readStatus,
         recentMessage: {
@@ -128,6 +135,7 @@ const MessageDetail = ({ route, navigation }) => {
     await messageCollection.add({
       text,
       createdAt: +new Date(),
+      sentBy: 'user',
       user: {
         _id: auth().currentUser.uid,
         name: localUser.fullName,

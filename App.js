@@ -5,7 +5,7 @@
  */
 import React, { useEffect, useReducer } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
+import { StatusBar, SafeAreaView } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { Provider } from 'react-redux';
 import { store } from './src/Redux/store';
@@ -27,21 +27,32 @@ const App = () => {
     dispatch({ user: result });
   };
 
-  const SetupAudioPlayer = () => {
-    TrackPlayer.setupPlayer({});
-    TrackPlayer.updateOptions({
-      stopWithApp: true,
+  const SetupAudioPlayer = async () => {
+    await TrackPlayer.updateOptions({
+      jumpInterval: 15,
+      stopWithApp: false,
+
       capabilities: [
         TrackPlayer.CAPABILITY_PLAY,
         TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
         TrackPlayer.CAPABILITY_STOP,
-        TrackPlayer.CAPABILITY_SKIP,
+        TrackPlayer.CAPABILITY_SEEK_TO,
+        TrackPlayer.CAPABILITY_JUMP_FORWARD,
+        TrackPlayer.CAPABILITY_JUMP_BACKWARD,
       ],
       compactCapabilities: [
         TrackPlayer.CAPABILITY_PLAY,
         TrackPlayer.CAPABILITY_PAUSE,
+        TrackPlayer.CAPABILITY_STOP,
+        TrackPlayer.CAPABILITY_JUMP_FORWARD,
+        TrackPlayer.CAPABILITY_JUMP_BACKWARD,
+      ],
+      notificationCapabilities: [
+        TrackPlayer.CAPABILITY_PLAY,
+        TrackPlayer.CAPABILITY_PAUSE,
+        TrackPlayer.CAPABILITY_STOP,
+        TrackPlayer.CAPABILITY_JUMP_FORWARD,
+        TrackPlayer.CAPABILITY_JUMP_BACKWARD,
       ],
     });
   };

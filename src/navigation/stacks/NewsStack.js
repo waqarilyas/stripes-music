@@ -32,6 +32,7 @@ const NewsStack = ({ navigation }) => {
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: () => search(navigation),
+          headerLeft: '',
           headerStyle: styles.headerStyle,
         })}
       />

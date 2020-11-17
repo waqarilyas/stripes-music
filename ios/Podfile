@@ -30,6 +30,8 @@ target 'musicapp' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
   target 'musicappTests' do
     inherit! :complete
     # Pods for testing

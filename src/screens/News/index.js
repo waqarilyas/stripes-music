@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import NewsTabs from '../../navigation/tabs/NewsTabs';
+import NewsTabs from '../../navigation/Tabs/NewsTabs';
 import styles from './styles';
 
 const News = () => {

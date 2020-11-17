@@ -146,19 +146,21 @@ const SongItem = ({ title, author, image, id, duration }) => {
       )}
 
       <View style={styles.container}>
-        <Image source={{ uri: image }} style={styles.image} />
-        <View style={styles.textContainer}>
-          <Text style={styles.title} numberOfLines={1}>
-            {title}
-          </Text>
-          <Text style={styles.author}>{author}</Text>
+        <View style={styles.containerLeft}>
+          <Image source={{ uri: image }} style={styles.image} />
+          <View style={styles.textContainer}>
+            <Text style={styles.title} numberOfLines={1}>
+              {title}
+            </Text>
+            <Text style={styles.author}>{author}</Text>
+          </View>
         </View>
         <View style={styles.iconContainer}>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.iconContainer}
             onPress={() => toggleOverlay()}>
             <Image source={plusIcon} style={styles.icon} />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconContainer}
             onPress={handleFavorite}>
@@ -186,12 +188,16 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    flex: 1,
+    width: '90%',
   },
   textContainer: {
-    flexDirection: 'column',
     flexShrink: 1,
-    width: '100%',
+    // width: '60%',
+  },
+  containerLeft: {
+    flexDirection: 'row',
+    width: '90%',
+    alignItems: 'center',
   },
   title: {
     color: 'white',

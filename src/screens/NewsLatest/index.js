@@ -39,6 +39,8 @@ const NewsLatest = ({ navigation }) => {
           },
         }) => {
           const date = dayjs(createdAt).format('DD MMMM, YYYY');
+
+          console.log('------DATE------', date);
           return (
             <TouchableOpacity
               onPress={() => {

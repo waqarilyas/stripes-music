@@ -54,12 +54,12 @@ const ProfileRecentlyPlayed = ({ navigation }) => {
         }
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ width: '100%' }}
-        renderItem={({ item: { title, artist, arts, duration } }) => {
+        renderItem={({ item, item: { title, artist, artwork, duration } }) => {
           return (
             <SongCardListView
               title={title}
               artist={artist}
-              arts={arts}
+              artwork={artwork}
               duration={duration}
             />
           );

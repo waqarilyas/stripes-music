@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import SectionHeader from '../SectionHeader';
-import ForYouTabs from '../../navigation/tabs/ForYouTabs';
+import ForYouTabs from '../../navigation/Tabs/ForYouTabs';
 import { musicHeartIcon } from '../../../Assets/Icons';
 
 const HomeForYou = () => {

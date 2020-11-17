@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaView } from 'react-native';
 
 import Login from '../../screens/Login';
 import Signup from '../../screens/Signup';

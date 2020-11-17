@@ -12,6 +12,7 @@ import {
 import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
+  useTrackPlayerProgress,
 } from 'react-native-track-player';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -29,7 +30,19 @@ import {
   whitePrev,
 } from '../../../Assets/Icons';
 import FullScreenPlaylistCard from '../../components/FullScreenPlaylistCard';
-import { isInitialPlay } from '../../Redux/Reducers/audioSlice';
+import {
+  isInitialPlay,
+  changeSong,
+  pushToPlaylist,
+  fullScreenChange,
+  changeToMiniModal,
+} from '../../Redux/Reducers/audioSlice';
+import {
+  addPlayCount,
+  addToRecentlyPlayed,
+} from '../../Redux/Reducers/firebaseSlice';
+import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
+
 import { LOG } from '../../utils/Constants';
 import AudioPlayerSlider from '../AudioPlayerSlider';
 import MiniMusicPlayer from '../MiniMusicPlayer';
@@ -59,6 +72,10 @@ const Player = ({ screen }) => {
   const [isMute, setIsMute] = useState(false);
   const [currentTrack, setCurrentTrack] = useState([]);
 
+  const currentUser = useSelector((state) => state.root.firebase.user);
+
+  console.log('-------user--------', currentUser);
+
   const currentSong = useSelector((state) => state.root.audio.currentSong);
   const queue = useSelector((state) => state.root.audio.playlist);
   const firstTime = useSelector((state) => state.root.audio.initialPlay);
@@ -67,6 +84,8 @@ const Player = ({ screen }) => {
 
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
+      console.log('------Track-------', track);
+
       const track = await TrackPlayer.getTrack(event.nextTrack);
       setCurrentTrack(track);
     }
@@ -133,11 +152,49 @@ const Player = ({ screen }) => {
     }
   };
 
+  const getDuration = async () => {
+    const progressData = useTrackPlayerProgress();
+    console.log('----Non Paid-----');
+    if (progressData.position.toFixed(0) == 5) {
+      dispatch(fullScreenChange(false));
+      dispatch(changeToMiniModal(true));
+      TrackPlayer.pause();
+      // TrackPlayer.reset();
+      dispatch(displaySubscriptionScreen(true));
+    }
+  };
+
+  if (!currentUser.isPaidUser) getDuration();
+
+  const playNewSong = async ({ title, artist, artwork, url, duration, id }) => {
+    try {
+      const result = {
+        title,
+        artist,
+        artwork,
+        url,
+        duration,
+        id,
+        createdAt: +new Date(),
+      };
+      dispatch(changeSong(result));
+      // dispatch(pushToPlaylist(result));
+      await TrackPlayer.add(result);
+      // dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(id));
+      dispatch(addToRecentlyPlayed(result));
+    } catch (error) {
+      LOG('PLAY SONG', error);
+    }
+  };
+
   // Function is called initially when
   // the first song is played
   const playSong = async () => {
     await TrackPlayer.play();
   };
+
+  // console.log()
 
   useEffect(() => {
     setCurrentTrack(currentSong);
@@ -208,7 +265,25 @@ const Player = ({ screen }) => {
             {/* Audio Player Slider */}
             <AudioPlayerSlider />
 
-            <View style={styles.fullscreenControls}>
+            <View
+              style={
+                isVisible
+                  ? styles.playlistOpenControls
+                  : styles.fullscreenControls
+              }>
+              {isVisible ? (
+                <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+                  <Image
+                    source={playlist}
+                    style={
+                      isVisible
+                        ? styles.playlistOpenIcon
+                        : styles.fullscreenIcon
+                    }
+                  />
+                </TouchableOpacity>
+              ) : null}
+
               {/* Previous Button */}
               <TouchableOpacity onPress={() => skipToPrevious()}>
                 <Image
@@ -239,45 +314,64 @@ const Player = ({ screen }) => {
                   }
                 />
               </TouchableOpacity>
+              {isVisible ? (
+                <TouchableOpacity onPress={mute}>
+                  <Image
+                    source={isMute ? speaker : muteIcon}
+                    style={
+                      isVisible
+                        ? styles.playlistOpenIcon
+                        : styles.fullscreenIcon
+                    }
+                  />
+                </TouchableOpacity>
+              ) : null}
             </View>
 
-            <View
-              style={
-                isVisible
-                  ? styles.playlistOpenIconContainer
-                  : styles.playlistIconsContainer
-              }>
-              {/* Playlist icon */}
-              <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
-                <Image
-                  source={playlist}
-                  style={
-                    isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
-                  }
-                />
-              </TouchableOpacity>
+            {isVisible ? null : (
+              <View
+                style={
+                  isVisible
+                    ? styles.playlistOpenIconContainer
+                    : styles.playlistIconsContainer
+                }>
+                {/* Playlist icon */}
+                <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+                  <Image
+                    source={playlist}
+                    style={
+                      isVisible
+                        ? styles.playlistOpenIcon
+                        : styles.fullscreenIcon
+                    }
+                  />
+                </TouchableOpacity>
 
-              {/* Like icon */}
-              <TouchableOpacity>
-                <Image
-                  source={heartIcon}
-                  style={
-                    isVisible ? styles.playlistOpenHeartIcon : styles.heartIcon
-                  }
-                />
-              </TouchableOpacity>
+                {/* Like icon */}
+                {/* <TouchableOpacity>
+                  <Image
+                    source={heartIcon}
+                    style={
+                      isVisible
+                        ? styles.playlistOpenHeartIcon
+                        : styles.heartIcon
+                    }
+                  />
+                </TouchableOpacity> */}
 
-              {/* Mute icon */}
-              <TouchableOpacity onPress={mute}>
-                <Image
-                  source={isMute ? speaker : muteIcon}
-                  style={
-                    isVisible ? styles.playlistOpenIcon : styles.fullscreenIcon
-                  }
-                />
-              </TouchableOpacity>
-            </View>
-
+                {/* Mute icon */}
+                <TouchableOpacity onPress={mute}>
+                  <Image
+                    source={isMute ? speaker : muteIcon}
+                    style={
+                      isVisible
+                        ? styles.playlistOpenIcon
+                        : styles.fullscreenIcon
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
             {/* Playlists Start here */}
             {isVisible ? (
               <>
@@ -291,6 +385,7 @@ const Player = ({ screen }) => {
                     </View>
                   </View>
                 </View>
+
                 <View>
                   <View style={{ flex: 1 }}>
                     <ScrollView>
@@ -300,7 +395,15 @@ const Player = ({ screen }) => {
                         keyExtractor={() => randomize('Aa0!', 10)}
                         renderItem={({ item }) => {
                           console.log('---Flatlist Item----', item);
-                          return <FullScreenPlaylistCard item={item} />;
+                          return (
+                            <TouchableOpacity
+                              onPress={() => {
+                                TrackPlayer.reset();
+                                playNewSong(item);
+                              }}>
+                              <FullScreenPlaylistCard item={item} />
+                            </TouchableOpacity>
+                          );
                         }}
                       />
                     </ScrollView>

@@ -48,7 +48,7 @@ const ProfileFavoriteSongs = ({ navigation }) => {
             icon={mostPlayedHome}
             text="No Favorite Songs"
             buttonTitle="SHOW SONG LIST"
-            onPress={() => console.log('Navigate to Artist List')}
+            onPress={() => navigation.navigate('ForYouAudioSeeAll')}
           />
         }
         renderItem={({ item: { title, artist, artwork } }) => {

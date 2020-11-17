@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 
-import MainTabs from '../tabs/MainTabs';
+import MainTabs from '../Tabs/MainTabs';
 import AccountSettingStack from './AccountSettingStack';
 import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
 import MusicPlayerModal from '../../screens/MusicPlayerModal';
@@ -14,15 +14,18 @@ import NoInternet from '../../screens/NoInternet';
 import SearchResultsScreen from '../../screens/SearchResultsSceen';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import SubscriptionModalScreen from '../../components/SubscriptionBottomSheet';
+import Subscriptions from '../../screens/Subscriptions';
 
 const Stack = createStackNavigator();
 
-const MainAppStack = () => {
+const MainAppStack = ({ navigation }) => {
   const currentState = useSelector((state) => state.root.audio.miniModalOpen);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
   const subsModal = useSelector(
     (state) => state.root.helpers.subscriptionModal,
   );
+
+  console.log('-----------SUBSCRIPTION--------', subsModal);
 
   const back = (navigation) => {
     return (
@@ -48,7 +51,22 @@ const MainAppStack = () => {
   return (
     <>
       {subsModal ? <SubscriptionModalScreen /> : null}
+
       <Stack.Navigator headerMode="none">
+        <Stack.Screen
+          name="Subscriptions"
+          component={SubscriptionModal}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="SubscriptionModalScreen"
+          component={SubscriptionModalScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}

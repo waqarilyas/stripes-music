@@ -218,6 +218,11 @@ const styles = StyleSheet.create({
     width: RFValue(20),
     tintColor: 'grey',
   },
+  playlistOpenControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
 });
 
 export default styles;
