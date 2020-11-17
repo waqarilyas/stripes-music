@@ -25,7 +25,6 @@ const MainAppStack = ({ navigation }) => {
     (state) => state.root.helpers.subscriptionModal,
   );
 
-  console.log('-----------SUBSCRIPTION--------', subsModal);
 
   const back = (navigation) => {
     return (
@@ -50,23 +49,10 @@ const MainAppStack = ({ navigation }) => {
 
   return (
     <>
-      {subsModal ? <SubscriptionModalScreen /> : null}
+      <SubscriptionModalScreen />
 
       <Stack.Navigator headerMode="none">
-        <Stack.Screen
-          name="Subscriptions"
-          component={SubscriptionModal}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="SubscriptionModalScreen"
-          component={SubscriptionModalScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+   
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}

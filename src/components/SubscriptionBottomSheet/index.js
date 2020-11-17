@@ -1,36 +1,56 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  StyleSheet,
-  TextInputComponent,
-  Text,
-  Modal,
+  StyleSheet
 } from 'react-native';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import { Overlay } from 'react-native-elements';
-import { useDispatch } from 'react-redux';
-
-import SubscriptionModalComponent from '../SubscriptionModalComponent';
-import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
-import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import TrackPlayer, {
+  useTrackPlayerProgress
+} from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import { setIsChatNotPaid, setVidoReferences } from '../../Redux/Reducers/helperSlice';
+import SubscriptionModal from '../../screens/SubscriptionModal';
+import { PLAYBACK_TIME_LIMIT_AUDIO } from '../../utils/Constants';
 
-const SubscriptionModalScreen = () => {
-  const dispatch = useDispatch();
-  const [visible, setVisible] = useState(true);
-  const toggleModal = () => {
-    setVisible(!visible);
-  };
+const playbackLimit = PLAYBACK_TIME_LIMIT_AUDIO;
 
-  useEffect(() => {}, []);
+const SubscriptionModalScreen = ({ }) => {
+  const user = useSelector(state => state.root.firebase.user);
+  const { isVideoPlaying, isChatPaid, currentTime } = useSelector(state => state.root.helpers)
 
+  console.log('--------VIDeo----', isVideoPlaying, '---', currentTime)
+
+  const progressData = useTrackPlayerProgress();
+  const dist = useDispatch();
+  let [state, setState] = useState({
+    isVisible: true,
+    stopPlaying: false
+  })
+
+  useEffect(() => {
+    if (!user.isPaidUser && state.isVisible && progressData.position > PLAYBACK_TIME_LIMIT_AUDIO) {
+      dist(fullScreenChange(false))
+      setState(prev => ({ ...prev, stopPlaying: !state.stopPlaying }))
+      TrackPlayer.pause();
+    } else if (progressData.position < PLAYBACK_TIME_LIMIT_AUDIO) {
+      setState(prev => ({ ...prev, isVisible: true, stopPlaying: false }))
+    }
+  }, [progressData.position])
+
+  const shouldShowAudioSubPlan = isVideoPlaying ? (!user.isPaidUser) : isChatPaid ? true : (!user.isPaidUser && state.isVisible && state.stopPlaying);
+  console.log('----------SOULD SHOW PLAN-------', shouldShowAudioSubPlan)
   return (
     <Overlay
-      isVisible={true}
+      isVisible={shouldShowAudioSubPlan}
       overlayStyle={styles.Overlay}
       animationType="slide"
       backdropStyle={{ backgroundColor: 'transparent' }}>
-      <SubscriptionModalComponent />
+      <SubscriptionModal toggleModal={() => {
+        dist(setVidoReferences({ isVideoPlaying: false, currentTime: 0 }))
+        dist(setIsChatNotPaid(false))
+        setState(prev => ({ ...prev, isVisible: false }))
+      }} />
     </Overlay>
   );
 };

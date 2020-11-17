@@ -1,17 +1,13 @@
+import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   ImageBackground,
   RefreshControl,
-  ScrollView,
-  Alert,
-  Platform,
+  ScrollView
 } from 'react-native';
-import RNIap from 'react-native-iap';
 import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
-import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
-
 import Button from '../../components/Button';
 import HomeBanner from '../../components/HomeBanner';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
@@ -41,9 +37,10 @@ import {
   getTopAllArtists,
   getTopArtists,
   getUser,
-  getVideos,
+  getVideos
 } from '../../Redux/Reducers/firebaseSlice';
 import styles from './styles';
+
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -85,32 +82,7 @@ const Home = ({ navigation }) => {
     auth().signOut();
   };
 
-  const itemSubs = Platform.select({
-    ios: ['1Month'],
-    android: [],
-  });
 
-  const subscribe = async () => {
-    const result = await RNIap.initConnection();
-    console.log('result', result);
-
-    Alert.alert('RNIAP is connected: ' + result);
-    // const result = await RNIap.initConnection();
-    let status1 = await RNIap.clearProductsIOS();
-    let status2 = await RNIap.clearTransactionIOS();
-    // }
-    const subscriptions = await RNIap.getSubscriptions(itemSubs);
-
-    console.log('----SUB------', subscriptions);
-    console.log(status1, '--------', status2);
-    RNIap.requestSubscription('1Month')
-      .then((res) => {
-        console.log('----Response----', res);
-      })
-      .catch((err) => {
-        console.log('------error----', err);
-      });
-  };
 
   useEffect(() => {
     disp(getSongs());
@@ -132,7 +104,6 @@ const Home = ({ navigation }) => {
     disp(getAllPopularVideos());
     disp(getAllNews());
     disp(getUser());
-    subscribe();
   }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);

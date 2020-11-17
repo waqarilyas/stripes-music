@@ -3,8 +3,10 @@ import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { backIcon, searchIcon } from '../../../Assets/Icons';
+import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
 import Community from '../../screens/Community';
 import MessageDetail from '../../screens/MessageDetail';
 import NewMessage from '../../screens/NewMessage';
@@ -12,6 +14,8 @@ import NewMessage from '../../screens/NewMessage';
 const Stack = createStackNavigator();
 
 const CommunityStack = () => {
+  let user = useSelector(state => state.root.firebase.user);
+  const dist = useDispatch();
   const search = () => <Image source={searchIcon} style={styles.icon} />;
   const newMessage = (navigation) => (
     <Button
@@ -19,7 +23,12 @@ const CommunityStack = () => {
       title="New Message"
       buttonStyle={styles.buttonContainer}
       titleStyle={styles.titleStyle}
-      onPress={() => navigation.navigate('NewMessage')}
+      onPress={() => {
+        if (user.isPaidUser)
+          navigation.navigate('NewMessage')
+        else
+          dist(setIsChatNotPaid(true))
+      }}
     />
   );
 

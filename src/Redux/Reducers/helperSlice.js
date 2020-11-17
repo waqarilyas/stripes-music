@@ -7,6 +7,9 @@ export const helperSlice = createSlice({
     subscriptionModal: false,
     videoModal: false,
     videoData: {},
+    isVideoPlaying: false,
+    currentTime: 0,
+    isChatPaid:false
   },
   reducers: {
     addToList: (state, action) => {
@@ -21,6 +24,13 @@ export const helperSlice = createSlice({
     setVideoData: (state, action) => {
       state.videoData = action.payload;
     },
+    setVidoReferences: (state, action) => {
+      state.isVideoPlaying = action.payload.isVideoPlaying;
+      state.currentTime = action.payload.currentTime;
+    },
+    setIsChatNotPaid: (state, action) => {
+      state.isChatPaid = action.payload;
+    }
   },
 });
 
@@ -29,6 +39,8 @@ export const {
   displaySubscriptionScreen,
   displayVideoModal,
   setVideoData,
+  setVidoReferences,
+  setIsChatNotPaid
 } = helperSlice.actions;
 
 export default helperSlice.reducer;

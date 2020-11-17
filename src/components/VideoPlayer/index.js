@@ -12,9 +12,9 @@ import {
   pauseIcon,
 } from '../../../Assets/Icons';
 import { convertToMinutes } from '../../utils/Helpers';
-import { useDispatch } from 'react-redux';
-import { displayVideoModal } from '../../Redux/Reducers/helperSlice';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { displayVideoModal, setVidoReferences } from '../../Redux/Reducers/helperSlice';
+import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants'
 const initialState = {
   paused: true,
   currentTime: 0.0,
@@ -30,7 +30,7 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
   const videoPlayer = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [finished, setFinished] = useState(false);
-
+let user = useSelector(state=>state.root.firebase.user)
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
 
   useEffect(() => {
@@ -72,7 +72,14 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
           dispatch({ duration: data.duration });
         }}
         onProgress={(data) => {
-          dispatch({ currentTime: data.currentTime });
+          if (data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO && !user.isPaidUser) {
+            disp(setVidoReferences({
+              isVideoPlaying: true,
+              currentTime: data.currentTime
+            }))
+            disp(displayVideoModal(false))
+          }
+          dispatch({ currentTime: data.currentTime, isVideo: true });
         }}
         volume={state.volume}
         muted={state.muted}

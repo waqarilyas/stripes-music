@@ -74,7 +74,6 @@ const Player = ({ screen }) => {
 
   const currentUser = useSelector((state) => state.root.firebase.user);
 
-  console.log('-------user--------', currentUser);
 
   const currentSong = useSelector((state) => state.root.audio.currentSong);
   const queue = useSelector((state) => state.root.audio.playlist);
@@ -101,7 +100,7 @@ const Player = ({ screen }) => {
       LOG('SKIP TO NEXT', err);
     }
   };
-
+  
   const skipToPrevious = async () => {
     try {
       await TrackPlayer.skipToPrevious();
@@ -151,20 +150,6 @@ const Player = ({ screen }) => {
       LOG('SKIP TRACK', err);
     }
   };
-
-  const getDuration = async () => {
-    const progressData = useTrackPlayerProgress();
-    console.log('----Non Paid-----');
-    if (progressData.position.toFixed(0) == 5) {
-      dispatch(fullScreenChange(false));
-      dispatch(changeToMiniModal(true));
-      TrackPlayer.pause();
-      // TrackPlayer.reset();
-      dispatch(displaySubscriptionScreen(true));
-    }
-  };
-
-  if (!currentUser.isPaidUser) getDuration();
 
   const playNewSong = async ({ title, artist, artwork, url, duration, id }) => {
     try {
