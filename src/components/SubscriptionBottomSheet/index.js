@@ -13,13 +13,11 @@ import { setIsChatNotPaid, setVidoReferences } from '../../Redux/Reducers/helper
 import SubscriptionModal from '../../screens/SubscriptionModal';
 import { PLAYBACK_TIME_LIMIT_AUDIO } from '../../utils/Constants';
 
-const playbackLimit = PLAYBACK_TIME_LIMIT_AUDIO;
 
 const SubscriptionModalScreen = ({ }) => {
   const user = useSelector(state => state.root.firebase.user);
   const { isVideoPlaying, isChatPaid, currentTime } = useSelector(state => state.root.helpers)
 
-  console.log('--------VIDeo----', isVideoPlaying, '---', currentTime)
 
   const progressData = useTrackPlayerProgress();
   const dist = useDispatch();
@@ -39,7 +37,7 @@ const SubscriptionModalScreen = ({ }) => {
   }, [progressData.position])
 
   const shouldShowAudioSubPlan = isVideoPlaying ? (!user.isPaidUser) : isChatPaid ? true : (!user.isPaidUser && state.isVisible && state.stopPlaying);
-  console.log('----------SOULD SHOW PLAN-------', shouldShowAudioSubPlan)
+  
   return (
     <Overlay
       isVisible={shouldShowAudioSubPlan}

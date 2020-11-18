@@ -22,14 +22,12 @@ const FullScreenOverlay = ({
   visible,
   toggleOverlay,
   playlists,
-  navigation,
 }) => {
   const [checked, setChecked] = useState(false);
   const uid = auth().currentUser.uid;
 
   const { currentSong } = useSelector((state) => state.root.audio);
 
-  console.log('----Current Song----', navigation);
 
   const getCurrentTrack = async () => {
     const track = await TrackPlayer.getCurrentTrack();
@@ -107,7 +105,9 @@ const FullScreenOverlay = ({
         }}
       />
       <View style={styles.overlayBottom}>
-        <Text style={styles.createPlaylistTitle}>Create New Playlist</Text>
+        <Text style={styles.createPlaylistTitle} onPress={() => {
+          global.nav.navigate("CreateNewPlaylist")
+        }}>Create New Playlist</Text>
         <Image source={plusIcon} style={styles.createIcon} />
       </View>
     </Overlay>

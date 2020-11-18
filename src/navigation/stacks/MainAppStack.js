@@ -46,12 +46,12 @@ const MainAppStack = ({}) => {
     );
   };
 
-  console.log('----nav-----', nav);
+
   return (
     <>
       <SubscriptionModalScreen />
 
-      {isFullScreen ? <MusicPlayerFullscreen navigation={navigation} /> : null}
+      {isFullScreen ? <MusicPlayerFullscreen  /> : null}
 
       <Stack.Navigator headerMode="none">
         <Stack.Screen

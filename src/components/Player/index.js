@@ -7,17 +7,14 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import TrackPlayer, {
   usePlaybackState,
-  useTrackPlayerEvents,
-  useTrackPlayerProgress,
+  useTrackPlayerEvents
 } from 'react-native-track-player';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
-  heartIcon,
   muteIcon,
   noInternetIcon,
   pauseButton,
@@ -27,26 +24,23 @@ import {
   speaker,
   swapIcon,
   whiteNext,
-  whitePrev,
+  whitePrev
 } from '../../../Assets/Icons';
 import FullScreenPlaylistCard from '../../components/FullScreenPlaylistCard';
 import {
-  isInitialPlay,
-  changeSong,
-  pushToPlaylist,
-  fullScreenChange,
-  changeToMiniModal,
+  changeSong, isInitialPlay, setPlaylist
 } from '../../Redux/Reducers/audioSlice';
 import {
   addPlayCount,
-  addToRecentlyPlayed,
+  addToRecentlyPlayed
 } from '../../Redux/Reducers/firebaseSlice';
-import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
-
 import { LOG } from '../../utils/Constants';
+import { shuffleArray } from '../../utils/Helpers';
 import AudioPlayerSlider from '../AudioPlayerSlider';
 import MiniMusicPlayer from '../MiniMusicPlayer';
 import styles from './styles';
+
+
 
 // Control Buttons for mini player
 const ControlButton = ({ icon, onPress }) => {
@@ -100,7 +94,7 @@ const Player = ({ screen }) => {
       LOG('SKIP TO NEXT', err);
     }
   };
-  
+
   const skipToPrevious = async () => {
     try {
       await TrackPlayer.skipToPrevious();
@@ -364,10 +358,20 @@ const Player = ({ screen }) => {
                   <Text style={styles.upNext}>UP NEXT</Text>
                   <View style={styles.headerRight}>
                     <Image source={swapIcon} style={styles.swapIcon} />
-                    <View style={styles.randomButton}>
-                      <Image source={shuffleIcon} style={styles.shuffleIcon} />
-                      <Text style={styles.randomButtonText}>Random</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => {
+                      let newQueue = shuffleArray(queue)
+                      dispatch(setPlaylist(newQueue))
+                      TrackPlayer.reset();
+                      newQueue.forEach(item => {
+                        TrackPlayer.add(item)
+                      })
+                      TrackPlayer.play()
+                    }}>
+                      <View style={styles.randomButton}>
+                        <Image source={shuffleIcon} style={styles.shuffleIcon} />
+                        <Text style={styles.randomButtonText}>Random</Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 </View>
 

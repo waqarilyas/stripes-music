@@ -26,14 +26,11 @@ import {
   addToPlaylist,
 } from '../../Redux/Reducers/firebaseSlice';
 
-const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
+const MusicPlayerFullscreen = ({ isVisible }) => {
   const [visible, setVisible] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const dispatch = useDispatch();
 
-  // const navigation = useNavigation();
-
-  // console.log('-------navigation:----', navigation);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -59,10 +56,6 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
       console.log(error);
     }
   };
-
-  // const navigation = useNavigation()
-
-  // const { playlists } = useSelector((state) => state.root.firebase);
 
   console.log('-----------PLAYLISTS---------', playlists);
 
@@ -90,8 +83,6 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
     return () => listener;
   }, []);
 
-  console.log(navigation);
-
   return (
     <Modal
       animationType="slide"
@@ -102,7 +93,7 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
         visible={visible}
         toggleOverlay={toggleOverlay}
         playlists={playlists}
-        navigation={navigation}
+        
       />
       <SafeAreaView>
         <View style={styles.header}>
