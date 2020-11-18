@@ -1,16 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import auth from '@react-native-firebase/auth';
 import { Text, FlatList, View, StyleSheet, Image } from 'react-native';
 import { CheckBox, Divider, Overlay } from 'react-native-elements';
+import TrackPlayer from 'react-native-track-player';
 import randomize from 'randomatic';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import firestore from '@react-native-firebase/firestore';
 
-import { plusIcon } from '../../../Assets/Icons';
+import {
+  plusIcon,
+  tick,
+  tick2,
+  tickIcon,
+  cancelIcon,
+} from '../../../Assets/Icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { addToPlaylist } from '../../Redux/Reducers/firebaseSlice';
 
-const FullScreenOverlay = ({ visible, toggleOverlay }) => {
+const FullScreenOverlay = ({
+  visible,
+  toggleOverlay,
+  playlists,
+  navigation,
+}) => {
   const [checked, setChecked] = useState(false);
+  const uid = auth().currentUser.uid;
 
-  const data = ['1'];
+  const { currentSong } = useSelector((state) => state.root.audio);
+
+  console.log('----Current Song----', navigation);
+
+  const getCurrentTrack = async () => {
+    const track = await TrackPlayer.getCurrentTrack();
+    console.log('----Current track----', track);
+  };
+  const addToPlaylist = (playlistId) => {
+    console.log('------Add to playlist--------');
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .doc(playlistId)
+      .collection('songs')
+      .doc(currentSong.id)
+      .set(currentSong)
+      .then((res) => {
+        console.log('-----SUCCESS----', res);
+      });
+  };
+  const removeFromPlaylist = (playlistId) => {
+    console.log('------remove from playlist--------');
+
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .doc(playlistId)
+      .collection('songs')
+      .doc(currentSong.id)
+      .delete()
+      .then((res) => {
+        console.log(res, 'remove successfull');
+      });
+  };
+
+  const handleClick = (playlistId) => {
+    checked ? removeFromPlaylist(playlistId) : addToPlaylist(playlistId);
+  };
+
+  useEffect(() => {
+    getCurrentTrack();
+  }, []);
+
   return (
     <Overlay
       isVisible={visible}
@@ -21,26 +83,26 @@ const FullScreenOverlay = ({ visible, toggleOverlay }) => {
       <Text style={styles.overlayHeader}>Add To Playlist</Text>
 
       <FlatList
-        data={data}
+        data={playlists}
         showsVerticalScrollIndicator={false}
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item }) => {
+          console.log('-------ITEM------', item);
           return (
-            <CheckBox
-              center
-              title="Playlist 1"
-              iconRight
-              containerStyle={styles.checkboxContainer}
-              textStyle={styles.checkboxInput}
-              iconType="material"
-              checkedIcon="clear"
-              uncheckedIcon="add"
-              checkedColor="red"
-              checked={checked}
-              onPress={() => {
-                setChecked(!checked);
-              }}
-            />
+            <View style={styles.checkboxContainer}>
+              <Text style={styles.checkboxInput}>{item.title}</Text>
+              <TouchableOpacity
+                style={styles.tickIconContainer}
+                onPress={() => {
+                  handleClick(item.id);
+                  setChecked(!checked);
+                }}>
+                <Image
+                  source={checked ? cancelIcon : tick2}
+                  style={styles.tickIcon}
+                />
+              </TouchableOpacity>
+            </View>
           );
         }}
       />
@@ -62,11 +124,32 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     backgroundColor: 'black',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
+    paddingVertical: hp('1'),
+    marginBottom: hp('1'),
+    paddingLeft: hp('1'),
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: hp('1'),
   },
   checkboxInput: {
     fontSize: hp('2'),
     color: 'white',
-    marginRight: hp('10'),
+    // : hp('10'),
+    flex: 2,
+  },
+  tickIconContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  tickIcon: {
+    tintColor: 'white',
+    resizeMode: 'contain',
+    height: hp('2'),
+    width: hp('2'),
   },
   overlayHeader: {
     color: 'white',

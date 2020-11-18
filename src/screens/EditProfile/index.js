@@ -155,6 +155,7 @@ const EditProfile = () => {
         dispatch(getUser());
         setVisible(true);
         setLoading(false);
+        z;
       });
   };
 

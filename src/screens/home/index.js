@@ -1,11 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import auth from '@react-native-firebase/auth';
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
-import {
-  ImageBackground,
-  RefreshControl,
-  ScrollView
-} from 'react-native';
+import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
@@ -37,10 +33,9 @@ import {
   getTopAllArtists,
   getTopArtists,
   getUser,
-  getVideos
+  getVideos,
 } from '../../Redux/Reducers/firebaseSlice';
 import styles from './styles';
-
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -82,8 +77,6 @@ const Home = ({ navigation }) => {
     auth().signOut();
   };
 
-
-
   useEffect(() => {
     disp(getSongs());
     disp(getAllSongs());
@@ -104,6 +97,7 @@ const Home = ({ navigation }) => {
     disp(getAllPopularVideos());
     disp(getAllNews());
     disp(getUser());
+    disp(getPlaylists());
   }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);

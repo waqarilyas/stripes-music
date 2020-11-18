@@ -18,14 +18,13 @@ import Subscriptions from '../../screens/Subscriptions';
 
 const Stack = createStackNavigator();
 
-const MainAppStack = ({ navigation }) => {
+const MainAppStack = ({}) => {
   const currentState = useSelector((state) => state.root.audio.miniModalOpen);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
   const subsModal = useSelector(
     (state) => state.root.helpers.subscriptionModal,
   );
-
-
+  const nav = {};
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -47,18 +46,20 @@ const MainAppStack = ({ navigation }) => {
     );
   };
 
+  console.log('----nav-----', nav);
   return (
     <>
       <SubscriptionModalScreen />
 
+      {isFullScreen ? <MusicPlayerFullscreen navigation={navigation} /> : null}
+
       <Stack.Navigator headerMode="none">
-   
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}
-          options={{
+          options={({ navigation }) => ({
             headerShown: false,
-          }}
+          })}
         />
         <Stack.Screen
           name="SearchScreen"
@@ -97,7 +98,6 @@ const MainAppStack = ({ navigation }) => {
       </Stack.Navigator>
 
       {currentState ? <MusicPlayerModal /> : null}
-      {isFullScreen ? <MusicPlayerFullscreen /> : null}
     </>
   );
 };

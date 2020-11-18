@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   Modal,
@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 import { downIcon, plusIcon, shareIcon } from '../../../Assets/Icons';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
@@ -19,9 +21,14 @@ import {
 } from '../../Redux/Reducers/audioSlice';
 import MusicPlayerRelated from '../MusicPlayerRelated';
 import styles from './styles';
+import {
+  getAPlaylist,
+  addToPlaylist,
+} from '../../Redux/Reducers/firebaseSlice';
 
-const MusicPlayerFullscreen = ({ isVisible }) => {
+const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
   const [visible, setVisible] = useState(false);
+  const [playlists, setPlaylists] = useState([]);
   const dispatch = useDispatch();
 
   // const navigation = useNavigation();
@@ -55,13 +62,48 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
 
   // const navigation = useNavigation()
 
+  // const { playlists } = useSelector((state) => state.root.firebase);
+
+  console.log('-----------PLAYLISTS---------', playlists);
+
+  const addToPlaylist = () => {
+    console.log(uid);
+  };
+
+  useEffect(() => {
+    const uid = auth().currentUser.uid;
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .orderBy('createdAt', 'asc')
+      .onSnapshot({ includeMetadataChanges: true }, (querySnapshot) => {
+        let data = [];
+        querySnapshot.docs.forEach((document) => {
+          if (document.exists) {
+            data.push(document.data());
+          }
+        });
+        setPlaylists(data);
+      });
+
+    return () => listener;
+  }, []);
+
+  console.log(navigation);
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={isVisible}
       onRequestClose={() => {}}>
-      <FullScreenOverlay visible={visible} toggleOverlay={toggleOverlay} />
+      <FullScreenOverlay
+        visible={visible}
+        toggleOverlay={toggleOverlay}
+        playlists={playlists}
+        navigation={navigation}
+      />
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity

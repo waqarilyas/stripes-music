@@ -133,10 +133,12 @@ export const getPlaylists = createAsyncThunk(
     const path = firestore().collection('playlists');
     const documents = await path.limit(6).get();
     documents.forEach((document) => {
+      console.log('-------Document-------', document);
       if (document.exists) {
         data.push(document.data());
       }
     });
+    console.log('------------Playlist Data---------', data);
     return data;
   },
 );
@@ -204,7 +206,10 @@ export const getUser = createAsyncThunk('firebase/getUser', async () => {
   const path = firestore().collection('users');
   const document = await path.doc(uid).get();
   if (document.exists) {
-    console.log('--------------LOGGED IN USER OBJECT------------', document.data())
+    console.log(
+      '--------------LOGGED IN USER OBJECT------------',
+      document.data(),
+    );
     return document.data();
   }
 });
@@ -437,22 +442,17 @@ export const addPlayCount = createAsyncThunk(
   },
 );
 
-export const updateUser = createAsyncThunk(
-  'firebase/updateUser',
-  (newData) => {
-    firestore()
-      .collection('users')
-      .doc(firebase.auth().currentUser.uid)
-      .set(newData,
-        {
-          merge: true,
-        },
-      )
-      .then((res) => {
-        console.log("------user------", res)
-      })
-  }
-)
+export const updateUser = createAsyncThunk('firebase/updateUser', (newData) => {
+  firestore()
+    .collection('users')
+    .doc(firebase.auth().currentUser.uid)
+    .set(newData, {
+      merge: true,
+    })
+    .then((res) => {
+      console.log('------user------', res);
+    });
+});
 
 export const addAlbumViewCount = createAsyncThunk(
   'firebase/addAlbumViewCount',
