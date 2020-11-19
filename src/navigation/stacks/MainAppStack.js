@@ -46,7 +46,6 @@ const MainAppStack = ({}) => {
     );
   };
 
-  console.log('----nav-----', nav);
   return (
     <>
       <SubscriptionModalScreen />

@@ -20,7 +20,7 @@ import {
 import MusicPlayerRelated from '../MusicPlayerRelated';
 import styles from './styles';
 
-const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
+const MusicPlayerFullscreen = ({ isVisible }) => {
   const [visible, setVisible] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const dispatch = useDispatch();
@@ -50,6 +50,8 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
     }
   };
 
+  console.log('-----------PLAYLISTS---------', playlists);
+
   const addToPlaylist = () => {
     console.log(uid);
   };
@@ -74,8 +76,6 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
     return () => listener;
   }, []);
 
-  console.log(navigation);
-
   return (
     <Modal
       animationType="slide"
@@ -86,7 +86,6 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
         visible={visible}
         toggleOverlay={toggleOverlay}
         playlists={playlists}
-        navigation={navigation}
       />
       <SafeAreaView>
         <View style={styles.header}>

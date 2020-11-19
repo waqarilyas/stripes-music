@@ -50,7 +50,7 @@ const initialState = {
 
 const Home = ({ navigation }) => {
   const disp = useDispatch();
-
+  global.nav = navigation;
   const [state, dispatch] = useReducer(reducer, initialState);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
   const playlist = useSelector((state) => state.root.audio.playlist);

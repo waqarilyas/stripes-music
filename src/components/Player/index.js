@@ -27,12 +27,17 @@ import {
   whitePrev,
 } from '../../../Assets/Icons';
 import FullScreenPlaylistCard from '../../components/FullScreenPlaylistCard';
-import { changeSong, isInitialPlay } from '../../Redux/Reducers/audioSlice';
+import {
+  changeSong,
+  isInitialPlay,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import {
   addPlayCount,
   addToRecentlyPlayed,
 } from '../../Redux/Reducers/firebaseSlice';
 import { LOG } from '../../utils/Constants';
+import { shuffleArray } from '../../utils/Helpers';
 import AudioPlayerSlider from '../AudioPlayerSlider';
 import MiniMusicPlayer from '../MiniMusicPlayer';
 import styles from './styles';
@@ -352,10 +357,24 @@ const Player = ({ screen }) => {
                   <Text style={styles.upNext}>UP NEXT</Text>
                   <View style={styles.headerRight}>
                     <Image source={swapIcon} style={styles.swapIcon} />
-                    <View style={styles.randomButton}>
-                      <Image source={shuffleIcon} style={styles.shuffleIcon} />
-                      <Text style={styles.randomButtonText}>Random</Text>
-                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        let newQueue = shuffleArray(queue);
+                        dispatch(setPlaylist(newQueue));
+                        TrackPlayer.reset();
+                        newQueue.forEach((item) => {
+                          TrackPlayer.add(item);
+                        });
+                        TrackPlayer.play();
+                      }}>
+                      <View style={styles.randomButton}>
+                        <Image
+                          source={shuffleIcon}
+                          style={styles.shuffleIcon}
+                        />
+                        <Text style={styles.randomButtonText}>Random</Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 </View>
 

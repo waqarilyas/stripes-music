@@ -27,6 +27,9 @@ export const audioSlice = createSlice({
     pushToPlaylist: (state, action) => {
       state.playlist = [...state.playlist, action.payload];
     },
+    setPlaylist: (state, action) => {
+      state.playlist = action.payload;
+    },
     removeFromPlaylist: (state, action) => {
       const index = state.playlist.findIndex(
         (item) => item.id === action.payload.id,
@@ -41,6 +44,7 @@ export const {
   fullScreenChange,
   changeToMiniModal,
   pushToPlaylist,
+  setPlaylist,
   isInitialPlay,
   removeFromPlaylist,
 } = audioSlice.actions;
