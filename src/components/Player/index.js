@@ -12,12 +12,9 @@ import {
 import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
-  useTrackPlayerProgress,
 } from 'react-native-track-player';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
-  heartIcon,
   muteIcon,
   noInternetIcon,
   pauseButton,
@@ -30,19 +27,11 @@ import {
   whitePrev,
 } from '../../../Assets/Icons';
 import FullScreenPlaylistCard from '../../components/FullScreenPlaylistCard';
-import {
-  isInitialPlay,
-  changeSong,
-  pushToPlaylist,
-  fullScreenChange,
-  changeToMiniModal,
-} from '../../Redux/Reducers/audioSlice';
+import { changeSong, isInitialPlay } from '../../Redux/Reducers/audioSlice';
 import {
   addPlayCount,
   addToRecentlyPlayed,
 } from '../../Redux/Reducers/firebaseSlice';
-import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
-
 import { LOG } from '../../utils/Constants';
 import AudioPlayerSlider from '../AudioPlayerSlider';
 import MiniMusicPlayer from '../MiniMusicPlayer';
@@ -74,7 +63,6 @@ const Player = ({ screen }) => {
 
   const currentUser = useSelector((state) => state.root.firebase.user);
 
-
   const currentSong = useSelector((state) => state.root.audio.currentSong);
   const queue = useSelector((state) => state.root.audio.playlist);
   const firstTime = useSelector((state) => state.root.audio.initialPlay);
@@ -100,7 +88,7 @@ const Player = ({ screen }) => {
       LOG('SKIP TO NEXT', err);
     }
   };
-  
+
   const skipToPrevious = async () => {
     try {
       await TrackPlayer.skipToPrevious();

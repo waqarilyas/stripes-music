@@ -51,7 +51,7 @@ const MainAppStack = ({}) => {
     <>
       <SubscriptionModalScreen />
 
-      {isFullScreen ? <MusicPlayerFullscreen navigation={navigation} /> : null}
+      {isFullScreen ? <MusicPlayerFullscreen /> : null}
 
       <Stack.Navigator headerMode="none">
         <Stack.Screen

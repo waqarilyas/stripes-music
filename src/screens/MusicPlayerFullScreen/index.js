@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   Modal,
@@ -8,11 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
+import { useDispatch } from 'react-redux';
 import { downIcon, plusIcon, shareIcon } from '../../../Assets/Icons';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
 import {
@@ -21,19 +19,11 @@ import {
 } from '../../Redux/Reducers/audioSlice';
 import MusicPlayerRelated from '../MusicPlayerRelated';
 import styles from './styles';
-import {
-  getAPlaylist,
-  addToPlaylist,
-} from '../../Redux/Reducers/firebaseSlice';
 
 const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
   const [visible, setVisible] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const dispatch = useDispatch();
-
-  // const navigation = useNavigation();
-
-  // console.log('-------navigation:----', navigation);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -59,12 +49,6 @@ const MusicPlayerFullscreen = ({ isVisible, navigation }) => {
       console.log(error);
     }
   };
-
-  // const navigation = useNavigation()
-
-  // const { playlists } = useSelector((state) => state.root.firebase);
-
-  console.log('-----------PLAYLISTS---------', playlists);
 
   const addToPlaylist = () => {
     console.log(uid);
