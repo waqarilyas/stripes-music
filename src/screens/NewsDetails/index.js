@@ -74,13 +74,14 @@ const NewsDetails = () => {
       postId: news.id,
       updatedAt: +new Date(),
       userId: auth().currentUser.uid,
-      username: 'Arslan Mushtaq',
+      username: auth().currentUser.displayName || '',
     };
 
     firestore()
       .collection('comments')
       .add(data)
       .then((result) => {
+        setCommentText('')
         const documentId = result.id;
         result.set({ id: documentId }, { merge: true });
         LOG('ID UPDATED!', 'DONE');
@@ -123,10 +124,10 @@ const NewsDetails = () => {
         />
         <View style={styles.commentButton}>
           <TextInput
+            value={commentText}
             style={styles.commentButtonText}
             placeholder="Leave a comment"
             placeholderTextColor="gray"
-            multiline
             onChangeText={(input) => setCommentText(input)}
           />
           <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
@@ -158,8 +159,8 @@ const NewsDetails = () => {
               }}
             />
           ) : (
-            <ActivityIndicator color="black" />
-          )}
+              <ActivityIndicator color="black" />
+            )}
         </View>
 
         <SectionHeader icon={newsComment} name="Related News" />
@@ -184,8 +185,8 @@ const NewsDetails = () => {
               }}
             />
           ) : (
-            <ActivityIndicator color="white" />
-          )}
+              <ActivityIndicator color="white" />
+            )}
         </View>
       </View>
     </Block>

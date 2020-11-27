@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Button as RNEButton } from 'react-native-elements';
 import { Formik } from 'formik';
@@ -20,18 +20,29 @@ import LoginUser from './utils';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const initValues = {
+
   email: '',
   password: '',
   globalError: '',
 };
 
 const Login = ({ navigation }) => {
+
+  let [state, setState] = useState({
+    initValues: {
+      email: '',
+      password: '',
+      globalError: '',
+    }
+
+
+  })
   return (
     <Block>
       <ScrollView>
         <Text style={styles.headerText}>Login</Text>
         <Formik
-          initialValues={initValues}
+          initialValues={state.initValues}
           onSubmit={(values, actions) => LoginUser(values, actions)}
           validationSchema={LoginVS}>
           {({
@@ -42,45 +53,45 @@ const Login = ({ navigation }) => {
             isSubmitting,
             touched,
           }) => (
-            <>
-              <Input
-                icon={emailIcon}
-                name="Email Address"
-                error={errors.email}
-                textContentType="emailAddress"
-                capitalize="none"
-                defaultValue={initialValues.email}
-                keyboardType="email-address"
-                onChangeText={handleChange('email')}
-              />
-              <Text style={styles.error}>
-                {touched.email && errors.email ? errors.email : ''}
-              </Text>
+              <>
+                <Input
+                  icon={emailIcon}
+                  name="Email Address"
+                  error={errors.email}
+                  textContentType="emailAddress"
+                  capitalize="none"
+                  defaultValue={initialValues.email}
+                  keyboardType="email-address"
+                  onChangeText={handleChange('email')}
+                />
+                <Text style={styles.error}>
+                  {touched.email && errors.email ? errors.email : ''}
+                </Text>
 
-              <Input
-                icon={passwordIcon}
-                name="Password"
-                error={errors.password}
-                defaultValue={initialValues.password}
-                textContentType="password"
-                capitalize="none"
-                secureTextEntry={true}
-                onChangeText={handleChange('password')}
-              />
-              <Text style={styles.error}>
-                {touched.password && errors.password ? errors.password : ''}
-              </Text>
+                <Input
+                  icon={passwordIcon}
+                  name="Password"
+                  error={errors.password}
+                  defaultValue={initialValues.password}
+                  textContentType="password"
+                  capitalize="none"
+                  secureTextEntry={true}
+                  onChangeText={handleChange('password')}
+                />
+                <Text style={styles.error}>
+                  {touched.password && errors.password ? errors.password : ''}
+                </Text>
 
-              {errors.globalErr ? (
-                <Text style={styles.globalError}>{errors.globalErr}</Text>
-              ) : null}
-              <Button
-                onPress={handleSubmit}
-                text="Login"
-                isSubmitting={isSubmitting}
-              />
-            </>
-          )}
+                {errors.globalErr ? (
+                  <Text style={styles.globalError}>{errors.globalErr}</Text>
+                ) : null}
+                <Button
+                  onPress={handleSubmit}
+                  text="Login"
+                  isSubmitting={isSubmitting}
+                />
+              </>
+            )}
         </Formik>
 
         <View style={styles.socialSection}>
@@ -113,7 +124,16 @@ const Login = ({ navigation }) => {
 
           <View style={styles.signupSection}>
             <Text style={styles.signupText}>Do not have an account?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <TouchableOpacity onPress={() => {
+              setState(prev => ({
+                ...prev, initValues: {
+                  email: '',
+                  password: '',
+                  globalError: '',
+                }
+              }))
+              navigation.navigate('Signup')
+            }}>
               <Text style={styles.signup}>Sign Up</Text>
             </TouchableOpacity>
           </View>

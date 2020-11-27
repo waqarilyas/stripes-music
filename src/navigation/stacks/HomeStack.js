@@ -67,7 +67,7 @@ const HomeStack = () => {
         name="Home"
         component={Home}
         options={({ navigation }) => ({
-          title: 'Browse',
+          title: 'Music',
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: () => search(navigation),

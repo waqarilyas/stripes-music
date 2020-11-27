@@ -69,6 +69,7 @@ const VideoPlayerModal = ({ onPress }) => {
   }, [videoData.id]);
 
   const handleSubmit = () => {
+    console.log('--------USER------', auth().currentUser)
     if (commentText === '') {
       return;
     }
@@ -84,9 +85,10 @@ const VideoPlayerModal = ({ onPress }) => {
         videoId: videoData.id,
         updatedAt: +new Date(),
         userId: auth().currentUser.uid,
-        username: 'Arslan Mushtaq',
+        username: auth().currentUser.displayName || '',
       })
       .then((result) => {
+        setCommentText('')
         const documentId = result.id;
         result.update({
           id: documentId,
@@ -99,10 +101,10 @@ const VideoPlayerModal = ({ onPress }) => {
   const [collapse, setCollapse] = useState(false);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'black' }}>
       <SubscriptionModalScreen duration={durationTime} />
       <Modal animationType="slide" visible={videoModal}>
-        <ScrollView>
+        <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
           <SafeAreaView style={styles.safeArea} />
           <StatusBar barStyle="light-content" />
           <View style={styles.container}>
@@ -177,10 +179,10 @@ const VideoPlayerModal = ({ onPress }) => {
 
             <View style={styles.commentButton}>
               <TextInput
+                value={commentText}
                 style={styles.commentButtonText}
                 placeholder="Leave a comment"
                 placeholderTextColor="gray"
-                multiline
                 onChangeText={(input) => setCommentText(input)}
               />
             </View>
@@ -205,7 +207,7 @@ const VideoPlayerModal = ({ onPress }) => {
                         image={image}
                         comment={comment}
                         username={username}
-                        createdAt={createdAt && dayjs.unix(createdAt._seconds)}
+                        createdAt={createdAt}
                       />
                     );
                   }}

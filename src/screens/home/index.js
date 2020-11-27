@@ -147,7 +147,6 @@ const Home = ({ navigation }) => {
           {/* The Best Playlists Section */}
           <HomeTopAlbums navigation={navigation} />
 
-          <Button text="Sign Out" onPress={handleSignOut} />
         </LinearGradient>
       </ImageBackground>
     </ScrollView>

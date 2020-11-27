@@ -66,7 +66,7 @@ const ProfileScreen = ({ navigation }) => {
             renderPlaceholderContent={<ProfilePicPlaceholder />}
           />
           <View style={styles.pageTopNameView}>
-            <Text style={styles.artistName}>{user.fullName}</Text>
+            <Text numberOfLines={1} style={styles.artistName}>{user.fullName}</Text>
             <View>
               <Text style={styles.followText}>{state.artistFollowing}</Text>
               <Text style={styles.followSubtext}>Following</Text>

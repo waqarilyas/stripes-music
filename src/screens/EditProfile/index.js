@@ -26,7 +26,9 @@ import TextBox from '../../components/TextBox';
 import { getUser } from '../../Redux/Reducers/firebaseSlice';
 
 const EditProfile = () => {
-  const [fullName, setFullName] = useState('');
+  const user = useSelector((state) => state.root.firebase.user);
+  const uid = auth().currentUser.uid;
+  const [fullName, setFullName] = useState(user.fullName);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [uploadErr, setUploadErr] = useState(false);
@@ -42,16 +44,9 @@ const EditProfile = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.root.firebase.user);
-  const uid = auth().currentUser.uid;
 
   const handleSubmit = () => {
     setLoading(true);
-    console.log(fullName);
-
-    user.fullName === fullName || fullName === ''
-      ? setFullName(user.fullName)
-      : null;
 
     updateProfiledata();
   };
@@ -90,10 +85,12 @@ const EditProfile = () => {
   const updateProfiledata = () => {
     if (fileUri) {
       uploadImageToStorage(fullName);
-      dispatch(getUser());
     } else {
-      uploadDataToFirestore(fullName);
-      dispatch(getUser());
+      if (fullName) {
+        uploadDataToFirestore(fullName, '');
+      } else {
+        setLoading(false)
+      }
     }
   };
 
@@ -122,8 +119,10 @@ const EditProfile = () => {
             console.log('Upload is running');
             break;
         }
+        setLoading(false);
       }, // Failed Listener
       (_err) => {
+        setLoading(false);
         console.log('Error: ', _err);
       }, // Successful Listener
       () => {
@@ -138,15 +137,18 @@ const EditProfile = () => {
     );
   };
 
-  const uploadDataToFirestore = (title, imageUrl = user.profilePicture) => {
+  const uploadDataToFirestore = (title = user.fullName, imageUrl = user.profilePicture) => {
     firestore()
       .collection('users')
       .doc(uid)
       .set(
-        {
-          profilePicture: imageUrl,
-          fullName: title,
-        },
+        imageUrl ?
+          {
+            profilePicture: imageUrl,
+            fullName: title,
+          } : fullName ? {
+            fullName: title,
+          } : {},
         {
           merge: true,
         },
@@ -155,7 +157,9 @@ const EditProfile = () => {
         dispatch(getUser());
         setVisible(true);
         setLoading(false);
-        z;
+      }).catch(err => {
+        setLoading(false);
+        console.log('--------ERROR UPDATING USER------', err)
       });
   };
 
@@ -195,10 +199,10 @@ const EditProfile = () => {
                   onPress={chooseImage}
                 />
               ) : (
-                <View style={styles.cameraIconContainer}>
-                  <Image source={camera} style={styles.camera} />
-                </View>
-              )}
+                  <View style={styles.cameraIconContainer}>
+                    <Image source={camera} style={styles.camera} />
+                  </View>
+                )}
               <View style={styles.edit}>
                 <Image source={edit} style={styles.imageEdit} />
               </View>
@@ -209,6 +213,7 @@ const EditProfile = () => {
             <TextBox
               text="Enter Name"
               defaultValue={user.fullName}
+              value={fullName}
               onChangeText={(input) => setFullName(input)}
               contentType="name"
             />

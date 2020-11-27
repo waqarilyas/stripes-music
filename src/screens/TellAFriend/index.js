@@ -17,9 +17,8 @@ const TellaFriend = () => {
     console.log('----Function called-----');
     try {
       const result = await Share.share({
-        message: 'Share Options',
-        url: 'https://www.google.com',
-        title: 'Share Music App',
+        message: 'Hey you might wanna check this app out',
+        title: 'Stripes',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -47,10 +46,9 @@ const TellaFriend = () => {
             <TextInput
               textContentType="URL"
               placeholder=""
-              defaultValue="checking123"
+              defaultValue="Hey you might wanna check this app out"
               placeholderTextColor="#8B868A"
-              editable={false}
-              style={{ color: '#8B868A' }}
+              style={{ color: '#8B868A', fontSize:16, padding:12 }}
             />
           </View>
           <View style={styles.subcontainer}>

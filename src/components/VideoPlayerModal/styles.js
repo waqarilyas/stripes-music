@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
   },
   commentButtonText: {
     color: 'white',
-    fontWeight: 'bold',
     fontSize: 18,
     width: '100%',
     textAlign: 'center',
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   submit: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(35, 35, 35, 0.7)',
     marginBottom: 20,
     marginTop: 12,
     paddingHorizontal: 18,

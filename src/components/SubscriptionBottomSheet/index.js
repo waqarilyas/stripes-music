@@ -31,7 +31,7 @@ const SubscriptionModalScreen = ({ }) => {
       dist(fullScreenChange(false))
       setState(prev => ({ ...prev, stopPlaying: !state.stopPlaying }))
       TrackPlayer.pause();
-    } else if (progressData.position < PLAYBACK_TIME_LIMIT_AUDIO) {
+    } else if (!user.isPaidUser && progressData.position < PLAYBACK_TIME_LIMIT_AUDIO) {
       setState(prev => ({ ...prev, isVisible: true, stopPlaying: false }))
     }
   }, [progressData.position])

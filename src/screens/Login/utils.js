@@ -11,6 +11,7 @@ const LoginUser = async (values, actions) => {
   try {
     await auth().signInWithEmailAndPassword(values.email, values.password);
   } catch (authErrors) {
+    console.log('-------------LOGIN ERROR----------', authErrors.code)
     actions.setSubmitting(false);
 
     let message = '';
@@ -21,15 +22,19 @@ const LoginUser = async (values, actions) => {
         break;
       case USER_NOT_FOUND:
         message = 'Not a registered email';
-        setError(actions, '', '', message);
+        setError(actions, '', message);
         break;
       case NETWORK_ERROR:
         message = 'No internet connection';
-        setError(actions, '', '', message);
+        setError(actions, '', message);
         break;
       case USER_DISABLED:
         message = 'Accout suspended, Contact Tech Support';
-        setError(actions, '', '', message);
+        setError(actions, '', message);
+        break;
+      default:
+        message = 'Invalid email or password';
+        setError(actions, '', message);
         break;
     }
   }
