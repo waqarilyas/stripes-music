@@ -14,7 +14,11 @@ const ProfileActionBar = ({ navigation }) => {
   };
 
   const handleSignOut = () => {
-    auth().signOut();
+    auth().signOut().then((res) => {
+      console.log('----------SINGING OUT--------->', res)
+    }).catch(err => {
+      console.log('----------SINGING OUT CATCH--------->', res)
+    });
   };
 
   return (
@@ -55,7 +59,10 @@ const ProfileActionBar = ({ navigation }) => {
             }}
           />
           <TouchableOpacity
-            onPress={handleSignOut}
+            onPress={() => {
+              toggleOverlay();
+              handleSignOut();
+            }}
             style={styles.signOutContainer}>
             <Image source={signout} style={styles.signoutIcon} />
             <Text style={styles.signOut}>Sign Out</Text>

@@ -7,9 +7,10 @@ import {
 } from '../../utils/Constants';
 
 // Login user using Firebase Authentication
-const LoginUser = async (values, actions) => {
+const LoginUser = async (values, actions, navigation) => {
   try {
     await auth().signInWithEmailAndPassword(values.email, values.password);
+    navigation.goBack();
   } catch (authErrors) {
     console.log('-------------LOGIN ERROR----------', authErrors.code)
     actions.setSubmitting(false);

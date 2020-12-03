@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
-import { Text, FlatList, View, StyleSheet, Image } from 'react-native';
-import { CheckBox, Divider, Overlay } from 'react-native-elements';
-import TrackPlayer from 'react-native-track-player';
-import randomize from 'randomatic';
-import { useDispatch, useSelector } from 'react-redux';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firestore from '@react-native-firebase/firestore';
-
-import {
-  plusIcon,
-  tick,
-  tick2,
-  tickIcon,
-  cancelIcon,
-} from '../../../Assets/Icons';
+import randomize from 'randomatic';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { addToPlaylist } from '../../Redux/Reducers/firebaseSlice';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import TrackPlayer from 'react-native-track-player';
+import { useSelector } from 'react-redux';
+import {
+  cancelIcon, plusIcon,
+
+  tick2
+} from '../../../Assets/Icons';
+
 
 const FullScreenOverlay = ({
   visible,

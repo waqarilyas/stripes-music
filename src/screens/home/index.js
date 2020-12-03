@@ -3,8 +3,8 @@ import auth from '@react-native-firebase/auth';
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from '../../components/Button';
 import HomeBanner from '../../components/HomeBanner';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
 import HomeForYou from '../../components/HomeForYou';
@@ -101,6 +101,7 @@ const Home = ({ navigation }) => {
   }, [disp]);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [bgImg, setBgImg] = useState('');
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -111,6 +112,8 @@ const Home = ({ navigation }) => {
 
     wait(2000).then(() => setRefreshing(false));
   }, [disp]);
+
+
 
   return (
     <ScrollView
@@ -124,10 +127,13 @@ const Home = ({ navigation }) => {
           progressBackgroundColor="transparent"
         />
       }>
-      <ImageBackground style={styles.background} blurRadius={20}>
-        <LinearGradient colors={['black', '#0F2027', 'black']}>
+      <ImageBackground source={bgImg ? { uri: bgImg } : null} style={[styles.background,{paddingHorizontal:0, margin:0}]} blurRadius={20}>
+        <LinearGradient colors={['rgba(0,0,0,0)', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black']} style={{paddingHorizontal:RFPercentage(1)}}>
           {/* Songs Slider Section */}
-          <HomeBanner />
+
+          <HomeBanner currentItemImage={(img) => {
+            setBgImg(img)
+          }} />
 
           {/* Most Played Section */}
           <HomeMostPlayed navigation={navigation} />

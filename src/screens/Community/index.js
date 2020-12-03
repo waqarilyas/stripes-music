@@ -1,22 +1,13 @@
-import React, { useReducer, useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Alert,
-  Modal,
-  Image,
-  TextInput,
-} from 'react-native';
-import { Divider } from 'react-native-elements';
-import randomize from 'randomatic';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
-import styles from './styles';
+import randomize from 'randomatic';
+import React, { useEffect, useReducer, useState } from 'react';
+import {
+  Alert, FlatList
+} from 'react-native';
 import ChatCard from '../../components/ChatCard';
 import reducer from '../../hooks/useReducer';
-import EmptyChatList from '../../components/EmptyChatList';
+
 
 const initialState = {
   inbox: [],
@@ -99,10 +90,10 @@ const Community = ({ navigation }) => {
     <>
       <FlatList
         data={state.inbox}
-        contentContainerStyle={{ height: '100%', backgroundColor: 'black' }}
-        keyExtractor={() => randomize(10)}
-        ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
-        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        contentContainerStyle={{ flex: 1, backgroundColor: 'black' }}
+        keyExtractor={(item) => randomize(10)}
+        // ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
+        // ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         renderItem={({ item }) => {
           return (
             <ChatCard

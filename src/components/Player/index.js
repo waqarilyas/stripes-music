@@ -209,7 +209,7 @@ const Player = ({ screen }) => {
               renderItem={({ item }) => {
                 return ( */}
               <Image
-                source={{ uri: currentTrack.artwork }}
+                source={currentTrack?.artwork?{ uri: currentTrack?.artwork }:null}
                 style={
                   isVisible
                     ? styles.playlistOpenStyleForImage
@@ -235,9 +235,9 @@ const Player = ({ screen }) => {
               <Text
                 style={isVisible ? styles.playlistOpenTitle : styles.FullTitle}
                 numberOfLines={2}>
-                {currentTrack.title}
+                {currentTrack?.title}
               </Text>
-              <Text style={styles.FullSubtitle}>{currentTrack.artist}</Text>
+              <Text style={styles.FullSubtitle}>{currentTrack?.artist}</Text>
             </View>
 
             {/* Audio Player Slider */}

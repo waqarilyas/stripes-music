@@ -1,19 +1,20 @@
-import React, { useEffect, useReducer, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import React, { useEffect, useReducer } from 'react';
 import { Image, Text, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
-
-import { profilePicPlaceholder, menuIcon } from '../../../Assets/Icons';
+import { profilePicPlaceholder } from '../../../Assets/Icons';
 import Block from '../../components/Block';
+import ProfileActionBar from '../../components/ProfileActionBar';
 import ProfileArtists from '../../components/ProfileArtists';
+import ProfileFavoriteSongs from '../../components/ProfileFavoriteSongs';
 import ProfilePlaylists from '../../components/ProfilePlaylists';
 import ProfileRecentlyPlayed from '../../components/ProfileRecentlyPlayed';
-import ProfileFavoriteSongs from '../../components/ProfileFavoriteSongs';
 import reducer from '../../hooks/useReducer';
 import styles from './styles';
-import ProfileActionBar from '../../components/ProfileActionBar';
+
 
 const initialState = {
   user: {},
@@ -66,10 +67,11 @@ const ProfileScreen = ({ navigation }) => {
             renderPlaceholderContent={<ProfilePicPlaceholder />}
           />
           <View style={styles.pageTopNameView}>
-            <Text numberOfLines={1} style={styles.artistName}>{user.fullName}</Text>
-            <View>
-              <Text style={styles.followText}>{state.artistFollowing}</Text>
-              <Text style={styles.followSubtext}>Following</Text>
+            <View style={{ alignSelf: 'flex-start', paddingLeft: RFPercentage(3) }}>
+              <Text numberOfLines={1} style={[styles.artistName, { textAlign: 'left' }]}>{user.fullName}</Text>
+              <Text style={[styles.followText, { textAlign: 'left', alignSelf: 'flex-start' }]}>{state.artistFollowing}</Text>
+              <Text style={[styles.followSubtext, { textAlign: 'left', alignSelf: 'flex-start' }]}>Following</Text>
+              <Text style={[styles.followSubtext, { textAlign: 'left', alignSelf: 'flex-start' }]}>Member</Text>
             </View>
           </View>
         </View>

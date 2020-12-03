@@ -6,7 +6,7 @@ import {
   USER_DISABLED,
 } from '../../utils/Constants';
 
-const ResetPassword = async (values, actions) => {
+const ResetPassword = async (values, actions, navigation) => {
   try {
     await auth()
       .sendPasswordResetEmail(values.email)
@@ -14,6 +14,7 @@ const ResetPassword = async (values, actions) => {
         actions.setSubmitting(false);
         actions.setErrors({ isSent: true });
       });
+    navigation.goBack();
   } catch (authErrors) {
     console.log(authErrors.code);
     actions.setSubmitting(false);

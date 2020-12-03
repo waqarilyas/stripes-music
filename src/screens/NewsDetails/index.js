@@ -1,32 +1,34 @@
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import dayjs from 'dayjs';
+import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
+  ActivityIndicator, FlatList,
+  LayoutAnimation,
+  Platform, Text,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity, UIManager, View
 } from 'react-native';
-import { Image, Divider } from 'react-native-elements';
-import randomize from 'randomatic';
-import dayjs from 'dayjs';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-
-import styles from './styles';
-import { LOG } from '../../utils/Constants';
-import { thousandSeprator } from '../../utils/Helpers';
-import Block from '../../components/Block';
-import ArtistFollowCard from '../../components/ArtistFollowCard';
-import NewsIconsCard from '../../components/NewsIconsCard';
-import NewsCommentCard from '../../components/NewsCommentCard';
-import SectionHeader from '../../components/SectionHeader';
-import { newsComment } from '../../../Assets/Icons';
-import RelatedNewsCard from '../../components/RelatedNewsCard';
-import { getCollection } from '../../utils/Firebase';
-import NewsEmptyComments from '../../components/NewsEmptyComments';
-import reducer from '../../hooks/useReducer';
+import { Divider, Image } from 'react-native-elements';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
+import { newsComment } from '../../../Assets/Icons';
+import ArtistFollowCard from '../../components/ArtistFollowCard';
+import Block from '../../components/Block';
+import NewsCommentCard from '../../components/NewsCommentCard';
+import NewsEmptyComments from '../../components/NewsEmptyComments';
+import NewsIconsCard from '../../components/NewsIconsCard';
+import RelatedNewsCard from '../../components/RelatedNewsCard';
+import SectionHeader from '../../components/SectionHeader';
+import reducer from '../../hooks/useReducer';
+import { LOG } from '../../utils/Constants';
+import { getCollection } from '../../utils/Firebase';
+import styles from './styles';
+
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const initialState = {
   comments: [],
@@ -40,7 +42,9 @@ const NewsDetails = () => {
   const { news } = useSelector((_state) => _state.root.firebase);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
-
+  const [stateVals, setStateVals] = useState({
+    showMore: []
+  });
   console.log('-------News ID-------', news);
 
   useEffect(() => {
@@ -55,6 +59,8 @@ const NewsDetails = () => {
         querySnapshot.forEach((doc) => {
           allComments.push(doc.data());
         });
+        let tempComments = allComments;
+        setStateVals(prev => ({ ...prev, showMore: tempComments.splice(0, 5) }))
         dispatch({ comments: allComments });
       });
 
@@ -70,7 +76,7 @@ const NewsDetails = () => {
       comment: commentText,
       createdAt: +new Date(),
       id: '',
-      image: profilePic,
+      image: auth().currentUser.photoURL || '',
       postId: news.id,
       updatedAt: +new Date(),
       userId: auth().currentUser.uid,
@@ -137,27 +143,51 @@ const NewsDetails = () => {
 
         <View style={styles.commentSection}>
           {state.comments ? (
-            <FlatList
-              style={styles.commentListStyle}
-              ListEmptyComponent={() => <NewsEmptyComments />}
-              data={state.comments}
-              ItemSeparatorComponent={() => (
-                <Divider style={styles.commentDivider} />
-              )}
-              keyExtractor={() => randomize('Aa0!', 10)}
-              renderItem={({
-                item: { image, comment, username, createdAt },
-              }) => {
-                return (
-                  <NewsCommentCard
-                    image={image}
-                    comment={comment}
-                    username={username}
-                    createdAt={createdAt && dayjs.unix(createdAt._seconds)}
-                  />
-                );
-              }}
-            />
+            <>
+              <FlatList
+                style={styles.commentListStyle}
+                ListEmptyComponent={() => <NewsEmptyComments />}
+                data={stateVals.showMore}
+                ItemSeparatorComponent={() => (
+                  <Divider style={styles.commentDivider} />
+                )}
+                keyExtractor={() => randomize('Aa0!', 10)}
+                renderItem={({
+                  item: { image, comment, username, createdAt },
+                }) => {
+                  return (
+                    <NewsCommentCard
+                      image={image}
+                      comment={comment}
+                      username={username}
+                      createdAt={createdAt}
+                    />
+                  );
+                }}
+              />
+
+
+              <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
+                {stateVals.showMore.length > 5 ?
+                  <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
+                    <Text onPress={() => {
+                      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+                      let tempCom = state.comments;
+                      setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length - 5) }))
+                    }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show Less</Text>
+                  </View>
+                  : null}
+
+                <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
+                  <Text onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+                    let tempCom = state.comments;
+                    setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length + 5) }))
+                  }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show More</Text>
+                </View>
+              </View>
+
+            </>
           ) : (
               <ActivityIndicator color="black" />
             )}
@@ -173,11 +203,13 @@ const NewsDetails = () => {
               renderItem={({ item: { id, imgUrl, title, description } }) => {
                 if (id !== news.id) {
                   return (
-                    <RelatedNewsCard
-                      image={imgUrl}
-                      title={title}
-                      description={description}
-                    />
+                    <View style={{ paddingBottom: RFPercentage(2) }}>
+                      <RelatedNewsCard
+                        image={imgUrl}
+                        title={title}
+                        description={description}
+                      />
+                    </View>
                   );
                 } else {
                   return null;

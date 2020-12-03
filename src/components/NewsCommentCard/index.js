@@ -30,6 +30,7 @@ dayjs.updateLocale('en', {
 });
 
 const NewsCommentCard = ({ image, comment, username, createdAt }) => {
+  console.log('-------ITEM-----', image)
   return (
     <View style={styles.container}>
       <Avatar size="medium" rounded source={{ uri: image }} />

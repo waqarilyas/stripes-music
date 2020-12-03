@@ -43,7 +43,7 @@ const Login = ({ navigation }) => {
         <Text style={styles.headerText}>Login</Text>
         <Formik
           initialValues={state.initValues}
-          onSubmit={(values, actions) => LoginUser(values, actions)}
+          onSubmit={(values, actions) => LoginUser(values, actions, navigation)}
           validationSchema={LoginVS}>
           {({
             initialValues,

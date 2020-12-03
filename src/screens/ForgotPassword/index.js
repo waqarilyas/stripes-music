@@ -35,7 +35,7 @@ const ForgotPassword = ({ navigation }) => {
 
       <Formik
         initialValues={initValues}
-        onSubmit={(values, actions) => ResetPassword(values, actions)}
+        onSubmit={(values, actions) => ResetPassword(values, actions, navigation)}
         validationSchema={ForgotPasswordVS}>
         {({
           initialValues,
@@ -46,37 +46,37 @@ const ForgotPassword = ({ navigation }) => {
           isSubmitting,
           touched,
         }) => (
-          <>
-            <Input
-              icon={emailIcon}
-              name="Email"
-              textContentType="emailAddress"
-              capitalize="none"
-              keyboardType="email-address"
-              defaultValue={initialValues.email}
-              onChangeText={handleChange('email')}
-            />
-            <Text style={styles.error}>
-              {touched.email && errors.email ? errors.email : ''}
-            </Text>
-
-            {errors.globalErr ? (
-              <Text style={styles.globalError}>{errors.globalErr}</Text>
-            ) : null}
-
-            <Button
-              onPress={handleSubmit}
-              text="Reset Password"
-              isSubmitting={isSubmitting}
-            />
-
-            {errors.isSent ? (
-              <Text style={styles.message}>
-                Password reset email sent to {values.email}
+            <>
+              <Input
+                icon={emailIcon}
+                name="Email"
+                textContentType="emailAddress"
+                capitalize="none"
+                keyboardType="email-address"
+                defaultValue={initialValues.email}
+                onChangeText={handleChange('email')}
+              />
+              <Text style={styles.error}>
+                {touched.email && errors.email ? errors.email : ''}
               </Text>
-            ) : null}
-          </>
-        )}
+
+              {errors.globalErr ? (
+                <Text style={styles.globalError}>{errors.globalErr}</Text>
+              ) : null}
+
+              <Button
+                onPress={handleSubmit}
+                text="Reset Password"
+                isSubmitting={isSubmitting}
+              />
+
+              {errors.isSent ? (
+                <Text style={styles.message}>
+                  Password reset email sent to {values.email}
+                </Text>
+              ) : null}
+            </>
+          )}
       </Formik>
     </Block>
   );

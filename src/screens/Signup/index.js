@@ -41,7 +41,7 @@ const Signup = ({ navigation }) => {
 
         <Formik
           initialValues={initValues}
-          onSubmit={(values, actions) => RegisterUser(values, actions)}
+          onSubmit={(values, actions) => RegisterUser(values, actions, navigation)}
           validationSchema={SignUpVS}>
           {({
             initialValues,
