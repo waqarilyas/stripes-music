@@ -12,7 +12,11 @@
     "build:pods": "cd ios/ && pod install && cd ..",
     "list:android": "adb devices",
     "list:ios": "instruments -s devices",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'"
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
+    "sha1release": "keytool -list -v -keystore android/releaseKeyStore.jks -alias key0 -storepass 123456 -keypass 1234567",
+    "sha1debug": "keytool -list -v -keystore android/app/debug.keystore -alias androiddebugkey -storepass android -keypass android",
+    "keyhashrelease": "keytool -exportcert -alias key0 -keystore android/omeGameKeyStore.jks | openssl sha1 -binary | openssl base64",
+    "keyhashdebug": "keytool -exportcert -alias androiddebugkey -keystore android/app/debug.keystore | openssl sha1 -binary | openssl base64"
   },
   "dependencies": {
     "@appbaseio/reactivesearch": "^3.12.6",
