@@ -75,13 +75,6 @@ module.exports = async function () {
         }),
 
 
-
-
-
-
-        TrackPlayer.addEventListener('playback-metadata-received', () => {
-            console.log('------playback-metadata-received-------');
-        }),
         TrackPlayer.addEventListener('playback-error', () => {
             console.log('------playback-error-------');
         })
