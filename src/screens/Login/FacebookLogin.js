@@ -34,12 +34,12 @@ const onFacebookButtonPress = async () => {
       .get();
 
     if (document.exists) {
-      return firestore().collection('users').doc(response.user.uid).update({
+      firestore().collection('users').doc(response.user.uid).update({
         fbAccessToken: data.accessToken,
         fbUserId: data.userID,
       });
     } else {
-      return firestore()
+      firestore()
         .collection('users')
         .doc(response.user.uid)
         .set({
@@ -58,8 +58,10 @@ const onFacebookButtonPress = async () => {
           isAdmin: false,
         });
     }
+    return true;
   } catch (err) {
     console.log(err);
+    return false;
   }
 };
 

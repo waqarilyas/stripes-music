@@ -97,7 +97,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
         headers: headers,
       },
     )
-    .then((response) => {})
+    .then((response) => { })
     .catch((error) => {
       console.log('-----POST ERROR------', engineName, ':', error);
     });
@@ -105,17 +105,14 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
 
 export const getSearchData = async (searchValue, engineName, callback) => {
   axios
-    .get(
-      `https://host-vgzu6u.api.swiftype.com/api/as/v1/engines/${engineName}/search?query=${searchValue}`,
+    .get(`https://host-vgzu6u.api.swiftype.com/api/as/v1/engines/${engineName}/search?query=${searchValue}`,
       {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer private-s18ijwj2r5ccjkfczo7awhhh',
         },
       },
-    )
-    .then((response) => callback(response.data))
-    .catch((err) => console.log(err));
+    ).then((response) => callback(response.data)).catch((err) => console.log(err));
 };
 
 export const getCollection = (collection, limit, callback) => {

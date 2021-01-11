@@ -53,45 +53,45 @@ const Login = ({ navigation }) => {
             isSubmitting,
             touched,
           }) => (
-              <>
-                <Input
-                  icon={emailIcon}
-                  name="Email Address"
-                  error={errors.email}
-                  textContentType="emailAddress"
-                  capitalize="none"
-                  defaultValue={initialValues.email}
-                  keyboardType="email-address"
-                  onChangeText={handleChange('email')}
-                />
-                <Text style={styles.error}>
-                  {touched.email && errors.email ? errors.email : ''}
-                </Text>
+            <>
+              <Input
+                icon={emailIcon}
+                name="Email Address"
+                error={errors.email}
+                textContentType="emailAddress"
+                capitalize="none"
+                defaultValue={initialValues.email}
+                keyboardType="email-address"
+                onChangeText={handleChange('email')}
+              />
+              <Text style={styles.error}>
+                {touched.email && errors.email ? errors.email : ''}
+              </Text>
 
-                <Input
-                  icon={passwordIcon}
-                  name="Password"
-                  error={errors.password}
-                  defaultValue={initialValues.password}
-                  textContentType="password"
-                  capitalize="none"
-                  secureTextEntry={true}
-                  onChangeText={handleChange('password')}
-                />
-                <Text style={styles.error}>
-                  {touched.password && errors.password ? errors.password : ''}
-                </Text>
+              <Input
+                icon={passwordIcon}
+                name="Password"
+                error={errors.password}
+                defaultValue={initialValues.password}
+                textContentType="password"
+                capitalize="none"
+                secureTextEntry={true}
+                onChangeText={handleChange('password')}
+              />
+              <Text style={styles.error}>
+                {touched.password && errors.password ? errors.password : ''}
+              </Text>
 
-                {errors.globalErr ? (
-                  <Text style={styles.globalError}>{errors.globalErr}</Text>
-                ) : null}
-                <Button
-                  onPress={handleSubmit}
-                  text="Login"
-                  isSubmitting={isSubmitting}
-                />
-              </>
-            )}
+              {errors.globalErr ? (
+                <Text style={styles.globalError}>{errors.globalErr}</Text>
+              ) : null}
+              <Button
+                onPress={handleSubmit}
+                text="Login"
+                isSubmitting={isSubmitting}
+              />
+            </>
+          )}
         </Formik>
 
         <View style={styles.socialSection}>
@@ -110,7 +110,11 @@ const Login = ({ navigation }) => {
             title="Google"
             buttonStyle={styles.socialButton}
             titleStyle={styles.socialButtonText}
-            onPress={() => onGoogleButtonPress()}
+            onPress={async () => {
+              let GoogleLoginResponse = await onGoogleButtonPress()
+              if (GoogleLoginResponse)
+                navigation.goBack();
+            }}
           />
 
           <RNEButton
@@ -119,7 +123,11 @@ const Login = ({ navigation }) => {
             title="Facebook"
             buttonStyle={styles.faceBookButton}
             titleStyle={styles.socialButtonText}
-            onPress={() => onFacebookButtonPress()}
+            onPress={async () => {
+              let FacebookLoginResponse = await onFacebookButtonPress()
+              if (FacebookLoginResponse)
+                navigation.goBack();
+            }}
           />
 
           <View style={styles.signupSection}>

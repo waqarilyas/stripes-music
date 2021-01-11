@@ -19,11 +19,11 @@ const onGoogleButtonPress = async () => {
       .get();
 
     if (document.exists) {
-      return firestore().collection('users').doc(response.user.uid).update({
+      firestore().collection('users').doc(response.user.uid).update({
         googleAccessToken: idToken,
       });
     } else {
-      return firestore()
+      firestore()
         .collection('users')
         .doc(response.user.uid)
         .set({
@@ -42,8 +42,10 @@ const onGoogleButtonPress = async () => {
           isAdmin: false,
         });
     }
+    return true
   } catch (err) {
     console.log(err);
+    return false
   }
 };
 
