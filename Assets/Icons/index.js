@@ -120,7 +120,6 @@ export const tick2 = require('./tick2.png');
 export const picker = require('./picker.png');
 export const downpicker = require('./picker2.png');
 export const plus = require('./plus.png');
-export const profilePhoto = require('./profile.png');
 export const options = require('./options.png');
 export const cancelIcon = require('./cancel.png');
 export const clockIcon = require('./wall-clock.png');

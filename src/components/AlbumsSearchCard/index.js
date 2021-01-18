@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { Image } from 'react-native-elements';
-
 import styles from './styles';
-import { songCountIcon } from '../../../Assets/Icons';
 
 const AlbumsSearchCard = ({ image, title, duration, author, songCount }) => {
   return (
@@ -22,10 +20,6 @@ const AlbumsSearchCard = ({ image, title, duration, author, songCount }) => {
             {author}
           </Text>
         </View>
-        {/* <View style={styles.songCountContainer}>
-          <Image source={songCountIcon} style={styles.countIcon} />
-          <Text style={styles.viewButtonText}>{songCount}</Text>
-        </View> */}
       </View>
     </View>
   );

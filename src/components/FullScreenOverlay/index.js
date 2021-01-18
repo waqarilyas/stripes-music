@@ -1,40 +1,21 @@
-import React, { useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
-import { Text, FlatList, View, StyleSheet, Image } from 'react-native';
-import { CheckBox, Divider, Overlay } from 'react-native-elements';
-import TrackPlayer from 'react-native-track-player';
-import randomize from 'randomatic';
-import { useDispatch, useSelector } from 'react-redux';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firestore from '@react-native-firebase/firestore';
-
-import {
-  plusIcon,
-  tick,
-  tick2,
-  tickIcon,
-  cancelIcon,
-} from '../../../Assets/Icons';
+import randomize from 'randomatic';
+import React, { useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { addToPlaylist } from '../../Redux/Reducers/firebaseSlice';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useSelector } from 'react-redux';
+import { cancelIcon, plusIcon, tick2 } from '../../../Assets/Icons';
 
-const FullScreenOverlay = ({
-  visible,
-  toggleOverlay,
-  playlists,
-}) => {
+const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
   const [checked, setChecked] = useState(false);
   const uid = auth().currentUser.uid;
 
   const { currentSong } = useSelector((state) => state.root.audio);
 
-
-  const getCurrentTrack = async () => {
-    const track = await TrackPlayer.getCurrentTrack();
-    console.log('----Current track----', track);
-  };
   const addToPlaylist = (playlistId) => {
-    console.log('------Add to playlist--------');
     firestore()
       .collection('users')
       .doc(uid)
@@ -48,8 +29,6 @@ const FullScreenOverlay = ({
       });
   };
   const removeFromPlaylist = (playlistId) => {
-    console.log('------remove from playlist--------');
-
     firestore()
       .collection('users')
       .doc(uid)
@@ -66,10 +45,6 @@ const FullScreenOverlay = ({
   const handleClick = (playlistId) => {
     checked ? removeFromPlaylist(playlistId) : addToPlaylist(playlistId);
   };
-
-  useEffect(() => {
-    getCurrentTrack();
-  }, []);
 
   return (
     <Overlay
@@ -105,9 +80,13 @@ const FullScreenOverlay = ({
         }}
       />
       <View style={styles.overlayBottom}>
-        <Text style={styles.createPlaylistTitle} onPress={() => {
-          global.nav.navigate("CreateNewPlaylist")
-        }}>Create New Playlist</Text>
+        <Text
+          style={styles.createPlaylistTitle}
+          onPress={() => {
+            global.nav.navigate('CreateNewPlaylist');
+          }}>
+          Create New Playlist
+        </Text>
         <Image source={plusIcon} style={styles.createIcon} />
       </View>
     </Overlay>
