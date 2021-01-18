@@ -9,12 +9,13 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const TextBox = ({ text, onChangeText, contentType, defaultValue }) => {
+const TextBox = ({ text, onChangeText, contentType, defaultValue, blurOnSubmit }) => {
   console.log(defaultValue);
 
   return (
     <View style={styles.maincontainer}>
       <TextInput
+        blurOnSubmit={blurOnSubmit}
         autoCapitalize={false}
         style={styles.Textinputstyle}
         defaultValue={defaultValue}

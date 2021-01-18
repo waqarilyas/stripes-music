@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import firestore, { firebase } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { LOG } from '../../utils/Constants';
+import firestore, { firebase } from '@react-native-firebase/firestore';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 
 export const getSongs = createAsyncThunk('firebase/getSongs', async () => {
   let data = [];
@@ -133,12 +133,10 @@ export const getPlaylists = createAsyncThunk(
     const path = firestore().collection('playlists');
     const documents = await path.limit(6).get();
     documents.forEach((document) => {
-      console.log('-------Document-------', document);
       if (document.exists) {
         data.push(document.data());
       }
     });
-    console.log('------------Playlist Data---------', data);
     return data;
   },
 );
@@ -210,6 +208,7 @@ export const getUser = createAsyncThunk('firebase/getUser', async () => {
       '--------------LOGGED IN USER OBJECT------------',
       document.data(),
     );
+
     return document.data();
   }
 });
@@ -551,7 +550,10 @@ const firebaseSlice = createSlice({
   initialState: {
     error: null,
     status: '',
-    user: {},
+    user: {
+      isPaidUser: false,
+      isAnonymous: true,
+    },
     playlist: {},
     artist: {},
     artists: [],
@@ -584,16 +586,22 @@ const firebaseSlice = createSlice({
     limitedNews: [],
     news: {},
   },
+  reducers: {
+    setUser: (state, action) => {
+      console.log('-----------USER UPDATE ALE--------', action.payload)
+      state.user = { ...state, ...action.payload }
+    }
+  },
   extraReducers: {
     // User data
     [getUser.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      state.user = action.payload;
+      state.user = { ...state.user, ...action.payload };
     },
 
     [updateUser.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      state.user = action.payload;
+      state.user = { ...state.user, ...action.payload };
     },
 
     // Songs Collections
@@ -770,4 +778,5 @@ const firebaseSlice = createSlice({
   },
 });
 
+export const { setUser } = firebaseSlice.actions;
 export default firebaseSlice.reducer;

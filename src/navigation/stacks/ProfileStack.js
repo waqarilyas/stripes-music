@@ -1,25 +1,29 @@
-import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { useDispatch, useSelector } from 'react-redux';
+import { backIcon, searchIcon } from '../../../Assets/Icons';
+import useUser from '../../hooks/useUser';
+import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
+import AccountSetting from '../../screens/AccountSetting';
 import Artist from '../../screens/Artist';
-import ProfileScreen from '../../screens/ProfileScreen';
-import { searchIcon, backIcon } from '../../../Assets/Icons';
+import ChangePassword from '../../screens/ChangePassword';
 import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
+import EditProfile from '../../screens/EditProfile';
+import NotificationSetting from '../../screens/NotificationSetting';
 import ProfileArtistsSeeAll from '../../screens/ProfileArtistsSeeAll';
 import ProfilePlaylistsSeeAll from '../../screens/ProfilePlaylistsSeeAll';
 import ProfileRecentlyPlayedSeeAll from '../../screens/ProfileRecentlyPlayedSeeAll';
-import AccountSetting from '../../screens/AccountSetting';
-import ChangePassword from '../../screens/ChangePassword';
-import NotificationSetting from '../../screens/NotificationSetting';
-import SubscriptionStack from '../stacks/SubscriptionStack';
+import ProfileScreen from '../../screens/ProfileScreen';
 import TellAFriend from '../../screens/TellAFriend';
-import EditProfile from '../../screens/EditProfile';
+import SubscriptionStack from '../stacks/SubscriptionStack';
 
 const Stack = createStackNavigator();
 
 const ProfileStack = () => {
+  const dist = useDispatch();
   const search = (navigation) => (
     <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
       <Image source={searchIcon} style={styles.icon} />
@@ -33,19 +37,41 @@ const ProfileStack = () => {
     );
   };
 
-  const searchAndProfile = () => {
+  const searchAndProfile = (navigation, user) => {
     return (
       <View style={styles.container}>
-        <Avatar
-          rounded
-          containerStyle={styles.avatar}
-          source={require('../../../Assets/Images/songCover5.jpg')}
-        />
-        <Image source={searchIcon} style={styles.icon} />
+        {user?.isPaidUser ?
+          <Avatar
+            rounded
+            containerStyle={styles.avatar}
+            source={user.profilePicture ? { uri: user.profilePicture } : placeholder}
+            onPress={() => navigation.navigate('Profile')}
+          />
+          :
+          user?.isAnonymous ?
+            <TouchableOpacity onPress={() => {
+              navigation.navigate("AuthStack");
+            }}>
+              <View style={{ borderRadius: 50, height: RFPercentage(4), paddingHorizontal: RFPercentage(1), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
+                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>Login</Text>
+              </View>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={() => {
+              dist(setIsChatNotPaid(true))
+            }}>
+              <View style={{ borderRadius: 50, height: RFPercentage(4), width: RFPercentage(4), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
+                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>.99</Text>
+              </View>
+            </TouchableOpacity>
+        }
+        <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+          <Image source={searchIcon} style={styles.icon} />
+        </TouchableOpacity>
       </View>
     );
   };
-
+  let user = useSelector(state => state.root.firebase.user);
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -53,7 +79,7 @@ const ProfileStack = () => {
         component={ProfileScreen}
         options={({ navigation }) => ({
           title: '',
-          headerRight: () => search(navigation),
+          headerRight: () => searchAndProfile(navigation, user),
           headerLeft: '',
           headerStyle: styles.headerStyle,
         })}

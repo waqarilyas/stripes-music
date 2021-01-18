@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Button as RNEButton } from 'react-native-elements';
 import { Formik } from 'formik';
@@ -20,19 +20,30 @@ import LoginUser from './utils';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const initValues = {
+
   email: '',
   password: '',
   globalError: '',
 };
 
 const Login = ({ navigation }) => {
+
+  let [state, setState] = useState({
+    initValues: {
+      email: '',
+      password: '',
+      globalError: '',
+    }
+
+
+  })
   return (
     <Block>
       <ScrollView>
         <Text style={styles.headerText}>Login</Text>
         <Formik
-          initialValues={initValues}
-          onSubmit={(values, actions) => LoginUser(values, actions)}
+          initialValues={state.initValues}
+          onSubmit={(values, actions) => LoginUser(values, actions, navigation)}
           validationSchema={LoginVS}>
           {({
             initialValues,
@@ -99,7 +110,11 @@ const Login = ({ navigation }) => {
             title="Google"
             buttonStyle={styles.socialButton}
             titleStyle={styles.socialButtonText}
-            onPress={() => onGoogleButtonPress()}
+            onPress={async () => {
+              let GoogleLoginResponse = await onGoogleButtonPress()
+              if (GoogleLoginResponse)
+                navigation.goBack();
+            }}
           />
 
           <RNEButton
@@ -108,12 +123,25 @@ const Login = ({ navigation }) => {
             title="Facebook"
             buttonStyle={styles.faceBookButton}
             titleStyle={styles.socialButtonText}
-            onPress={() => onFacebookButtonPress()}
+            onPress={async () => {
+              let FacebookLoginResponse = await onFacebookButtonPress()
+              if (FacebookLoginResponse)
+                navigation.goBack();
+            }}
           />
 
           <View style={styles.signupSection}>
             <Text style={styles.signupText}>Do not have an account?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <TouchableOpacity onPress={() => {
+              setState(prev => ({
+                ...prev, initValues: {
+                  email: '',
+                  password: '',
+                  globalError: '',
+                }
+              }))
+              navigation.navigate('Signup')
+            }}>
               <Text style={styles.signup}>Sign Up</Text>
             </TouchableOpacity>
           </View>

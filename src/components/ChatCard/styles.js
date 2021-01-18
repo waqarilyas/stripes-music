@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
@@ -23,7 +22,6 @@ const styles = StyleSheet.create({
     marginTop: hp('1'),
   },
   delete: {
-    height: '100%',
     width: '15%',
     alignItems: 'center',
     justifyContent: 'center',

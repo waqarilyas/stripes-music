@@ -1,33 +1,38 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import {
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from 'react-native-gesture-handler';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-
-import Header from '../../components/Header';
-import Entity from '../../components/Entity';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { useDispatch, useSelector } from 'react-redux';
 import { downpicker, picker } from '../../../Assets/Icons';
+import Entity from '../../components/Entity';
+import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
+
 
 const Subscription = ({ route }) => {
-  // const { check } = route.params;
+
+  let user = useSelector(state => state.root.firebase.user);
+  const dist = useDispatch();
+
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(true);
   const [visible3, setVisible3] = useState(true);
 
   const onDowngradeClicked = () => {
-    setVisible3(false);
-    setVisible1(false);
-    setVisible2(true);
+    setVisible3(!visible3);
+    setVisible1(!visible1);
+    setVisible2(!visible2);
   };
 
   const onUPgradeClicked = () => {
-    setVisible3(true);
-    setVisible1(false);
-    setVisible2(false);
+    if (user.isPaidUser) {
+      setVisible3(!visible3);
+      setVisible1(!visible1);
+      setVisible2(!visible2);
+    } else
+      dist(setIsChatNotPaid(true));
   };
 
   return (
@@ -38,10 +43,10 @@ const Subscription = ({ route }) => {
           <View style={{ flex: 5 }}>
             <Text style={styles.container1Text}>Current Plan</Text>
             <Text style={styles.container1Text2}>
-              {!visible3 ? 'Free' : 'Standard'}
+              {!visible3 ? 'Standard' : 'Free'}
             </Text>
           </View>
-          {visible3 ? (
+          {!visible3 ? (
             <View style={styles.button}>
               <TouchableOpacity
                 style={styles.touchView3}
@@ -132,7 +137,7 @@ const Subscription = ({ route }) => {
               <Entity text="Listen to any song for full length" />
               <Entity text="Create a queue of your favorite songs" />
               <Entity text="Chat with any artist" />
-              {!visible3 ? (
+              {visible3 ? (
                 <TouchableOpacity
                   style={styles.touchView2}
                   onPress={onUPgradeClicked}>

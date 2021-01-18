@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ import {
   changeToMiniModal,
 } from '../../Redux/Reducers/audioSlice';
 import styles from './styles';
+import { PLAYER_CONFIG } from '../../utils/Constants';
 
 function ControlButton({ icon, onPress }) {
   return (
@@ -28,11 +29,10 @@ function ControlButton({ icon, onPress }) {
 }
 
 const MiniMusicPlayer = ({ currentTrack }) => {
-  const [, setCurrentTrack] = useState([]);
+  const [setCurrentTrack] = useState([]);
   const playbackState = usePlaybackState();
   const dispatch = useDispatch();
 
-  console.log('----Music player state-------', playbackState);
 
   //
   let middleButtonText = whitePlayIcon;
@@ -77,13 +77,14 @@ const MiniMusicPlayer = ({ currentTrack }) => {
     }
   };
 
+
   return (
     <View style={styles.container}>
       <Avatar
         size="large"
         rounded
         onPress={() => dispatch(fullScreenChange(true))}
-        source={{ uri: currentTrack.artwork }}
+        source={currentTrack?.artwork ? { uri: currentTrack?.artwork } : null}
         containerStyle={styles.songArt}
       />
       <View style={styles.containerRight}>
@@ -91,9 +92,9 @@ const MiniMusicPlayer = ({ currentTrack }) => {
         <View style={styles.playerBottom}>
           <View style={styles.artistContainer}>
             <Text style={styles.title} numberOfLines={1}>
-              {currentTrack.title}
+              {currentTrack?.title}
             </Text>
-            <Text style={styles.artist}>{currentTrack.artist}</Text>
+            <Text style={styles.artist}>{currentTrack?.artist}</Text>
           </View>
 
           <View style={styles.controls}>

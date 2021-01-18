@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   },
   commentButtonText: {
     color: 'white',
-    fontWeight: 'bold',
     fontSize: 18,
     width: '100%',
     textAlign: 'center',

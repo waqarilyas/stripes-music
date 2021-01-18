@@ -1,36 +1,30 @@
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
 import {
-  Modal,
-  SafeAreaView,
-  View,
-  Text,
-  StatusBar,
-  Image,
-  TextInput,
   ActivityIndicator,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-  TouchableHighlight,
+  FlatList, Image, Modal,
+  SafeAreaView,
+  ScrollView, StatusBar, Text,
+  TextInput,
+  TouchableHighlight, TouchableOpacity, View
 } from 'react-native';
-import randomize from 'randomatic';
-import dayjs from 'dayjs';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-
-import { commentIcon, videoIcon, eyeIcon } from '../../../Assets/Icons';
-import { thousandSeprator } from '../../utils/Helpers';
-import SectionHeader from '../../components/SectionHeader';
-import { getCollection } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-import NewVideosCard from '../../components/NewVideosCard';
 import { Divider } from 'react-native-elements';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { useSelector } from 'react-redux';
+import { commentIcon, eyeIcon, videoIcon } from '../../../Assets/Icons';
 import NewsCommentCard from '../../components/NewsCommentCard';
-import styles from './styles';
-import VideoPlayer from '../VideoPlayer';
-import { useDispatch, useSelector } from 'react-redux';
+import NewVideosCard from '../../components/NewVideosCard';
+import SectionHeader from '../../components/SectionHeader';
+import reducer from '../../hooks/useReducer';
 import { LOG } from '../../utils/Constants';
+import { getCollection } from '../../utils/Firebase';
+import { thousandSeprator } from '../../utils/Helpers';
 import SubscriptionModalScreen from '../SubscriptionBottomSheet';
+import VideoPlayer from '../VideoPlayer';
+import styles from './styles';
+
 
 const profilePic =
   'https://res.cloudinary.com/practicaldev/image/fetch/s--ef-WXsPf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/8050/Mm3V3467.jpg';
@@ -46,6 +40,9 @@ const VideoPlayerModal = ({ onPress }) => {
   );
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
+  const [stateVals, setStateVals] = useState({
+    showMore: []
+  });
   const [durationTime, setDurationTime] = useState(0);
 
   // LOG('VIDEO DATA', videoData);
@@ -62,6 +59,8 @@ const VideoPlayerModal = ({ onPress }) => {
         querySnapshot.forEach((doc) => {
           allComments.push(doc.data());
         });
+        let tempComments = allComments;
+        setStateVals(prev => ({ ...prev, showMore: tempComments.splice(0, 5) }))
         dispatch({ comments: allComments });
       });
 
@@ -69,6 +68,7 @@ const VideoPlayerModal = ({ onPress }) => {
   }, [videoData.id]);
 
   const handleSubmit = () => {
+    console.log('--------USER------', auth().currentUser)
     if (commentText === '') {
       return;
     }
@@ -80,13 +80,14 @@ const VideoPlayerModal = ({ onPress }) => {
         comment: commentText,
         createdAt: +new Date(),
         id: '',
-        image: profilePic,
+        image: auth().currentUser?.photoURL || '',
         videoId: videoData.id,
         updatedAt: +new Date(),
         userId: auth().currentUser.uid,
-        username: 'Arslan Mushtaq',
+        username: auth().currentUser.displayName || '',
       })
       .then((result) => {
+        setCommentText('')
         const documentId = result.id;
         result.update({
           id: documentId,
@@ -99,10 +100,10 @@ const VideoPlayerModal = ({ onPress }) => {
   const [collapse, setCollapse] = useState(false);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'black' }}>
       <SubscriptionModalScreen duration={durationTime} />
       <Modal animationType="slide" visible={videoModal}>
-        <ScrollView>
+        <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
           <SafeAreaView style={styles.safeArea} />
           <StatusBar barStyle="light-content" />
           <View style={styles.container}>
@@ -177,10 +178,10 @@ const VideoPlayerModal = ({ onPress }) => {
 
             <View style={styles.commentButton}>
               <TextInput
+                value={commentText}
                 style={styles.commentButtonText}
                 placeholder="Leave a comment"
                 placeholderTextColor="gray"
-                multiline
                 onChangeText={(input) => setCommentText(input)}
               />
             </View>
@@ -190,26 +191,50 @@ const VideoPlayerModal = ({ onPress }) => {
 
             <View style={styles.commentSection}>
               {state.comments ? (
-                <FlatList
-                  style={styles.commentListStyle}
-                  data={state.comments}
-                  ItemSeparatorComponent={() => (
-                    <Divider style={styles.commentDivider} />
-                  )}
-                  keyExtractor={() => randomize('Aa0!', 10)}
-                  renderItem={({
-                    item: { image, comment, username, createdAt },
-                  }) => {
-                    return (
-                      <NewsCommentCard
-                        image={image}
-                        comment={comment}
-                        username={username}
-                        createdAt={createdAt && dayjs.unix(createdAt._seconds)}
-                      />
-                    );
-                  }}
-                />
+                <>
+                  <FlatList
+                    style={styles.commentListStyle}
+                    data={stateVals.showMore}
+                    ItemSeparatorComponent={() => (
+                      <Divider style={styles.commentDivider} />
+                    )}
+                    keyExtractor={() => randomize('Aa0!', 10)}
+                    renderItem={({
+                      item: { image, comment, username, createdAt },
+                    }) => {
+                      return (
+                        <NewsCommentCard
+                          image={image}
+                          comment={comment}
+                          username={username}
+                          createdAt={createdAt}
+                        />
+                      );
+                    }}
+                  />
+
+
+                  <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
+                    {stateVals.showMore.length > 5 ?
+                      <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
+                        <Text onPress={() => {
+                          let tempCom = state.comments;
+                          setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length - 5) }))
+                        }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show Less</Text>
+                      </View>
+                      : null}
+
+                    <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
+                      <Text onPress={() => {
+                        let tempCom = state.comments;
+                        setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length + 5) }))
+                      }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show More</Text>
+                    </View>
+                  </View>
+
+
+
+                </>
               ) : (
                   <ActivityIndicator color="black" />
                 )}

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import ArtistsTabs from '../../navigation/Tabs/ArtistsTabs';
 import styles from './styles';
@@ -93,19 +92,25 @@ const Artist = ({ route }) => {
             renderPlaceholderContent={<ActivityIndicator color="black" />}
           />
         </View>
+
+
         <View style={styles.containerRight}>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { textAlign: 'left' }]}>
             {artist.firstName} {artist.lastName}
           </Text>
           <Text style={styles.subtitle}>
             {thousandSeprator(artist.followerCount)} Listeners
           </Text>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => handleFollowingStatus()}>
-            {LOG('STATUS', status)}
-            <Text style={styles.text}>{status ? 'UNFOLLOW' : 'FOLLOW'}</Text>
-          </TouchableOpacity>
+
+          <Text style={styles.subtitle}>Artist</Text>
+          <View >
+            <TouchableOpacity
+              style={[styles.buttonContainer, { alignSelf: 'flex-end' }]}
+              onPress={() => handleFollowingStatus()}>
+              {LOG('STATUS', status)}
+              <Text style={styles.text}>{status ? 'UNFOLLOW' : 'FOLLOW'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <ArtistsTabs />

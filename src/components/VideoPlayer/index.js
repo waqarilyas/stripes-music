@@ -1,20 +1,18 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { View, TouchableOpacity, Image, Text, Animated } from 'react-native';
+import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Slider } from 'react-native-elements';
+import TrackPlayer from 'react-native-track-player';
 import Video from 'react-native-video';
-
-import styles from './styles';
-import reducer from '../../hooks/useReducer';
-import {
-  fullscreenIcon,
-  closeIcon,
-  playIcon,
-  pauseIcon,
-} from '../../../Assets/Icons';
-import { convertToMinutes } from '../../utils/Helpers';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  closeIcon, fullscreenIcon,
+  pauseIcon, playIcon
+} from '../../../Assets/Icons';
+import reducer from '../../hooks/useReducer';
 import { displayVideoModal, setVidoReferences } from '../../Redux/Reducers/helperSlice';
-import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants'
+import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
+import { convertToMinutes } from '../../utils/Helpers';
+import styles from './styles';
 const initialState = {
   paused: true,
   currentTime: 0.0,
@@ -27,10 +25,10 @@ const initialState = {
 
 const VideoPlayer = ({ fileUrl, onPress }) => {
   const disp = useDispatch();
-  const videoPlayer = useRef(null);
+  let videoPlayer = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [finished, setFinished] = useState(false);
-let user = useSelector(state=>state.root.firebase.user)
+  let user = useSelector(state => state.root.firebase.user)
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
 
   useEffect(() => {
@@ -65,7 +63,10 @@ let user = useSelector(state=>state.root.firebase.user)
   return (
     <View>
       <Video
-        ref={videoPlayer}
+        ref={ref => {
+          videoPlayer = ref;
+          global.vidRef = ref
+        }}
         source={{ uri: fileUrl }}
         onLoad={(data) => {
           console.log('On Load Fired!');
@@ -94,7 +95,10 @@ let user = useSelector(state=>state.root.firebase.user)
         <Animated.View style={{ ...styles.container, opacity: visibility }}>
           <TouchableOpacity
             style={styles.resumeContainer}
-            onPress={() => dispatch({ paused: !state.paused })}>
+            onPress={() => {
+              TrackPlayer.pause();
+              dispatch({ paused: !state.paused })
+            }}>
             <Image
               source={state.paused ? playIcon : pauseIcon}
               style={styles.resumeIcon}

@@ -10,8 +10,6 @@ const styles = StyleSheet.create({
   containerRight: {
     flexShrink: 1,
     paddingHorizontal: RFValue(10),
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
     flex: 1,
   },

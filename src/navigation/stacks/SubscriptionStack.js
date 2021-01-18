@@ -9,7 +9,9 @@ const Stack = createStackNavigator();
 
 const SubscriptionStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
       <Stack.Screen name="Subscriptions" component={Subscriptions} />
       <Stack.Screen
         name="EditYourSubscription"

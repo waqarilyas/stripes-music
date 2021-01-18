@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 
 import { NETWORK_ERROR, EMAIL_ALREADY_IN_USE } from '../../utils/Constants';
 
-const RegisterUser = async (values, actions) => {
+const RegisterUser = async (values, actions, navigation) => {
   try {
     await auth()
       .createUserWithEmailAndPassword(values.email, values.password)
@@ -15,6 +15,7 @@ const RegisterUser = async (values, actions) => {
             id: result.user.uid,
             fullName: values.name,
             email: values.email,
+            isAnonymous: false,
             isPaidUser: false,
             isActive: false,
             createdAt: +new Date(),
@@ -27,6 +28,7 @@ const RegisterUser = async (values, actions) => {
             isAdmin: false,
           });
       });
+    navigation.goBack();
     console.log(values);
   } catch (authErrors) {
     actions.setSubmitting(false);

@@ -1,36 +1,35 @@
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-import React from 'react';
+import React, { useRef } from 'react';
 import {
-  FlatList,
+  Dimensions,
+
   Image,
   ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Carousel from 'react-native-snap-carousel';
+import TrackPlayer from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { musicSeeAllIcon, sliderPlaceholder } from '../../../Assets/Icons';
 import {
   changeSong,
-  pushToPlaylist,
-  fullScreenChange,
+  fullScreenChange, pushToPlaylist
 } from '../../Redux/Reducers/audioSlice';
 import {
-  addToRecentlyPlayed,
-  addPlayCount,
+  addPlayCount, addToRecentlyPlayed
 } from '../../Redux/Reducers/firebaseSlice';
-import TrackPlayer from 'react-native-track-player';
-
-import HomeTopSlider from '../HomeTopSlider';
-import { sliderPlaceholder, musicSeeAllIcon } from '../../../Assets/Icons';
 import { LOG } from '../../utils/Constants';
+import HomeTopSlider from '../HomeTopSlider';
 
-const HomeBanner = () => {
+
+const HomeBanner = ({ currentItemImage }) => {
   const { songs } = useSelector((state) => state.root.firebase);
   const dispatch = useDispatch();
-
+  let _carousel = useRef(null);
   const playSong = async ({ title, artist, artwork, url, duration, id }) => {
     try {
       const result = {
@@ -53,16 +52,32 @@ const HomeBanner = () => {
     }
   };
 
+  function updateIndex() {
+    if (_carousel.currentIndex && _carousel.currentIndex >= 0 && songs[_carousel.currentIndex]?.artwork)
+      currentItemImage(songs[_carousel.currentIndex].artwork)
+  }
+
   return (
-    <FlatList
+    <Carousel
       horizontal
+      // pagingEnabled={true}
+
+      ref={(c) => { _carousel = c; }}
+      sliderWidth={Dimensions.get('screen').width}
+      sliderHeight={hp('23')}
+
+      itemWidth={hp('34')}
+      itemHeight={hp('20')}
+
+      onSnapToItem={updateIndex}
+
       showsHorizontalScrollIndicator={false}
       data={[...songs, { seeAll: true }]}
       keyExtractor={(item) => item.id}
       renderItem={({ item, item: { artwork, title, description, seeAll } }) => {
         if (seeAll) {
           return (
-            <TouchableOpacity>
+            <TouchableOpacity style={{ margin: hp('0.4') }}>
               <ImageBackground
                 blurRadius={5}
                 source={sliderPlaceholder}
@@ -77,7 +92,7 @@ const HomeBanner = () => {
         }
 
         return (
-          <TouchableOpacity onPress={() => playSong(item)}>
+          <TouchableOpacity onPress={() => playSong(item)} style={{}}>
             <HomeTopSlider
               artwork={artwork}
               title={title}

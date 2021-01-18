@@ -15,10 +15,11 @@ import SearchResultsScreen from '../../screens/SearchResultsSceen';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import SubscriptionModalScreen from '../../components/SubscriptionBottomSheet';
 import Subscriptions from '../../screens/Subscriptions';
+import AuthStack from './AuthenticationStack';
 
 const Stack = createStackNavigator();
 
-const MainAppStack = ({}) => {
+const MainAppStack = ({ }) => {
   const currentState = useSelector((state) => state.root.audio.miniModalOpen);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
   const subsModal = useSelector(
@@ -67,6 +68,15 @@ const MainAppStack = ({}) => {
             headerShown: false,
           })}
         />
+
+        <Stack.Screen
+          name="AuthStack"
+          options={({ navigation }) => ({
+            headerShown: false,
+          })}
+        >
+          {(props) => <AuthStack {...props} />}
+        </Stack.Screen>
 
         <Stack.Screen
           name="AccountSettingStack"

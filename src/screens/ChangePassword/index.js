@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import firebase from '@react-native-firebase/app';
-
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   heightPercentageToDP as hp,
-  widthPercentageToDP,
+  widthPercentageToDP
 } from 'react-native-responsive-screen';
-
-import { tick, errIcon } from '../../../Assets/Icons';
-import Header from '../../components/Header';
+import { errIcon, tick } from '../../../Assets/Icons';
 import Button from '../../components/Mybutton';
 import TextBox from '../../components/TextBox';
 
@@ -21,6 +18,7 @@ const ChangePassword = () => {
   const [matchErr, setMatchErr] = useState(false);
   const [emptyFieldError, setEmptyFieldError] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
     console.log(currentPass);
@@ -57,23 +55,26 @@ const ChangePassword = () => {
 
   const setNewPassword = () => {
     console.log(currentPass, '---------', newPass);
-
+    setLoading(true)
     reauthenticate()
       .then(() => {
         var user = firebase.auth().currentUser;
         user
           .updatePassword(newPass)
           .then(() => {
+            setLoading(false)
             console.log('Password updated!');
             setVisible(true);
           })
           .catch((error) => {
-            console.log('---Error----', error);
+            setLoading(false)
+            console.log('---Error----', error.message);
           });
       })
       .catch((error) => {
+        setLoading(false)
         setWrongPassword(true);
-        console.log('----Functionreauthenticate error--', error);
+        console.log('----Functionreauthenticate error--', error.message);
       });
   };
 
@@ -81,28 +82,32 @@ const ChangePassword = () => {
     <View style={{ backgroundColor: '#120810' }}>
       <ScrollView>
         <View style={{ height: hp('3%') }} />
+
+        <TextBox
+          blurOnSubmit={true}
+          text="Enter current password"
+          onChangeText={(input) => setcurrentPass(input)}
+          contentType="password"
+        />
+        <TextBox
+          blurOnSubmit={true}
+          text="Enter new password"
+          onChangeText={(input) => setnewPass(input)}
+          contentType="password"
+        />
+        <TextBox
+          blurOnSubmit={true}
+          text="Re-enter new password"
+          onChangeText={(input) => setconfirmPass(input)}
+          contentType="password"
+        />
+
         {wrongPassword ? (
           <View style={styles.postContainer}>
             <Image source={errIcon} style={styles.successImage} />
             <Text style={styles.textStyle}>Wrong Password!</Text>
           </View>
         ) : null}
-        <TextBox
-          text="Enter current password"
-          onChangeText={(input) => setcurrentPass(input)}
-          contentType="password"
-        />
-        <TextBox
-          text="Enter new password"
-          onChangeText={(input) => setnewPass(input)}
-          contentType="password"
-        />
-        <TextBox
-          text="Re-enter new password"
-          onChangeText={(input) => setconfirmPass(input)}
-          contentType="password"
-        />
-        <Button text="CHANGE PASSWORD" onPress={handleSubmit} />
 
         {emptyFieldError ? (
           <View style={styles.postContainer}>
@@ -124,6 +129,10 @@ const ChangePassword = () => {
             <Text style={styles.textStyle}>Password updated successfully!</Text>
           </View>
         ) : null}
+
+
+
+        <Button text="CHANGE PASSWORD" onPress={handleSubmit} loading={loading} />
         <View style={{ height: hp('10%') }} />
       </ScrollView>
       <View style={{ height: hp('30%') }} />

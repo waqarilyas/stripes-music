@@ -14,7 +14,9 @@ const ChatCard = ({
   onDeletePress,
 }) => {
   return (
-    <ListItem containerStyle={styles.container} onPress={onPress}>
+    <ListItem
+      containerStyle={styles.container}
+      onPress={onPress}>
       <Avatar
         rounded
         source={{ uri: avatar }}
@@ -25,7 +27,9 @@ const ChatCard = ({
         }}
       />
       <ListItem.Content>
-        <ListItem.Title numberOfLines={1} style={styles.title}>
+        <ListItem.Title numberOfLines={1}
+          style={styles.title}
+        >
           {name}
         </ListItem.Title>
         <ListItem.Subtitle

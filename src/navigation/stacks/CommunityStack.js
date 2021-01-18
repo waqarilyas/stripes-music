@@ -1,22 +1,54 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Avatar, Button } from 'react-native-elements';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
 import Community from '../../screens/Community';
 import MessageDetail from '../../screens/MessageDetail';
 import NewMessage from '../../screens/NewMessage';
-
 const Stack = createStackNavigator();
 
 const CommunityStack = () => {
   let user = useSelector(state => state.root.firebase.user);
   const dist = useDispatch();
-  const search = () => <Image source={searchIcon} style={styles.icon} />;
+  const search = (navigation) => {
+    return (
+      <View style={styles.container}>
+        {user?.isPaidUser ?
+          <Avatar
+            rounded
+            containerStyle={styles.avatar}
+            source={user.profilePicture ? { uri: user.profilePicture } : placeholder}
+            onPress={() => navigation.navigate('Profile')}
+          />
+          :
+          user?.isAnonymous ?
+            <TouchableOpacity onPress={() => {
+              navigation.navigate("AuthStack");
+            }}>
+              <View style={{ borderRadius: 50, height: RFPercentage(4), paddingHorizontal: RFPercentage(1), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
+                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>Login</Text>
+              </View>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={() => {
+              dist(setIsChatNotPaid(true))
+            }}>
+              <View style={{ borderRadius: 50, height: RFPercentage(4), width: RFPercentage(4), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
+                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>.99</Text>
+              </View>
+            </TouchableOpacity>
+        }
+        <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
+          <Image source={searchIcon} style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+    )
+  };
   const newMessage = (navigation) => (
     <Button
       type="solid"
@@ -49,7 +81,7 @@ const CommunityStack = () => {
           title: 'Chat',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerLeft: () => newMessage(navigation),
           headerStyle: styles.headerStyle,
         })}
@@ -62,7 +94,7 @@ const CommunityStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: search,
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -70,9 +102,11 @@ const CommunityStack = () => {
         name="MessageDetail"
         component={MessageDetail}
         options={({ navigation }) => ({
-          headerTitleAlign: 'left',
+          title: 'Artists',
+          headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
+          headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -109,6 +143,11 @@ const styles = StyleSheet.create({
     paddingVertical: hp('1'),
     borderRadius: hp('1'),
     marginStart: hp('2'),
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   titleStyle: {
     fontWeight: 'bold',
