@@ -37,16 +37,6 @@ const App = () => {
       store.dispatch(getUser());
       setLoading(false);
     } else {
-<<<<<<< HEAD
-      auth().signInAnonymously().then(res => {
-        setLoading(false);
-        store.dispatch(setUser({ isAnonymous: true }))
-        dispatch({ user: { isAnonymous: true } });
-      }).catch(err => {
-
-        setLoading(false);
-      });
-=======
       auth()
         .signInAnonymously()
         .then(() => {
@@ -56,39 +46,18 @@ const App = () => {
         .catch(() => {
           setLoading(false);
         });
->>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1
     }
   };
 
   const SetupAudioPlayer = async () => {
     TrackPlayer.updateOptions({
       jumpInterval: 15,
-<<<<<<< HEAD
-      stopWithApp: true,
-
-      ...PLAYER_CONFIG,
-
-
-      
-=======
       stopWithApp: false,
       ...PLAYER_CONFIG,
->>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1
     });
   };
 
   const handleAppStateChange = (nextAppState) => {
-<<<<<<< HEAD
-
-    if (nextAppState === 'inactive' || nextAppState === 'background' || nextAppState != 'active') {
-      if (store.getState().root?.firebase?.user?.isPaidUser) { } else {
-
-
-        store.dispatch(changeToMiniModal(false))
-        store.dispatch(fullScreenChange(false))
-        TrackPlayer.destroy();
-      }
-=======
     if (
       nextAppState === 'inactive' ||
       nextAppState === 'background' ||
@@ -97,7 +66,6 @@ const App = () => {
       store.dispatch(changeToMiniModal(false));
       store.dispatch(fullScreenChange(false));
       TrackPlayer.destroy();
->>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1
     }
   };
 

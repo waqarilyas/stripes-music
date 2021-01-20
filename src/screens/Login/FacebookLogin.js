@@ -40,26 +40,6 @@ const onFacebookButtonPress = async (setVisibility) => {
         fbUserId: data.userID,
       });
     } else {
-<<<<<<< HEAD
-      firestore()
-        .collection('users')
-        .doc(response.user.uid)
-        .set({
-          id: response.user.uid,
-          fullName: response.user.displayName,
-          email: response.user.email,
-          isPaidUser: false,
-          isActive: false,
-          createdAt: +new Date(),
-          updatedAt: +new Date(),
-          subscribedAt: null,
-          fbAccessToken: data.accessToken,
-          googleAccessToken: '',
-          fbUserId: data.userID,
-          profilePicture: '',
-          isAdmin: false,
-        });
-=======
       return firestore().collection('users').doc(response.user.uid).set({
         id: response.user.uid,
         fullName: response.user.displayName,
@@ -75,7 +55,6 @@ const onFacebookButtonPress = async (setVisibility) => {
         profilePicture: '',
         isAdmin: false,
       });
->>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1
     }
     return true;
   } catch (err) {

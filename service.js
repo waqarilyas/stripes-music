@@ -18,16 +18,6 @@ const removeAllListeners = () => {
   clearInterval(timer);
 };
 
-<<<<<<< HEAD
-
-        TrackPlayer.addEventListener('playback-error', () => {
-            console.log('------playback-error-------');
-        })
-    ];
-    // ...
-
-};
-=======
 module.exports = async function () {
   listeners.map((listener) => {
     listener.remove();
@@ -96,4 +86,3 @@ module.exports = async function () {
   ];
   // ...
 };
->>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1

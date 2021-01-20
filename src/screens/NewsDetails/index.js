@@ -46,13 +46,14 @@ const profilePic =
   'https://res.cloudinary.com/practicaldev/image/fetch/s--ef-WXsPf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/8050/Mm3V3467.jpg';
 
 const NewsDetails = () => {
-  const { news } = useSelector((_state) => _state.root.firebase);
+  const { news, user } = useSelector((_state) => _state.root.firebase);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [stateVals, setStateVals] = useState({
     showMore: [],
   });
+
 
   useEffect(() => {
     getCollection('news', 5, (documents) =>
@@ -61,7 +62,7 @@ const NewsDetails = () => {
     let listener = firestore()
       .collection('news')
       .doc(news.id)
-      .collection('comments')
+      .collection('comments').orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
         let allComments = [];
         querySnapshot.forEach((doc) => {
@@ -86,6 +87,7 @@ const NewsDetails = () => {
 
     setCommentText('');
 
+
     const data = {
       comment: commentText,
       createdAt: +new Date(),
@@ -94,7 +96,7 @@ const NewsDetails = () => {
       postId: news.id,
       updatedAt: +new Date(),
       userId: auth().currentUser.uid,
-      username: auth().currentUser.displayName || '',
+      username: user.fullName || '',
     };
 
     firestore()
@@ -223,7 +225,7 @@ const NewsDetails = () => {
             )}
           </View>
 
-          <SectionHeader icon={newsComment} name="Related News" />
+          <SectionHeader icon={newsComment} name="Related News" isRequired={false}/>
 
           <View style={styles.realtedNewsContainer}>
             {state.relatedNews ? (

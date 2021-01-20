@@ -9,6 +9,10 @@ const RegisterUser = async (values, actions, navigation, setLoading) => {
     await auth()
       .createUserWithEmailAndPassword(values.email, values.password)
       .then((result) => {
+        console.log('---------newUser----------', result.user);
+        result.user.updateProfile({displayName: values.name});
+        console.log('---------newUserUpdated----------', result.user);
+
         firestore().collection('users').doc(result.user.uid).set({
           id: result.user.uid,
           fullName: values.name,
