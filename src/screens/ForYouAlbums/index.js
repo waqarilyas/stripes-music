@@ -17,6 +17,16 @@ const ForYouAlbums = ({ navigation }) => {
   const dispatch = useDispatch();
   const { albums } = useSelector((state) => state.root.firebase);
 
+  const handleAlbum = (id) => {
+    dispatch(getAnAlbum(id));
+    dispatch(getAlbumSongs(id));
+    dispatch(addAlbumViewCount(id));
+    navigation.navigate('AlbumDetail');
+  };
+
+  const handleSeeAllNavigation = () =>
+    navigation.navigate('ForYouAlbumsSeeAll');
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <FlatList
@@ -28,20 +38,10 @@ const ForYouAlbums = ({ navigation }) => {
         data={[...albums, { seeAll: true }]}
         renderItem={({ item: { id, title, imgUrl, seeAll, songCount } }) => {
           if (seeAll) {
-            return (
-              <SeeAll
-                onPress={() => navigation.navigate('ForYouAlbumsSeeAll')}
-              />
-            );
+            return <SeeAll onPress={handleSeeAllNavigation} />;
           } else {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(getAnAlbum(id));
-                  dispatch(getAlbumSongs(id));
-                  dispatch(addAlbumViewCount(id));
-                  navigation.navigate('AlbumDetail');
-                }}>
+              <TouchableOpacity onPress={() => handleAlbum(id)}>
                 <PlaylistCard
                   title={title}
                   image={imgUrl}

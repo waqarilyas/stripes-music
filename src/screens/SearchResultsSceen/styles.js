@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   searchWithClose: {
@@ -37,6 +41,12 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: 'transparent',
     marginVertical: 8,
+  },
+  backContainer: {
+    paddingEnd: wp(3),
+  },
+  back: {
+    resizeMode: 'contain',
   },
 });
 

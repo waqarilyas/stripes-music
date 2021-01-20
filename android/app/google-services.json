@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:91986739524:android:d9fcd94b61bd02b1bf9711",
+        "mobilesdk_app_id": "1:91986739524:android:b177213da925a427bf9711",
         "android_client_info": {
-          "package_name": "com.musicapp"
+          "package_name": "com.stripes"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "91986739524-ndsgbu2j0dufdo1dd0f0t6s46qmd01br.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stripes",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "91986739524-je9lbope2f8mfn7l0ld58k10dk00armv.apps.googleusercontent.com",
           "client_type": 3

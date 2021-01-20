@@ -9,10 +9,8 @@ import {
   pushToPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
-import {
-  addToRecentlyPlayed,
-  addPlayCount,
-} from '../../Redux/Reducers/firebaseSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
 import SeeAll from '../../components/SeeAll';
 import SongCard from '../../components/SongCard';
@@ -46,6 +44,8 @@ const ForYouSongs = ({ navigation }) => {
     }
   };
 
+  const handleNav = () => navigation.navigate('ForYouAudioSeeAll');
+
   return (
     <ScrollView horizontal>
       <FlatList
@@ -55,11 +55,7 @@ const ForYouSongs = ({ navigation }) => {
         data={[...songs, { seeAll: true }]}
         renderItem={({ item, item: { title, artwork, artist, seeAll } }) => {
           if (seeAll) {
-            return (
-              <SeeAll
-                onPress={() => navigation.navigate('ForYouAudioSeeAll')}
-              />
-            );
+            return <SeeAll onPress={handleNav} />;
           } else {
             return (
               <TouchableOpacity onPress={() => playSong(item)}>

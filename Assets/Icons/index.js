@@ -133,3 +133,6 @@ export const nextIcon = require('./next.png');
 export const optionsIcon = require('./icons-options-28x28-black.png');
 export const errIcon = require('./close.png');
 export const noNewsIcon = require('./news.png');
+
+// Videos
+export const introVideo = require('../Videos/intro.mp4');

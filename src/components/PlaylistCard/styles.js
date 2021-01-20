@@ -3,16 +3,16 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
-    height: hp('23'),
-    width: hp('15'),
+    height: hp(23),
+    width: hp(15),
     marginHorizontal: hp('1'),
     marginTop: hp('1'),
   },
   image: {
     resizeMode: 'cover',
     justifyContent: 'center',
-    height: hp('15'),
-    width: hp('15'),
+    height: hp(15),
+    width: hp(15),
     borderRadius: hp('1'),
     overflow: 'hidden',
   },
@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
     fontSize: hp('1.5'),
     color: 'gray',
     fontWeight: 'bold',
+  },
+  placeholderStyle: {
+    backgroundColor: '#212121',
   },
 });
 

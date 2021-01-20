@@ -23,6 +23,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const MainTabs = () => {
   const miniModalOpen = useSelector((state) => state.root.audio.miniModalOpen);
+  const { user } = useSelector((state) => state.root.firebase);
   return (
     <Tab.Navigator
       labeled={false}
@@ -78,7 +79,7 @@ const MainTabs = () => {
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Videos" component={VideoStack} />
-      <Tab.Screen name="Profile" component={ProfileStack} />
+      {user && <Tab.Screen name="Profile" component={ProfileStack} />}
       <Tab.Screen name="Community" component={CommunityStack} />
       <Tab.Screen name="News" component={NewsStack} />
     </Tab.Navigator>

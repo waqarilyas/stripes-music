@@ -17,7 +17,12 @@ import { LOG } from '../../utils/Constants';
 const NewsLatest = ({ navigation }) => {
   const dispatch = useDispatch();
   const { allNews } = useSelector((state) => state.root.firebase);
-  LOG('RESPONSE', allNews);
+
+  const handleNav = (id) => {
+    dispatch(getANews(id)).then(() => {
+      navigation.navigate('NewsDetails');
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -39,14 +44,8 @@ const NewsLatest = ({ navigation }) => {
           },
         }) => {
           const date = dayjs(createdAt).format('DD MMMM, YYYY');
-
-          console.log('------DATE------', date);
           return (
-            <TouchableOpacity
-              onPress={() => {
-                dispatch(getANews(id));
-                navigation.navigate('NewsDetails');
-              }}>
+            <TouchableOpacity onPress={() => handleNav(id)}>
               <NewsCard
                 title={title}
                 image={imgUrl}

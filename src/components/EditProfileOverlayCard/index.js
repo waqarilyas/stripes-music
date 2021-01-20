@@ -7,7 +7,6 @@ const EditProfileOverlayCard = ({ name, onPress }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={{ color: 'white' }}>{name}</Text>
-
       <Image source={nextIcon} style={styles.icon} />
     </TouchableOpacity>
   );

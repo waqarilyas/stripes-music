@@ -1,22 +1,44 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { getArtist } from '../../Redux/Reducers/firebaseSlice';
-
+import {
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Divider } from 'react-native-elements';
-import styles from './styles';
+import { useDispatch, useSelector } from 'react-redux';
 import ArtistsGridCard from '../../components/ArtistsGridCard';
+import {
+  getArtist,
+  getArtistNews,
+  getArtistPlaylists,
+  getArtistPopularSongs,
+} from '../../Redux/Reducers/firebaseSlice';
+import { getArtistId } from '../../Redux/Reducers/idsSlice';
+import styles from './styles';
+
+const width = Dimensions.get('window').width;
 
 const ArtistsSeeAll = ({ navigation }) => {
   const dispatch = useDispatch();
   const { allTopArtists } = useSelector((state) => state.root.firebase);
+
+  const handleArtist = (id) => {
+    dispatch(getArtist(id));
+    dispatch(getArtistId(id));
+    dispatch(getArtistNews(id));
+    dispatch(getArtistPopularSongs(id));
+    dispatch(getArtistPlaylists(id));
+    navigation.navigate('Artist', { artistId: id });
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topView}>
         <Text style={styles.title}>Top Artists</Text>
         <Text style={styles.subtitle}>
-          Artists which the highest followers. Checkout their profile.
+          These are our top artists. Checkout their profile.
         </Text>
       </View>
       <FlatList
@@ -29,11 +51,8 @@ const ArtistsSeeAll = ({ navigation }) => {
         }) => {
           return (
             <TouchableOpacity
-              style={{ width: '33.3%' }}
-              onPress={() => {
-                dispatch(getArtist(id));
-                navigation.navigate('Artist', { artistId: id });
-              }}>
+              style={{ width: width / 3 }}
+              onPress={() => handleArtist(id)}>
               <ArtistsGridCard
                 name={`${firstName} ${lastName}`}
                 avatar={imgUrl}

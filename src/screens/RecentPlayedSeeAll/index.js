@@ -9,10 +9,8 @@ import {
   pushToPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
-import {
-  addPlayCount,
-  addToRecentlyPlayed,
-} from '../../Redux/Reducers/firebaseSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 import TrackPlayer from 'react-native-track-player';
 import { LOG } from '../../utils/Constants';
 

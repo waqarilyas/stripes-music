@@ -4,7 +4,7 @@ import { Image } from 'react-native-elements';
 
 import { eyeIcon } from '../../../Assets/Icons';
 import styles from './styles';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 
 const NewVideoscard = ({ poster, title, artist, viewCount, duration }) => {
   return (
@@ -25,7 +25,7 @@ const NewVideoscard = ({ poster, title, artist, viewCount, duration }) => {
         <View style={styles.views}>
           <Image source={eyeIcon} style={styles.icon} />
           <Text numberOfLines={1} style={styles.viewCount}>
-            {thousandSeprator(viewCount)}
+            {thousandSeparator(viewCount)}
           </Text>
         </View>
       </View>

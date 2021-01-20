@@ -1,5 +1,6 @@
 import randomize from 'randomatic';
 import React, { useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 import {
   FlatList,
   Image,
@@ -10,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import TrackPlayer, {
+  STATE_READY,
   usePlaybackState,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
@@ -32,10 +34,8 @@ import {
   isInitialPlay,
   setPlaylist,
 } from '../../Redux/Reducers/audioSlice';
-import {
-  addPlayCount,
-  addToRecentlyPlayed,
-} from '../../Redux/Reducers/firebaseSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 import { LOG } from '../../utils/Constants';
 import { shuffleArray } from '../../utils/Helpers';
 import AudioPlayerSlider from '../AudioPlayerSlider';
@@ -63,10 +63,10 @@ const EmptyPlaylist = () => {
 const Player = ({ screen }) => {
   const playbackState = usePlaybackState();
   const [isVisible, setIsVisible] = useState(false);
-  const [isMute, setIsMute] = useState(false);
+  const [volume, setVolume] = useState(null);
   const [currentTrack, setCurrentTrack] = useState([]);
-
-  const currentUser = useSelector((state) => state.root.firebase.user);
+  const [buffering, setBuffering] = useState(true);
+  const [playing, setPlaying] = useState(false);
 
   const currentSong = useSelector((state) => state.root.audio.currentSong);
   const queue = useSelector((state) => state.root.audio.playlist);
@@ -74,10 +74,38 @@ const Player = ({ screen }) => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    TrackPlayer.getVolume().then((level) => setVolume(level));
+    setCurrentTrack(currentSong);
+    if (firstTime) {
+      playSong();
+      dispatch(isInitialPlay(false));
+    } else {
+      skipTrack();
+    }
+  }, [currentSong]);
+
+  useEffect(() => {
+    switch (playbackState) {
+      case TrackPlayer.STATE_PLAYING:
+        setPlaying(true);
+        setBuffering(false);
+        break;
+      case TrackPlayer.STATE_BUFFERING:
+        setBuffering(true);
+        break;
+      case TrackPlayer.STATE_PAUSED:
+      case TrackPlayer.STATE_NONE:
+      case TrackPlayer.STATE_STOPPED:
+      case TrackPlayer.STATE_READY:
+        setPlaying(false);
+        setBuffering(false);
+        break;
+    }
+  }, [playbackState]);
+
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
-      console.log('------Track-------', track);
-
       const track = await TrackPlayer.getTrack(event.nextTrack);
       setCurrentTrack(track);
     }
@@ -86,8 +114,8 @@ const Player = ({ screen }) => {
   const skipToNext = async () => {
     try {
       await TrackPlayer.skipToNext();
-      const trackid = await TrackPlayer.getCurrentTrack();
-      const track = await TrackPlayer.getTrack(trackid);
+      const trackId = await TrackPlayer.getCurrentTrack();
+      const track = await TrackPlayer.getTrack(trackId);
       setCurrentTrack(track);
     } catch (err) {
       LOG('SKIP TO NEXT', err);
@@ -97,8 +125,8 @@ const Player = ({ screen }) => {
   const skipToPrevious = async () => {
     try {
       await TrackPlayer.skipToPrevious();
-      const trackid = await TrackPlayer.getCurrentTrack();
-      const track = await TrackPlayer.getTrack(trackid);
+      const trackId = await TrackPlayer.getCurrentTrack();
+      const track = await TrackPlayer.getTrack(trackId);
       setCurrentTrack(track);
     } catch (err) {
       LOG('SKIP TO PREVIOUS', err);
@@ -117,31 +145,20 @@ const Player = ({ screen }) => {
     }
   };
 
-  // full screen icons
-  let fullscreenMiddleButtonText = playButton;
-  if (
-    playbackState === TrackPlayer.STATE_PLAYING ||
-    playbackState === TrackPlayer.STATE_BUFFERING
-  ) {
-    fullscreenMiddleButtonText = pauseButton;
-  }
-
-  const mute = async () => {
+  const handleMute = async () => {
     try {
-      setIsMute(!isMute);
-      isMute ? await TrackPlayer.setVolume(0) : await TrackPlayer.setVolume(1);
+      //console.log('isMute', isMute);
+
+      await TrackPlayer.setVolume(volume === 0 ? 1 : 0).then(() =>
+        setVolume(volume === 0 ? 1 : 0),
+      );
     } catch (err) {
       LOG('MUTE ERROR', err);
     }
   };
 
-  const skipTrack = async () => {
-    try {
-      await TrackPlayer.skip(currentSong.id);
-      await TrackPlayer.play();
-    } catch (err) {
-      LOG('SKIP TRACK', err);
-    }
+  const skipTrack = () => {
+    TrackPlayer.skip(currentSong.id).then(() => TrackPlayer.play());
   };
 
   const playNewSong = async ({ title, artist, artwork, url, duration, id }) => {
@@ -168,21 +185,7 @@ const Player = ({ screen }) => {
 
   // Function is called initially when
   // the first song is played
-  const playSong = async () => {
-    await TrackPlayer.play();
-  };
-
-  // console.log()
-
-  useEffect(() => {
-    setCurrentTrack(currentSong);
-    if (firstTime) {
-      playSong();
-      dispatch(isInitialPlay(false));
-    } else {
-      skipTrack();
-    }
-  }, [currentSong]);
+  const playSong = async () => await TrackPlayer.play();
 
   return (
     <>
@@ -209,7 +212,9 @@ const Player = ({ screen }) => {
               renderItem={({ item }) => {
                 return ( */}
               <Image
-                source={currentTrack?.artwork?{ uri: currentTrack?.artwork }:null}
+                source={
+                  currentTrack?.artwork ? { uri: currentTrack?.artwork } : null
+                }
                 style={
                   isVisible
                     ? styles.playlistOpenStyleForImage
@@ -272,17 +277,24 @@ const Player = ({ screen }) => {
                 />
               </TouchableOpacity>
 
-              {/* Previous Button */}
-              <TouchableOpacity onPress={() => togglePlayback()}>
-                <Image
-                  source={fullscreenMiddleButtonText}
-                  style={
-                    isVisible
-                      ? styles.playlistOpenMiddleIcon
-                      : styles.fullscreenMiddleIcon
-                  }
-                />
-              </TouchableOpacity>
+              {/* Play/Pause Button */}
+
+              {buffering ? (
+                <View style={styles.loading}>
+                  <ActivityIndicator color={'black'} />
+                </View>
+              ) : (
+                <TouchableOpacity onPress={() => togglePlayback()}>
+                  <Image
+                    source={playing ? pauseButton : playButton}
+                    style={
+                      isVisible
+                        ? styles.playlistOpenMiddleIcon
+                        : styles.fullscreenMiddleIcon
+                    }
+                  />
+                </TouchableOpacity>
+              )}
 
               <TouchableOpacity onPress={() => skipToNext()}>
                 <Image
@@ -293,9 +305,9 @@ const Player = ({ screen }) => {
                 />
               </TouchableOpacity>
               {isVisible ? (
-                <TouchableOpacity onPress={mute}>
+                <TouchableOpacity onPress={handleMute}>
                   <Image
-                    source={isMute ? speaker : muteIcon}
+                    source={volume === 0 ? muteIcon : speaker}
                     style={
                       isVisible
                         ? styles.playlistOpenIcon
@@ -338,9 +350,9 @@ const Player = ({ screen }) => {
                 </TouchableOpacity> */}
 
                 {/* Mute icon */}
-                <TouchableOpacity onPress={mute}>
+                <TouchableOpacity onPress={handleMute}>
                   <Image
-                    source={isMute ? speaker : muteIcon}
+                    source={volume === 0 ? muteIcon : speaker}
                     style={
                       isVisible
                         ? styles.playlistOpenIcon
@@ -386,7 +398,6 @@ const Player = ({ screen }) => {
                         ListEmptyComponent={<EmptyPlaylist />}
                         keyExtractor={() => randomize('Aa0!', 10)}
                         renderItem={({ item }) => {
-                          console.log('---Flatlist Item----', item);
                           return (
                             <TouchableOpacity
                               onPress={() => {

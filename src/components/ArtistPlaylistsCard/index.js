@@ -1,16 +1,15 @@
 import React from 'react';
 import { View, Text, ImageBackground } from 'react-native';
+import { thousandSeparator } from '../../utils/Helpers';
 
 import styles from './styles';
 
-const ArtistPlaylist = ({ image, title, duration, author }) => {
+const ArtistPlaylist = ({ image, title, duration, author, viewCount }) => {
   return (
     <View style={styles.container}>
-      <ImageBackground source={{ uri: image }} style={styles.image}>
-        <View style={styles.background}>
-          <Text style={styles.duration}>{duration}</Text>
-        </View>
-      </ImageBackground>
+      <ImageBackground
+        source={{ uri: image }}
+        style={styles.image}></ImageBackground>
       <View style={styles.detail}>
         <Text style={styles.title} numberOfLines={2}>
           {title}
@@ -18,9 +17,11 @@ const ArtistPlaylist = ({ image, title, duration, author }) => {
         <Text style={styles.subtitle} numberOfLines={1}>
           {author}
         </Text>
-        <View style={styles.viewButton}>
-          <Text style={styles.viewButtonText}>Play</Text>
-        </View>
+        <Text style={styles.duration}>{duration} Duration</Text>
+        <Text style={styles.duration}>
+          Viewed {thousandSeparator(viewCount)} times
+        </Text>
+        <Text style={styles.seeMore}>See More...</Text>
       </View>
     </View>
   );

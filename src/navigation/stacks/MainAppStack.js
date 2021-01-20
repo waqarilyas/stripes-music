@@ -1,31 +1,29 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, Image, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 
-import MainTabs from '../Tabs/MainTabs';
-import AccountSettingStack from './AccountSettingStack';
-import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
-import MusicPlayerModal from '../../screens/MusicPlayerModal';
-import SubscriptionModal from '../../screens/SubscriptionModal';
-import SearchScreen from '../../screens/SearchScreen';
-import NoInternet from '../../screens/NoInternet';
-import SearchResultsScreen from '../../screens/SearchResultsSceen';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import SubscriptionModalScreen from '../../components/SubscriptionBottomSheet';
-import Subscriptions from '../../screens/Subscriptions';
-import AuthStack from './AuthenticationStack';
+import ForgotPassword from '../../screens/ForgotPassword';
+import IntroScreen from '../../screens/IntroScreen';
+import Login from '../../screens/Login';
+import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
+import MusicPlayerModal from '../../screens/MusicPlayerModal';
+import NoInternet from '../../screens/NoInternet';
+import SearchResultsScreen from '../../screens/SearchResultsSceen';
+import SearchScreen from '../../screens/SearchScreen';
+import Signup from '../../screens/Signup';
+import MainTabs from '../Tabs/MainTabs';
+import AccountSettingStack from './AccountSettingStack';
 
 const Stack = createStackNavigator();
 
-const MainAppStack = ({ }) => {
+const MainAppStack = () => {
   const currentState = useSelector((state) => state.root.audio.miniModalOpen);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
-  const subsModal = useSelector(
-    (state) => state.root.helpers.subscriptionModal,
-  );
-  const nav = {};
+
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -49,42 +47,49 @@ const MainAppStack = ({ }) => {
 
   return (
     <>
-      <SubscriptionModalScreen />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="IntroScreen"
+          component={IntroScreen}
+          options={{ headerShown: false }}
+        />
 
-      {isFullScreen ? <MusicPlayerFullscreen /> : null}
-
-      <Stack.Navigator headerMode="none">
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}
-          options={({ navigation }) => ({
-            headerShown: false,
-          })}
-        />
-        <Stack.Screen
-          name="SearchScreen"
-          component={SearchScreen}
-          options={({ navigation }) => ({
-            headerShown: false,
-          })}
+          options={{ headerShown: false, gestureEnabled: false }}
         />
 
         <Stack.Screen
-          name="AuthStack"
-          options={({ navigation }) => ({
-            headerShown: false,
-          })}
-        >
-          {(props) => <AuthStack {...props} />}
-        </Stack.Screen>
+          name="SearchScreen"
+          component={SearchScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
+          options={{ headerShown: false }}
+        />
 
         <Stack.Screen
           name="AccountSettingStack"
           component={AccountSettingStack}
-          options={{
-            headerShown: false,
-          }}
+          options={{ headerShown: false }}
         />
+
         <Stack.Screen
           name="NoInternet"
           component={NoInternet}
@@ -95,18 +100,17 @@ const MainAppStack = ({ }) => {
             headerStyle: styles.headerStyle,
           })}
         />
+
         <Stack.Screen
           name="SearchResultsScreen"
           component={SearchResultsScreen}
-          options={({ navigation }) => ({
-            title: ' ',
-            headerLeft: () => back(navigation),
-            headerStyle: styles.headerStyle,
-          })}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
 
       {currentState ? <MusicPlayerModal /> : null}
+      {isFullScreen ? <MusicPlayerFullscreen /> : null}
+      <SubscriptionModalScreen />
     </>
   );
 };

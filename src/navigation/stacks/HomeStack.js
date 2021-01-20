@@ -1,12 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { backIcon, searchIcon } from '../../../Assets/Icons';
-import useUser from '../../hooks/useUser';
-import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
+import HeaderRightButton from '../../components/HeaderRightButton';
+import { getAnAlbum, getArtist } from '../../Redux/Reducers/firebaseSlice';
 import AlbumDetail from '../../screens/AlbumDetail';
 import Artist from '../../screens/Artist';
 import ArtistNews from '../../screens/ArtistNews';
@@ -22,6 +21,7 @@ import MostPlayedSeeAll from '../../screens/MostPlayedSeeAll';
 import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
 import MusicScreenCreateNewPlaylist from '../../screens/MusicScreenCreateNewPlaylist';
 import MusicScreenPlaylistDetails from '../../screens/MusicScreenPlaylistDetails';
+import NewsDetails from '../../screens/NewsDetails';
 import RecentPlayedSeeAll from '../../screens/RecentPlayedSeeAll';
 import TopAlbumsSeeAll from '../../screens/TopAlbumsSeeAll';
 import ForYouTabs from '../Tabs/ForYouTabs';
@@ -34,7 +34,7 @@ const search = (navigation) => (
     <Image source={searchIcon} style={styles.icon} />
   </TouchableOpacity>
 );
-const back = (navigation) => {
+const HeaderLeft = (navigation) => {
   return (
     <TouchableOpacity onPress={() => navigation.goBack()}>
       <Image source={backIcon} style={styles.back} />
@@ -42,46 +42,36 @@ const back = (navigation) => {
   );
 };
 
-const placeholder = '';
-
-const searchAndProfile = (navigation, user) => {
-  const dist = useDispatch();
-  return (
-    <View style={styles.container}>
-      {user?.isPaidUser ?
-        <Avatar
-          rounded
-          containerStyle={styles.avatar}
-          source={user.profilePicture ? { uri: user.profilePicture } : placeholder}
-          onPress={() => navigation.navigate('Profile')}
-        />
-        :
-        user?.isAnonymous ?
-          <TouchableOpacity onPress={() => {
-            navigation.navigate("AuthStack");
-          }}>
-            <View style={{ borderRadius: 50, height: RFPercentage(4), paddingHorizontal: RFPercentage(1), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
-              <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>Login</Text>
-            </View>
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={() => {
-            dist(setIsChatNotPaid(true))
-          }}>
-            <View style={{ borderRadius: 50, height: RFPercentage(4), width: RFPercentage(4), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
-              <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>.99</Text>
-            </View>
-          </TouchableOpacity>
-      }
-      <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
-        <Image source={searchIcon} style={styles.icon} />
-      </TouchableOpacity>
-    </View>
-  );
-};
+const HeaderRight = (navigation) => (
+  <HeaderRightButton navigation={navigation} />
+);
 
 const HomeStack = () => {
-  let user = useSelector(state => state.root.firebase.user);
+  const dispatch = useDispatch();
+
+  const BackButton = ({ handleNavigation }) => (
+    <TouchableOpacity onPress={handleNavigation}>
+      <Image source={backIcon} style={styles.back} />
+    </TouchableOpacity>
+  );
+
+  const HandleAlbumDetail = (navigation) => {
+    const handleNavigation = () => {
+      dispatch(getAnAlbum(null));
+      navigation.goBack();
+    };
+
+    return <BackButton handleNavigation={handleNavigation} />;
+  };
+
+  const HandleArtist = (navigation) => {
+    const handleNavigation = () => {
+      dispatch(getArtist(null));
+      navigation.goBack();
+    };
+
+    return <BackButton handleNavigation={handleNavigation} />;
+  };
 
   return (
     <Stack.Navigator>
@@ -92,7 +82,7 @@ const HomeStack = () => {
           title: 'Music',
           headerTitleAlign: 'left',
           headerTitleStyle: styles.headerTitleStyle,
-          headerRight: () => searchAndProfile(navigation, user),
+          headerRight: () => HeaderRight(navigation),
           headerLeft: null,
           headerStyle: styles.headerStyle,
         })}
@@ -104,8 +94,8 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, user),
+          headerLeft: () => HeaderLeft(navigation),
+          headerRight: () => HeaderRight(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -116,8 +106,8 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, user),
+          headerLeft: () => HeaderLeft(navigation),
+          headerRight: () => HeaderRight(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -128,8 +118,8 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, user),
+          headerLeft: () => HandleAlbumDetail(navigation),
+          headerRight: () => HeaderRight(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -140,7 +130,7 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
+          headerLeft: () => HeaderLeft(navigation),
           headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
@@ -152,7 +142,19 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
+          headerLeft: () => HandleArtist(navigation),
+          headerRight: () => search(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="NewsDetails"
+        component={NewsDetails}
+        options={({ navigation }) => ({
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => BackButton(() => navigation.goBack()),
           headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}
@@ -164,7 +166,7 @@ const HomeStack = () => {
           headerTitle: '',
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: 'center',
-          headerLeft: () => back(navigation),
+          headerLeft: () => HeaderLeft(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -177,7 +179,7 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
+          headerLeft: () => HeaderLeft(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -189,7 +191,7 @@ const HomeStack = () => {
           headerTitle: '',
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: 'center',
-          headerLeft: () => back(navigation),
+          headerLeft: () => HeaderLeft(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -200,8 +202,8 @@ const HomeStack = () => {
           title: 'Favourite Artists',
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: 'center',
-          headerLeft: () => back(navigation),
-          headerRight: () => searchAndProfile(navigation, user),
+          headerLeft: () => HeaderLeft(navigation),
+          headerRight: () => HeaderRight(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -222,7 +224,7 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => back(navigation),
+          headerLeft: () => HeaderLeft(navigation),
           headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}

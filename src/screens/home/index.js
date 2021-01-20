@@ -1,10 +1,9 @@
 import NetInfo from '@react-native-community/netinfo';
-import auth from '@react-native-firebase/auth';
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import HomeBanner from '../../components/HomeBanner';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
 import HomeForYou from '../../components/HomeForYou';
@@ -12,7 +11,6 @@ import HomeMostPlayed from '../../components/HomeMostPlayed';
 import HomeRecentPlayed from '../../components/HomeRecentPlayed';
 import HomeTopAlbums from '../../components/HomeTopAlbums';
 import HomeTopArtists from '../../components/HomeTopArtists';
-import reducer from '../../hooks/useReducer';
 import {
   getAlbums,
   getAllAlbums,
@@ -43,62 +41,31 @@ const wait = (timeout) => {
   });
 };
 
-const initialState = {
-  banner: [],
-  songs: [],
-};
+const colors = [
+  'transparent',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+  'black',
+];
 
 const Home = ({ navigation }) => {
-  const disp = useDispatch();
   global.nav = navigation;
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
-  const playlist = useSelector((state) => state.root.audio.playlist);
-  const [checked, setChecked] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [selectedSong, setSelectedSong] = useState({});
-  // const subsModal = useSelector(
-  //   (state) => state.root.helpers.subscriptionModal,
-  // );
-
-  // subsModal && navigation.navigate('SubscriptionModalScreen');
+  const dispatch = useDispatch();
 
   const checkInternet = async () => {
     const connected = await NetInfo.fetch();
     !connected.isConnected && navigation.navigate('NoInternet');
   };
-  // checkInternet();
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
-
-  const handleSignOut = () => {
-    auth().signOut();
-  };
-
-  useEffect(() => {
-    disp(getSongs());
-    disp(getAllSongs());
-    disp(getMostPlayed());
-    disp(getMostPlayedSongs());
-    disp(getAlbums());
-    disp(getAllAlbums());
-    disp(getAllPlaylists());
-    disp(getHistory());
-    disp(getAllHistory());
-    disp(getTopArtists());
-    disp(getTopAllArtists());
-    disp(getBestAlbums());
-    disp(getAllBestAlbums());
-    disp(getVideos());
-    disp(getPopularVideos());
-    disp(getLatestVideos());
-    disp(getAllPopularVideos());
-    disp(getAllNews());
-    disp(getUser());
-    disp(getPlaylists());
-  }, [disp]);
+  checkInternet();
 
   const [refreshing, setRefreshing] = useState(false);
   const [bgImg, setBgImg] = useState('');
@@ -106,14 +73,29 @@ const Home = ({ navigation }) => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
 
-    disp(getSongs());
-    disp(getMostPlayed());
-    disp(getPlaylists());
+    dispatch(getSongs());
+    dispatch(getAllSongs());
+    dispatch(getMostPlayed());
+    dispatch(getMostPlayedSongs());
+    dispatch(getAlbums());
+    dispatch(getAllAlbums());
+    dispatch(getAllPlaylists());
+    dispatch(getHistory());
+    dispatch(getAllHistory());
+    dispatch(getTopArtists());
+    dispatch(getTopAllArtists());
+    dispatch(getBestAlbums());
+    dispatch(getAllBestAlbums());
+    // dispatch(getVideos());
+    // dispatch(getPopularVideos());
+    // dispatch(getLatestVideos());
+    // dispatch(getAllPopularVideos());
+    // dispatch(getAllNews());
+    dispatch(getUser());
+    // dispatch(getPlaylists());
 
     wait(2000).then(() => setRefreshing(false));
-  }, [disp]);
-
-
+  }, []);
 
   return (
     <ScrollView
@@ -127,13 +109,15 @@ const Home = ({ navigation }) => {
           progressBackgroundColor="transparent"
         />
       }>
-      <ImageBackground source={bgImg ? { uri: bgImg } : null} style={[styles.background,{paddingHorizontal:0, margin:0}]} blurRadius={20}>
-        <LinearGradient colors={['rgba(0,0,0,0)', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black', 'black']} style={{paddingHorizontal:RFPercentage(1)}}>
+      <ImageBackground
+        source={bgImg ? { uri: bgImg } : null}
+        style={[styles.background, { paddingHorizontal: 0, margin: 0 }]}
+        blurRadius={20}>
+        <LinearGradient
+          colors={colors}
+          style={{ paddingHorizontal: RFPercentage(1) }}>
           {/* Songs Slider Section */}
-
-          <HomeBanner currentItemImage={(img) => {
-            setBgImg(img)
-          }} />
+          <HomeBanner currentItemImage={(img) => setBgImg(img)} />
 
           {/* Most Played Section */}
           <HomeMostPlayed navigation={navigation} />
@@ -152,7 +136,6 @@ const Home = ({ navigation }) => {
 
           {/* The Best Playlists Section */}
           <HomeTopAlbums navigation={navigation} />
-
         </LinearGradient>
       </ImageBackground>
     </ScrollView>

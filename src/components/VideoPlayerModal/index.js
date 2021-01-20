@@ -4,11 +4,17 @@ import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
 import {
   ActivityIndicator,
-  FlatList, Image, Modal,
+  FlatList,
+  Image,
+  Modal,
   SafeAreaView,
-  ScrollView, StatusBar, Text,
+  ScrollView,
+  StatusBar,
+  Text,
   TextInput,
-  TouchableHighlight, TouchableOpacity, View
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -20,14 +26,10 @@ import SectionHeader from '../../components/SectionHeader';
 import reducer from '../../hooks/useReducer';
 import { LOG } from '../../utils/Constants';
 import { getCollection } from '../../utils/Firebase';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 import SubscriptionModalScreen from '../SubscriptionBottomSheet';
 import VideoPlayer from '../VideoPlayer';
 import styles from './styles';
-
-
-const profilePic =
-  'https://res.cloudinary.com/practicaldev/image/fetch/s--ef-WXsPf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/8050/Mm3V3467.jpg';
 
 const initialState = {
   videos: [],
@@ -41,7 +43,7 @@ const VideoPlayerModal = ({ onPress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
   const [stateVals, setStateVals] = useState({
-    showMore: []
+    showMore: [],
   });
   const [durationTime, setDurationTime] = useState(0);
 
@@ -60,7 +62,10 @@ const VideoPlayerModal = ({ onPress }) => {
           allComments.push(doc.data());
         });
         let tempComments = allComments;
-        setStateVals(prev => ({ ...prev, showMore: tempComments.splice(0, 5) }))
+        setStateVals((prev) => ({
+          ...prev,
+          showMore: tempComments.splice(0, 5),
+        }));
         dispatch({ comments: allComments });
       });
 
@@ -68,7 +73,7 @@ const VideoPlayerModal = ({ onPress }) => {
   }, [videoData.id]);
 
   const handleSubmit = () => {
-    console.log('--------USER------', auth().currentUser)
+    console.log('--------USER------', auth().currentUser);
     if (commentText === '') {
       return;
     }
@@ -87,7 +92,7 @@ const VideoPlayerModal = ({ onPress }) => {
         username: auth().currentUser.displayName || '',
       })
       .then((result) => {
-        setCommentText('')
+        setCommentText('');
         const documentId = result.id;
         result.update({
           id: documentId,
@@ -115,7 +120,7 @@ const VideoPlayerModal = ({ onPress }) => {
               <View style={styles.rowContainer}>
                 <Image source={eyeIcon} style={styles.icon} />
                 <Text style={styles.count}>
-                  {thousandSeprator(videoData.viewCount)}
+                  {thousandSeparator(videoData.viewCount)}
                 </Text>
               </View>
             </View>
@@ -136,7 +141,9 @@ const VideoPlayerModal = ({ onPress }) => {
                 ListHeaderComponent={() => (
                   <SectionHeader icon={videoIcon} name="More Videos" />
                 )}
-                ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+                ItemSeparatorComponent={() => (
+                  <Divider style={styles.divider} />
+                )}
                 keyExtractor={() => randomize('Aa0!', 10)}
                 renderItem={({
                   item,
@@ -213,36 +220,72 @@ const VideoPlayerModal = ({ onPress }) => {
                     }}
                   />
 
-
                   <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
-                    {stateVals.showMore.length > 5 ?
-                      <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
-                        <Text onPress={() => {
-                          let tempCom = state.comments;
-                          setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length - 5) }))
-                        }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show Less</Text>
+                    {stateVals.showMore.length > 5 ? (
+                      <View
+                        style={{
+                          margin: RFPercentage(1),
+                          backgroundColor: 'grey',
+                          borderRadius: 3,
+                          padding: RFPercentage(0.5),
+                        }}>
+                        <Text
+                          onPress={() => {
+                            let tempCom = state.comments;
+                            setStateVals((prev) => ({
+                              ...prev,
+                              showMore: tempCom.slice(
+                                0,
+                                stateVals.showMore.length - 5,
+                              ),
+                            }));
+                          }}
+                          style={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                          }}>
+                          Show Less
+                        </Text>
                       </View>
-                      : null}
+                    ) : null}
 
-                    <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
-                      <Text onPress={() => {
-                        let tempCom = state.comments;
-                        setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length + 5) }))
-                      }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show More</Text>
+                    <View
+                      style={{
+                        margin: RFPercentage(1),
+                        backgroundColor: 'grey',
+                        borderRadius: 3,
+                        padding: RFPercentage(0.5),
+                      }}>
+                      <Text
+                        onPress={() => {
+                          let tempCom = state.comments;
+                          setStateVals((prev) => ({
+                            ...prev,
+                            showMore: tempCom.slice(
+                              0,
+                              stateVals.showMore.length + 5,
+                            ),
+                          }));
+                        }}
+                        style={{
+                          color: 'white',
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                        }}>
+                        Show More
+                      </Text>
                     </View>
                   </View>
-
-
-
                 </>
               ) : (
-                  <ActivityIndicator color="black" />
-                )}
+                <ActivityIndicator color="black" />
+              )}
             </View>
           </View>
         </ScrollView>
       </Modal>
-    </View >
+    </View>
   );
 };
 

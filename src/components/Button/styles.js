@@ -1,12 +1,15 @@
 import { StyleSheet } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   backgroundStyle: {
     backgroundColor: '#F5138E',
     alignSelf: 'center',
     height: hp('6'),
-    width: hp('19'),
+    paddingHorizontal: wp(4),
     flexDirection: 'row',
     borderRadius: hp('1'),
     marginVertical: hp('3'),
@@ -19,6 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     color: 'white',
+    textTransform: 'uppercase',
   },
   loadingTextStyle: {
     fontWeight: 'bold',

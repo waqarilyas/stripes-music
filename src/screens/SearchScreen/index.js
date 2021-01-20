@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import dayjs from 'dayjs';
@@ -15,6 +16,7 @@ import moment from 'moment';
 
 const relativeTime = require('dayjs/plugin/relativeTime');
 const updateLocale = require('dayjs/plugin/updateLocale');
+
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -80,7 +82,7 @@ const SearchScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.searchWithClose}>
           <TouchableOpacity
             style={styles.searchContainer}
@@ -135,11 +137,6 @@ const SearchScreen = ({ navigation }) => {
               style={styles.item}>
               <SearchScreenButton title="Artists" selected={selected.artists} />
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              onPress={() => selectButton('genre', !selected.genre)}
-              style={styles.item}>
-              <SearchScreenButton title="Genre" selected={selected.genre} />
-            </TouchableOpacity> */}
           </View>
         </View>
         <View style={styles.header}>
@@ -172,7 +169,7 @@ const SearchScreen = ({ navigation }) => {
             </Text>
           </View>
         )}
-      </View>
+      </SafeAreaView>
     </>
   );
 };

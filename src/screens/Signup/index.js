@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from './styles';
 import Block from '../../components/Block';
@@ -25,6 +26,11 @@ const initValues = {
 };
 
 const Signup = ({ navigation }) => {
+  let emailInput = useRef(null);
+  let passwordInput = useRef(null);
+  let confirmPasswordInput = useRef(null);
+  const [loading, setLoading] = useState(null);
+
   return (
     <Block>
       <ScrollView>
@@ -41,30 +47,29 @@ const Signup = ({ navigation }) => {
 
         <Formik
           initialValues={initValues}
-          onSubmit={(values, actions) => RegisterUser(values, actions, navigation)}
+          onSubmit={(values, actions) =>
+            RegisterUser(values, actions, navigation, setLoading)
+          }
           validationSchema={SignUpVS}>
-          {({
-            initialValues,
-            errors,
-            handleChange,
-            handleSubmit,
-            isSubmitting,
-            touched,
-          }) => (
+          {({ initialValues, errors, handleChange, handleSubmit, touched }) => (
             <>
               <Input
                 icon={usernameIcon}
-                name="Full Name"
-                textType="name"
-                capitalize="words"
+                name={'Full Name'}
+                textType={'name'}
+                capitalize={'words'}
                 defaultValue={initialValues.name}
                 onChangeText={handleChange('name')}
+                onSubmitEditing={() => emailInput.current.focus()}
+                autoCompleteType={'name'}
+                returnKeyType={'next'}
               />
               <Text style={styles.error}>
                 {touched.name && errors.name ? errors.name : ''}
               </Text>
 
               <Input
+                reference={emailInput}
                 icon={emailIcon}
                 name="Email"
                 textContentType="emailAddress"
@@ -72,12 +77,16 @@ const Signup = ({ navigation }) => {
                 keyboardType="email-address"
                 defaultValue={initialValues.email}
                 onChangeText={handleChange('email')}
+                onSubmitEditing={() => passwordInput.current.focus()}
+                autoCompleteType={'email'}
+                returnKeyType={'next'}
               />
               <Text style={styles.error}>
                 {touched.email && errors.email ? errors.email : ''}
               </Text>
 
               <Input
+                reference={passwordInput}
                 icon={passwordIcon}
                 name="Password"
                 textContentType="password"
@@ -85,12 +94,16 @@ const Signup = ({ navigation }) => {
                 secureTextEntry={true}
                 defaultValue={initialValues.password}
                 onChangeText={handleChange('password')}
+                onSubmitEditing={() => confirmPasswordInput.current.focus()}
+                autoCompleteType={'password'}
+                returnKeyType={'next'}
               />
               <Text style={styles.error}>
                 {touched.password && errors.password ? errors.password : ''}
               </Text>
 
               <Input
+                reference={confirmPasswordInput}
                 icon={passwordIcon}
                 name="Confirm Password"
                 textContentType="password"
@@ -98,6 +111,8 @@ const Signup = ({ navigation }) => {
                 secureTextEntry={true}
                 defaultValue={initialValues.confirmPassword}
                 onChangeText={handleChange('confirmPassword')}
+                autoCompleteType={'password'}
+                returnKeyType={'done'}
               />
               <Text style={styles.error}>
                 {touched.confirmPassword && errors.confirmPassword
@@ -109,11 +124,7 @@ const Signup = ({ navigation }) => {
                 <Text style={styles.globalError}>{errors.globalErr}</Text>
               ) : null}
 
-              <Button
-                isSubmitting={isSubmitting}
-                onPress={handleSubmit}
-                text="Signup"
-              />
+              <Button onPress={handleSubmit} text="Signup" />
             </>
           )}
         </Formik>
@@ -131,6 +142,14 @@ const Signup = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
+      {loading && (
+        <Spinner
+          animation={'fade'}
+          cancelable={false}
+          size={'large'}
+          visible={loading}
+        />
+      )}
     </Block>
   );
 };

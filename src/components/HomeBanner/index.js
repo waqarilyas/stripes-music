@@ -1,15 +1,12 @@
 import React, { useRef } from 'react';
 import {
   Dimensions,
-
   Image,
   ImageBackground,
-  StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Carousel from 'react-native-snap-carousel';
 import TrackPlayer from 'react-native-track-player';
@@ -17,20 +14,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { musicSeeAllIcon, sliderPlaceholder } from '../../../Assets/Icons';
 import {
   changeSong,
-  fullScreenChange, pushToPlaylist
+  fullScreenChange,
+  pushToPlaylist,
 } from '../../Redux/Reducers/audioSlice';
-import {
-  addPlayCount, addToRecentlyPlayed
-} from '../../Redux/Reducers/firebaseSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 import { LOG } from '../../utils/Constants';
 import HomeTopSlider from '../HomeTopSlider';
-
+import styles from './styles';
 
 const HomeBanner = ({ currentItemImage }) => {
   const { songs } = useSelector((state) => state.root.firebase);
   const dispatch = useDispatch();
-  let _carousel = useRef(null);
-  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+  let carousel = useRef(null);
+
+  const handleSong = async ({ title, artist, artwork, url, duration, id }) => {
     try {
       const result = {
         title,
@@ -52,25 +50,24 @@ const HomeBanner = ({ currentItemImage }) => {
     }
   };
 
-  function updateIndex() {
-    if (_carousel.currentIndex && _carousel.currentIndex >= 0 && songs[_carousel.currentIndex]?.artwork)
-      currentItemImage(songs[_carousel.currentIndex].artwork)
-  }
+  const updateIndex = () => {
+    if (
+      carousel.currentIndex &&
+      carousel.currentIndex >= 0 &&
+      songs[carousel.currentIndex]?.artwork
+    )
+      currentItemImage(songs[carousel.currentIndex].artwork);
+  };
 
   return (
     <Carousel
       horizontal
-      // pagingEnabled={true}
-
-      ref={(c) => { _carousel = c; }}
+      ref={carousel}
       sliderWidth={Dimensions.get('screen').width}
       sliderHeight={hp('23')}
-
       itemWidth={hp('34')}
       itemHeight={hp('20')}
-
       onSnapToItem={updateIndex}
-
       showsHorizontalScrollIndicator={false}
       data={[...songs, { seeAll: true }]}
       keyExtractor={(item) => item.id}
@@ -92,7 +89,7 @@ const HomeBanner = ({ currentItemImage }) => {
         }
 
         return (
-          <TouchableOpacity onPress={() => playSong(item)} style={{}}>
+          <TouchableOpacity onPress={() => handleSong(item)}>
             <HomeTopSlider
               artwork={artwork}
               title={title}
@@ -104,33 +101,5 @@ const HomeBanner = ({ currentItemImage }) => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: hp('20'),
-    width: hp('34'),
-    borderRadius: hp('2'),
-    margin: hp('1'),
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  subContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    height: '100%',
-  },
-  text: {
-    color: 'white',
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    marginTop: hp('1'),
-  },
-  icon: {
-    height: hp('6'),
-    width: hp('6'),
-    tintColor: 'white',
-  },
-});
 
 export default HomeBanner;

@@ -3,7 +3,7 @@ import { ActivityIndicator, Text, View } from 'react-native';
 import { Image } from 'react-native-elements';
 
 import styles from './styles';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 
 const ArtistsGridCard = ({ name, avatar, followerCount }) => {
   return (
@@ -18,7 +18,7 @@ const ArtistsGridCard = ({ name, avatar, followerCount }) => {
         {name}
       </Text>
       <Text numberOfLines={1} style={styles.count}>
-        {thousandSeprator(followerCount)}
+        {thousandSeparator(followerCount)}
       </Text>
       <Text style={styles.subtitle}>FOLLOWERS</Text>
     </View>

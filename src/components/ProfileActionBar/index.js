@@ -6,19 +6,15 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { optionsIcon, plusIcon, signout } from '../../../Assets/Icons';
 import EditProfileOverlayCard from '../../components/EditProfileOverlayCard';
 
-const ProfileActionBar = ({ navigation }) => {
+const ProfileActionBar = ({ navigation, profilePicture }) => {
   const [overlayVisible, setOverlayVisible] = useState(false);
 
-  const toggleOverlay = () => {
-    setOverlayVisible(!overlayVisible);
-  };
+  const toggleOverlay = () => setOverlayVisible(!overlayVisible);
 
   const handleSignOut = () => {
-    auth().signOut().then((res) => {
-      console.log('----------SINGING OUT--------->', res)
-    }).catch(err => {
-      console.log('----------SINGING OUT CATCH--------->', res)
-    });
+    auth()
+      .signOut()
+      .then(() => navigation.navigate('Login'));
   };
 
   return (
@@ -34,7 +30,7 @@ const ProfileActionBar = ({ navigation }) => {
             name="Edit Profile"
             onPress={() => {
               setOverlayVisible(false);
-              navigation.navigate('EditProfile');
+              navigation.navigate('EditProfile', { profilePicture });
             }}
           />
           <EditProfileOverlayCard

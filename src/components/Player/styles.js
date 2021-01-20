@@ -223,6 +223,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
+  loading: {
+    backgroundColor: 'white',
+    height: RFValue(60),
+    width: RFValue(60),
+    marginHorizontal: RFValue(30),
+    borderRadius: 100,
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

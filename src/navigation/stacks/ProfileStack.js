@@ -1,12 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
-import useUser from '../../hooks/useUser';
-import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
+import HeaderRightButton from '../../components/HeaderRightButton';
 import AccountSetting from '../../screens/AccountSetting';
 import Artist from '../../screens/Artist';
 import ChangePassword from '../../screens/ChangePassword';
@@ -23,12 +20,14 @@ import SubscriptionStack from '../stacks/SubscriptionStack';
 const Stack = createStackNavigator();
 
 const ProfileStack = () => {
-  const dist = useDispatch();
+  const user = useSelector((state) => state.root.firebase.user);
+
   const search = (navigation) => (
     <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
       <Image source={searchIcon} style={styles.icon} />
     </TouchableOpacity>
   );
+
   const back = (navigation) => {
     return (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -37,41 +36,10 @@ const ProfileStack = () => {
     );
   };
 
-  const searchAndProfile = (navigation, user) => {
-    return (
-      <View style={styles.container}>
-        {user?.isPaidUser ?
-          <Avatar
-            rounded
-            containerStyle={styles.avatar}
-            source={user.profilePicture ? { uri: user.profilePicture } : placeholder}
-            onPress={() => navigation.navigate('Profile')}
-          />
-          :
-          user?.isAnonymous ?
-            <TouchableOpacity onPress={() => {
-              navigation.navigate("AuthStack");
-            }}>
-              <View style={{ borderRadius: 50, height: RFPercentage(4), paddingHorizontal: RFPercentage(1), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
-                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>Login</Text>
-              </View>
-            </TouchableOpacity>
-            :
-            <TouchableOpacity onPress={() => {
-              dist(setIsChatNotPaid(true))
-            }}>
-              <View style={{ borderRadius: 50, height: RFPercentage(4), width: RFPercentage(4), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
-                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>.99</Text>
-              </View>
-            </TouchableOpacity>
-        }
-        <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
-          <Image source={searchIcon} style={styles.icon} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-  let user = useSelector(state => state.root.firebase.user);
+  const searchAndProfile = (navigation) => (
+    <HeaderRightButton navigation={navigation} />
+  );
+
   return (
     <Stack.Navigator>
       <Stack.Screen

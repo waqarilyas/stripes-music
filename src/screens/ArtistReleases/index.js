@@ -9,30 +9,35 @@ import { mostPlayedHome } from '../../../Assets/Icons';
 import styles from './styles';
 
 const ArtistReleases = ({ navigation }) => {
-  const playlists = useSelector((state) => state.root.firebase.artistPlaylists);
+  const { artistPlaylists } = useSelector((state) => state.root.firebase);
+  console.log(artistPlaylists);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={playlists}
+        data={artistPlaylists}
         style={styles.list}
+        contentContainerStyle={
+          artistPlaylists && artistPlaylists.length > 0 ? null : { flex: 1 }
+        }
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         ListEmptyComponent={
           <EmptyArtistProfileCard
             text="NO RELEASES YET!"
             icon={mostPlayedHome}
-            onPress={() => navigation.navigate('News')}
-            buttonTitle=""
           />
         }
-        renderItem={({ item: { image, title, duration, author } }) => {
+        renderItem={({
+          item: { image, title, duration, author, viewCount },
+        }) => {
           return (
             <ArtistPlaylistsCard
               image={image}
               title={title}
               duration={duration}
               author={author}
+              viewCount={viewCount}
             />
           );
         }}

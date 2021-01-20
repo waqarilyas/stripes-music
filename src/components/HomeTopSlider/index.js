@@ -10,7 +10,9 @@ const HomeTopSlider = ({ artwork, title, description }) => {
       <Image
         source={{ uri: artwork }}
         style={styles.image}
-        loadingIndicatorSource={<ActivityIndicator />}>
+        PlaceholderContent={<ActivityIndicator color="white" />}
+        placeholderStyle={styles.placeholderStyle}
+        transition={true}>
         <View style={styles.text}>
           <Text style={styles.songName}>{title}</Text>
           <Text numberOfLines={1} style={styles.subText}>

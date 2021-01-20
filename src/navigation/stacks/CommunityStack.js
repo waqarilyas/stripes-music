@@ -1,68 +1,45 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button } from 'react-native-elements';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
-import { backIcon, searchIcon } from '../../../Assets/Icons';
+
+import { backIcon } from '../../../Assets/Icons';
+import HeaderRightButton from '../../components/HeaderRightButton';
 import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
 import Community from '../../screens/Community';
 import MessageDetail from '../../screens/MessageDetail';
 import NewMessage from '../../screens/NewMessage';
 const Stack = createStackNavigator();
 
+const RightButton = (navigation) => (
+  <HeaderRightButton navigation={navigation} />
+);
+
 const CommunityStack = () => {
-  let user = useSelector(state => state.root.firebase.user);
-  const dist = useDispatch();
-  const search = (navigation) => {
+  const { user } = useSelector((state) => state.root.firebase);
+  const dispatch = useDispatch();
+
+  const NewMessage = (navigation) => {
+    const handleMessage = () => {
+      if (user?.isPaidUser) {
+        navigation.navigate('NewMessage');
+      } else {
+        dispatch(setIsChatNotPaid(true));
+      }
+    };
+
     return (
-      <View style={styles.container}>
-        {user?.isPaidUser ?
-          <Avatar
-            rounded
-            containerStyle={styles.avatar}
-            source={user.profilePicture ? { uri: user.profilePicture } : placeholder}
-            onPress={() => navigation.navigate('Profile')}
-          />
-          :
-          user?.isAnonymous ?
-            <TouchableOpacity onPress={() => {
-              navigation.navigate("AuthStack");
-            }}>
-              <View style={{ borderRadius: 50, height: RFPercentage(4), paddingHorizontal: RFPercentage(1), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
-                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>Login</Text>
-              </View>
-            </TouchableOpacity>
-            :
-            <TouchableOpacity onPress={() => {
-              dist(setIsChatNotPaid(true))
-            }}>
-              <View style={{ borderRadius: 50, height: RFPercentage(4), width: RFPercentage(4), marginHorizontal: RFPercentage(2), justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5138E' }}>
-                <Text style={{ fontSize: RFPercentage(2), color: 'white' }}>.99</Text>
-              </View>
-            </TouchableOpacity>
-        }
-        <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
-          <Image source={searchIcon} style={styles.icon} />
-        </TouchableOpacity>
-      </View>
-    )
+      <Button
+        type="solid"
+        title="New Message"
+        buttonStyle={styles.buttonContainer}
+        titleStyle={styles.titleStyle}
+        onPress={handleMessage}
+      />
+    );
   };
-  const newMessage = (navigation) => (
-    <Button
-      type="solid"
-      title="New Message"
-      buttonStyle={styles.buttonContainer}
-      titleStyle={styles.titleStyle}
-      onPress={() => {
-        if (user.isPaidUser)
-          navigation.navigate('NewMessage')
-        else
-          dist(setIsChatNotPaid(true))
-      }}
-    />
-  );
 
   const back = (navigation) => {
     return (
@@ -81,8 +58,8 @@ const CommunityStack = () => {
           title: 'Chat',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerRight: () => search(navigation),
-          headerLeft: () => newMessage(navigation),
+          headerRight: () => RightButton(navigation),
+          headerLeft: () => NewMessage(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -94,7 +71,7 @@ const CommunityStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: () => search(navigation),
+          headerRight: () => RightButton(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -106,7 +83,7 @@ const CommunityStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),
-          headerRight: () => search(navigation),
+          headerRight: () => RightButton(navigation),
           headerStyle: styles.headerStyle,
         })}
       />

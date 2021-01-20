@@ -8,8 +8,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
 
 const EmptyChatList = ({ navigation }) => {
-  let user = useSelector(state => state.root.firebase.user)
-  const dist = useDispatch()
+  const { user } = useSelector((state) => state.root.firebase);
+  const dispatch = useDispatch();
+
+  const handleMessage = () => {
+    if (user?.isPaidUser) {
+      navigation.navigate('NewMessage');
+    } else {
+      dispatch(setIsChatNotPaid(true));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image source={emptyChatIcon} style={styles.icon} />
@@ -19,12 +28,7 @@ const EmptyChatList = ({ navigation }) => {
         title="New Message"
         buttonStyle={styles.buttonContainer}
         titleStyle={styles.titleStyle}
-        onPress={() => {
-          if (user.isPaidUser)
-            navigation.navigate('NewMessage')
-          else
-            dist(setIsChatNotPaid(true))
-        }}
+        onPress={handleMessage}
       />
     </View>
   );

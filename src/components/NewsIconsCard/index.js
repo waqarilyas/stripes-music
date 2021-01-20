@@ -8,7 +8,7 @@ import {
   shareIcon,
   newLikeIconWhite,
 } from '../../../Assets/Icons';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 
 const check = (array = [], value = '') => {
   return array.includes(value);
@@ -21,7 +21,7 @@ const NewsIconsCard = ({ viewCount, likedBy, likeCount }) => {
     <View style={styles.container}>
       <View style={styles.iconContainer}>
         <Image source={eyeIconWhite} style={styles.icon} />
-        <Text style={styles.count}>{thousandSeprator(viewCount)}</Text>
+        <Text style={styles.count}>{thousandSeparator(viewCount)}</Text>
       </View>
 
       <View style={styles.iconContainer}>
@@ -30,13 +30,13 @@ const NewsIconsCard = ({ viewCount, likedBy, likeCount }) => {
           style={isLiked ? styles.activatedIcon : styles.icon}
         />
         <Text style={isLiked ? styles.activatedCount : styles.count}>
-          {thousandSeprator(likeCount)}
+          {thousandSeparator(likeCount)}
         </Text>
       </View>
 
       <View style={styles.iconContainer}>
         <Image source={shareIcon} style={styles.icon} />
-        <Text style={styles.count}>{thousandSeprator(likeCount)}</Text>
+        <Text style={styles.count}>{thousandSeparator(likeCount)}</Text>
       </View>
     </View>
   );

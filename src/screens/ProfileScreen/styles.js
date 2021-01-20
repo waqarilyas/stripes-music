@@ -1,10 +1,18 @@
 import { StyleSheet } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFValue } from 'react-native-responsive-fontsize';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   profilePictureContainer: {
-    width: hp('15'),
-    height: hp('15'),
+    width: hp(15),
+    height: hp(15),
+  },
+  header: {
+    alignSelf: 'flex-start',
+    paddingLeft: wp(5),
   },
   profilePicOverlayContainer: {
     borderRadius: hp('10'),
@@ -33,7 +41,6 @@ const styles = StyleSheet.create({
   },
   pageTopNameView: {
     justifyContent: 'space-evenly',
-    alignItems: 'center',
     width: '100%',
     flexShrink: 1,
   },
@@ -48,13 +55,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: hp('2'),
     marginTop: 12,
-    alignSelf: 'center',
   },
-  followSubtext: {
+  followingCountText: {
     color: '#928989',
     marginTop: 6,
-    alignSelf: 'center',
     fontSize: 12,
+  },
+  status: {
+    color: 'white',
+    marginTop: hp(1),
+    fontSize: RFValue(12),
+    backgroundColor: '#F5138E',
+    alignSelf: 'flex-start',
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(0.5),
+    borderRadius: 6,
+    fontWeight: 'bold',
+    overflow: 'hidden',
   },
   followButtonText: {
     color: 'white',

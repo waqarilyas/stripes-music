@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
+import { updateAlbum, updateArtist } from '../../utils/Helpers';
 
 export const getSongs = createAsyncThunk('firebase/getSongs', async () => {
   let data = [];
@@ -34,10 +34,7 @@ export const getArtist = createAsyncThunk('firebase/getArtist', async (id) => {
   const path = firestore().collection('artists');
   const document = await path.doc(id).get();
   if (document.exists) {
-    let response = document.data();
-    response.createdAt = JSON.stringify(response.createdAt);
-    response.updatedAt = JSON.stringify(response.updatedAt);
-    return response;
+    return document.data();
   }
 });
 
@@ -91,6 +88,7 @@ export const getAllAlbums = createAsyncThunk(
     const documents = await path.get();
     documents.forEach((document) => {
       if (document.exists) {
+        updateAlbum(document.id);
         data.push(document.data());
       }
     });
@@ -101,10 +99,14 @@ export const getAllAlbums = createAsyncThunk(
 export const getAnAlbum = createAsyncThunk(
   'firebase/getAnAlbum',
   async (albumId) => {
-    const path = firestore().collection('albums');
-    const document = await path.doc(albumId).get();
-    if (document.exists) {
-      data.push(document.data());
+    try {
+      const path = firestore().collection('albums');
+      const document = await path.doc(albumId).get();
+      if (document.exists) {
+        return document.data();
+      }
+    } catch (err) {
+      console.log('firebaseReducer::getAnAlbum', err);
     }
   },
 );
@@ -179,7 +181,6 @@ export const getArtistNews = createAsyncThunk(
       }
     });
 
-    console.log('--------Data from firebase slice---------', data);
     return data;
   },
 );
@@ -204,11 +205,6 @@ export const getUser = createAsyncThunk('firebase/getUser', async () => {
   const path = firestore().collection('users');
   const document = await path.doc(uid).get();
   if (document.exists) {
-    console.log(
-      '--------------LOGGED IN USER OBJECT------------',
-      document.data(),
-    );
-
     return document.data();
   }
 });
@@ -283,6 +279,7 @@ export const getTopAllArtists = createAsyncThunk(
     const documents = await path.orderBy('followerCount', 'desc').get();
     documents.forEach((document) => {
       if (document.exists) {
+        updateArtist(document.id);
         data.push(document.data());
       }
     });
@@ -447,9 +444,6 @@ export const updateUser = createAsyncThunk('firebase/updateUser', (newData) => {
     .doc(firebase.auth().currentUser.uid)
     .set(newData, {
       merge: true,
-    })
-    .then((res) => {
-      console.log('------user------', res);
     });
 });
 
@@ -549,16 +543,12 @@ const firebaseSlice = createSlice({
   name: 'firebase',
   initialState: {
     error: null,
-    status: '',
-    user: {
-      isPaidUser: false,
-      isAnonymous: true,
-    },
+    user: null,
     playlist: {},
-    artist: {},
+    artist: null,
     artists: [],
     allTopArtists: [],
-    album: {},
+    album: null,
     albumSongs: [],
     songs: [],
     allSongs: [],
@@ -570,9 +560,9 @@ const firebaseSlice = createSlice({
     mostPlayedSongs: [],
     playlists: [],
     allPlaylists: [],
-    artistNews: [],
-    artistPopularSongs: [],
-    artistPlaylists: [],
+    artistNews: null,
+    artistPopularSongs: null,
+    artistPlaylists: null,
     favoriteSongList: [],
     bestAlbums: [],
     allBestAlbums: [],
@@ -588,191 +578,159 @@ const firebaseSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      console.log('-----------USER UPDATE ALE--------', action.payload)
-      state.user = { ...state, ...action.payload }
-    }
+      state.user = action.payload;
+    },
   },
   extraReducers: {
     // User data
     [getUser.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
-      state.user = { ...state.user, ...action.payload };
+      state.user = action.payload;
     },
 
     [updateUser.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
-      state.user = { ...state.user, ...action.payload };
+      state.user = action.payload;
     },
 
     // Songs Collections
     [getSongs.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.songs = action.payload;
     },
 
     // All Songs Collections
     [getAllSongs.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allSongs = action.payload;
     },
 
     // Most Played Songs Collection
     [getMostPlayed.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.mostPlayed = action.payload;
     },
 
     // Most Played Songs Collection
     [getMostPlayedSongs.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.mostPlayedSongs = action.payload;
     },
 
     // Playlists Collection
     [getPlaylists.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.playlists = action.payload;
     },
 
     // A Playlist Document
     [getAPlaylist.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.playlist = action.payload;
     },
 
     // All Playlists Collection
     [getAllPlaylists.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allPlaylists = action.payload;
     },
 
     // Limited Albums
     [getAlbums.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.albums = action.payload;
     },
 
     // All Albums
     [getAllAlbums.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allAlbums = action.payload;
     },
 
     // An Album
     [getAnAlbum.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.album = action.payload;
     },
 
     // Album related Songs
     [getAlbumSongs.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.albumSongs = action.payload;
     },
 
     // Get Artist Document
     [getArtist.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.artist = action.payload;
     },
 
     // Get Artist News
     [getArtistNews.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.artistNews = action.payload;
     },
 
     // Get Artist Popular Songs
     [getArtistPopularSongs.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.artistPopularSongs = action.payload;
     },
 
     // Get Artist Popular Songs
     [getArtistPopularSongs.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.artistPopularSongs = action.payload;
     },
 
     // Get Artist Playlists
     [getArtistPlaylists.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.artistPlaylists = action.payload;
     },
 
     // Get user audio history
     [getHistory.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.history = action.payload;
     },
 
     // Get All user audio history
     [getAllHistory.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allHistory = action.payload;
     },
 
     // Get top artists
     [getTopArtists.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.artists = action.payload;
     },
 
     // Get All top artists
     [getTopAllArtists.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allTopArtists = action.payload;
     },
 
     // Get Best Playlists
     [getBestAlbums.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.bestAlbums = action.payload;
     },
 
     // Get All Best Playlists
     [getAllBestAlbums.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allBestAlbums = action.payload;
     },
 
     // Get Videos
     [getVideos.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.videos = action.payload;
     },
 
     // Get Popular Video
     [getPopularVideos.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.popularVideos = action.payload;
     },
 
     // Get All Popular Video
     [getAllPopularVideos.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allPopularVideos = action.payload;
     },
 
     // Get Latest Videos
     [getLatestVideos.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.latestVideos = action.payload;
     },
 
     // Get All News
     [getAllNews.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.allNews = action.payload;
     },
 
     [getANews.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.news = action.payload;
     },
 
     [getNews.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
       state.limitedNews = action.payload;
     },
   },

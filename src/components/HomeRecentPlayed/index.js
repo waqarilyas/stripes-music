@@ -1,10 +1,9 @@
 import randomize from 'randomatic';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, ScrollView } from 'react-native';
 import { Divider } from 'react-native-elements';
 
 import { recentlyPlayedHome, musicIcon } from '../../../Assets/Icons';
-
 import SectionHeader from '../SectionHeader';
 import SongCardListView from '../SongCardListView';
 import styles from './styles';
@@ -16,10 +15,8 @@ import {
   pushToPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
-import {
-  addPlayCount,
-  addToRecentlyPlayed,
-} from '../../Redux/Reducers/firebaseSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 import TrackPlayer from 'react-native-track-player';
 import { LOG } from '../../utils/Constants';
 
@@ -31,7 +28,7 @@ const emptyCard = () => {
 
 const HomeRecentPlayed = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { history } = useSelector((state) => state.root.firebase);
+  const { recentlyPlayed } = useSelector((state) => state.root.player);
 
   const playSong = async ({ title, artist, artwork, url, duration, id }) => {
     try {
@@ -65,7 +62,7 @@ const HomeRecentPlayed = ({ navigation }) => {
             onPress={() => navigation.navigate('RecentPlayedSeeAll')}
           />
         }
-        data={history}
+        data={recentlyPlayed}
         keyExtractor={() => randomize('Aa0!', 10)}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         ListEmptyComponent={emptyCard}
@@ -85,5 +82,12 @@ const HomeRecentPlayed = ({ navigation }) => {
     </ScrollView>
   );
 };
+
+// const sortRecentlyPlayed = (list) => {
+//   let temp = list;
+//   return temp.slice().sort((a, b) => {
+//     return new Date(a.createdAt) - new Date(b.createdAt);
+//   });
+// };
 
 export default HomeRecentPlayed;

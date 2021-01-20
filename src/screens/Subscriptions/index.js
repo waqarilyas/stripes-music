@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
 import { downpicker, picker } from '../../../Assets/Icons';
 import Entity from '../../components/Entity';
 import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
 
-
 const Subscription = ({ route }) => {
-
-  let user = useSelector(state => state.root.firebase.user);
+  let { user } = useSelector((state) => state.root.firebase);
   const dist = useDispatch();
 
   const [visible1, setVisible1] = useState(false);
@@ -26,13 +27,14 @@ const Subscription = ({ route }) => {
     setVisible2(!visible2);
   };
 
-  const onUPgradeClicked = () => {
-    if (user.isPaidUser) {
+  const onUpgradeClicked = () => {
+    if (user?.isPaidUser) {
       setVisible3(!visible3);
       setVisible1(!visible1);
       setVisible2(!visible2);
-    } else
+    } else {
       dist(setIsChatNotPaid(true));
+    }
   };
 
   return (
@@ -140,7 +142,7 @@ const Subscription = ({ route }) => {
               {visible3 ? (
                 <TouchableOpacity
                   style={styles.touchView2}
-                  onPress={onUPgradeClicked}>
+                  onPress={onUpgradeClicked}>
                   <Text style={styles.textStyle}>UPGRADE NOW</Text>
                 </TouchableOpacity>
               ) : null}

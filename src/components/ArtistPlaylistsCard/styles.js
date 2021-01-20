@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,6 +17,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 8,
     marginRight: 16,
+    overflow: 'hidden',
   },
   title: {
     color: 'white',
@@ -43,9 +46,6 @@ const styles = StyleSheet.create({
   },
   background: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    position: 'absolute',
-    bottom: 12,
-    right: 12,
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 4,
@@ -54,6 +54,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 10,
+    marginTop: hp(1),
+  },
+  seeMore: {
+    color: 'white',
+    position: 'absolute',
+    bottom: 0,
+    fontSize: RFValue(10),
+    color: 'gray',
   },
 });
 

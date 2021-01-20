@@ -5,11 +5,16 @@ import TrackPlayer from 'react-native-track-player';
 import Video from 'react-native-video';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  closeIcon, fullscreenIcon,
-  pauseIcon, playIcon
+  closeIcon,
+  fullscreenIcon,
+  pauseIcon,
+  playIcon,
 } from '../../../Assets/Icons';
 import reducer from '../../hooks/useReducer';
-import { displayVideoModal, setVidoReferences } from '../../Redux/Reducers/helperSlice';
+import {
+  displayVideoModal,
+  setVidoReferences,
+} from '../../Redux/Reducers/helperSlice';
 import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
 import { convertToMinutes } from '../../utils/Helpers';
 import styles from './styles';
@@ -28,7 +33,7 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
   let videoPlayer = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [finished, setFinished] = useState(false);
-  let user = useSelector(state => state.root.firebase.user)
+  const { user } = useSelector((state) => state.root.firebase);
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
 
   useEffect(() => {
@@ -63,9 +68,9 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
   return (
     <View>
       <Video
-        ref={ref => {
+        ref={(ref) => {
           videoPlayer = ref;
-          global.vidRef = ref
+          global.vidRef = ref;
         }}
         source={{ uri: fileUrl }}
         onLoad={(data) => {
@@ -73,12 +78,17 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
           dispatch({ duration: data.duration });
         }}
         onProgress={(data) => {
-          if (data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO && !user.isPaidUser) {
-            disp(setVidoReferences({
-              isVideoPlaying: true,
-              currentTime: data.currentTime
-            }))
-            disp(displayVideoModal(false))
+          if (
+            data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO &&
+            !user?.isPaidUser
+          ) {
+            disp(
+              setVidoReferences({
+                isVideoPlaying: true,
+                currentTime: data.currentTime,
+              }),
+            );
+            disp(displayVideoModal(false));
           }
           dispatch({ currentTime: data.currentTime, isVideo: true });
         }}
@@ -97,7 +107,7 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
             style={styles.resumeContainer}
             onPress={() => {
               TrackPlayer.pause();
-              dispatch({ paused: !state.paused })
+              dispatch({ paused: !state.paused });
             }}>
             <Image
               source={state.paused ? playIcon : pauseIcon}

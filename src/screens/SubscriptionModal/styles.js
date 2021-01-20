@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const cardStyles = {
-  flex: 1,
-  marginHorizontal: RFValue(6),
-  borderRadius: RFValue('6'),
-  padding: RFValue('16'),
+  marginHorizontal: wp(2),
+  borderRadius: 6,
+  padding: '2%',
 };
 
 const styles = StyleSheet.create({
@@ -16,56 +18,47 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   container: {
-    borderRadius: RFValue(24),
-    backgroundColor: 'rgba(0,0,0,0.9)',
+    marginHorizontal: wp(3),
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 1)',
     height: '100%',
-    // flex: 1,
-  },
-  divider: {
-    backgroundColor: 'gray',
-    marginBottom: RFValue('8'),
-    height: RFValue('4'),
-    alignSelf: 'center',
-    width: '40%',
-    borderRadius: RFValue('3'),
   },
   header: {
     color: 'white',
     alignSelf: 'center',
-    fontSize: hp('2.5'),
+    fontSize: RFValue(14),
     fontWeight: 'bold',
-    marginVertical: hp('2'),
+    marginVertical: hp(2),
   },
   freeContainer: {
     ...cardStyles,
-    marginBottom: RFValue('24'),
-    backgroundColor: '#1A1A1A',
+    flex: 1,
   },
   standardContainer: {
-    marginBottom: RFValue('6'),
     ...cardStyles,
     backgroundColor: '#16C286',
+    flex: 1,
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: RFValue('8'),
+    margin: '2%',
   },
   title: {
     color: 'white',
-    fontSize: RFValue(18),
+    fontSize: RFValue(14),
     alignSelf: 'center',
-    marginBottom: RFValue('20'),
+    marginVertical: hp(2),
     fontWeight: 'bold',
   },
   tick: {
     resizeMode: 'contain',
     tintColor: 'white',
-    marginRight: RFValue('10'),
+    marginRight: wp(3),
   },
   text: {
     color: 'white',
-    fontSize: RFValue('14'),
+    fontSize: RFValue(12),
     fontWeight: 'bold',
     paddingRight: hp('2'),
   },

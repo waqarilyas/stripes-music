@@ -10,9 +10,8 @@ import {
 const LoginUser = async (values, actions, navigation) => {
   try {
     await auth().signInWithEmailAndPassword(values.email, values.password);
-    navigation.goBack();
+    navigation.navigate('MainTabs');
   } catch (authErrors) {
-    console.log('-------------LOGIN ERROR----------', authErrors.code)
     actions.setSubmitting(false);
 
     let message = '';
@@ -30,7 +29,7 @@ const LoginUser = async (values, actions, navigation) => {
         setError(actions, '', message);
         break;
       case USER_DISABLED:
-        message = 'Accout suspended, Contact Tech Support';
+        message = 'Account suspended, Contact Tech Support';
         setError(actions, '', message);
         break;
       default:

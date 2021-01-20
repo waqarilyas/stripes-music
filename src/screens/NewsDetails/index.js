@@ -4,14 +4,18 @@ import dayjs from 'dayjs';
 import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
 import {
-  ActivityIndicator, FlatList,
+  ActivityIndicator,
+  FlatList,
   LayoutAnimation,
-  Platform, Text,
+  Platform,
+  Text,
   TextInput,
-  TouchableOpacity, UIManager, View
+  TouchableOpacity,
+  UIManager,
+  View,
 } from 'react-native';
 import { Divider, Image } from 'react-native-elements';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
 import { newsComment } from '../../../Assets/Icons';
 import ArtistFollowCard from '../../components/ArtistFollowCard';
@@ -26,7 +30,10 @@ import { LOG } from '../../utils/Constants';
 import { getCollection } from '../../utils/Firebase';
 import styles from './styles';
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -42,35 +49,42 @@ const NewsDetails = () => {
   const { news } = useSelector((_state) => _state.root.firebase);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
+  const [commentCount, setCommentCount] = useState(0);
   const [stateVals, setStateVals] = useState({
-    showMore: []
+    showMore: [],
   });
-  console.log('-------News ID-------', news);
 
   useEffect(() => {
     getCollection('news', 5, (documents) =>
       dispatch({ relatedNews: documents }),
     );
-    const listener = firestore()
+    let listener = firestore()
+      .collection('news')
+      .doc(news.id)
       .collection('comments')
-      .where('postId', '==', news.id || '')
       .onSnapshot((querySnapshot) => {
         let allComments = [];
         querySnapshot.forEach((doc) => {
           allComments.push(doc.data());
         });
+        setCommentCount(allComments.length);
         let tempComments = allComments;
-        setStateVals(prev => ({ ...prev, showMore: tempComments.splice(0, 5) }))
+        setStateVals((prev) => ({
+          ...prev,
+          showMore: tempComments.splice(0, 5),
+        }));
         dispatch({ comments: allComments });
       });
 
-    return () => listener;
+    return listener;
   }, []);
 
   const handleSubmit = () => {
     if (commentText === '') {
       return;
     }
+
+    setCommentText('');
 
     const data = {
       comment: commentText,
@@ -84,143 +98,162 @@ const NewsDetails = () => {
     };
 
     firestore()
+      .collection('news')
+      .doc(news.id)
       .collection('comments')
       .add(data)
-      .then((result) => {
-        setCommentText('')
-        const documentId = result.id;
-        result.set({ id: documentId }, { merge: true });
-        LOG('ID UPDATED!', 'DONE');
-      })
       .catch((err) => LOG('ERROR', err));
   };
 
+  console.log('Comment Count', commentCount);
+  console.log('Equality', commentCount === stateVals.showMore.length);
+
+  const handleShowLess = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    let tempCom = state.comments;
+    setStateVals((prev) => ({
+      ...prev,
+      showMore: tempCom.slice(0, stateVals.showMore.length - 5),
+    }));
+  };
+
+  const handleShowMore = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    let tempCom = state.comments;
+    setStateVals((prev) => ({
+      ...prev,
+      showMore: tempCom.slice(0, stateVals.showMore.length + 5),
+    }));
+  };
+
+  console.log('Show More Length:', stateVals.showMore.length);
+
   return (
     <Block>
-      <View style={styles.container}>
-        {/* <Button text="Add Comments" onPress={Add} /> */}
-        <Image
-          source={{ uri: news.imgUrl }}
-          style={styles.image}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-        <View style={styles.titleView}>
-          <Text style={styles.title}>{news.title}</Text>
-          {news.createdAt ? (
-            <Text style={styles.date}>
-              {dayjs(news.createdAt).format('DD MMMM, YYYY')}
-            </Text>
-          ) : null}
-        </View>
-        <Text style={styles.blog} adjustsFontSizeToFit>
-          {news.description}
-        </Text>
-
-        <View style={styles.authorView}>
-          <Text style={styles.postBy}>Post by </Text>
-          <Text style={styles.authorName}>{news.author}</Text>
-        </View>
-
-        <ArtistFollowCard artistId={news.artistId} />
-        <NewsIconsCard
-          viewedBy={news.viewedBy}
-          likedBy={news.likedBy}
-          viewCount={news.viewCount}
-          likeCount={news.likeCount}
-        />
-        <View style={styles.commentButton}>
-          <TextInput
-            value={commentText}
-            style={styles.commentButtonText}
-            placeholder="Leave a comment"
-            placeholderTextColor="gray"
-            onChangeText={(input) => setCommentText(input)}
+      {Object.values(news).length > 0 ? (
+        <View style={styles.container}>
+          <Image
+            source={{ uri: news.imgUrl }}
+            style={styles.image}
+            PlaceholderContent={<ActivityIndicator />}
           />
-          <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-            <Text style={styles.submitText}>SUBMIT</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.titleView}>
+            <Text style={styles.title}>{news.title}</Text>
+            {news.createdAt ? (
+              <Text style={styles.date}>
+                {dayjs(news.createdAt).format('DD MMMM, YYYY')}
+              </Text>
+            ) : null}
+          </View>
+          <Text style={styles.blog} adjustsFontSizeToFit>
+            {news.description}
+          </Text>
 
-        <View style={styles.commentSection}>
-          {state.comments ? (
-            <>
-              <FlatList
-                style={styles.commentListStyle}
-                ListEmptyComponent={() => <NewsEmptyComments />}
-                data={stateVals.showMore}
-                ItemSeparatorComponent={() => (
-                  <Divider style={styles.commentDivider} />
-                )}
-                keyExtractor={() => randomize('Aa0!', 10)}
-                renderItem={({
-                  item: { image, comment, username, createdAt },
-                }) => {
-                  return (
-                    <NewsCommentCard
-                      image={image}
-                      comment={comment}
-                      username={username}
-                      createdAt={createdAt}
-                    />
-                  );
-                }}
-              />
+          <View style={styles.authorView}>
+            <Text style={styles.postBy}>Post by </Text>
+            <Text style={styles.authorName}>{news.author}</Text>
+          </View>
 
+          <ArtistFollowCard artistId={news.artistId} />
+          <NewsIconsCard
+            viewedBy={news.viewedBy}
+            likedBy={news.likedBy}
+            viewCount={news.viewCount}
+            likeCount={news.likeCount}
+          />
+          <View style={styles.commentButton}>
+            <TextInput
+              value={commentText}
+              style={styles.commentButtonText}
+              placeholder="Leave a comment"
+              placeholderTextColor="gray"
+              onChangeText={(input) => setCommentText(input)}
+            />
+            <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+              <Text style={styles.submitText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
 
-              <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
-                {stateVals.showMore.length > 5 ?
-                  <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
-                    <Text onPress={() => {
-                      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-                      let tempCom = state.comments;
-                      setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length - 5) }))
-                    }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show Less</Text>
-                  </View>
-                  : null}
+          <View style={styles.commentSection}>
+            {state.comments ? (
+              <>
+                <FlatList
+                  style={styles.commentListStyle}
+                  ListEmptyComponent={() => <NewsEmptyComments />}
+                  data={stateVals.showMore}
+                  ItemSeparatorComponent={() => (
+                    <Divider style={styles.commentDivider} />
+                  )}
+                  keyExtractor={() => randomize('Aa0!', 10)}
+                  renderItem={({
+                    item: { image, comment, username, createdAt },
+                  }) => {
+                    return (
+                      <NewsCommentCard
+                        image={image}
+                        comment={comment}
+                        username={username}
+                        createdAt={createdAt}
+                      />
+                    );
+                  }}
+                />
 
-                <View style={{ margin: RFPercentage(1), backgroundColor: 'grey', borderRadius: 3, padding: RFPercentage(0.5), }}>
-                  <Text onPress={() => {
-                    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-                    let tempCom = state.comments;
-                    setStateVals(prev => ({ ...prev, showMore: tempCom.slice(0, stateVals.showMore.length + 5) }))
-                  }} style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', }}>Show More</Text>
+                <View style={styles.showRootContainer}>
+                  {stateVals.showMore.length > 5 ? (
+                    <View style={styles.showContainer}>
+                      <Text onPress={handleShowLess} style={styles.showText}>
+                        Show Less
+                      </Text>
+                    </View>
+                  ) : null}
+
+                  {stateVals.showMore.length >= 5 &&
+                  stateVals.showMore.length !== commentCount ? (
+                    <View style={styles.showContainer}>
+                      <Text onPress={handleShowMore} style={styles.showText}>
+                        Show More
+                      </Text>
+                    </View>
+                  ) : null}
                 </View>
-              </View>
-
-            </>
-          ) : (
+              </>
+            ) : (
               <ActivityIndicator color="black" />
             )}
-        </View>
+          </View>
 
-        <SectionHeader icon={newsComment} name="Related News" />
+          <SectionHeader icon={newsComment} name="Related News" />
 
-        <View style={styles.realtedNewsContainer}>
-          {state.relatedNews ? (
-            <FlatList
-              data={state.relatedNews}
-              keyExtractor={() => randomize('Aa0!', 10)}
-              renderItem={({ item: { id, imgUrl, title, description } }) => {
-                if (id !== news.id) {
-                  return (
-                    <View style={{ paddingBottom: RFPercentage(2) }}>
-                      <RelatedNewsCard
-                        image={imgUrl}
-                        title={title}
-                        description={description}
-                      />
-                    </View>
-                  );
-                } else {
-                  return null;
-                }
-              }}
-            />
-          ) : (
+          <View style={styles.realtedNewsContainer}>
+            {state.relatedNews ? (
+              <FlatList
+                data={state.relatedNews}
+                keyExtractor={() => randomize('Aa0!', 10)}
+                renderItem={({ item: { id, imgUrl, title, description } }) => {
+                  if (id !== news.id) {
+                    return (
+                      <View style={{ paddingBottom: RFPercentage(2) }}>
+                        <RelatedNewsCard
+                          image={imgUrl}
+                          title={title}
+                          description={description}
+                        />
+                      </View>
+                    );
+                  } else {
+                    return null;
+                  }
+                }}
+              />
+            ) : (
               <ActivityIndicator color="white" />
             )}
+          </View>
         </View>
-      </View>
+      ) : (
+        <ActivityIndicator color={'white'} />
+      )}
     </Block>
   );
 };

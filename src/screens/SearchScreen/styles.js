@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
     marginVertical: RFValue('10'),
   },
   buttonContainer: {
-    marginVertical: RFValue('70'),
+    marginVertical: hp(2),
   },
   header: {
     flexDirection: 'row',

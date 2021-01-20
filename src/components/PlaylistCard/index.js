@@ -11,6 +11,8 @@ const PlaylistCard = ({ title, image, songsCount }) => {
         source={{ uri: image }}
         style={styles.image}
         PlaceholderContent={<ActivityIndicator color="white" />}
+        placeholderStyle={styles.placeholderStyle}
+        transition={true}
       />
       <View style={styles.cardText}>
         <Text numberOfLines={1} style={styles.title}>

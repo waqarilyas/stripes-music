@@ -6,10 +6,25 @@ import { topArtistIcon } from '../../../Assets/Icons';
 import ArtistsHorizontalCard from '../ArtistsHorizontalCard';
 import SectionHeader from '../SectionHeader';
 import { getArtistId } from '../../Redux/Reducers/idsSlice';
+import {
+  getArtist,
+  getArtistNews,
+  getArtistPlaylists,
+  getArtistPopularSongs,
+} from '../../Redux/Reducers/firebaseSlice';
 
 const HomeTopArtists = ({ navigation }) => {
-  const disp = useDispatch();
+  const dispatch = useDispatch();
   const { artists } = useSelector((state) => state.root.firebase);
+
+  const handleArtist = (id) => {
+    dispatch(getArtist(id));
+    dispatch(getArtistId(id));
+    dispatch(getArtistNews(id));
+    dispatch(getArtistPopularSongs(id));
+    dispatch(getArtistPlaylists(id));
+    navigation.navigate('Artist');
+  };
 
   return (
     <>
@@ -24,11 +39,7 @@ const HomeTopArtists = ({ navigation }) => {
         horizontal
         renderItem={({ item: { id, firstName, lastName, imgUrl } }) => {
           return (
-            <TouchableOpacity
-              onPress={() => {
-                disp(getArtistId(id));
-                navigation.navigate('Artist', { artistId: id });
-              }}>
+            <TouchableOpacity onPress={() => handleArtist(id)}>
               <ArtistsHorizontalCard
                 name={`${firstName} ${lastName}`}
                 avatar={imgUrl}

@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,8 +14,19 @@ const styles = StyleSheet.create({
   containerRight: {
     flexShrink: 1,
     paddingHorizontal: RFValue(10),
-    width: '100%',
     flex: 1,
+  },
+  followerCountText: {
+    color: '#928989',
+    marginTop: 6,
+    fontSize: 12,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    backgroundColor: 'black',
   },
   avatarContainer: {
     flex: 1,
@@ -22,22 +37,41 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: RFValue(18),
     fontWeight: 'bold',
-    marginVertical: RFValue(5),
+    marginBottom: hp(1),
   },
   subtitle: {
     color: 'grey',
     fontSize: RFValue(12),
   },
-  buttonContainer: {
+  follow: {
     backgroundColor: '#F5138E',
-    padding: RFValue(12),
-    marginTop: RFValue(18),
-    borderRadius: RFValue(8),
+  },
+  unfollow: {
+    backgroundColor: '#778899',
+  },
+  buttonContainer: {
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(1),
+    borderRadius: 10,
+    marginTop: hp(1),
   },
   text: {
     color: 'white',
     fontWeight: 'bold',
     letterSpacing: 1,
+    textAlign: 'center',
+  },
+  status: {
+    color: 'white',
+    marginTop: hp(1),
+    fontSize: RFValue(12),
+    backgroundColor: '#F5138E',
+    alignSelf: 'flex-start',
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(0.5),
+    borderRadius: 6,
+    fontWeight: 'bold',
+    overflow: 'hidden',
   },
 });
 

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import styles from './styles';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 import { playlistDefault, eyeIcon } from '../../../Assets/Icons';
 
 const ProfilePlaylistsCard = ({
@@ -42,7 +42,7 @@ const ProfilePlaylistsCard = ({
           </View>
           <View style={styles.viewCountContainer}>
             <Image style={styles.icon} source={eyeIcon} />
-            <Text style={styles.viewCount}>{thousandSeprator(viewCount)}</Text>
+            <Text style={styles.viewCount}>{thousandSeparator(viewCount)}</Text>
           </View>
         </>
       )}

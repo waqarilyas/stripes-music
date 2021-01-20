@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
@@ -94,6 +95,24 @@ const styles = StyleSheet.create({
   commentListStyle: {
     marginVertical: 32,
     marginHorizontal: 12,
+  },
+  showContainer: {
+    margin: '2%',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 10,
+    marginBottom: hp(3),
+    padding: '4%',
+  },
+  showText: {
+    textTransform: 'uppercase',
+    color: 'rgba(0, 0, 0, 0.4)',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: RFValue(12),
+  },
+  showRootContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
   },
 });
 

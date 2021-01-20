@@ -1,8 +1,13 @@
-export const thousandSeprator = (num = 0) => {
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
+import { BASE_URL } from './Constants';
+
+export const thousandSeparator = (num = 0) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 export const convertToMinutes = (seconds = 0) => {
+  const sec = seconds.toFixed(0);
   return (
     (seconds - (seconds %= 60)) / 60 + (seconds > 9 ? ':' : ':0') + seconds
   );
@@ -14,26 +19,42 @@ export const KFormatter = (num = 0) => {
     : Math.sign(num) * Math.abs(num);
 };
 
-export const shuffleArray = (arra1) => {
-  console.log('----------ARR----------', arra1)
-  var ctr = arra1.length, temp, index;
-var tempArr = []
-  // While there are elements in the array
+export const shuffleArray = (arr) => {
+  let ctr = arr.length,
+    temp,
+    index;
+  let tempArr = [];
+
   while (ctr > 0) {
-    // Pick a random index
     index = Math.floor(Math.random() * ctr);
-    // Decrease ctr by 1
     ctr--;
-    // And swap the last element with it
-    temp = arra1[ctr];
-    tempArr.push(temp)
+    temp = arr[ctr];
+    tempArr.push(temp);
   }
-  console.log('----------ARR modified----------', tempArr)
   return tempArr;
-}
+};
 
 export const customDocId = (uid, passedId) => {
   return uid < passedId
     ? uid.concat('**', passedId)
     : passedId.concat('**', uid);
+};
+
+export const displayToast = (title = '', message = '') => {
+  Toast.show({
+    type: 'success',
+    position: 'bottom',
+    text1: title,
+    text2: message,
+    visibilityTime: 3000,
+    autoHide: true,
+  });
+};
+
+export const updateAlbum = (albumId) => {
+  return axios.get(`${BASE_URL}/updateAlbum?id=${albumId}`);
+};
+
+export const updateArtist = (artistId) => {
+  return axios.get(`${BASE_URL}/updateArtist?id=${artistId}`);
 };

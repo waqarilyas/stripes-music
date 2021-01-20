@@ -1,16 +1,11 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import { Formik } from 'formik';
 import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  Switch,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Avatar, Overlay } from 'react-native-elements';
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Image } from 'react-native-elements';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { ScrollView } from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -19,55 +14,42 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
-import { camera, edit, tickIcon } from '../../../Assets/Icons';
-import Button from '../../components/Mybutton';
-import TextBox from '../../components/TextBox';
-// import fileType from 'react-native-file-type';
+
+import { camera, edit, usernameIcon } from '../../../Assets/Icons';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 import { getUser } from '../../Redux/Reducers/firebaseSlice';
+import { displayToast } from '../../utils/Helpers';
+import { ActivityIndicator } from 'react-native';
 
-const EditProfile = () => {
-  const user = useSelector((state) => state.root.firebase.user);
+const options = {
+  title: 'Select Avatar',
+  cameraType: 'front',
+  mediaType: 'photo',
+  maxWidth: 800,
+  maxHeight: 800,
+  allowsEditing: true,
+  quality: 1,
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
+
+const EditProfile = ({ navigation, route }) => {
+  const { profilePicture } = route.params;
   const uid = auth().currentUser.uid;
-  const [fullName, setFullName] = useState(user.fullName);
-  const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [uploadErr, setUploadErr] = useState(false);
-
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
-
-  const [ext, setExt] = useState('');
-  var [fileUri, SetFileuri] = useState('');
-
+  const { user } = useSelector((state) => state.root.firebase);
+  const [ext, setExt] = useState(null);
+  const [fileUri, setFileUri] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [loading, setLoading] = useState(false);
 
+  const toggleSwitch = () => setIsEnabled(!isEnabled);
   const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    setLoading(true);
-
-    updateProfiledata();
-  };
-
   const chooseImage = () => {
-    let options = {
-      title: 'Select Avatar',
-      cameraType: 'front',
-      mediaType: 'photo',
-      maxWidth: 800,
-      maxHeight: 800,
-      allowsEditing: true,
-      quality: 1,
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
     ImagePicker.showImagePicker(options, (response) => {
-      // console.log(response.uri);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -76,27 +58,25 @@ const EditProfile = () => {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        SetFileuri(decodeURI(response.uri));
+        setFileUri(decodeURI(response.uri));
         const type = response.type.split('/');
         setExt(type[1]);
       }
     });
   };
-  const updateProfiledata = () => {
+
+  const handleForm = ({ name }) => {
+    setLoading(true);
     if (fileUri) {
-      uploadImageToStorage(fullName);
-    } else {
-      if (fullName) {
-        uploadDataToFirestore(fullName, '');
-      } else {
-        setLoading(false)
-      }
+      updatePicture(name);
+    } else if (name !== user?.fullName) {
+      updateDB(name);
     }
   };
 
-  const uploadImageToStorage = (title) => {
+  const updatePicture = (name) => {
     const storageRef = storage().ref('users/');
-    const path = `${uid}/${user.fullName}.${ext}`;
+    const path = `${uid}/${name}.${ext}`;
 
     const uploadTask = storageRef.child(path).putFile(fileUri);
     uploadTask.on(
@@ -107,146 +87,141 @@ const EditProfile = () => {
         switch (snapshot.state) {
           case storage.TaskState.PAUSED:
             console.log('Upload is paused');
+            setLoading(false);
             break;
           case storage.TaskState.CANCELLED:
             console.log('Upload is cancelled');
+            setLoading(false);
             break;
           case storage.TaskState.ERROR:
             console.log('Failed to create a playlist. Try again.');
-
+            setLoading(false);
             break;
           case storage.TaskState.RUNNING:
             console.log('Upload is running');
             break;
         }
-        setLoading(false);
       }, // Failed Listener
       (_err) => {
-        setLoading(false);
         console.log('Error: ', _err);
+        setLoading(false);
       }, // Successful Listener
       () => {
-        console.log('------ SUCCESSFULLY UPLOADED PICTURE ------');
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {
-          setVisible(true);
-          console.log('File available at', downloadUrl);
-          uploadDataToFirestore(title, downloadUrl);
-          setLoading(false);
-        });
+        uploadTask.snapshot.ref
+          .getDownloadURL()
+          .then((downloadUrl) => updateDB(name, downloadUrl));
       },
     );
   };
 
-  const uploadDataToFirestore = (title = user.fullName, imageUrl = user.profilePicture) => {
+  const updateDB = (name = user?.fullName, imageURI = user?.profilePicture) => {
     firestore()
       .collection('users')
       .doc(uid)
-      .set(
-        imageUrl ?
-          {
-            profilePicture: imageUrl,
-            fullName: title,
-          } : fullName ? {
-            fullName: title,
-          } : {},
-        {
-          merge: true,
-        },
-      )
-      .then((res) => {
+      .update({
+        profilePicture: imageURI,
+        fullName: name,
+      })
+      .then(() => {
         dispatch(getUser());
-        setVisible(true);
+        displayToast('Profile Updated');
+        navigation.goBack();
+      })
+      .catch((err) => {
         setLoading(false);
-      }).catch(err => {
-        setLoading(false);
-        console.log('--------ERROR UPDATING USER------', err)
+        console.log('Error updating user', err);
       });
   };
 
-  if (visible) {
-    setInterval(function () {
-      setVisible(false);
-    }, 3000);
-  }
+  const switchColors = { false: '#767577', true: '#36E76E' };
+
+  const initialValues = {
+    name: user?.fullName,
+  };
+
   return (
     <>
-      <Overlay
-        isVisible={visible}
-        onBackdropPress={toggleOverlay}
-        overlayStyle={styles.overlay}>
-        <View style={styles.overlayContainer}>
-          <Image source={tickIcon} style={styles.tick} />
-          <Text style={styles.successMessage}>
-            Profile updated successfully!
-          </Text>
-        </View>
-      </Overlay>
-
-      <View style={styles.maincontainer}>
+      <View style={styles.container}>
         <ScrollView>
           <View style={styles.profileContainer}>
             <TouchableOpacity
               style={styles.profileTouchView}
               onPress={chooseImage}>
-              {fileUri || user.profilePicture ? (
-                <Avatar
-                  rounded
-                  source={
-                    fileUri ? { uri: fileUri } : { uri: user.profilePicture }
-                  }
-                  size="xlarge"
-                  containerStyle={{ alignSelf: 'center' }}
-                  onPress={chooseImage}
-                />
-              ) : (
-                  <View style={styles.cameraIconContainer}>
-                    <Image source={camera} style={styles.camera} />
-                  </View>
-                )}
+              <Image
+                defaultSource={camera}
+                resizeMode={
+                  fileUri || user?.profilePicture ? 'contain' : 'center'
+                }
+                style={styles.profilePicture}
+                onPress={chooseImage}
+                source={{
+                  uri: fileUri || profilePicture,
+                }}
+                PlaceholderContent={<ActivityIndicator color={'white'} />}
+                placeholderStyle={styles.placeholderStyle}
+              />
               <View style={styles.edit}>
                 <Image source={edit} style={styles.imageEdit} />
               </View>
             </TouchableOpacity>
           </View>
 
-          <View>
-            <TextBox
-              text="Enter Name"
-              defaultValue={user.fullName}
-              value={fullName}
-              onChangeText={(input) => setFullName(input)}
-              contentType="name"
-            />
+          <Formik initialValues={initialValues} onSubmit={handleForm}>
+            {({
+              initialValues,
+              errors,
+              handleChange,
+              handleSubmit,
+              touched,
+            }) => (
+              <View>
+                <Input
+                  icon={usernameIcon}
+                  name={'Full Name'}
+                  textType={'name'}
+                  capitalize={'words'}
+                  defaultValue={initialValues.name}
+                  onChangeText={handleChange('name')}
+                  autoCompleteType={'name'}
+                  returnKeyType={'done'}
+                />
+                <Text style={styles.error}>
+                  {touched.name && errors.name ? errors.name : ''}
+                </Text>
 
-            <View style={styles.notificationContainer}>
-              <Text style={styles.notifyText}>Notifications</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#36E76E' }}
-                thumbColor={isEnabled ? '#FFFFFF' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={isEnabled}
-              />
-              {/* </View> */}
-            </View>
+                <View style={styles.notificationContainer}>
+                  <Text style={styles.notifyText}>Notifications</Text>
+                  <Switch
+                    trackColor={switchColors}
+                    thumbColor={isEnabled ? '#FFFFFF' : '#f4f3f4'}
+                    ios_backgroundColor={'#3e3e3e'}
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                    style={styles.switch}
+                  />
+                </View>
 
-            <Button
-              text="UPDATE PROFILE"
-              onPress={handleSubmit}
-              loading={loading}
-            />
-            <View style={{ height: hp('10%') }}></View>
-          </View>
+                <Button text={'Update Profile'} onPress={handleSubmit} />
+              </View>
+            )}
+          </Formik>
         </ScrollView>
+        <Spinner visible={loading} color={'white'} />
       </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  maincontainer: {
+  container: {
     backgroundColor: '#120810',
     flex: 1,
+    paddingHorizontal: wp(4),
+  },
+  error: {
+    color: '#B22222',
+    marginVertical: hp('1'),
+    marginLeft: hp('1'),
   },
   profileContainer: {
     height: hp('25%'),
@@ -275,15 +250,6 @@ const styles = StyleSheet.create({
     height: hp('4.4%'),
     width: hp('4.4%'),
   },
-  textInputstyle: {
-    height: hp('15%'),
-    backgroundColor: '#2c262b',
-    fontSize: 14,
-    width: wp('90%'),
-    borderRadius: 5,
-    color: 'white',
-    paddingLeft: 15,
-  },
   cameraImage: {
     resizeMode: 'contain',
     height: hp('14'),
@@ -297,42 +263,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: hp('10'),
   },
-  notifyText: {
-    color: 'white',
-    fontSize: RFValue('16'),
-  },
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-
-    width: '100%',
-    marginVertical: hp('2'),
-    paddingHorizontal: hp('4'),
-  },
-  overlay: {
-    backgroundColor: '#BBF5BB',
-    width: '80%',
+    paddingHorizontal: wp(3),
+    backgroundColor: 'red',
     paddingVertical: hp('3'),
-    alignItems: 'center',
-    borderRadius: 10,
+    backgroundColor: '#1a1a1a',
+    marginTop: hp(1),
   },
-  successMessage: {
-    color: 'black',
-    fontSize: RFValue('14'),
+  notifyText: {
+    color: 'white',
+    fontSize: RFValue(18),
+    marginStart: wp(3),
   },
-  overlayContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    // width: '100%',
+  switch: {
+    marginEnd: wp(3),
   },
-  tick: {
-    alignItems: 'center',
-    resizeMode: 'contain',
-    height: hp('4'),
-    width: hp('4'),
-    marginRight: hp('2'),
+  profilePicture: {
+    height: hp(18),
+    width: hp(18),
+    borderRadius: 100,
+  },
+  placeholderStyle: {
+    backgroundColor: '#212121',
   },
 });
 

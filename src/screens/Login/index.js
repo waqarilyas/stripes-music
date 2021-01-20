@@ -1,48 +1,67 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { Button as RNEButton } from 'react-native-elements';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import { Formik } from 'formik';
+import React, { useEffect, useState, useRef } from 'react';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Button as RNEButton } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import Block from '../../components/Block';
-import Button from '../../components/Button';
-import styles from './styles';
 import {
   emailIcon,
-  passwordIcon,
   facebookIcon,
   googleIcon,
+  passwordIcon,
 } from '../../../Assets/Icons';
+import Block from '../../components/Block';
+import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { GOOGLE_WEB_CLIENT_ID } from '../../utils/Constants';
+import { LoginVS } from '../../utils/Validation';
 import onFacebookButtonPress from './FacebookLogin';
 import onGoogleButtonPress from './GoogleLogin';
-import { LoginVS } from '../../utils/Validation';
+import styles from './styles';
 import LoginUser from './utils';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const initValues = {
-
   email: '',
   password: '',
   globalError: '',
 };
 
 const Login = ({ navigation }) => {
+  let formik = useRef(null);
+  const [visibility, setVisibility] = useState(false);
 
-  let [state, setState] = useState({
-    initValues: {
-      email: '',
-      password: '',
-      globalError: '',
-    }
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
 
+  const configureGoogleSignIn = () => {
+    GoogleSignin.configure({
+      webClientId: GOOGLE_WEB_CLIENT_ID,
+      offlineAccess: false,
+    });
+  };
 
-  })
+  const handleGoogleLogin = () => {
+    onGoogleButtonPress(setVisibility)
+      .then(() => navigation.navigate('MainTabs'))
+      .catch((err) => console.log(err));
+  };
+
+  const handleFacebookLogin = () => {
+    onFacebookButtonPress(setVisibility)
+      .then(() => navigation.navigate('MainTabs'))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Block>
       <ScrollView>
         <Text style={styles.headerText}>Login</Text>
         <Formik
-          initialValues={state.initValues}
+          innerRef={formik}
+          initialValues={initValues}
           onSubmit={(values, actions) => LoginUser(values, actions, navigation)}
           validationSchema={LoginVS}>
           {({
@@ -52,6 +71,7 @@ const Login = ({ navigation }) => {
             handleSubmit,
             isSubmitting,
             touched,
+            values,
           }) => (
             <>
               <Input
@@ -63,6 +83,7 @@ const Login = ({ navigation }) => {
                 defaultValue={initialValues.email}
                 keyboardType="email-address"
                 onChangeText={handleChange('email')}
+                value={values.email}
               />
               <Text style={styles.error}>
                 {touched.email && errors.email ? errors.email : ''}
@@ -77,6 +98,7 @@ const Login = ({ navigation }) => {
                 capitalize="none"
                 secureTextEntry={true}
                 onChangeText={handleChange('password')}
+                value={values.password}
               />
               <Text style={styles.error}>
                 {touched.password && errors.password ? errors.password : ''}
@@ -85,9 +107,10 @@ const Login = ({ navigation }) => {
               {errors.globalErr ? (
                 <Text style={styles.globalError}>{errors.globalErr}</Text>
               ) : null}
+
               <Button
                 onPress={handleSubmit}
-                text="Login"
+                text={'Login'}
                 isSubmitting={isSubmitting}
               />
             </>
@@ -110,11 +133,7 @@ const Login = ({ navigation }) => {
             title="Google"
             buttonStyle={styles.socialButton}
             titleStyle={styles.socialButtonText}
-            onPress={async () => {
-              let GoogleLoginResponse = await onGoogleButtonPress()
-              if (GoogleLoginResponse)
-                navigation.goBack();
-            }}
+            onPress={handleGoogleLogin}
           />
 
           <RNEButton
@@ -123,30 +142,29 @@ const Login = ({ navigation }) => {
             title="Facebook"
             buttonStyle={styles.faceBookButton}
             titleStyle={styles.socialButtonText}
-            onPress={async () => {
-              let FacebookLoginResponse = await onFacebookButtonPress()
-              if (FacebookLoginResponse)
-                navigation.goBack();
-            }}
+            onPress={handleFacebookLogin}
           />
 
           <View style={styles.signupSection}>
             <Text style={styles.signupText}>Do not have an account?</Text>
-            <TouchableOpacity onPress={() => {
-              setState(prev => ({
-                ...prev, initValues: {
-                  email: '',
-                  password: '',
-                  globalError: '',
-                }
-              }))
-              navigation.navigate('Signup')
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                formik.current.resetForm(initValues);
+                navigation.navigate('Signup');
+              }}>
               <Text style={styles.signup}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
+      {visibility && (
+        <Spinner
+          animation={'fade'}
+          cancelable={false}
+          size={'large'}
+          visible={visibility}
+        />
+      )}
     </Block>
   );
 };

@@ -11,6 +11,7 @@ import {
   playIcon,
   searchIcon,
   videoIcon,
+  backIcon,
 } from '../../../Assets/Icons';
 import AlbumsSearchCard from '../../components/AlbumsSearchCard';
 import ArtistsHorizontalCard from '../../components/ArtistsHorizontalCard';
@@ -21,12 +22,13 @@ import SectionHeader from '../../components/SectionHeader';
 import SongCard from '../../components/SongCard';
 import { getSearchData } from '../../utils/Firebase';
 import styles from './styles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const SearchResultsScreen = ({ route, navigation }) => {
   const { selected } = route.params;
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [query, setQuery] = useState('');
-  const [searchResults, setSearchSelecteds] = useState({
+  const [searchResults, setSearchResults] = useState({
     songs: [],
     videos: [],
     playlists: [],
@@ -62,7 +64,7 @@ const SearchResultsScreen = ({ route, navigation }) => {
   };
 
   const setResults = (name, value) => {
-    setSearchSelecteds((prevState) => ({
+    setSearchResults((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -85,6 +87,11 @@ const SearchResultsScreen = ({ route, navigation }) => {
   return (
     <Block>
       <View style={styles.searchWithClose}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backContainer}>
+          <Image source={backIcon} style={styles.back} />
+        </TouchableOpacity>
         <View
           style={styles.searchContainer}
           onPress={() => navigation.navigate('SearchResultsScreen')}>
@@ -93,7 +100,7 @@ const SearchResultsScreen = ({ route, navigation }) => {
             placeholder="Search..."
             style={styles.textInput}
             textStyle={{ color: 'white', flex: 1, flexShrink: 1 }}
-            placeholderTextColor="#918E96"
+            placeholderTextColor={'#918E96'}
             onChangeText={(text) => setQuery(text)}
             onSubmitEditing={(text) => {
               addToFirestore(text.nativeEvent.text);

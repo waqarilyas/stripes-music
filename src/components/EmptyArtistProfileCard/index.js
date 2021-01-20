@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const EmptyArtistProfileCard = ({ icon, text, buttonTitle, onPress }) => {
+const EmptyArtistProfileCard = ({ icon, text, buttonTitle = '', onPress }) => {
   return (
     <View style={styles.container}>
       <Image source={icon} style={styles.icon} />
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    height: '100%',
   },
   text: {
     marginTop: hp('3'),

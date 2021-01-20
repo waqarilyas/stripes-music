@@ -1,22 +1,20 @@
 import React from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
 
-import SongCard from '../SongCard';
-import EmptyCard from '../EmptyCard';
-import SectionHeader from '../SectionHeader';
 import { mostPlayedHome, whitePlayIcon } from '../../../Assets/Icons';
 import {
   changeSong,
-  pushToPlaylist,
   fullScreenChange,
+  pushToPlaylist,
 } from '../../Redux/Reducers/audioSlice';
-import {
-  addToRecentlyPlayed,
-  addPlayCount,
-} from '../../Redux/Reducers/firebaseSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 import { LOG } from '../../utils/Constants';
+import EmptyCard from '../EmptyCard';
+import SectionHeader from '../SectionHeader';
+import SongCard from '../SongCard';
 
 const emptyCard = () => {
   return <EmptyCard text="No Songs Played" icon={mostPlayedHome} />;

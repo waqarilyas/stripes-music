@@ -15,9 +15,7 @@ import ProfileRecentlyPlayed from '../../components/ProfileRecentlyPlayed';
 import reducer from '../../hooks/useReducer';
 import styles from './styles';
 
-
 const initialState = {
-  user: {},
   artistFollowing: 0,
 };
 
@@ -27,9 +25,7 @@ const ProfilePicPlaceholder = () => {
 
 const ProfileScreen = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const user = useSelector((state) => state.root.firebase.user);
-
-  console.log('-------USer-----', user);
+  const { user } = useSelector((state) => state.root.firebase);
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
@@ -39,7 +35,6 @@ const ProfileScreen = ({ navigation }) => {
       .get()
       .then((document) => {
         if (document.exists) {
-          console.log(document.data());
           const user = document.data();
           if (user.artistFollowing) {
             const artists = user.artistFollowing.length;
@@ -57,31 +52,33 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <Block>
-      {user && (
-        <View style={styles.pageTop}>
-          <Avatar
-            rounded
-            containerStyle={styles.profilePictureContainer}
-            overlayContainerStyle={styles.profilePicOverlayContainer}
-            source={{ uri: user.profilePicture }}
-            renderPlaceholderContent={<ProfilePicPlaceholder />}
-          />
-          <View style={styles.pageTopNameView}>
-            <View style={{ alignSelf: 'flex-start', paddingLeft: RFPercentage(3) }}>
-              <Text numberOfLines={1} style={[styles.artistName, { textAlign: 'left' }]}>{user.fullName}</Text>
-              <Text style={[styles.followText, { textAlign: 'left', alignSelf: 'flex-start' }]}>{state.artistFollowing}</Text>
-              <Text style={[styles.followSubtext, { textAlign: 'left', alignSelf: 'flex-start' }]}>Following</Text>
-              <Text style={[styles.followSubtext, { textAlign: 'left', alignSelf: 'flex-start' }]}>Member</Text>
-            </View>
+      <View style={styles.pageTop}>
+        <Avatar
+          rounded
+          containerStyle={styles.profilePictureContainer}
+          overlayContainerStyle={styles.profilePicOverlayContainer}
+          source={{ uri: user.profilePicture }}
+          renderPlaceholderContent={<ProfilePicPlaceholder />}
+        />
+        <View style={styles.pageTopNameView}>
+          <View style={styles.header}>
+            <Text numberOfLines={1} style={styles.artistName}>
+              {user.fullName}
+            </Text>
+            <Text style={styles.followText}>{state.artistFollowing}</Text>
+            <Text style={styles.followingCountText}>Following</Text>
+            <Text style={styles.status}>Member</Text>
           </View>
         </View>
-      )}
-
-      <ProfileActionBar navigation={navigation} />
+      </View>
+      <ProfileActionBar
+        navigation={navigation}
+        profilePicture={user?.profilePicture}
+      />
       <ProfilePlaylists navigation={navigation} styles={styles} />
       <ProfileFavoriteSongs navigation={navigation} />
       <ProfileArtists navigation={navigation} />
-      <ProfileRecentlyPlayed navigation={navigation} />
+      {/* <ProfileRecentlyPlayed navigation={navigation} /> */}
     </Block>
   );
 };

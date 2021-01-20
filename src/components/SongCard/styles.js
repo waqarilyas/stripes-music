@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'cover',
     justifyContent: 'center',
-    height: hp('15'),
-    width: hp('15'),
+    height: hp(15),
+    width: hp(15),
     borderRadius: hp('1'),
     overflow: 'hidden',
   },
@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
   },
   cardText: {
     marginTop: hp('2'),
+  },
+  placeholderStyle: {
+    backgroundColor: '#212121',
   },
 });
 

@@ -17,8 +17,15 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     alignSelf: 'center',
   },
-  list: {
-    // height: '100%',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    backgroundColor: 'black',
+  },
+  placeholderStyle: {
+    backgroundColor: '#212121',
   },
   divider: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -31,13 +38,12 @@ const styles = StyleSheet.create({
   overlay: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     paddingLeft: hp('4'),
     paddingTop: hp('4'),
   },
   image: {
     height: hp('40'),
-    resizeMode: 'contain',
   },
   title: {
     fontSize: hp('3'),

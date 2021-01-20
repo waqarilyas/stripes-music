@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  ImageBackground,
   ScrollView,
   Text,
   View,
@@ -16,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import styles from './styles';
 import { LOG } from '../../utils/Constants';
 import SongItem from '../../components/SongItem';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 import { eyeIcon, playButton } from '../../../Assets/Icons';
 import {
   fullScreenChange,
@@ -25,13 +24,22 @@ import {
 } from '../../Redux/Reducers/audioSlice';
 import {
   addAlbumPlayCount,
-  addToRecentlyPlayed,
   addPlayCount,
 } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
+import { Animated } from 'react-native';
 
 const AlbumDetail = () => {
   const dispatch = useDispatch();
   const { album, albumSongs } = useSelector((state) => state.root.firebase);
+  let fadeIn = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeIn, {
+      toValue: 1,
+      duration: 2000,
+    }).start();
+  }, [fadeIn]);
 
   const handleAddToPlaylist = async () => {
     try {
@@ -59,8 +67,6 @@ const AlbumDetail = () => {
         createdAt: +new Date(),
       };
 
-      console.log('-----Result------', result);
-
       dispatch(changeSong(result));
       dispatch(pushToPlaylist(result));
       await TrackPlayer.add(result);
@@ -72,13 +78,14 @@ const AlbumDetail = () => {
     }
   };
 
-  return (
+  return album ? (
     <ScrollView style={styles.scrollContainer}>
-      <View style={styles.container}>
-        <ImageBackground
-          loadingIndicatorSource={<ActivityIndicator color="white" />}
-          source={{ uri: album.imgUrl }}
-          style={styles.image}>
+      <Animated.View style={{ ...styles.container, opacity: fadeIn }}>
+        <Image
+          source={{ uri: album?.imgUrl }}
+          style={styles.image}
+          PlaceholderContent={<ActivityIndicator color="white" />}
+          placeholderStyle={styles.placeholderStyle}>
           <View style={styles.overlay}>
             <Text style={styles.title}>{album.title}</Text>
             <Text style={styles.subtitle}>{album.author}</Text>
@@ -86,7 +93,7 @@ const AlbumDetail = () => {
             <View style={styles.viewContainer}>
               <Image source={eyeIcon} style={styles.eyeIcon} />
               <Text style={styles.viewCount}>
-                {thousandSeprator(album.viewCount)}
+                {thousandSeparator(album.viewCount)}
               </Text>
             </View>
             <Image
@@ -95,7 +102,7 @@ const AlbumDetail = () => {
               onPress={() => handleAddToPlaylist()}
             />
           </View>
-        </ImageBackground>
+        </Image>
         <Text style={styles.heading}>SONGS</Text>
         <FlatList
           style={styles.list}
@@ -104,7 +111,7 @@ const AlbumDetail = () => {
           keyExtractor={(item) => item.id}
           renderItem={({
             item,
-            item: { title, artist, artwork, id, duration, url },
+            item: { title, artist, artwork, id, duration },
           }) => {
             return (
               <TouchableOpacity onPress={() => playSong(item)}>
@@ -119,8 +126,12 @@ const AlbumDetail = () => {
             );
           }}
         />
-      </View>
+      </Animated.View>
     </ScrollView>
+  ) : (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator color={'white'} />
+    </View>
   );
 };
 

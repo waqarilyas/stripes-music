@@ -13,47 +13,48 @@ const emptyCard = () => {
 };
 
 const HomeFavoriteArtists = ({ navigation }) => {
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(null);
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
-    const listener = firestore()
+    let listener = firestore()
       .collection('users')
       .doc(uid)
       .collection('favArtists')
-      .where('isFavorite', '==', true)
+      .where('isFollowing', '==', true)
       .onSnapshot((querySnapshot) => {
         let data = [];
         querySnapshot.docs.forEach((document) => {
           if (document.exists) {
-            let response = document.data();
-            response.updatedAt = JSON.stringify(response.updatedAt);
-            data.push(response);
+            data.push(document.data());
           }
         });
         setList(data);
       });
 
-    return () => listener;
+    return listener;
   }, []);
 
   return (
     <>
       <SectionHeader
-        name="Favourite Artists"
+        name="Favorite Artists"
         icon={favoriteArtistIcon}
         onPress={() => navigation.navigate('FavouriteArtistSeeAll')}
       />
-      <FlatList
-        data={list}
-        contentContainerStyle={list.length > 0 ? null : { flex: 1 }}
-        ListEmptyComponent={emptyCard}
-        keyExtractor={(item) => item.id}
-        horizontal
-        renderItem={({ item: { name, avatar } }) => {
-          return <ArtistsHorizontalCard name={name} avatar={avatar} />;
-        }}
-      />
+      {list && (
+        <FlatList
+          data={list}
+          contentContainerStyle={list.length > 0 ? null : { flex: 1 }}
+          ListEmptyComponent={emptyCard}
+          keyExtractor={(item) => `${item.id}`}
+          horizontal
+          renderItem={({ item: { name, avatar } }) => {
+            console.log(name, avatar);
+            return <ArtistsHorizontalCard name={name} avatar={avatar} />;
+          }}
+        />
+      )}
     </>
   );
 };

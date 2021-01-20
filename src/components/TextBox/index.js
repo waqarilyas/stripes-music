@@ -1,15 +1,18 @@
 // Module imports
 
 import React from 'react';
-import { StyleSheet, Dimensions, View, TextInput } from 'react-native';
+import { Dimensions, StyleSheet, TextInput, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-// Local imports
-//import styles from './styles'
 
-const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const TextBox = ({ text, onChangeText, contentType, defaultValue, blurOnSubmit }) => {
+const TextBox = ({
+  text,
+  onChangeText,
+  contentType,
+  defaultValue,
+  blurOnSubmit,
+}) => {
   console.log(defaultValue);
 
   return (

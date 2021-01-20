@@ -3,7 +3,7 @@ import { Text, View, ImageBackground, Image } from 'react-native';
 
 import styles from './styles';
 import { eyeIcon } from '../../../Assets/Icons';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 
 const BestPlaylistsCard = ({ imgUrl, songCount, title, viewCount }) => {
   return (
@@ -18,7 +18,7 @@ const BestPlaylistsCard = ({ imgUrl, songCount, title, viewCount }) => {
       </Text>
       <View style={styles.bottom}>
         <Image source={eyeIcon} style={styles.icon} />
-        <Text style={styles.text}>{thousandSeprator(viewCount)}</Text>
+        <Text style={styles.text}>{thousandSeparator(viewCount)}</Text>
       </View>
     </View>
   );

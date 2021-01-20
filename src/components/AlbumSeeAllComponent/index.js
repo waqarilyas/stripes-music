@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, Image } from 'react-native';
 
 import styles from './styles';
 import { eyeIcon, whitePlayIcon, musicIcon } from '../../../Assets/Icons';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 
 const AlbumSeeAllComponent = ({
   image,
@@ -30,15 +30,15 @@ const AlbumSeeAllComponent = ({
         </Text>
         <View style={styles.iconWithLabel}>
           <Image source={eyeIcon} style={styles.icon} />
-          <Text style={styles.label}>{thousandSeprator(viewCount)}</Text>
+          <Text style={styles.label}>{thousandSeparator(viewCount)}</Text>
         </View>
         <View style={styles.iconWithLabel}>
           <Image source={whitePlayIcon} style={styles.icon} />
-          <Text style={styles.label}>{thousandSeprator(playCount)}</Text>
+          <Text style={styles.label}>{thousandSeparator(playCount)}</Text>
         </View>
         <View style={styles.iconWithLabel}>
           <Image source={musicIcon} style={styles.icon} />
-          <Text style={styles.label}>{thousandSeprator(songCount)}</Text>
+          <Text style={styles.label}>{thousandSeparator(songCount)}</Text>
         </View>
       </View>
     </View>

@@ -2,8 +2,9 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { LoginManager, AccessToken } from 'react-native-fbsdk';
 
-const onFacebookButtonPress = async () => {
+const onFacebookButtonPress = async (setVisibility) => {
   try {
+    setVisibility(true);
     // Attempt login with permissions
     const result = await LoginManager.logInWithPermissions([
       'public_profile',
@@ -39,6 +40,7 @@ const onFacebookButtonPress = async () => {
         fbUserId: data.userID,
       });
     } else {
+<<<<<<< HEAD
       firestore()
         .collection('users')
         .doc(response.user.uid)
@@ -57,9 +59,27 @@ const onFacebookButtonPress = async () => {
           profilePicture: '',
           isAdmin: false,
         });
+=======
+      return firestore().collection('users').doc(response.user.uid).set({
+        id: response.user.uid,
+        fullName: response.user.displayName,
+        email: response.user.email,
+        isPaidUser: false,
+        isActive: false,
+        createdAt: firestore.FieldValue.serverTimestamp(),
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+        subscribedAt: null,
+        fbAccessToken: data.accessToken,
+        googleAccessToken: '',
+        fbUserId: data.userID,
+        profilePicture: '',
+        isAdmin: false,
+      });
+>>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1
     }
     return true;
   } catch (err) {
+    setVisibility(false);
     console.log(err);
     return false;
   }

@@ -2,6 +2,11 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 533c9d1c267a98fbb3c4ba248fa63b770fb5e7c1
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
@@ -25,7 +30,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.musicapp"
+        applicationId "com.stripes"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

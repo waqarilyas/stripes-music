@@ -2,21 +2,18 @@
 
 import React from 'react';
 import {
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  View,
-  Text,
   ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-// Local imports
-//import styles from './styles'
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const Button = ({ onPress, text, loading }) => {
-  console.log('----Pres--------', onPress);
-
   return (
     <View style={styles.mainContainer}>
       {loading ? (
@@ -40,7 +37,7 @@ const styles = StyleSheet.create({
     height: hp('6%'),
     alignSelf: 'center',
     width: wp('50%'),
-    borderRadius: 5,
+    borderRadius: 12,
     justifyContent: 'center',
   },
   touchView: {
@@ -49,6 +46,7 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'white',
     fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

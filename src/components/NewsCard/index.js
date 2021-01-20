@@ -4,7 +4,7 @@ import { Image, Text, Divider } from 'react-native-elements';
 
 import styles from './styles';
 import { likeIcon, commentIcon, shareIcon } from '../../../Assets/Icons';
-import { thousandSeprator } from '../../utils/Helpers';
+import { thousandSeparator } from '../../utils/Helpers';
 
 const NewsCard = ({
   title,
@@ -35,21 +35,21 @@ const NewsCard = ({
           <View style={styles.iconContainer}>
             <Image source={likeIcon} style={styles.icon} />
             <Text numberOfLines={1} style={styles.bottomSectionNumber}>
-              {thousandSeprator(likeCount)}
+              {thousandSeparator(likeCount)}
             </Text>
           </View>
 
           <View style={styles.iconContainer}>
             <Image source={commentIcon} style={styles.icon} />
             <Text numberOfLines={1} style={styles.bottomSectionNumber}>
-              {thousandSeprator(commentCount)}
+              {thousandSeparator(commentCount)}
             </Text>
           </View>
 
           <View style={styles.iconContainer}>
             <Image source={shareIcon} style={styles.icon} />
             <Text numberOfLines={1} style={styles.bottomSectionNumber}>
-              {thousandSeprator(shareCount)}
+              {thousandSeparator(shareCount)}
             </Text>
           </View>
         </View>
