@@ -137,7 +137,7 @@ const NewsDetails = () => {
             onChangeText={(input) => setCommentText(input)}
           />
           <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-            <Text style={styles.submitText}>Submit</Text>
+            <Text style={styles.submitText}>SUBMIT</Text>
           </TouchableOpacity>
         </View>
 

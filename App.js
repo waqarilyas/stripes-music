@@ -34,7 +34,7 @@ const App = () => {
         store.dispatch(setUser({ isAnonymous: true }))
         dispatch({ user: { isAnonymous: true } });
       }).catch(err => {
-        console.log('--------ERROR SIGNING IN--------->', err)
+
         setLoading(false);
       });
     }
@@ -43,19 +43,12 @@ const App = () => {
   const SetupAudioPlayer = async () => {
     await TrackPlayer.updateOptions({
       jumpInterval: 15,
-      stopWithApp: false,
+      stopWithApp: true,
 
       ...PLAYER_CONFIG,
 
 
-      // Icons for the notification on Android (if you don't like the default ones)
-      // playIcon: require('./play-icon.png'),
-      // pauseIcon: require('./pause-icon.png'),
-      // stopIcon: require('./stop-icon.png'),
-      // previousIcon: require('./previous-icon.png'),
-      // nextIcon: require('./next-icon.png'),
-      // icon: require('./notification-icon.png'), // The notification icon
-
+      
     });
   };
 
@@ -73,11 +66,11 @@ const App = () => {
   }, []);
 
   const handleAppStateChange = (nextAppState) => {
-    console.log('--------------STATE OF APP---------', nextAppState)
+
     if (nextAppState === 'inactive' || nextAppState === 'background' || nextAppState != 'active') {
       if (store.getState().root?.firebase?.user?.isPaidUser) { } else {
 
-        console.log('--------------STATE OF USER---------', store.getState().root?.firebase?.user?.isPaidUser)
+
         store.dispatch(changeToMiniModal(false))
         store.dispatch(fullScreenChange(false))
         TrackPlayer.destroy();

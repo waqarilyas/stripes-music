@@ -74,14 +74,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   submit: {
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#F5148E',
     marginTop: 22,
-    paddingHorizontal: 18,
-    paddingVertical: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     borderRadius: 12,
   },
   submitText: {
     color: 'white',
+    fontSize: 16
   },
   realtedNewsContainer: {
     flex: 1,
