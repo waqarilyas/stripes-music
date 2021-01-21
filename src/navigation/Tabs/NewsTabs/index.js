@@ -17,7 +17,7 @@ function NewsTabs() {
           fontWeight: 'bold',
         },
         indicatorStyle: {
-          backgroundColor: 'white',
+          backgroundColor: 'transparent',
         },
         style: {
           backgroundColor: 'black',

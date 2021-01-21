@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     flexDirection: 'row',
     marginTop: 24,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  subContainer: {
+    flexDirection: 'row',
   },
   artist: {
     color: 'white',
@@ -23,22 +28,29 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   buttonContainer: {
-    flex: 1,
     justifyContent: 'center',
-    alignItems: 'flex-end',
-    alignContent: 'flex-end',
+    padding: 10,
+    borderRadius: 15,
   },
   leftContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 10,
   },
+ 
   follow: {
-    fontSize: 12,
+    backgroundColor: '#F5138E',
+  },
+  unfollow: {
+    backgroundColor: '#778899',
+  },
+  text: {
     color: 'white',
     fontWeight: 'bold',
-    textTransform: 'uppercase',
+    letterSpacing: 1,
+    textAlign: 'center',
   },
 });
+
 
 export default styles;

@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { downIcon, plusIcon, shareIcon } from '../../../Assets/Icons';
@@ -32,8 +33,8 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: 'Share Options',
-        url: 'https://www.google.com',
+        message: Platform.OS === 'android' ? 'https://www.google.com' : '',
+        url: 'https://apps.apple.com/us/app/stripes-app/id1538914059',
         title: 'Share Music App',
       });
       if (result.action === Share.sharedAction) {

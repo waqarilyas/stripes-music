@@ -162,6 +162,8 @@ const NewsDetails = () => {
             likedBy={news.likedBy}
             viewCount={news.viewCount}
             likeCount={news.likeCount}
+            shareCount={news.shareCount}
+            newsId={news.id}
           />
           <View style={styles.commentButton}>
             <TextInput
