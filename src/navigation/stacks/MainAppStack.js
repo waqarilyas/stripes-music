@@ -26,7 +26,9 @@ const MainAppStack = () => {
 
   const back = (navigation) => {
     return (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButtonContainer}
+        onPress={() => navigation.goBack()}>
         <Image source={backIcon} style={styles.back} />
       </TouchableOpacity>
     );
@@ -127,6 +129,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 22,
     alignSelf: 'center',
+  },
+  backButtonContainer: {
+    paddingVertical: 10,
+    paddingRight: 15,
   },
   back: {
     resizeMode: 'contain',

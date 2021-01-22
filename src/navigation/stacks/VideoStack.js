@@ -22,7 +22,7 @@ const VideoStack = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={{ padding: 15, paddingRight: 25 }}>
+        style={styles.backButtonContainer}>
         <Image source={backIcon} style={styles.back} />
       </TouchableOpacity>
     );
@@ -78,6 +78,10 @@ const styles = StyleSheet.create({
   icon: {
     resizeMode: 'contain',
     marginRight: 18,
+  },
+  backButtonContainer: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   back: {
     resizeMode: 'contain',

@@ -4,9 +4,11 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import { StatusBar } from 'react-native';
 
 const styles = StyleSheet.create({
   searchWithClose: {
+    marginTop: StatusBar.currentHeight,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
     margin: RFValue('5'),
     color: 'white',
     flex: 1,
+    padding: 4,
   },
   closeButton: {
     color: 'white',

@@ -1,6 +1,13 @@
 import auth from '@react-native-firebase/auth';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  DeviceEventEmitter,
+} from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { optionsIcon, plusIcon, signout } from '../../../Assets/Icons';
@@ -14,7 +21,10 @@ const ProfileActionBar = ({ navigation, profilePicture }) => {
   const handleSignOut = () => {
     auth()
       .signOut()
-      .then(() => navigation.navigate('Login'));
+      .then(() => {
+        navigation.navigate('Home');
+        // DeviceEventEmitter.emit('userSignOut');
+      });
   };
 
   return (

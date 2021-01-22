@@ -37,9 +37,12 @@ const initialState = {
 };
 
 const VideoPlayerModal = ({ onPress }) => {
+  const { user } = useSelector((_state) => _state.root.firebase);
+
   const { videoModal, videoData } = useSelector(
     (_state) => _state.root.helpers,
   );
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
   const [stateVals, setStateVals] = useState({
@@ -56,6 +59,7 @@ const VideoPlayerModal = ({ onPress }) => {
       .collection('videos')
       .doc(videoData.id)
       .collection('comments')
+      .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
         let allComments = [];
         querySnapshot.forEach((doc) => {
@@ -85,11 +89,11 @@ const VideoPlayerModal = ({ onPress }) => {
         comment: commentText,
         createdAt: +new Date(),
         id: '',
-        image: auth().currentUser?.photoURL || '',
+        image: user.profilePicture || '',
         videoId: videoData.id,
         updatedAt: +new Date(),
         userId: auth().currentUser.uid,
-        username: auth().currentUser.displayName || '',
+        username: user.fullName || '',
       })
       .then((result) => {
         setCommentText('');
@@ -189,12 +193,13 @@ const VideoPlayerModal = ({ onPress }) => {
                 style={styles.commentButtonText}
                 placeholder="Leave a comment"
                 placeholderTextColor="gray"
+                multiline={true}
                 onChangeText={(input) => setCommentText(input)}
               />
+              <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+                <Text style={styles.submitText}>Submit</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-              <Text style={styles.submitText}>Submit</Text>
-            </TouchableOpacity>
 
             <View style={styles.commentSection}>
               {state.comments ? (

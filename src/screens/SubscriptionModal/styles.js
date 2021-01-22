@@ -62,6 +62,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingRight: hp('2'),
   },
+  cancelButtonContainer: {
+    width: wp('8'),
+    height: wp('8'),
+    borderRadius: wp('4'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    position: 'absolute',
+    right: -10,
+    top: -10,
+  },
+  cancel: {
+    resizeMode: 'contain',
+    height: wp('5'),
+    width: wp('5'),
+    marginHorizontal: hp(1),
+  },
 });
 
 export default styles;

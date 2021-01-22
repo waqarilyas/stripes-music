@@ -55,6 +55,11 @@ const Login = ({ navigation }) => {
       .catch((err) => console.log(err));
   };
 
+  const signupHandler = () => {
+    formik.current.resetForm(initValues);
+    navigation.navigate('Signup');
+  };
+
   return (
     <Block>
       <ScrollView>
@@ -147,11 +152,7 @@ const Login = ({ navigation }) => {
 
           <View style={styles.signupSection}>
             <Text style={styles.signupText}>Do not have an account?</Text>
-            <TouchableOpacity
-              onPress={() => {
-                formik.current.resetForm(initValues);
-                navigation.navigate('Signup');
-              }}>
+            <TouchableOpacity onPress={signupHandler}>
               <Text style={styles.signup}>Sign Up</Text>
             </TouchableOpacity>
           </View>

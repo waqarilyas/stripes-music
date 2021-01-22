@@ -46,7 +46,7 @@ const getNews=()=>{
     newsPath.update({
       viewCount: viewCount + 1
     }).then(() => {
-        // getNews();
+        getNews();
     }).catch((err) => {
       LOG('HANDLE VIEWCOUNT STATUS');
     });
@@ -78,7 +78,6 @@ const getNews=()=>{
           }) => {
             const date = dayjs(createdAt.seconds).format('DD MMMM, YYYY');
             return (
-              <TouchableOpacity onPress={() => handleNav(id, viewCount)}> 
                 <NewsCard
                   title={title}
                   image={imgUrl}
@@ -89,8 +88,8 @@ const getNews=()=>{
                   commentCount={commentCount}
                   nav={navigation}
                   newsId={id}
+                  handleNav={() => handleNav(id, viewCount)}
                 />
-              </TouchableOpacity>
             );
           }}
         />

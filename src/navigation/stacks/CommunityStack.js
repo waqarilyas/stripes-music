@@ -21,7 +21,7 @@ const CommunityStack = () => {
   const { user } = useSelector((state) => state.root.firebase);
   const dispatch = useDispatch();
 
-  const NewMessage = (navigation) => {
+  const NewMessageFunc = (navigation) => {
     const handleMessage = () => {
       if (user?.isPaidUser) {
         navigation.navigate('NewMessage');
@@ -43,7 +43,9 @@ const CommunityStack = () => {
 
   const back = (navigation) => {
     return (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButtonContainer}
+        onPress={() => navigation.goBack()}>
         <Image source={backIcon} style={styles.back} />
       </TouchableOpacity>
     );
@@ -59,7 +61,7 @@ const CommunityStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerRight: () => RightButton(navigation),
-          headerLeft: () => NewMessage(navigation),
+          headerLeft: () => NewMessageFunc(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
@@ -113,6 +115,10 @@ const styles = StyleSheet.create({
   back: {
     resizeMode: 'contain',
     marginLeft: 18,
+  },
+  backButtonContainer: {
+    paddingVertical: 10,
+    paddingRight: 15,
   },
   buttonContainer: {
     backgroundColor: '#F5138E',

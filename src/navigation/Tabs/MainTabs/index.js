@@ -1,6 +1,6 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, Platform } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
 
@@ -35,7 +35,7 @@ const MainTabs = () => {
               backgroundColor: 'black',
             }
           : {
-              height: RFValue(80),
+              height: RFValue(Platform.OS === 'android' ? 50 : 80),
               backgroundColor: 'black',
             }
       }

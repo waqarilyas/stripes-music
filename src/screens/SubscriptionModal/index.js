@@ -68,6 +68,15 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
     <SafeAreaView style={styles.container}>
       {/* <View> */}
       <Text style={styles.header}>Choose a Subscription</Text>
+      <TouchableOpacity
+        style={styles.cancelButtonContainer}
+        onPress={() => toggleModal()}>
+        <Image
+          source={require('../../../Assets/Icons/cancel.png')}
+          style={styles.cancel}
+          tintColor="black"
+        />
+      </TouchableOpacity>
 
       <LinearGradient
         start={{ x: 0, y: 0 }}

@@ -30,7 +30,9 @@ const ProfileStack = () => {
 
   const back = (navigation) => {
     return (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButtonContainer}
+        onPress={() => navigation.goBack()}>
         <Image source={backIcon} style={styles.back} />
       </TouchableOpacity>
     );
@@ -154,6 +156,10 @@ const styles = StyleSheet.create({
   icon: {
     resizeMode: 'contain',
     marginRight: 18,
+  },
+  backButtonContainer: {
+    paddingRight: 15,
+    paddingVertical: 10,
   },
   back: {
     resizeMode: 'contain',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Image, Text, Divider } from 'react-native-elements';
 
 import styles from './styles';
@@ -14,6 +14,7 @@ const NewsCard = ({
   likeCount,
   shareCount,
   commentCount,
+  handleNav
 }) => {
   return (
     <View style={styles.container}>
@@ -53,9 +54,9 @@ const NewsCard = ({
             </Text>
           </View>
         </View>
-        <View style={styles.readButton}>
+        <TouchableOpacity onPress={handleNav} style={styles.readButton}>
           <Text style={styles.readText}>Read</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

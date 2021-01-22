@@ -2,12 +2,9 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
-import {
-  Alert, FlatList
-} from 'react-native';
+import { Alert, FlatList, Text } from 'react-native';
 import ChatCard from '../../components/ChatCard';
 import reducer from '../../hooks/useReducer';
-
 
 const initialState = {
   inbox: [],
@@ -86,6 +83,8 @@ const Community = ({ navigation }) => {
     return batch.commit();
   };
 
+  console.log('state.inbox', state.inbox);
+
   return (
     <>
       <FlatList
@@ -94,6 +93,7 @@ const Community = ({ navigation }) => {
         keyExtractor={(item) => randomize(10)}
         // ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
         // ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        scrollEnabled={state.inbox.length < 1 ? false : true}
         renderItem={({ item }) => {
           return (
             <ChatCard
