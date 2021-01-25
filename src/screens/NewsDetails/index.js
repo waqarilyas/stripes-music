@@ -54,7 +54,6 @@ const NewsDetails = () => {
     showMore: [],
   });
 
-
   useEffect(() => {
     getCollection('news', 5, (documents) =>
       dispatch({ relatedNews: documents }),
@@ -62,7 +61,8 @@ const NewsDetails = () => {
     let listener = firestore()
       .collection('news')
       .doc(news.id)
-      .collection('comments').orderBy('createdAt', 'desc')
+      .collection('comments')
+      .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
         let allComments = [];
         querySnapshot.forEach((doc) => {
@@ -72,7 +72,7 @@ const NewsDetails = () => {
         let tempComments = allComments;
         setStateVals((prev) => ({
           ...prev,
-          showMore: tempComments.splice(0, 5),
+          showMore: tempComments.slice(0, 5),
         }));
         dispatch({ comments: allComments });
       });
@@ -86,7 +86,6 @@ const NewsDetails = () => {
     }
 
     setCommentText('');
-
 
     const data = {
       comment: commentText,
@@ -107,28 +106,30 @@ const NewsDetails = () => {
       .catch((err) => LOG('ERROR', err));
   };
 
-  console.log('Comment Count', commentCount);
-  console.log('Equality', commentCount === stateVals.showMore.length);
+  // console.log('Comment Count', commentCount);
+  // console.log('Equality', commentCount === stateVals.showMore.length);
 
   const handleShowLess = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     let tempCom = state.comments;
     setStateVals((prev) => ({
       ...prev,
-      showMore: tempCom.slice(0, stateVals.showMore.length - 5),
+      showMore: tempCom.slice(0, 5),
     }));
   };
 
   const handleShowMore = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-    let tempCom = state.comments;
+    const index = stateVals.showMore.length;
+    let tempComments = [
+      ...stateVals.showMore,
+      ...state.comments.slice(index, index + 5),
+    ];
     setStateVals((prev) => ({
       ...prev,
-      showMore: tempCom.slice(0, stateVals.showMore.length + 5),
+      showMore: tempComments,
     }));
   };
-
-  console.log('Show More Length:', stateVals.showMore.length);
 
   return (
     <Block>
@@ -227,7 +228,11 @@ const NewsDetails = () => {
             )}
           </View>
 
-          <SectionHeader icon={newsComment} name="Related News" isRequired={false}/>
+          <SectionHeader
+            icon={newsComment}
+            name="Related News"
+            isRequired={false}
+          />
 
           <View style={styles.realtedNewsContainer}>
             {state.relatedNews ? (

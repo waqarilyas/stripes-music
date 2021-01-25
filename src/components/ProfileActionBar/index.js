@@ -23,7 +23,6 @@ const ProfileActionBar = ({ navigation, profilePicture }) => {
       .signOut()
       .then(() => {
         navigation.navigate('Home');
-        // DeviceEventEmitter.emit('userSignOut');
       });
   };
 

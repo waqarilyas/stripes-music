@@ -79,6 +79,17 @@ const styles = StyleSheet.create({
     width: wp('5'),
     marginHorizontal: hp(1),
   },
+  logoutButtonContainer: {
+    alignSelf: 'center',
+    backgroundColor: '#808080',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+  },
+  logoutButtonText: {
+    fontSize: 16,
+    color: '#fff',
+  },
 });
 
 export default styles;

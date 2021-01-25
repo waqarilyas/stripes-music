@@ -5,7 +5,6 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { Button as RNEButton } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
-
 import {
   emailIcon,
   facebookIcon,

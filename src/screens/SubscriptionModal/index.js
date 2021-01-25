@@ -8,6 +8,7 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
 import { tick2 } from '../../../Assets/Icons';
 import styles from './styles';
@@ -61,6 +62,15 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
       })
       .catch(() => {
         setState((prev) => ({ ...prev, loading: false }));
+      });
+  };
+
+  const handleSignOut = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        toggleModal();
+        navigation.navigate('Home');
       });
   };
 
@@ -126,6 +136,12 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
             Create a queue for your favourite songs
           </Text>
         </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleSignOut}
+        style={styles.logoutButtonContainer}>
+        <Text style={styles.logoutButtonText}>Signout</Text>
       </TouchableOpacity>
       {/* </View> */}
 

@@ -79,8 +79,12 @@ const MainTabs = () => {
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Videos" component={VideoStack} />
-      {user && <Tab.Screen name="Profile" component={ProfileStack} />}
-      <Tab.Screen name="Community" component={CommunityStack} />
+      {user && user.isPaidUser && (
+        <Tab.Screen name="Profile" component={ProfileStack} />
+      )}
+      {user && user.isPaidUser && (
+        <Tab.Screen name="Community" component={CommunityStack} />
+      )}
       <Tab.Screen name="News" component={NewsStack} />
     </Tab.Navigator>
   );
