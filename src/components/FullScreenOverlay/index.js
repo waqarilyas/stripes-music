@@ -1,49 +1,51 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
-import React, { useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from 'react-redux';
-import { cancelIcon, plusIcon, tick2 } from '../../../Assets/Icons';
+import { plusIcon, tick2 } from '../../../Assets/Icons';
 
 const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
-  const [checked, setChecked] = useState(false);
+  const [selectedPlaylist, setSelectedPlaylist] = useState();
+  const [saving, setSaving] = useState(false);
   const uid = auth().currentUser.uid;
 
   const { currentSong } = useSelector((state) => state.root.audio);
 
-  const addToPlaylist = (playlistId) => {
+  useEffect(() => {
+    setSelectedPlaylist(playlists[0]);
+  }, [playlists]);
+
+  const addToPlaylist = () => {
+    setSaving(true);
+    console.log('selectedPlaylist', selectedPlaylist);
     firestore()
       .collection('users')
       .doc(uid)
       .collection('playlists')
-      .doc(playlistId)
+      .doc(selectedPlaylist?.id)
       .collection('songs')
       .doc(currentSong.id)
       .set(currentSong)
       .then((res) => {
         console.log('-----SUCCESS----', res);
+        setSaving(false);
+        toggleOverlay();
+      })
+      .catch(() => {
+        setSaving(false);
       });
-  };
-  const removeFromPlaylist = (playlistId) => {
-    firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('playlists')
-      .doc(playlistId)
-      .collection('songs')
-      .doc(currentSong.id)
-      .delete()
-      .then((res) => {
-        console.log(res, 'remove successfull');
-      });
-  };
-
-  const handleClick = (playlistId) => {
-    checked ? removeFromPlaylist(playlistId) : addToPlaylist(playlistId);
   };
 
   return (
@@ -60,25 +62,38 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item }) => {
-          console.log('-------ITEM------', item);
           return (
-            <View style={styles.checkboxContainer}>
+            <TouchableOpacity
+              style={styles.checkboxContainer}
+              onPress={() => setSelectedPlaylist(item)}>
               <Text style={styles.checkboxInput}>{item.title}</Text>
-              <TouchableOpacity
-                style={styles.tickIconContainer}
-                onPress={() => {
-                  handleClick(item.id);
-                  setChecked(!checked);
-                }}>
-                <Image
-                  source={checked ? cancelIcon : tick2}
-                  style={styles.tickIcon}
-                />
-              </TouchableOpacity>
-            </View>
+              {item.id === selectedPlaylist?.id && <Image source={tick2} />}
+            </TouchableOpacity>
           );
         }}
       />
+      <TouchableOpacity
+        disabled={saving}
+        style={{
+          backgroundColor: saving ? '#C2C2C2' : '#F5148E',
+          padding: 10,
+          width: '40%',
+          alignSelf: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 10,
+        }}
+        onPress={addToPlaylist}>
+        <Text style={{ fontSize: 20, color: '#fff' }}>Done</Text>
+        <View
+          style={{
+            position: 'absolute',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          {saving && <ActivityIndicator size="small" color="navy" />}
+        </View>
+      </TouchableOpacity>
       <View style={styles.overlayBottom}>
         <Text
           style={styles.createPlaylistTitle}
@@ -119,16 +134,6 @@ const styles = StyleSheet.create({
     color: 'white',
     // : hp('10'),
     flex: 2,
-  },
-  tickIconContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  tickIcon: {
-    tintColor: 'white',
-    resizeMode: 'contain',
-    height: hp('2'),
-    width: hp('2'),
   },
   overlayHeader: {
     color: 'white',

@@ -9,9 +9,10 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Platform
+  Platform,
+  Alert,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { downIcon, plusIcon, shareIcon } from '../../../Assets/Icons';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
 import {
@@ -24,6 +25,7 @@ import styles from './styles';
 const MusicPlayerFullscreen = ({ isVisible }) => {
   const [visible, setVisible] = useState(false);
   const [playlists, setPlaylists] = useState([]);
+  const { user } = useSelector((state) => state.root.firebase);
   const dispatch = useDispatch();
 
   const toggleOverlay = () => {
@@ -51,10 +53,23 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
     }
   };
 
-  console.log('-----------PLAYLISTS---------', playlists);
+  // console.log('-----------PLAYLISTS---------', playlists);
 
   const addToPlaylist = () => {
-    console.log(uid);
+    console.log('user***', user);
+    if (user?.isPaidUser) {
+      toggleOverlay();
+    } else if (user) {
+      Alert.alert(
+        'Premium Account Required',
+        'You must purchase Standard Subscription in order to add this song to your custom playlist',
+      );
+    } else {
+      Alert.alert(
+        'Login Required',
+        'You must be logged in to add this song to your custom playlist',
+      );
+    }
   };
 
   useEffect(() => {
@@ -104,7 +119,7 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
             <TouchableOpacity onPress={onShare}>
               <Image source={shareIcon} style={styles.icon} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => toggleOverlay()}>
+            <TouchableOpacity onPress={addToPlaylist}>
               <Image source={plusIcon} style={styles.icon} />
             </TouchableOpacity>
           </View>
