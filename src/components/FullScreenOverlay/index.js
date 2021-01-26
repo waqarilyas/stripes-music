@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  Modal,
   View,
   ActivityIndicator,
 } from 'react-native';
@@ -14,38 +15,62 @@ import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from 'react-redux';
-import { plusIcon, tick2 } from '../../../Assets/Icons';
+import { plusIcon } from '../../../Assets/Icons';
+import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 
 const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
-  const [selectedPlaylist, setSelectedPlaylist] = useState();
-  const [saving, setSaving] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [removed, setRemoved] = useState(false);
   const uid = auth().currentUser.uid;
 
   const { currentSong } = useSelector((state) => state.root.audio);
 
   useEffect(() => {
-    setSelectedPlaylist(playlists[0]);
-  }, [playlists]);
+    if (added) {
+      setTimeout(() => {
+        setAdded(false);
+      }, 1000);
+    }
+    if (removed) {
+      setTimeout(() => {
+        setRemoved(false);
+      }, 1000);
+    }
+  }, [added, removed]);
 
-  const addToPlaylist = () => {
-    setSaving(true);
-    console.log('selectedPlaylist', selectedPlaylist);
+  console.log('playlists', playlists);
+
+  console.log('added', added);
+
+  const addToPlaylist = (playlistId) => {
     firestore()
       .collection('users')
       .doc(uid)
       .collection('playlists')
-      .doc(selectedPlaylist?.id)
-      .collection('songs')
-      .doc(currentSong.id)
-      .set(currentSong)
-      .then((res) => {
-        console.log('-----SUCCESS----', res);
-        setSaving(false);
-        toggleOverlay();
+      .doc(playlistId)
+      .update({
+        songs: firestore.FieldValue.arrayUnion(currentSong.id),
       })
-      .catch(() => {
-        setSaving(false);
-      });
+      .then((res) => {
+        setAdded(true);
+        console.log('-----SUCCESS----', res);
+      })
+      .catch(() => {});
+  };
+
+  const removeFromPlaylist = (playlistId) => {
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .doc(playlistId)
+      .update({
+        songs: firestore.FieldValue.arrayRemove(currentSong.id),
+      })
+      .then((res) => {
+        setRemoved(true);
+      })
+      .catch(() => {});
   };
 
   return (
@@ -62,38 +87,53 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item }) => {
+          const addedToPlaylist = item.songs?.some(
+            (song) => song === currentSong.id,
+          );
           return (
             <TouchableOpacity
-              style={styles.checkboxContainer}
-              onPress={() => setSelectedPlaylist(item)}>
+              style={[
+                styles.checkboxContainer,
+                {
+                  backgroundColor: addedToPlaylist ? '#006600' : 'gray',
+                },
+              ]}
+              onPress={() => {
+                addedToPlaylist
+                  ? removeFromPlaylist(item.id)
+                  : addToPlaylist(item.id);
+              }}>
               <Text style={styles.checkboxInput}>{item.title}</Text>
-              {item.id === selectedPlaylist?.id && <Image source={tick2} />}
+              {addedToPlaylist && (
+                <FeatherIcon name="check" size={20} color="#fff" />
+              )}
             </TouchableOpacity>
           );
         }}
       />
-      <TouchableOpacity
-        disabled={saving}
-        style={{
-          backgroundColor: saving ? '#C2C2C2' : '#F5148E',
-          padding: 10,
-          width: '40%',
-          alignSelf: 'center',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 10,
-        }}
-        onPress={addToPlaylist}>
-        <Text style={{ fontSize: 20, color: '#fff' }}>Done</Text>
-        <View
-          style={{
-            position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {saving && <ActivityIndicator size="small" color="navy" />}
+      <Modal
+        visible={added || removed}
+        transparent={true}
+        animationType={'fade'}>
+        <View style={styles.infoMainContainer}>
+          <View style={styles.infoSubContainer}>
+            {added && <Text style={styles.infoText}>Added to</Text>}
+            {removed && <Text style={styles.infoText}>Removed from</Text>}
+            <Text style={[styles.infoText, { fontSize: 22 }]}>Playlist</Text>
+            <View
+              style={[
+                styles.infoIconContainer,
+                { backgroundColor: added ? 'green' : 'red' },
+              ]}>
+              <FeatherIcon
+                name={added ? 'check' : 'x'}
+                size={25}
+                color="#fff"
+              />
+            </View>
+          </View>
         </View>
-      </TouchableOpacity>
+      </Modal>
       <View style={styles.overlayBottom}>
         <Text
           style={styles.createPlaylistTitle}
@@ -117,10 +157,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: hp('2'),
   },
   checkboxContainer: {
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.4)',
-    paddingVertical: hp('1'),
+    borderRadius: 10,
+    paddingVertical: hp('2'),
     marginBottom: hp('1'),
     paddingLeft: hp('1'),
     flexDirection: 'row',
@@ -131,9 +171,34 @@ const styles = StyleSheet.create({
   },
   checkboxInput: {
     fontSize: hp('2'),
-    color: 'white',
+    color: 'black',
     // : hp('10'),
     flex: 2,
+  },
+  infoMainContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  infoSubContainer: {
+    justifyContent: 'center',
+    backgroundColor: 'silver',
+    alignItems: 'center',
+    height: '20%',
+    borderRadius: 30,
+    width: '50%',
+  },
+  infoText: {
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  infoIconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   overlayHeader: {
     color: 'white',

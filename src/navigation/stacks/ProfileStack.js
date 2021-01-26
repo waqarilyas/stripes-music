@@ -9,6 +9,7 @@ import Artist from '../../screens/Artist';
 import ChangePassword from '../../screens/ChangePassword';
 import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
 import EditProfile from '../../screens/EditProfile';
+import Playlist from '../../screens/Playlist';
 import NotificationSetting from '../../screens/NotificationSetting';
 import ProfileArtistsSeeAll from '../../screens/ProfileArtistsSeeAll';
 import ProfilePlaylistsSeeAll from '../../screens/ProfilePlaylistsSeeAll';
@@ -144,6 +145,15 @@ const ProfileStack = () => {
         options={({ navigation }) => ({
           title: 'Edit Profile',
           headerTitleStyle: { color: 'white' },
+          headerLeft: () => back(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
+      <Stack.Screen
+        name="PlaylistDetails"
+        component={Playlist}
+        options={({ navigation }) => ({
+          title: '',
           headerLeft: () => back(navigation),
           headerStyle: styles.headerStyle,
         })}

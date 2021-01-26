@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useReducer } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
 
 import { iconsPlaylist } from '../../../Assets/Icons';
@@ -66,13 +66,26 @@ const ProfilePlaylists = ({ navigation, styles }) => {
           item: { image, title, songs, isPrivate, viewCount },
         }) => {
           return (
-            <ProfilePlaylistsCard
-              imgUrl={image}
-              // songCount={songs.length ? songs.length : 0}
-              title={title}
-              isPrivate={isPrivate}
-              viewCount={viewCount}
-            />
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() =>
+                navigation.navigate('PlaylistDetails', {
+                  image,
+                  title,
+                  songs,
+                  isPrivate,
+                  viewCount,
+                  songCount: songs.length,
+                })
+              }>
+              <ProfilePlaylistsCard
+                imgUrl={image}
+                songCount={songs.length}
+                title={title}
+                isPrivate={isPrivate}
+                viewCount={viewCount}
+              />
+            </TouchableOpacity>
           );
         }}
       />

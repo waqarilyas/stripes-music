@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     backgroundColor: 'transparent',
-    marginHorizontal: 8,
+    marginHorizontal: 12,
   },
   editProfile: {
     color: 'black',
