@@ -3,9 +3,9 @@ import {
   FlatList,
   View,
   Text,
-  ImageBackground,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -27,7 +27,7 @@ const Playlist = ({ navigation, route }) => {
   const { image, title, viewCount, songCount, songs, isPrivate } = route.params;
   const { allSongs } = useSelector((state) => state.root.firebase);
   const [favSongs, setFavSongs] = useState([]);
-  const [playlistSongs, setPlaylistSongs] = useState();
+  const [playlistSongs, setPlaylistSongs] = useState([]);
   const uid = auth().currentUser.uid;
 
   console.log('allSongs', allSongs);
@@ -44,10 +44,10 @@ const Playlist = ({ navigation, route }) => {
         });
       });
     setFavSongs(favSongs);
-    return () => listener();
+    return listener;
   }, []);
 
-  console.log('favSongs+', favSongs);
+  console.log('favSongs**', favSongs);
 
   useEffect(() => {
     const playlistSongs = [];
@@ -93,6 +93,21 @@ const Playlist = ({ navigation, route }) => {
       });
   };
 
+  const renderEmptyComponent = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size={'large'} color={'#fff'} />
+      </View>
+    );
+  };
+
+  console.log('playlistSongs', playlistSongs?.length);
+
   return (
     <View style={styles.mainContainer}>
       <LinearGradient
@@ -121,6 +136,8 @@ const Playlist = ({ navigation, route }) => {
           data={playlistSongs}
           showsVerticalScrollIndicator={false}
           keyExtractor={() => randomize('Aa0!', 10)}
+          contentContainerStyle={{ flexGrow: 1 }}
+          ListEmptyComponent={() => renderEmptyComponent()}
           renderItem={({ item }) => {
             let favSong = favSongs.some((song) => song.id == item.id);
             return (
