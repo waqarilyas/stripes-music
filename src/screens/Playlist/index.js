@@ -9,47 +9,57 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { playlistDefault, eyeIcon } from '../../../Assets/Icons';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { playlistDefault } from '../../../Assets/Icons';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicon from 'react-native-vector-icons/dist/Ionicons';
 import EntypoIcon from 'react-native-vector-icons/dist/Entypo';
 import MaterialCommunityIcon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import randomize from 'randomatic';
+import { backIcon } from '../../../Assets/Icons';
+import { LOG } from '../../utils/Constants';
+import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
+import FullScreenOverlay from '../../components/FullScreenOverlay';
 
 import styles from './styles';
+import { changeToMiniModal, changeSong } from '../../Redux/Reducers/audioSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
 const Playlist = ({ navigation, route }) => {
-  const { image, title, viewCount, songCount, songs, isPrivate } = route.params;
+  const { title, songs, id: playlistId } = route.params;
   const { allSongs } = useSelector((state) => state.root.firebase);
   const [favSongs, setFavSongs] = useState([]);
   const [playlistSongs, setPlaylistSongs] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
+  const [targetSong, setTargetSong] = useState();
+  const [visible, setVisible] = useState(false);
   const uid = auth().currentUser.uid;
+  const dispatch = useDispatch();
+  const playbackState = usePlaybackState();
 
-  console.log('allSongs', allSongs);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => back(),
+    });
+  }, [navigation]);
 
   useEffect(() => {
-    const favSongs = [];
     const listener = firestore()
       .collection('users')
       .doc(uid)
       .collection('favSongs')
       .onSnapshot((snapshot) => {
-        snapshot.docs.map((doc) => {
+        const favSongs = [];
+        snapshot.docs.forEach((doc) => {
           favSongs.push(doc.data());
         });
+        setFavSongs(favSongs);
       });
-    setFavSongs(favSongs);
     return listener;
   }, []);
 
-  console.log('favSongs**', favSongs);
-
-  useEffect(() => {
+  const getPlaylistSongs = (songs) => {
     const playlistSongs = [];
     songs.map((playlistSong) => {
       allSongs.map((song) => {
@@ -59,9 +69,86 @@ const Playlist = ({ navigation, route }) => {
         }
       });
     });
-    console.log('playListSongs', playlistSongs);
     setPlaylistSongs(playlistSongs);
+  };
+
+  useEffect(() => {
+    getPlaylistSongs(songs);
   }, [allSongs]);
+
+  useEffect(() => {
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .orderBy('createdAt', 'asc')
+      .onSnapshot({ includeMetadataChanges: true }, (querySnapshot) => {
+        let data = [];
+        querySnapshot.docs.forEach((document) => {
+          if (document.exists) {
+            data.push(document.data());
+          }
+        });
+        setPlaylists(data);
+      });
+
+    return () => listener;
+  }, []);
+
+  const back = () => {
+    return (
+      <TouchableOpacity
+        style={styles.backButtonContainer}
+        onPress={() => {
+          resetPlay().then(() => {
+            navigation.goBack();
+          });
+        }}>
+        <Image source={backIcon} style={styles.back} />
+      </TouchableOpacity>
+    );
+  };
+
+  const resetPlay = async () => {
+    try {
+      await TrackPlayer.reset();
+    } catch (error) {}
+    dispatch(changeToMiniModal(false));
+  };
+
+  const initialPlay = async () => {
+    const playlist = playlistSongs.map(
+      ({ title, artist, artwork, url, duration, id }) => {
+        return {
+          title,
+          artist,
+          artwork,
+          url,
+          duration,
+          id,
+        };
+      },
+    );
+    try {
+      dispatch(changeSong(playlist[0]));
+      dispatch(changeToMiniModal(true));
+      await TrackPlayer.add(playlist);
+      dispatch(addPlayCount(playlist[0].id));
+      dispatch(addToRecentlyPlayed(playlist[0]));
+    } catch (error) {
+      LOG('PLAY SONG', error);
+    }
+  };
+
+  const playAllHandler = async () => {
+    if (playbackState === TrackPlayer.STATE_PAUSED) {
+      await TrackPlayer.play();
+    } else if (playbackState === TrackPlayer.STATE_PLAYING) {
+      await TrackPlayer.pause();
+    } else {
+      initialPlay();
+    }
+  };
 
   const addToFavSongs = (song) => {
     firestore()
@@ -106,7 +193,22 @@ const Playlist = ({ navigation, route }) => {
     );
   };
 
-  console.log('playlistSongs', playlistSongs?.length);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
+  const addToPlaylist = (song) => {
+    setTargetSong(song);
+    toggleOverlay();
+  };
+
+  const onBackdropPress = () => {
+    const currentPlaylist = playlists.filter(
+      (playlist) => playlist.id === playlistId,
+    );
+    getPlaylistSongs(currentPlaylist[0].songs);
+    toggleOverlay();
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -120,13 +222,23 @@ const Playlist = ({ navigation, route }) => {
             <View style={styles.songsSubContainer}>
               <Text style={styles.songsText}>SONGS</Text>
               <Text style={[styles.songsText, { color: 'silver' }]}>
-                {songCount}
+                {playlistSongs.length}
               </Text>
             </View>
-            <TouchableOpacity style={styles.playallButtonContainer}>
-              <Ionicon name="md-play" size={26} color="#fff" />
+            <View style={styles.playallButtonContainer}>
+              <TouchableOpacity onPress={playAllHandler}>
+                <Ionicon
+                  name={
+                    playbackState === TrackPlayer.STATE_PLAYING
+                      ? 'md-pause'
+                      : 'md-play'
+                  }
+                  size={26}
+                  color="#fff"
+                />
+              </TouchableOpacity>
               <Text style={styles.playallButtonText}>Play All</Text>
-            </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.optionsButtonContainer}>
               <EntypoIcon name="dots-three-horizontal" size={25} color="#fff" />
             </TouchableOpacity>
@@ -141,39 +253,13 @@ const Playlist = ({ navigation, route }) => {
           renderItem={({ item }) => {
             let favSong = favSongs.some((song) => song.id == item.id);
             return (
-              <View
-                style={{
-                  width: '90%',
-                  alignSelf: 'center',
-                  paddingVertical: hp('2'),
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'gray',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View style={{}}>
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontWeight: 'bold',
-                        fontSize: 18,
-                      }}>
-                      {item.title}
-                    </Text>
-                    <Text
-                      style={{ fontSize: 16, color: 'silver', paddingTop: 4 }}>
-                      {item.artist}
-                    </Text>
+              <View style={styles.itemMainContainer}>
+                <View style={styles.itemSubContainer}>
+                  <View>
+                    <Text style={styles.songTitleText}>{item.title}</Text>
+                    <Text style={styles.artistNameText}>{item.artist}</Text>
                   </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                      alignItems: 'center',
-                    }}>
+                  <View style={styles.favSongButtonContainer}>
                     <TouchableOpacity
                       onPress={() =>
                         favSong ? removeFromFavSongs(item) : addToFavSongs(item)
@@ -184,20 +270,29 @@ const Playlist = ({ navigation, route }) => {
                         size={25}
                       />
                     </TouchableOpacity>
-                    <Text
-                      style={{ color: 'silver', paddingHorizontal: wp('3') }}>
+                    <Text style={styles.songDurationText}>
                       {(item.duration / 60).toFixed(2)}
                     </Text>
-                    <MaterialCommunityIcon
-                      name="plus"
-                      color="silver"
-                      size={40}
-                    />
+                    <TouchableOpacity onPress={() => addToPlaylist(item)}>
+                      <MaterialCommunityIcon
+                        name="plus"
+                        color="silver"
+                        size={40}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
             );
           }}
+        />
+        <FullScreenOverlay
+          visible={visible}
+          playlists={playlists}
+          targetSong={targetSong}
+          toggleOverlay={toggleOverlay}
+          onBackdropPress={onBackdropPress}
+          navigation={navigation}
         />
       </LinearGradient>
     </View>

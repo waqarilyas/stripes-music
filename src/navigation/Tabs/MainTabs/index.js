@@ -35,7 +35,7 @@ const MainTabs = () => {
               backgroundColor: 'black',
             }
           : {
-              height: RFValue(Platform.OS === 'android' ? 50 : 80),
+              height: RFValue(Platform.OS === 'android' ? 50 : 65),
               backgroundColor: 'black',
             }
       }

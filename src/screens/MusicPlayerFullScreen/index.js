@@ -100,6 +100,7 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
       onRequestClose={() => {}}>
       <FullScreenOverlay
         visible={visible}
+        onBackdropPress={toggleOverlay}
         toggleOverlay={toggleOverlay}
         playlists={playlists}
       />

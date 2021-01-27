@@ -33,7 +33,6 @@ const MiniMusicPlayer = ({ currentTrack }) => {
   const playbackState = usePlaybackState();
   const dispatch = useDispatch();
 
-
   //
   let middleButtonText = whitePlayIcon;
   if (
@@ -77,6 +76,12 @@ const MiniMusicPlayer = ({ currentTrack }) => {
     }
   };
 
+  const closeHandler = async () => {
+    try {
+      await TrackPlayer.reset();
+    } catch (error) {}
+    dispatch(changeToMiniModal(false));
+  };
 
   return (
     <View style={styles.container}>
@@ -109,10 +114,7 @@ const MiniMusicPlayer = ({ currentTrack }) => {
       </View>
       <TouchableOpacity
         style={styles.closeIconContainer}
-        onPress={() => {
-          TrackPlayer.reset();
-          dispatch(changeToMiniModal(false));
-        }}>
+        onPress={closeHandler}>
         <Image source={closeIcon} style={styles.close} />
       </TouchableOpacity>
     </View>

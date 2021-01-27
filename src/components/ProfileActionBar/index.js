@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     marginTop: hp('2'),
   },
   backdrop: {
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
   signOut: {
     color: 'white',

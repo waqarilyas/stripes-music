@@ -18,7 +18,14 @@ import { useSelector } from 'react-redux';
 import { plusIcon } from '../../../Assets/Icons';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 
-const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
+const FullScreenOverlay = ({
+  visible,
+  playlists,
+  targetSong,
+  toggleOverlay,
+  onBackdropPress,
+  navigation,
+}) => {
   const [added, setAdded] = useState(false);
   const [removed, setRemoved] = useState(false);
   const uid = auth().currentUser.uid;
@@ -38,10 +45,6 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
     }
   }, [added, removed]);
 
-  console.log('playlists', playlists);
-
-  console.log('added', added);
-
   const addToPlaylist = (playlistId) => {
     firestore()
       .collection('users')
@@ -49,7 +52,9 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
       .collection('playlists')
       .doc(playlistId)
       .update({
-        songs: firestore.FieldValue.arrayUnion(currentSong.id),
+        songs: firestore.FieldValue.arrayUnion(
+          targetSong?.id || currentSong.id,
+        ),
       })
       .then((res) => {
         setAdded(true);
@@ -65,7 +70,9 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
       .collection('playlists')
       .doc(playlistId)
       .update({
-        songs: firestore.FieldValue.arrayRemove(currentSong.id),
+        songs: firestore.FieldValue.arrayRemove(
+          targetSong?.id || currentSong.id,
+        ),
       })
       .then((res) => {
         setRemoved(true);
@@ -76,7 +83,7 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
   return (
     <Overlay
       isVisible={visible}
-      onBackdropPress={toggleOverlay}
+      onBackdropPress={onBackdropPress}
       overlayStyle={styles.overlay}
       ListEmptyComponent={() => <ActivityIndicator color="black" />}
       backdropStyle={{ backgroundColor: 'transparent' }}>
@@ -88,7 +95,7 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item }) => {
           const addedToPlaylist = item.songs?.some(
-            (song) => song === currentSong.id,
+            (song) => song === targetSong?.id || song === currentSong.id,
           );
           return (
             <TouchableOpacity
@@ -138,7 +145,12 @@ const FullScreenOverlay = ({ visible, toggleOverlay, playlists }) => {
         <Text
           style={styles.createPlaylistTitle}
           onPress={() => {
-            global.nav.navigate('CreateNewPlaylist');
+            if (targetSong) {
+              navigation.navigate('CreateNewPlaylist');
+            } else {
+              global.nav.navigate('CreateNewPlaylist');
+            }
+            toggleOverlay();
           }}>
           Create New Playlist
         </Text>

@@ -1,6 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useReducer } from 'react';
+import { Alert } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
 
@@ -37,6 +38,26 @@ const ProfilePlaylists = ({ navigation, styles }) => {
     return () => listener;
   }, []);
 
+  const gotoPlaylist = ({ image, title, songs, isPrivate, viewCount, id }) => {
+    const songCount = songs.length;
+    if (songCount === 0) {
+      Alert.alert(
+        'No Songs Inside',
+        "This Playlist doesn't contain any songs at the moment!",
+      );
+    } else {
+      navigation.navigate('PlaylistDetails', {
+        image,
+        title,
+        songs,
+        isPrivate,
+        viewCount,
+        id,
+        songCount: songs.length,
+      });
+    }
+  };
+
   return (
     <>
       <SectionHeader
@@ -62,22 +83,12 @@ const ProfilePlaylists = ({ navigation, styles }) => {
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        renderItem={({
-          item: { image, title, songs, isPrivate, viewCount },
-        }) => {
+        renderItem={({ item }) => {
+          const { image, title, songs, isPrivate, viewCount, id } = item;
           return (
             <TouchableOpacity
               activeOpacity={1}
-              onPress={() =>
-                navigation.navigate('PlaylistDetails', {
-                  image,
-                  title,
-                  songs,
-                  isPrivate,
-                  viewCount,
-                  songCount: songs.length,
-                })
-              }>
+              onPress={() => gotoPlaylist(item)}>
               <ProfilePlaylistsCard
                 imgUrl={image}
                 songCount={songs.length}

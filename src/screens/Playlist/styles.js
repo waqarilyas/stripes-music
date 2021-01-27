@@ -8,6 +8,14 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
   },
+  backButtonContainer: {
+    paddingRight: 15,
+    paddingVertical: 10,
+  },
+  back: {
+    resizeMode: 'contain',
+    marginLeft: 18,
+  },
   imageContainer: {
     alignItems: 'center',
     marginTop: hp('4'),
@@ -61,6 +69,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#3B3F55',
+  },
+  itemMainContainer: {
+    width: '90%',
+    alignSelf: 'center',
+    paddingVertical: hp('2'),
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+  },
+  itemSubContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  songTitleText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  artistNameText: {
+    fontSize: 16,
+    color: 'silver',
+    paddingTop: 4,
+  },
+  favSongButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  songDurationText: {
+    color: 'silver',
+    paddingHorizontal: wp('3'),
   },
 });
 

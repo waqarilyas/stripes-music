@@ -154,7 +154,7 @@ const ProfileStack = () => {
         component={Playlist}
         options={({ navigation }) => ({
           title: '',
-          headerLeft: () => back(navigation),
+          // headerLeft: () => back(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
