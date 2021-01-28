@@ -20,7 +20,6 @@ import { backIcon } from '../../../Assets/Icons';
 import { LOG } from '../../utils/Constants';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
-
 import styles from './styles';
 import { changeToMiniModal, changeSong } from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
@@ -117,24 +116,12 @@ const Playlist = ({ navigation, route }) => {
   };
 
   const initialPlay = async () => {
-    const playlist = playlistSongs.map(
-      ({ title, artist, artwork, url, duration, id }) => {
-        return {
-          title,
-          artist,
-          artwork,
-          url,
-          duration,
-          id,
-        };
-      },
-    );
     try {
-      dispatch(changeSong(playlist[0]));
+      dispatch(changeSong(playlistSongs[0]));
       dispatch(changeToMiniModal(true));
-      await TrackPlayer.add(playlist);
-      dispatch(addPlayCount(playlist[0].id));
-      dispatch(addToRecentlyPlayed(playlist[0]));
+      await TrackPlayer.add(playlistSongs);
+      dispatch(addPlayCount(playlistSongs[0].id));
+      dispatch(addToRecentlyPlayed(playlistSongs[0]));
     } catch (error) {
       LOG('PLAY SONG', error);
     }

@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   },
   viewCountContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 6,
   },
   viewCount: {

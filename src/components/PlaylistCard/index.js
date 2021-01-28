@@ -4,7 +4,7 @@ import { Image } from 'react-native-elements';
 
 import styles from './styles';
 
-const PlaylistCard = ({ title, image, songsCount }) => {
+const PlaylistCard = ({ title, image, songCount }) => {
   return (
     <View style={styles.container}>
       <Image
@@ -19,7 +19,7 @@ const PlaylistCard = ({ title, image, songsCount }) => {
           {title}
         </Text>
         <Text numberOfLines={1} style={styles.songsCount}>
-          {songsCount} songs
+          {songCount} songs
         </Text>
       </View>
     </View>

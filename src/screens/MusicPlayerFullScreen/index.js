@@ -22,10 +22,13 @@ import {
 import MusicPlayerRelated from '../MusicPlayerRelated';
 import styles from './styles';
 
-const MusicPlayerFullscreen = ({ isVisible }) => {
+const MusicPlayerFullscreen = (props) => {
+  const { isVisible } = props;
+  console.log('MusicPlayerFullscreen Props', props);
   const [visible, setVisible] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const { user } = useSelector((state) => state.root.firebase);
+  const { currentSong } = useSelector((state) => state.root.audio);
   const dispatch = useDispatch();
 
   const toggleOverlay = () => {
@@ -53,10 +56,7 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
     }
   };
 
-  // console.log('-----------PLAYLISTS---------', playlists);
-
   const addToPlaylist = () => {
-    console.log('user***', user);
     if (user?.isPaidUser) {
       toggleOverlay();
     } else if (user) {
@@ -103,6 +103,7 @@ const MusicPlayerFullscreen = ({ isVisible }) => {
         onBackdropPress={toggleOverlay}
         toggleOverlay={toggleOverlay}
         playlists={playlists}
+        targetSong={currentSong}
       />
       <SafeAreaView>
         <View style={styles.header}>

@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   heightPercentageToDP as hp,
-  widthPercentageToDP
+  widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import { errIcon, tick } from '../../../Assets/Icons';
 import Button from '../../components/Mybutton';
@@ -55,31 +55,31 @@ const ChangePassword = () => {
 
   const setNewPassword = () => {
     console.log(currentPass, '---------', newPass);
-    setLoading(true)
+    setLoading(true);
     reauthenticate()
       .then(() => {
         var user = firebase.auth().currentUser;
         user
           .updatePassword(newPass)
           .then(() => {
-            setLoading(false)
+            setLoading(false);
             console.log('Password updated!');
             setVisible(true);
           })
           .catch((error) => {
-            setLoading(false)
+            setLoading(false);
             console.log('---Error----', error.message);
           });
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         setWrongPassword(true);
         console.log('----Functionreauthenticate error--', error.message);
       });
   };
 
   return (
-    <View style={{ backgroundColor: '#120810' }}>
+    <View style={{ flex: 1, backgroundColor: '#120810' }}>
       <ScrollView>
         <View style={{ height: hp('3%') }} />
 
@@ -130,9 +130,11 @@ const ChangePassword = () => {
           </View>
         ) : null}
 
-
-
-        <Button text="CHANGE PASSWORD" onPress={handleSubmit} loading={loading} />
+        <Button
+          text="CHANGE PASSWORD"
+          onPress={handleSubmit}
+          loading={loading}
+        />
         <View style={{ height: hp('10%') }} />
       </ScrollView>
       <View style={{ height: hp('30%') }} />

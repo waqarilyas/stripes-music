@@ -9,46 +9,14 @@ import {
 } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Carousel from 'react-native-snap-carousel';
-import TrackPlayer from 'react-native-track-player';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { musicSeeAllIcon, sliderPlaceholder } from '../../../Assets/Icons';
-import {
-  changeSong,
-  fullScreenChange,
-  pushToPlaylist,
-} from '../../Redux/Reducers/audioSlice';
-import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
-import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
-import { LOG } from '../../utils/Constants';
 import HomeTopSlider from '../HomeTopSlider';
 import styles from './styles';
 
-const HomeBanner = ({ currentItemImage }) => {
+const HomeBanner = ({ currentItemImage, playSong }) => {
   const { songs } = useSelector((state) => state.root.firebase);
-  const dispatch = useDispatch();
   let carousel = useRef(null);
-
-  const handleSong = async ({ title, artist, artwork, url, duration, id }) => {
-    try {
-      const result = {
-        title,
-        artist,
-        artwork,
-        url,
-        duration,
-        id,
-        createdAt: +new Date(),
-      };
-      dispatch(changeSong(result));
-      dispatch(pushToPlaylist(result));
-      await TrackPlayer.add(result);
-      dispatch(fullScreenChange(true));
-      dispatch(addPlayCount(id));
-      dispatch(addToRecentlyPlayed(result));
-    } catch (error) {
-      LOG('PLAY SONG', error);
-    }
-  };
 
   const updateIndex = () => {
     if (
@@ -89,7 +57,7 @@ const HomeBanner = ({ currentItemImage }) => {
         }
 
         return (
-          <TouchableOpacity onPress={() => handleSong(item)}>
+          <TouchableOpacity onPress={() => playSong(item, songs)}>
             <HomeTopSlider
               artwork={artwork}
               title={title}

@@ -7,6 +7,7 @@ import {
 } from '../../utils/Constants';
 
 const ResetPassword = async (values, actions, navigation) => {
+  console.log('email', values);
   try {
     await auth()
       .sendPasswordResetEmail(values.email)

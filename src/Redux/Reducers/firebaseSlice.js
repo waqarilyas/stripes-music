@@ -115,6 +115,7 @@ export const getAlbumSongs = createAsyncThunk(
   'firebase/getAlbumSongs',
   async (albumId) => {
     let data = [];
+    let totalDuration = 0;
     const path = firestore().collection('songs');
     const documents = await path.where('albumId', '==', albumId).get();
     documents.docs.forEach((document) => {
@@ -122,8 +123,19 @@ export const getAlbumSongs = createAsyncThunk(
         const { title, artist, artwork, url, duration, id } = document.data();
         const temp = { title, artist, artwork, url, duration, id };
         data.push(temp);
+        totalDuration += duration;
       }
     });
+    const hr = Math.floor(totalDuration / 3600);
+    let remainingTime = totalDuration - hr * 3600;
+    const min = Math.floor(remainingTime / 60);
+    const sec = remainingTime % 60;
+    const albumDuration = { hr, min, sec };
+    firestore()
+      .collection('albums')
+      .doc(albumId)
+      .update({ songCount: data.length, duration: albumDuration });
+    updateAlbum(albumId);
     return data;
   },
 );
@@ -432,7 +444,7 @@ export const addPlayCount = createAsyncThunk(
       }
 
       await transaction.update(songReference, {
-        playCount: songSnapshot.data().playCount + 1,
+        playCount: firestore.FieldValue.increment(1),
       });
     });
   },
@@ -460,7 +472,7 @@ export const addAlbumViewCount = createAsyncThunk(
       }
 
       await transaction.update(albumReference, {
-        viewCount: albumSnapshot.data().viewCount + 1,
+        viewCount: firestore.FieldValue.increment(1),
       });
     });
   },
@@ -479,7 +491,7 @@ export const addVideoViewCount = createAsyncThunk(
       }
 
       await transaction.update(videoSnapshot, {
-        viewCount: videoSnapshot.data().viewCount + 1,
+        viewCount: firestore.FieldValue.increment(1),
       });
     });
   },
@@ -498,7 +510,7 @@ export const addAlbumPlayCount = createAsyncThunk(
       }
 
       await transaction.update(albumReference, {
-        playCount: albumSnapshot.data().playCount + 1,
+        playCount: firestore.FieldValue.increment(1),
       });
     });
   },

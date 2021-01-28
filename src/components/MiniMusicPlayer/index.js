@@ -33,7 +33,6 @@ const MiniMusicPlayer = ({ currentTrack }) => {
   const playbackState = usePlaybackState();
   const dispatch = useDispatch();
 
-  //
   let middleButtonText = whitePlayIcon;
   if (
     playbackState === TrackPlayer.STATE_PLAYING ||

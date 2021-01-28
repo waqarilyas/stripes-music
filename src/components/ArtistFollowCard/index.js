@@ -80,8 +80,12 @@ const ArtistFollowCard = ({ artistId }) => {
     <View style={styles.container}>
       {state.artist ? (
         <>
-        <View style={styles.subContainer}>
-            <Avatar rounded size="medium" source={{ uri: state.artist.imgUrl }} />
+          <View style={styles.subContainer}>
+            <Avatar
+              rounded
+              size="medium"
+              source={{ uri: state.artist.imgUrl }}
+            />
             <View style={styles.detail}>
               <Text style={styles.artist}>
                 {state.artist.firstName} {state.artist.lastName}
@@ -92,15 +96,15 @@ const ArtistFollowCard = ({ artistId }) => {
                 </Text>
               ) : null}
             </View>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.buttonContainer,
-            status ? styles.unfollow : styles.follow,
-          ]}
-          onPress={handleFollowingStatus}>
+          </View>
+          <TouchableOpacity
+            style={[
+              styles.buttonContainer,
+              status ? styles.unfollow : styles.follow,
+            ]}
+            onPress={handleFollowingStatus}>
             <Text style={styles.text}>{status ? 'UNFOLLOW' : 'FOLLOW'}</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
         </>
       ) : null}
     </View>

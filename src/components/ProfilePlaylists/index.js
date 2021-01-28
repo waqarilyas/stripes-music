@@ -17,9 +17,9 @@ const initialState = {
 
 const ProfilePlaylists = ({ navigation, styles }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const uid = auth().currentUser?.uid;
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
     const listener = firestore()
       .collection('users')
       .doc(uid)
@@ -38,6 +38,18 @@ const ProfilePlaylists = ({ navigation, styles }) => {
     return () => listener;
   }, []);
 
+  const incrementViewCount = (id) => {
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('playlists')
+      .doc(id)
+      .update({
+        viewCount: firestore.FieldValue.increment(1),
+      })
+      .catch((error) => console.log('firestore error', error));
+  };
+
   const gotoPlaylist = ({ image, title, songs, isPrivate, viewCount, id }) => {
     const songCount = songs.length;
     if (songCount === 0) {
@@ -46,6 +58,7 @@ const ProfilePlaylists = ({ navigation, styles }) => {
         "This Playlist doesn't contain any songs at the moment!",
       );
     } else {
+      incrementViewCount(id);
       navigation.navigate('PlaylistDetails', {
         image,
         title,

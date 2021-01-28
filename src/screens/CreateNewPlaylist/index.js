@@ -19,17 +19,20 @@ import { imagePlaceholder } from '../../../Assets/Icons';
 import Button from '../../components/Button';
 import { CreatePlaylistVS } from '../../utils/Validation';
 import styles from './styles';
+import { useDispatch } from 'react-redux';
+import { fullScreenChange } from '../../Redux/Reducers/audioSlice';
 
 const initValues = {
   title: '',
   err: '',
 };
 
-const CreateNewPlaylist = ({ navigation }) => {
+const CreateNewPlaylist = ({ navigation, route, resumePlayer }) => {
   const [fileUri, setFileuri] = useState(null);
   const [ext, setExt] = useState('');
   const [privacy, setPrivacy] = useState(false);
   const uid = auth().currentUser.uid;
+  const dispatch = useDispatch();
 
   const chooseImage = () => {
     const options = {
@@ -138,7 +141,14 @@ const CreateNewPlaylist = ({ navigation }) => {
           { merge: true },
         );
       })
-      .then(() => navigation.goBack());
+      .then(() => {
+        if (route.params) {
+          route.params.resumePlayer();
+          navigation.goBack();
+        } else {
+          navigation.goBack();
+        }
+      });
   };
 
   return (

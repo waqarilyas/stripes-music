@@ -11,6 +11,11 @@ import HomeMostPlayed from '../../components/HomeMostPlayed';
 import HomeRecentPlayed from '../../components/HomeRecentPlayed';
 import HomeTopAlbums from '../../components/HomeTopAlbums';
 import HomeTopArtists from '../../components/HomeTopArtists';
+import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import TrackPlayer from 'react-native-track-player';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
+import { LOG } from '../../utils/Constants';
 import {
   getAlbums,
   getAllAlbums,
@@ -97,6 +102,18 @@ const Home = ({ navigation }) => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const playSong = async (currentSong, playlist) => {
+    try {
+      dispatch(changeSong(currentSong));
+      await TrackPlayer.add(playlist);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(currentSong.id));
+      dispatch(addToRecentlyPlayed(currentSong));
+    } catch (error) {
+      LOG('PLAY SONG', error);
+    }
+  };
+
   return (
     <ScrollView
       style={styles.container}
@@ -117,16 +134,19 @@ const Home = ({ navigation }) => {
           colors={colors}
           style={{ paddingHorizontal: RFPercentage(1) }}>
           {/* Songs Slider Section */}
-          <HomeBanner currentItemImage={(img) => setBgImg(img)} />
+          <HomeBanner
+            currentItemImage={(img) => setBgImg(img)}
+            playSong={playSong}
+          />
 
           {/* Most Played Section */}
-          <HomeMostPlayed navigation={navigation} />
+          <HomeMostPlayed navigation={navigation} playSong={playSong} />
 
           {/* For You section */}
           <HomeForYou />
 
           {/* Recent Played Section */}
-          <HomeRecentPlayed navigation={navigation} />
+          <HomeRecentPlayed navigation={navigation} playSong={playSong} />
 
           {/* Favorite Artists Section */}
           <HomeTopArtists navigation={navigation} />

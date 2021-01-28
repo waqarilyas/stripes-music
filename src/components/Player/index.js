@@ -116,6 +116,7 @@ const Player = ({ screen }) => {
       await TrackPlayer.skipToNext();
       const trackId = await TrackPlayer.getCurrentTrack();
       const track = await TrackPlayer.getTrack(trackId);
+      dispatch(changeSong(track));
       setCurrentTrack(track);
     } catch (err) {
       LOG('SKIP TO NEXT', err);
@@ -127,6 +128,7 @@ const Player = ({ screen }) => {
       await TrackPlayer.skipToPrevious();
       const trackId = await TrackPlayer.getCurrentTrack();
       const track = await TrackPlayer.getTrack(trackId);
+      dispatch(changeSong(track));
       setCurrentTrack(track);
     } catch (err) {
       LOG('SKIP TO PREVIOUS', err);

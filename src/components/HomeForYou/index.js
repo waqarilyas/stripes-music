@@ -5,7 +5,7 @@ import SectionHeader from '../SectionHeader';
 import ForYouTabs from '../../navigation/Tabs/ForYouTabs';
 import { musicHeartIcon } from '../../../Assets/Icons';
 
-const HomeForYou = () => {
+const HomeForYou = ({ playSong }) => {
   return (
     <>
       <View>

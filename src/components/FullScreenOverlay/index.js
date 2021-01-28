@@ -11,10 +11,14 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import {
+  changeToMiniModal,
+  fullScreenChange,
+} from '../../Redux/Reducers/audioSlice';
 import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useSelector } from 'react-redux';
 import { plusIcon } from '../../../Assets/Icons';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 
@@ -28,9 +32,8 @@ const FullScreenOverlay = ({
 }) => {
   const [added, setAdded] = useState(false);
   const [removed, setRemoved] = useState(false);
+  const dispatch = useDispatch();
   const uid = auth().currentUser.uid;
-
-  const { currentSong } = useSelector((state) => state.root.audio);
 
   useEffect(() => {
     if (added) {
@@ -52,9 +55,7 @@ const FullScreenOverlay = ({
       .collection('playlists')
       .doc(playlistId)
       .update({
-        songs: firestore.FieldValue.arrayUnion(
-          targetSong?.id || currentSong.id,
-        ),
+        songs: firestore.FieldValue.arrayUnion(targetSong?.id),
       })
       .then((res) => {
         setAdded(true);
@@ -70,14 +71,17 @@ const FullScreenOverlay = ({
       .collection('playlists')
       .doc(playlistId)
       .update({
-        songs: firestore.FieldValue.arrayRemove(
-          targetSong?.id || currentSong.id,
-        ),
+        songs: firestore.FieldValue.arrayRemove(targetSong?.id),
       })
       .then((res) => {
         setRemoved(true);
       })
       .catch(() => {});
+  };
+
+  const resumePlayer = () => {
+    dispatch(changeToMiniModal(false));
+    dispatch(fullScreenChange(true));
   };
 
   return (
@@ -95,7 +99,7 @@ const FullScreenOverlay = ({
         keyExtractor={() => randomize('Aa0!', 10)}
         renderItem={({ item }) => {
           const addedToPlaylist = item.songs?.some(
-            (song) => song === targetSong?.id || song === currentSong.id,
+            (song) => song === targetSong?.id,
           );
           return (
             <TouchableOpacity
@@ -145,10 +149,12 @@ const FullScreenOverlay = ({
         <Text
           style={styles.createPlaylistTitle}
           onPress={() => {
-            if (targetSong) {
-              navigation.navigate('CreateNewPlaylist');
+            if (!navigation) {
+              dispatch(changeToMiniModal(true));
+              dispatch(fullScreenChange(false));
+              global.nav.navigate('CreateNewPlaylist', { resumePlayer });
             } else {
-              global.nav.navigate('CreateNewPlaylist');
+              navigation.navigate('CreateNewPlaylist');
             }
             toggleOverlay();
           }}>

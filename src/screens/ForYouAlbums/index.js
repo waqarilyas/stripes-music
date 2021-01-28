@@ -18,8 +18,8 @@ const ForYouAlbums = ({ navigation }) => {
   const { albums } = useSelector((state) => state.root.firebase);
 
   const handleAlbum = (id) => {
-    dispatch(getAnAlbum(id));
     dispatch(getAlbumSongs(id));
+    dispatch(getAnAlbum(id));
     dispatch(addAlbumViewCount(id));
     navigation.navigate('AlbumDetail');
   };
@@ -45,7 +45,7 @@ const ForYouAlbums = ({ navigation }) => {
                 <PlaylistCard
                   title={title}
                   image={imgUrl}
-                  songsCount={songCount}
+                  songCount={songCount}
                 />
               </TouchableOpacity>
             );
