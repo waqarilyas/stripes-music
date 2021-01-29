@@ -19,6 +19,7 @@ import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
 import { newsComment } from '../../../Assets/Icons';
 import ArtistFollowCard from '../../components/ArtistFollowCard';
+import { getDocument } from '../../utils/Firebase';
 import Block from '../../components/Block';
 import NewsCommentCard from '../../components/NewsCommentCard';
 import NewsEmptyComments from '../../components/NewsEmptyComments';
@@ -38,6 +39,7 @@ if (
 }
 
 const initialState = {
+  artist: {},
   comments: [],
   relatedNews: [],
 };
@@ -53,6 +55,13 @@ const NewsDetails = () => {
   const [stateVals, setStateVals] = useState({
     showMore: [],
   });
+
+  useEffect(() => {
+    getDocument('artists', news.artistId, (document) => {
+      console.log('artistDoc', document);
+      dispatch({ artist: document });
+    });
+  }, [news.artistId]);
 
   useEffect(() => {
     getCollection('news', 5, (documents) =>
@@ -136,7 +145,7 @@ const NewsDetails = () => {
       {Object.values(news).length > 0 ? (
         <View style={styles.container}>
           <Image
-            source={{ uri: news.imgUrl }}
+            source={news.imgUrl ? { uri: news.imgUrl } : null}
             style={styles.image}
             PlaceholderContent={<ActivityIndicator />}
           />
@@ -157,7 +166,7 @@ const NewsDetails = () => {
             <Text style={styles.authorName}>{news.author}</Text>
           </View>
 
-          <ArtistFollowCard artistId={news.artistId} />
+          <ArtistFollowCard artist={state.artist} />
           <NewsIconsCard
             viewedBy={news.viewedBy}
             likedBy={news.likedBy}

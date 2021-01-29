@@ -6,7 +6,7 @@ import styles from './styles';
 const AlbumsSearchCard = ({ image, title, duration, author, songCount }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: image }} style={styles.image}>
+      <Image source={image ? { uri: image } : null} style={styles.image}>
         <View style={styles.background}>
           <Text style={styles.duration}>{duration}</Text>
         </View>

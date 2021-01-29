@@ -8,7 +8,7 @@ import styles from './styles';
 const ForYouAudioCard = ({ artwork, title, artist, onPress }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: artwork }} style={styles.image} />
+      <Image source={artwork ? { uri: artwork } : null} style={styles.image} />
       <View style={styles.detail}>
         <Text style={styles.title} numberOfLines={2}>
           {title}

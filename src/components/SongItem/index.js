@@ -19,47 +19,42 @@ import {
 } from '../../../Assets/Icons';
 import SongCardListView from '../../components/SongCardListView';
 
-const SongItem = ({ title, author, image, id, duration }) => {
+const SongItem = ({ song, isFavourite }) => {
+  const { title, artist, artwork, id, duration } = song;
   const [visible, setVisible] = useState(false);
   const [addToQueue, setAddToQueue] = useState(false);
   const [checked, setChecked] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
-  const [favorite, setFavorite] = useState(false);
   const uid = auth().currentUser.uid;
 
-  useEffect(() => {
-    const listener = firestore()
+  const addToFavSongs = () => {
+    firestore()
       .collection('users')
       .doc(uid)
       .collection('favSongs')
       .doc(id)
-      .onSnapshot((document) => {
-        if (document.exists) {
-          const isFavorite = document.data().isFavorite;
-          setFavorite(isFavorite);
-        }
+      .set({ ...song })
+      .then(() => {
+        console.log('success');
+      })
+      .catch((error) => {
+        console.log('error', error);
       });
+  };
 
-    return () => listener;
-  }, []);
-
-  const handleFavorite = async () => {
-    // setFavorite(!favorite);
-    const userFavDoc = firestore()
+  const removeFromFavSongs = (song) => {
+    firestore()
       .collection('users')
       .doc(uid)
-      .collection('favSongs');
-    await userFavDoc.doc(id).set(
-      {
-        title,
-        author,
-        image,
-        id,
-        isFavorite: !favorite,
-        duration,
-      },
-      { merge: true },
-    );
+      .collection('favSongs')
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log('success');
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
   };
 
   const toggleOverlay = () => {
@@ -78,8 +73,8 @@ const SongItem = ({ title, author, image, id, duration }) => {
           }>
           <SongCardListView
             title={title}
-            artist={author}
-            arts={image}
+            artist={artist}
+            artwork={artwork}
             duration={duration}
           />
 
@@ -147,12 +142,15 @@ const SongItem = ({ title, author, image, id, duration }) => {
 
       <View style={styles.container}>
         <View style={styles.containerLeft}>
-          <Image source={{ uri: image }} style={styles.image} />
+          <Image
+            source={artwork ? { uri: artwork } : null}
+            style={styles.image}
+          />
           <View style={styles.textContainer}>
             <Text style={styles.title} numberOfLines={1}>
               {title}
             </Text>
-            <Text style={styles.author}>{author}</Text>
+            <Text style={styles.author}>{artist}</Text>
           </View>
         </View>
         <View style={styles.iconContainer}>
@@ -163,10 +161,10 @@ const SongItem = ({ title, author, image, id, duration }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconContainer}
-            onPress={handleFavorite}>
+            onPress={isFavourite ? removeFromFavSongs : addToFavSongs}>
             <Image
               source={heartGrayIcon}
-              style={favorite ? styles.favoriteIcon : styles.icon}
+              style={isFavourite ? styles.favoriteIcon : styles.icon}
             />
           </TouchableOpacity>
         </View>

@@ -1,20 +1,29 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, TouchableOpacity } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 import RelatedNewsCard from '../../components/RelatedNewsCard';
 import styles from './styles';
 import { Divider } from 'react-native-elements';
 import EmptyArtistProfileCard from '../../components/EmptyArtistProfileCard';
 import { noNewsIcon } from '../../../Assets/Icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getANews } from '../../Redux/Reducers/firebaseSlice';
 
 const ArtistNews = ({ navigation }) => {
   const dispatch = useDispatch();
   const { artistNews } = useSelector((state) => state.root.firebase);
 
-  const handleNav = (id) => {
+  const handleNav = async (id) => {
+    console.log('id,', id);
+    const newsPath = firestore().collection('news').doc(id);
+    newsPath
+      .update({
+        viewCount: firestore.FieldValue.increment(1),
+      })
+      .catch((err) => {
+        console.log('HANDLE VIEWCOUNT STATUS');
+      });
     dispatch(getANews(id)).then(() => {
       navigation.navigate('NewsDetails');
     });

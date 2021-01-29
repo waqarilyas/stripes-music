@@ -69,7 +69,7 @@ const CommunityStack = () => {
         name="NewMessage"
         component={NewMessage}
         options={({ navigation }) => ({
-          title: 'Artists',
+          title: 'Start a Chat',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
           headerLeft: () => back(navigation),

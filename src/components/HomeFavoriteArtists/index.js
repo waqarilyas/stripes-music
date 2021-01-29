@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { getArtistId } from '../../Redux/Reducers/idsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getArtist,
+  getArtistNews,
+  getArtistPlaylists,
+  getArtistPopularSongs,
+} from '../../Redux/Reducers/firebaseSlice';
 
 import SectionHeader from '../SectionHeader';
 import { emptyArtist, favoriteArtistIcon } from '../../../Assets/Icons';
@@ -14,6 +22,7 @@ const emptyCard = () => {
 
 const HomeFavoriteArtists = ({ navigation }) => {
   const [list, setList] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const uid = auth().currentUser.uid;
@@ -21,11 +30,11 @@ const HomeFavoriteArtists = ({ navigation }) => {
       .collection('users')
       .doc(uid)
       .collection('favArtists')
-      .where('isFollowing', '==', true)
       .onSnapshot((querySnapshot) => {
         let data = [];
         querySnapshot.docs.forEach((document) => {
-          if (document.exists) {
+          if (document.exists && document.data().isFollowing) {
+            console.log('docs', document.data());
             data.push(document.data());
           }
         });
@@ -34,6 +43,20 @@ const HomeFavoriteArtists = ({ navigation }) => {
 
     return listener;
   }, []);
+
+  const handleArtist = (id) => {
+    console.log('id', id);
+    try {
+      dispatch(getArtist(id));
+      dispatch(getArtistId(id));
+      dispatch(getArtistNews(id));
+      dispatch(getArtistPopularSongs(id));
+      dispatch(getArtistPlaylists(id));
+      navigation.navigate('Artist');
+    } catch (err) {
+      console.log('dispatch error', err);
+    }
+  };
 
   return (
     <>
@@ -49,9 +72,13 @@ const HomeFavoriteArtists = ({ navigation }) => {
           ListEmptyComponent={emptyCard}
           keyExtractor={(item) => `${item.id}`}
           horizontal
-          renderItem={({ item: { name, avatar } }) => {
-            console.log(name, avatar);
-            return <ArtistsHorizontalCard name={name} avatar={avatar} />;
+          renderItem={({ item, item: { name, avatar } }) => {
+            console.log('item', item);
+            return (
+              <TouchableOpacity onPress={() => handleArtist(item.artistId)}>
+                <ArtistsHorizontalCard name={name} avatar={avatar} />
+              </TouchableOpacity>
+            );
           }}
         />
       )}

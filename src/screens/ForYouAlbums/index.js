@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ScrollView } from 'react-native';
+import { FlatList, ScrollView, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './styles';

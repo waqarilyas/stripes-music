@@ -22,7 +22,7 @@ const EmptyChatList = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={emptyChatIcon} style={styles.icon} />
-      <Text style={styles.text}>Start a chat with an Artist</Text>
+      <Text style={styles.text}>Start a Chat</Text>
       <Button
         type="solid"
         title="New Message"

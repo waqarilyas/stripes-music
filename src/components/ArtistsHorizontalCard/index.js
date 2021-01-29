@@ -7,7 +7,7 @@ const ArtistsHorizontalCard = ({ name, avatar }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: avatar }}
+        source={avatar ? { uri: avatar } : null}
         containerStyle={styles.image}
         PlaceholderContent={<ActivityIndicator />}
         placeholderStyle={styles.placeholder}

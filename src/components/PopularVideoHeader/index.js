@@ -7,7 +7,9 @@ import styles from './style';
 
 const PopularVideoHeader = ({ poster, title, onPress }) => {
   return (
-    <ImageBackground source={{ uri: poster }} style={styles.header}>
+    <ImageBackground
+      source={poster ? { uri: poster } : null}
+      style={styles.header}>
       <View style={styles.view}>
         <Text numberOfLines={1} style={styles.text}>
           {title}

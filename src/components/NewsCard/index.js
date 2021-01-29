@@ -14,12 +14,12 @@ const NewsCard = ({
   likeCount,
   shareCount,
   commentCount,
-  handleNav
+  handleNav,
 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <Image style={styles.image} source={{ uri: image }} />
+        <Image style={styles.image} source={image ? { uri: image } : null} />
         <View style={styles.textInner}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.date}>{date}</Text>

@@ -8,7 +8,7 @@ import styles from './styles';
 const SongCardListView = ({ title, artist, artwork, duration }) => {
   return (
     <ListItem containerStyle={styles.container}>
-      <Image source={{ uri: artwork }} style={styles.image} />
+      <Image source={artwork ? { uri: artwork } : null} style={styles.image} />
       <ListItem.Content>
         <ListItem.Title numberOfLines={1} style={styles.title}>
           {title}

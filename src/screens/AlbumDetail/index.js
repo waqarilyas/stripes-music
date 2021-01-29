@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { Divider, Image } from 'react-native-elements';
 import { useSelector } from 'react-redux';
@@ -48,6 +49,14 @@ const AlbumDetail = () => {
     }
   };
 
+  const titleSongPlayHandler = () => {
+    if (albumSongs.length < 1) {
+      Alert.alert('No Songs to Play!', 'The Album is currently empty!');
+    } else {
+      playSong(albumSongs[0]);
+    }
+  };
+
   return album && albumSongs ? (
     <ScrollView style={styles.scrollContainer}>
       <Animated.View style={{ ...styles.container, opacity: fadeIn }}>
@@ -75,7 +84,7 @@ const AlbumDetail = () => {
             <Image
               source={playButton}
               containerStyle={styles.playIcon}
-              onPress={() => playSong(albumSongs[0])}
+              onPress={() => titleSongPlayHandler()}
             />
           </View>
         </Image>

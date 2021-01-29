@@ -14,13 +14,18 @@ import styles from './styles';
 import useUser from '../../hooks/useUser';
 
 const MessageDetail = ({ route, navigation }) => {
-  navigation.setOptions({ title: route.params.name });
+  const { otherUser } = route.params;
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: otherUser.name,
+    });
+  }, [navigation]);
 
   const uid = auth().currentUser.uid;
-  const passedId = route.params.passedId;
+  const passedId = otherUser.id;
 
   const [messages, setMessages] = useState([]);
-  const [artist, setArtist] = useState({});
   const localUser = useUser();
 
   useEffect(() => {
@@ -67,15 +72,6 @@ const MessageDetail = ({ route, navigation }) => {
       });
     };
 
-    const getArtist = async () => {
-      const artistDocument = firestore().collection('artists').doc(passedId);
-      await artistDocument.get().then((value) => {
-        if (value.exists) {
-          setArtist(value.data());
-        }
-      });
-    };
-
     firestore()
       .collection('chats')
       .doc(chatId)
@@ -88,7 +84,6 @@ const MessageDetail = ({ route, navigation }) => {
         }
       });
 
-    getArtist();
     const unsubscribe = getData();
 
     return () => unsubscribe;
@@ -107,17 +102,17 @@ const MessageDetail = ({ route, navigation }) => {
     const chatCollection = firestore().collection('chats').doc(chatId);
     chatCollection.set(
       {
-        artist: {
-          avatar: artist.imgUrl,
-          id: artist.id,
-          name: `${artist.firstName} ${artist.lastName}`,
+        otherUser: {
+          avatar: otherUser.image,
+          id: otherUser.id,
+          name: otherUser.name,
         },
         user: {
           avatar: localUser.profilePicture,
           id: auth().currentUser.uid,
           name: localUser.fullName,
         },
-        members: [artist.id, uid],
+        members: [otherUser.id, uid],
         readStatus,
         recentMessage: {
           createdAt: +new Date(),

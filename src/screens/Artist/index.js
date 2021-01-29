@@ -1,7 +1,13 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  Alert,
+  View,
+} from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import ArtistsTabs from '../../navigation/Tabs/ArtistsTabs';
@@ -9,8 +15,8 @@ import { LOG } from '../../utils/Constants';
 import { thousandSeparator } from '../../utils/Helpers';
 import styles from './styles';
 
-const Artist = ({ route }) => {
-  const { artist, user } = useSelector((state) => state.root.firebase);
+const Artist = () => {
+  const { user, artist } = useSelector((state) => state.root.firebase);
   const [status, setStatus] = useState(false);
   const uid = auth().currentUser.uid;
 
@@ -27,40 +33,47 @@ const Artist = ({ route }) => {
       });
 
     return listener;
-  }, []);
+  }, [artist]);
 
   const handleFollowingStatus = async () => {
-    setStatus(!status);
-    try {
-      const path = firestore().collection('artists');
-      const subPath = path.doc(artist?.id).collection('followers').doc(uid);
-      await subPath.set(
-        {
-          userId: uid,
-          username: user?.fullName,
-          avatar: user?.profilePicture,
-          updatedAt: +new Date(),
-          isFollowing: !status,
-        },
-        { merge: true },
+    if (auth().currentUser.isAnonymous) {
+      Alert.alert(
+        'Login Required',
+        'You must be logged in to follow this Artist!',
       );
-      const userPath = firestore().collection('users');
-      const subUserPath = userPath
-        .doc(uid)
-        .collection('favArtists')
-        .doc(artist?.id);
-      await subUserPath.set(
-        {
-          artistId: artist?.id,
-          name: `${artist?.firstName} ${artist?.lastName}`,
-          updatedAt: +new Date(),
-          isFollowing: !status,
-          avatar: artist?.imgUrl,
-        },
-        { merge: true },
-      );
-    } catch (err) {
-      LOG('HANDLE FOLLOWING STATUS', err);
+    } else {
+      setStatus(!status);
+      try {
+        const path = firestore().collection('artists');
+        const subPath = path.doc(artist?.id).collection('followers').doc(uid);
+        await subPath.set(
+          {
+            userId: uid,
+            username: user?.fullName,
+            avatar: user?.profilePicture,
+            updatedAt: +new Date(),
+            isFollowing: !status,
+          },
+          { merge: true },
+        );
+        const userPath = firestore().collection('users');
+        const subUserPath = userPath
+          .doc(uid)
+          .collection('favArtists')
+          .doc(artist?.id);
+        await subUserPath.set(
+          {
+            artistId: artist?.id,
+            name: `${artist?.firstName} ${artist?.lastName}`,
+            updatedAt: +new Date(),
+            isFollowing: !status,
+            avatar: artist?.imgUrl,
+          },
+          { merge: true },
+        );
+      } catch (err) {
+        LOG('HANDLE FOLLOWING STATUS', err);
+      }
     }
   };
 

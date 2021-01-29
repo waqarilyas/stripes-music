@@ -181,7 +181,7 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => BackButton(() => navigation.goBack()),
+          headerLeft: () => HeaderLeft(navigation),
           headerRight: () => search(navigation),
           headerStyle: styles.headerStyle,
         })}

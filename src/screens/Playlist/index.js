@@ -238,7 +238,9 @@ const Playlist = ({ navigation, route }) => {
           contentContainerStyle={{ flexGrow: 1 }}
           ListEmptyComponent={() => renderEmptyComponent()}
           renderItem={({ item }) => {
-            let favSong = favSongs.some((song) => song.id == item.id);
+            const favSong = favSongs.filter((song) => song.id == item.id);
+            const isFavourite =
+              favSong.length < 1 ? false : favSong[0].isFavourite;
             return (
               <View style={styles.itemMainContainer}>
                 <View style={styles.itemSubContainer}>
@@ -249,11 +251,13 @@ const Playlist = ({ navigation, route }) => {
                   <View style={styles.favSongButtonContainer}>
                     <TouchableOpacity
                       onPress={() =>
-                        favSong ? removeFromFavSongs(item) : addToFavSongs(item)
+                        isFavourite
+                          ? removeFromFavSongs(item)
+                          : addToFavSongs(item)
                       }>
                       <EntypoIcon
                         name="heart"
-                        color={favSong ? '#F5138E' : 'silver'}
+                        color={isFavourite ? '#F5138E' : 'silver'}
                         size={25}
                       />
                     </TouchableOpacity>

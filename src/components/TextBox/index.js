@@ -12,12 +12,14 @@ const TextBox = ({
   contentType,
   defaultValue,
   blurOnSubmit,
+  secureTextEntry,
 }) => {
   console.log(defaultValue);
 
   return (
     <View style={styles.maincontainer}>
       <TextInput
+        secureTextEntry={secureTextEntry}
         blurOnSubmit={blurOnSubmit}
         autoCapitalize={false}
         style={styles.Textinputstyle}

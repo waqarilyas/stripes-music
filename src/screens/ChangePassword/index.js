@@ -1,14 +1,20 @@
 import firebase from '@react-native-firebase/app';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP,
-} from 'react-native-responsive-screen';
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  View,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { errIcon, tick } from '../../../Assets/Icons';
 import Button from '../../components/Mybutton';
 import TextBox from '../../components/TextBox';
+import styles from './styles';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 
 const ChangePassword = () => {
   const [currentPass, setcurrentPass] = useState('');
@@ -19,6 +25,9 @@ const ChangePassword = () => {
   const [emptyFieldError, setEmptyFieldError] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showCurrentPass, setShowCurrentPass] = useState(true);
+  const [showNewPass, setShowNewPass] = useState(true);
+  const [showConfirmPass, setShowConfirmPass] = useState(true);
 
   const handleSubmit = () => {
     console.log(currentPass);
@@ -82,25 +91,58 @@ const ChangePassword = () => {
     <View style={{ flex: 1, backgroundColor: '#120810' }}>
       <ScrollView>
         <View style={{ height: hp('3%') }} />
+        <View style={styles.mainContainer}>
+          <TextInput
+            style={styles.textInput}
+            blurOnSubmit={true}
+            secureTextEntry={showCurrentPass}
+            placeholder={'Enter current password'}
+            onChangeText={(input) => setcurrentPass(input)}
+            maxLength={20}
+          />
+          {currentPass.length > 0 && (
+            <TouchableOpacity
+              onPressIn={() => setShowCurrentPass(false)}
+              onPressOut={() => setShowCurrentPass(true)}>
+              <FeatherIcon name="eye" color="#000" size={20} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.mainContainer}>
+          <TextInput
+            style={styles.textInput}
+            blurOnSubmit={true}
+            secureTextEntry={showNewPass}
+            placeholder={'Enter new password'}
+            onChangeText={(input) => setnewPass(input)}
+            maxLength={20}
+          />
 
-        <TextBox
-          blurOnSubmit={true}
-          text="Enter current password"
-          onChangeText={(input) => setcurrentPass(input)}
-          contentType="password"
-        />
-        <TextBox
-          blurOnSubmit={true}
-          text="Enter new password"
-          onChangeText={(input) => setnewPass(input)}
-          contentType="password"
-        />
-        <TextBox
-          blurOnSubmit={true}
-          text="Re-enter new password"
-          onChangeText={(input) => setconfirmPass(input)}
-          contentType="password"
-        />
+          {newPass.length > 0 && (
+            <TouchableOpacity
+              onPressIn={() => setShowNewPass(false)}
+              onPressOut={() => setShowNewPass(true)}>
+              <FeatherIcon name="eye" color="#000" size={20} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.mainContainer}>
+          <TextInput
+            style={styles.textInput}
+            blurOnSubmit={true}
+            secureTextEntry={showConfirmPass}
+            placeholder={'Re-enter new password'}
+            onChangeText={(input) => setconfirmPass(input)}
+            maxLength={20}
+          />
+          {confirmPass.length > 0 && (
+            <TouchableOpacity
+              onPressIn={() => setShowConfirmPass(false)}
+              onPressOut={() => setShowConfirmPass(true)}>
+              <FeatherIcon name="eye" color="#000" size={20} />
+            </TouchableOpacity>
+          )}
+        </View>
 
         {wrongPassword ? (
           <View style={styles.postContainer}>
@@ -141,23 +183,5 @@ const ChangePassword = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  postContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textStyle: {
-    color: '#c4c4c4',
-    marginLeft: widthPercentageToDP('2%'),
-    fontSize: 12,
-  },
-  successImage: {
-    resizeMode: 'contain',
-    height: hp('4'),
-    width: hp('4'),
-  },
-});
 
 export default ChangePassword;

@@ -2,7 +2,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
-import { Alert, FlatList, Text } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import ChatCard from '../../components/ChatCard';
 import reducer from '../../hooks/useReducer';
 
@@ -83,8 +83,6 @@ const Community = ({ navigation }) => {
     return batch.commit();
   };
 
-  console.log('state.inbox', state.inbox);
-
   return (
     <>
       <FlatList
@@ -95,19 +93,20 @@ const Community = ({ navigation }) => {
         // ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         scrollEnabled={state.inbox.length < 1 ? false : true}
         renderItem={({ item }) => {
+          const targetUser =
+            item.otherUser.id === uid ? item.user : item.otherUser;
           return (
             <ChatCard
-              name={item.artist.name}
-              avatar={item.artist.avatar}
+              name={targetUser.name}
+              avatar={targetUser.avatar}
               message={item.recentMessage.text}
               status={item.readStatus[`${uid}`]}
               onPress={() => {
                 navigation.navigate('MessageDetail', {
-                  passedId: item.artist.id,
-                  name: item.artist.name,
+                  otherUser: targetUser,
                 });
               }}
-              onDeletePress={() => alertDelete(item.artist.id)}
+              onDeletePress={() => alertDelete(item.otherUser.id)}
             />
           );
         }}

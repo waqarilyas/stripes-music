@@ -1,51 +1,57 @@
-import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyArtistProfileCard from '../../components/EmptyArtistProfileCard';
 import TrackPlayer from 'react-native-track-player';
-
-import {
-  changeSong,
-  fullScreenChange,
-  pushToPlaylist,
-} from '../../Redux/Reducers/audioSlice';
+import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { mostPlayedHome } from '../../../Assets/Icons';
 import SongItem from '../../components/SongItem';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
 const ArtistPopular = () => {
   const dispatch = useDispatch();
+  const [favSongs, setFavSongs] = useState();
+  const uid = auth().currentUser.uid;
   const { artistPopularSongs } = useSelector((state) => state.root.firebase);
 
-  const handleSong = async ({ title, artist, artwork, url, duration, id }) => {
+  useEffect(() => {
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs')
+      .onSnapshot((snapshot) => {
+        const favSongs = [];
+        snapshot.docs.forEach((doc) => {
+          console.log('doc', doc);
+          favSongs.push(doc.data());
+        });
+        console.log('favSongs', favSongs);
+        setFavSongs(favSongs);
+      });
+    return listener;
+  }, []);
+
+  const playSong = async (currentSong) => {
     try {
-      const result = {
-        title,
-        artist,
-        artwork,
-        url,
-        duration,
-        id,
-        createdAt: +new Date(),
-      };
-      dispatch(changeSong(result));
-      dispatch(pushToPlaylist(result));
-      await TrackPlayer.add(result);
+      dispatch(changeSong(currentSong));
       dispatch(fullScreenChange(true));
-      dispatch(addPlayCount(id));
-      dispatch(addToRecentlyPlayed(result));
+      await TrackPlayer.add(artistPopularSongs);
+      dispatch(addPlayCount(currentSong.id));
+      dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {
-      LOG('PLAY SONG', error);
+      console.log('PLAY SONG', error);
     }
   };
 
   return (
     <View style={styles.container}>
-      {artistPopularSongs && (
+      {artistPopularSongs && favSongs && (
         <FlatList
           data={artistPopularSongs}
+          bounces={false}
           contentContainerStyle={
             artistPopularSongs.length > 0 ? null : { flex: 1 }
           }
@@ -57,15 +63,10 @@ const ArtistPopular = () => {
             />
           }
           renderItem={({ item }) => {
+            const favSong = favSongs.some((song) => song.id == item.id);
             return (
-              <TouchableOpacity onPress={() => handleSong(item)}>
-                <SongItem
-                  title={item.title}
-                  author={item.artist}
-                  image={item.artwork}
-                  id={item.id}
-                  duration={item.duration}
-                />
+              <TouchableOpacity onPress={() => playSong(item)}>
+                <SongItem song={item} isFavourite={favSong} />
               </TouchableOpacity>
             );
           }}

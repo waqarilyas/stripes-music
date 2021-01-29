@@ -8,7 +8,7 @@ const SongCard = ({ title, artwork, artist }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: artwork }}
+        source={artwork ? { uri: artwork } : null}
         style={styles.image}
         PlaceholderContent={<ActivityIndicator color="white" />}
         placeholderStyle={styles.placeholderStyle}

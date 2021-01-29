@@ -26,6 +26,7 @@ const itemSubs = Platform.select({
 const SubscriptionModal = ({ navigation, toggleModal }) => {
   const dispatch = useDispatch();
   const user = auth().currentUser;
+  // console.log('user', user);
   const [state, setState] = useState({
     productIDs: [],
     loading: false,
@@ -139,7 +140,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
         </View>
       </TouchableOpacity>
 
-      {user && (
+      {!user.isAnonymous && (
         <TouchableOpacity
           onPress={handleSignOut}
           style={styles.logoutButtonContainer}>
