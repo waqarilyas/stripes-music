@@ -40,7 +40,7 @@ const MusicPlayerFullscreen = (props) => {
       const result = await Share.share({
         message: Platform.OS === 'android' ? 'https://www.google.com' : '',
         url: 'https://apps.apple.com/us/app/stripes-app/id1538914059',
-        title: 'Share Music App',
+        title: 'Share Stripes',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

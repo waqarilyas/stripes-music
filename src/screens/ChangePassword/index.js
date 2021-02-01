@@ -1,26 +1,25 @@
 import firebase from '@react-native-firebase/app';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Image,
-  StyleSheet,
   Text,
   TouchableOpacity,
   TextInput,
   View,
+  Modal,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { errIcon, tick } from '../../../Assets/Icons';
 import Button from '../../components/Mybutton';
-import TextBox from '../../components/TextBox';
 import styles from './styles';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 
-const ChangePassword = () => {
+const ChangePassword = ({ navigation }) => {
   const [currentPass, setcurrentPass] = useState('');
   const [newPass, setnewPass] = useState('');
   const [confirmPass, setconfirmPass] = useState('');
-  const [visible, setVisible] = useState(false);
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
   const [matchErr, setMatchErr] = useState(false);
   const [emptyFieldError, setEmptyFieldError] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -28,6 +27,36 @@ const ChangePassword = () => {
   const [showCurrentPass, setShowCurrentPass] = useState(true);
   const [showNewPass, setShowNewPass] = useState(true);
   const [showConfirmPass, setShowConfirmPass] = useState(true);
+  const currentPassRef = useRef();
+  const newPassRef = useRef();
+  const confirmPassRef = useRef();
+
+  useEffect(() => {
+    if (emptyFieldError) {
+      setTimeout(() => {
+        setEmptyFieldError(false);
+      }, 2000);
+    }
+    if (matchErr) {
+      setTimeout(() => {
+        setMatchErr(false);
+      }, 2000);
+    }
+    if (wrongPassword) {
+      setTimeout(() => {
+        setWrongPassword(false);
+      }, 2000);
+    }
+    if (passwordUpdated) {
+      setTimeout(() => {
+        setPasswordUpdated(false);
+        currentPassRef.current.clear();
+        newPassRef.current.clear();
+        confirmPassRef.current.clear();
+        navigation.goBack();
+      }, 3000);
+    }
+  }, [emptyFieldError, matchErr, wrongPassword, passwordUpdated]);
 
   const handleSubmit = () => {
     console.log(currentPass);
@@ -36,19 +65,15 @@ const ChangePassword = () => {
 
     if (currentPass === '' || newPass == '' || confirmPass == '') {
       setEmptyFieldError(true);
-      return;
-    }
-
-    if (newPass !== confirmPass) {
+    } else if (newPass !== confirmPass) {
       setMatchErr(true);
-      return;
     } else if (newPass === confirmPass) {
       setMatchErr(false);
+      setNewPassword();
     }
-
-    setNewPassword();
   };
-  var user = firebase.auth().currentUser;
+
+  const user = firebase.auth().currentUser;
 
   console.log('-----usr---', user);
 
@@ -73,7 +98,7 @@ const ChangePassword = () => {
           .then(() => {
             setLoading(false);
             console.log('Password updated!');
-            setVisible(true);
+            setPasswordUpdated(true);
           })
           .catch((error) => {
             setLoading(false);
@@ -93,6 +118,7 @@ const ChangePassword = () => {
         <View style={{ height: hp('3%') }} />
         <View style={styles.mainContainer}>
           <TextInput
+            ref={currentPassRef}
             style={styles.textInput}
             blurOnSubmit={true}
             secureTextEntry={showCurrentPass}
@@ -110,6 +136,7 @@ const ChangePassword = () => {
         </View>
         <View style={styles.mainContainer}>
           <TextInput
+            ref={newPassRef}
             style={styles.textInput}
             blurOnSubmit={true}
             secureTextEntry={showNewPass}
@@ -128,6 +155,7 @@ const ChangePassword = () => {
         </View>
         <View style={styles.mainContainer}>
           <TextInput
+            ref={confirmPassRef}
             style={styles.textInput}
             blurOnSubmit={true}
             secureTextEntry={showConfirmPass}
@@ -143,43 +171,46 @@ const ChangePassword = () => {
             </TouchableOpacity>
           )}
         </View>
-
-        {wrongPassword ? (
-          <View style={styles.postContainer}>
-            <Image source={errIcon} style={styles.successImage} />
-            <Text style={styles.textStyle}>Wrong Password!</Text>
+        <Modal
+          transparent={true}
+          animationType={'fade'}
+          visible={
+            wrongPassword || emptyFieldError || matchErr || passwordUpdated
+          }>
+          <View style={styles.modalMainContainer}>
+            <View style={styles.postContainer}>
+              <Image
+                source={passwordUpdated ? tick : errIcon}
+                style={styles.successImage}
+              />
+              {wrongPassword && (
+                <Text style={styles.textStyle}>
+                  Current Password is not correct!
+                </Text>
+              )}
+              {emptyFieldError && (
+                <Text style={styles.textStyle}>
+                  Please fill all the fields!
+                </Text>
+              )}
+              {matchErr && (
+                <Text style={styles.textStyle}>Passwords don't match!</Text>
+              )}
+              {passwordUpdated && (
+                <Text style={styles.textStyle}>
+                  Password updated successfully!
+                </Text>
+              )}
+            </View>
           </View>
-        ) : null}
-
-        {emptyFieldError ? (
-          <View style={styles.postContainer}>
-            <Image source={errIcon} style={styles.successImage} />
-            <Text style={styles.textStyle}>Please fill all the fields!</Text>
-          </View>
-        ) : null}
-
-        {matchErr ? (
-          <View style={styles.postContainer}>
-            <Image source={errIcon} style={styles.successImage} />
-            <Text style={styles.textStyle}>Passwords don't match!</Text>
-          </View>
-        ) : null}
-
-        {visible ? (
-          <View style={styles.postContainer}>
-            <Image source={tick} style={styles.successImage} />
-            <Text style={styles.textStyle}>Password updated successfully!</Text>
-          </View>
-        ) : null}
+        </Modal>
 
         <Button
           text="CHANGE PASSWORD"
           onPress={handleSubmit}
           loading={loading}
         />
-        <View style={{ height: hp('10%') }} />
       </ScrollView>
-      <View style={{ height: hp('30%') }} />
     </View>
   );
 };

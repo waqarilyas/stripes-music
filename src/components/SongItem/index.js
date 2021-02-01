@@ -3,6 +3,8 @@ import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Avatar, CheckBox, Overlay } from 'react-native-elements';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+
 import {
   ActivityIndicator,
   ScrollView,
@@ -19,7 +21,7 @@ import {
 } from '../../../Assets/Icons';
 import SongCardListView from '../../components/SongCardListView';
 
-const SongItem = ({ song, isFavourite }) => {
+const SongItem = ({ song, isFavourite, playSong }) => {
   const { title, artist, artwork, id, duration } = song;
   const [visible, setVisible] = useState(false);
   const [addToQueue, setAddToQueue] = useState(false);
@@ -142,16 +144,20 @@ const SongItem = ({ song, isFavourite }) => {
 
       <View style={styles.container}>
         <View style={styles.containerLeft}>
-          <Image
-            source={artwork ? { uri: artwork } : null}
-            style={styles.image}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
-            <Text style={styles.author}>{artist}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.subContainerLeft}
+            onPress={() => playSong(id)}>
+            <Image
+              source={artwork ? { uri: artwork } : null}
+              style={styles.image}
+            />
+            <View style={styles.textContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>{title}</Text>
+              </View>
+              <Text style={styles.author}>{artist}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity
@@ -159,6 +165,7 @@ const SongItem = ({ song, isFavourite }) => {
             onPress={() => toggleOverlay()}>
             <Image source={plusIcon} style={styles.icon} />
           </TouchableOpacity>
+          <Text style={styles.durationText}>{(duration / 60).toFixed(3)}</Text>
           <TouchableOpacity
             style={styles.iconContainer}
             onPress={isFavourite ? removeFromFavSongs : addToFavSongs}>
@@ -183,19 +190,26 @@ const icon = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    width: wp('100'),
     marginVertical: 16,
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    width: '90%',
   },
   textContainer: {
-    flexShrink: 1,
-    // width: '60%',
+    flex: 1,
+  },
+  titleContainer: {
+    flexDirection: 'row',
   },
   containerLeft: {
+    flex: 3,
+    width: '100%',
+  },
+  subContainerLeft: {
     flexDirection: 'row',
-    width: '90%',
     alignItems: 'center',
+  },
+  durationText: {
+    color: 'silver',
   },
   title: {
     color: 'white',
@@ -215,6 +229,7 @@ const styles = StyleSheet.create({
     tintColor: '#e81093',
   },
   iconContainer: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',

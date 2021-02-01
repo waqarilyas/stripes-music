@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Share, Text, Image, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -11,8 +11,6 @@ import {
 } from '../../../Assets/Icons';
 import { thousandSeparator } from '../../utils/Helpers';
 
-
-
 const NewsIconsCard = ({ viewCount, likedBy, shareCount, newsId }) => {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -24,9 +22,9 @@ const NewsIconsCard = ({ viewCount, likedBy, shareCount, newsId }) => {
       .doc(newsId)
       .onSnapshot((document) => {
         if (document.exists) {
-          const {likeCount, likedBy} = document.data();
+          const { likeCount, likedBy } = document.data();
           setLikeCount(likeCount);
-          if(likedBy?.includes(uid)) {
+          if (likedBy?.includes(uid)) {
             setLike(true);
           }
         }
@@ -38,39 +36,40 @@ const NewsIconsCard = ({ viewCount, likedBy, shareCount, newsId }) => {
     const counter = !like ? likeCount + 1 : likeCount - 1;
     setLikeCount(counter);
     setLike(!like);
-      const newsPath = firestore().collection('news').doc(newsId);
-      newsPath.update({
-        likedBy: !like ? firestore.FieldValue.arrayUnion(uid) : firestore.FieldValue.arrayRemove(uid),
-        likeCount: !like ? likeCount + 1 : likeCount > 0 ? likeCount - 1 : 0
-    }).then(() => {
-    
-    }).catch((err) => {
+    const newsPath = firestore().collection('news').doc(newsId);
+    newsPath
+      .update({
+        likedBy: !like
+          ? firestore.FieldValue.arrayUnion(uid)
+          : firestore.FieldValue.arrayRemove(uid),
+        likeCount: !like ? likeCount + 1 : likeCount > 0 ? likeCount - 1 : 0,
+      })
+      .then(() => {})
+      .catch((err) => {
         LOG('HANDLE LIKE STATUS', err);
-    });
+      });
   };
-  
+
   const onShare = async () => {
-      try {
-        const result = await Share.share({
-          message: 'Share Options',
-          url: 'https://www.google.com',
-          title: 'Share Music App',
-        });
-        if (result.action === Share.sharedAction) {
-          if (result.activityType) {
-
-            // shared with activity type of result.activityType
-          } else {
-            // shared
-          }
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
+    try {
+      const result = await Share.share({
+        message: 'Share Options',
+        url: 'https://www.google.com',
+        title: 'Share Stripes',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
         }
-      } catch (error) {
-        console.log(error);
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
       }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
 
   return (
     <View style={styles.container}>

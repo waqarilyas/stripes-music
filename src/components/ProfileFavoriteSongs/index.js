@@ -63,7 +63,6 @@ const ProfileFavoriteSongs = ({ navigation }) => {
         data={state.favSongs}
         keyExtractor={(item) => item.id}
         horizontal
-        contentContainerStyle={{ width: '100%' }}
         ListEmptyComponent={
           <EmptyProfileCard
             icon={mostPlayedHome}

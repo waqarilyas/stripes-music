@@ -65,9 +65,9 @@ const ArtistPopular = () => {
           renderItem={({ item }) => {
             const favSong = favSongs.some((song) => song.id == item.id);
             return (
-              <TouchableOpacity onPress={() => playSong(item)}>
-                <SongItem song={item} isFavourite={favSong} />
-              </TouchableOpacity>
+              // <TouchableOpacity onPress={() => playSong(item)}>
+              <SongItem song={item} isFavourite={favSong} playSong={playSong} />
+              // </TouchableOpacity>
             );
           }}
         />

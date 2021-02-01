@@ -17,20 +17,28 @@ const styles = StyleSheet.create({
   },
   textInput: {
     padding: hp('1.5'),
-    // width: '100%',
     fontSize: 16,
     borderRadius: 5,
     flex: 1,
   },
+  modalMainContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
   postContainer: {
+    backgroundColor: '#d1e0e0',
+    borderRadius: hp('1'),
+    padding: hp('3'),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   textStyle: {
-    color: '#c4c4c4',
+    color: '#000',
     marginLeft: widthPercentageToDP('2%'),
-    fontSize: 12,
+    fontSize: 14,
   },
   successImage: {
     resizeMode: 'contain',
