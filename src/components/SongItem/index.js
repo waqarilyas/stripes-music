@@ -73,7 +73,7 @@ const SongItem = ({ song, playlist }) => {
       });
   };
 
-  const removeFromFavSongs = () => {
+  const removeFromFavSongs = (id) => {
     firestore()
       .collection('users')
       .doc(uid)
@@ -209,7 +209,9 @@ const SongItem = ({ song, playlist }) => {
           <Text style={styles.durationText}>{(duration / 60).toFixed(3)}</Text>
           <TouchableOpacity
             style={styles.iconContainer}
-            onPress={isFavourite ? removeFromFavSongs : addToFavSongs}>
+            onPress={() => {
+              isFavourite ? removeFromFavSongs(id) : addToFavSongs(id);
+            }}>
             <Image
               source={heartGrayIcon}
               style={isFavourite ? styles.favoriteIcon : styles.icon}

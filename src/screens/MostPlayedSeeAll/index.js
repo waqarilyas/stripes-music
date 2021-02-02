@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { FlatList, View, Text } from 'react-native';
 import { Divider } from 'react-native-elements';
 import SongItem from '../../components/SongItem';
@@ -17,8 +17,8 @@ const initialState = {
 
 const MostPlayedSeeAll = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [favSongs, setFavSongs] = useState([]);
   const { mostPlayedSongs } = useSelector((state) => state.root.firebase);
-
   useEffect(() => {
     getOrderedCollections('songs', 'playCount', 'desc', (collection) =>
       dispatch({ songs: collection }),
@@ -32,6 +32,18 @@ const MostPlayedSeeAll = () => {
         dispatch({ favoriteSongs: favoriteSongsList });
       }
     });
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs')
+      .onSnapshot((snapshot) => {
+        const favSongs = [];
+        snapshot.docs.forEach((doc) => {
+          favSongs.push(doc.data());
+        });
+        setFavSongs(favSongs);
+      });
+    return () => listener;
   }, []);
 
   return (
