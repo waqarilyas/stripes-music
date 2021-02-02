@@ -27,7 +27,7 @@ const SongItem = ({ song, isFavourite }) => {
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const uid = auth().currentUser.uid;
 
-  const addToFavSongs = () => {
+  const addToFavSongs = (id) => {
     firestore()
       .collection('users')
       .doc(uid)
@@ -42,7 +42,7 @@ const SongItem = ({ song, isFavourite }) => {
       });
   };
 
-  const removeFromFavSongs = (song) => {
+  const removeFromFavSongs = (id) => {
     firestore()
       .collection('users')
       .doc(uid)
@@ -161,7 +161,9 @@ const SongItem = ({ song, isFavourite }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconContainer}
-            onPress={isFavourite ? removeFromFavSongs : addToFavSongs}>
+            onPress={() => {
+              isFavourite ? removeFromFavSongs(id) : addToFavSongs(id);
+            }}>
             <Image
               source={heartGrayIcon}
               style={isFavourite ? styles.favoriteIcon : styles.icon}

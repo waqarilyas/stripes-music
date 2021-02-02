@@ -101,11 +101,13 @@ const AlbumDetail = () => {
             return (
               <TouchableOpacity onPress={() => playSong(item)}>
                 <SongItem
-                  title={title}
-                  author={artist}
-                  image={artwork}
-                  id={id}
-                  duration={duration}
+                  song={{
+                    title: title,
+                    artist: artist,
+                    artwork: artwork,
+                    id: id,
+                    duration: duration,
+                  }}
                 />
               </TouchableOpacity>
             );
