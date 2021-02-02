@@ -1,9 +1,11 @@
 import auth from '@react-native-firebase/auth';
+import TrackPlayer from 'react-native-track-player';
 import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Avatar, CheckBox, Overlay } from 'react-native-elements';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
 import {
   ActivityIndicator,
@@ -19,15 +21,42 @@ import {
   queueIcon,
   tickIcon,
 } from '../../../Assets/Icons';
+import { useDispatch } from 'react-redux';
+import { fullScreenChange, changeSong } from '../../Redux/Reducers/audioSlice';
+import {
+  addAlbumPlayCount,
+  addPlayCount,
+} from '../../Redux/Reducers/firebaseSlice';
+
 import SongCardListView from '../../components/SongCardListView';
 
-const SongItem = ({ song, isFavourite, playSong }) => {
+const SongItem = ({ song, playlist }) => {
   const { title, artist, artwork, id, duration } = song;
   const [visible, setVisible] = useState(false);
+  const [isFavourite, setIsFavourite] = useState();
   const [addToQueue, setAddToQueue] = useState(false);
   const [checked, setChecked] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
+  const dispatch = useDispatch();
   const uid = auth().currentUser.uid;
+
+  useEffect(() => {
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs')
+      .where('isFavourite', '==', true)
+      .onSnapshot((snapshot) => {
+        let isFavourite = false;
+        snapshot.forEach((doc) => {
+          if (doc.data().id == song.id) {
+            isFavourite = true;
+          }
+        });
+        setIsFavourite(isFavourite);
+      });
+    return () => listener();
+  });
 
   const addToFavSongs = () => {
     firestore()
@@ -35,7 +64,7 @@ const SongItem = ({ song, isFavourite, playSong }) => {
       .doc(uid)
       .collection('favSongs')
       .doc(id)
-      .set({ ...song })
+      .set({ ...song, isFavourite: true })
       .then(() => {
         console.log('success');
       })
@@ -44,19 +73,31 @@ const SongItem = ({ song, isFavourite, playSong }) => {
       });
   };
 
-  const removeFromFavSongs = (song) => {
+  const removeFromFavSongs = () => {
     firestore()
       .collection('users')
       .doc(uid)
       .collection('favSongs')
       .doc(id)
-      .delete()
+      .update({ isFavourite: false })
       .then(() => {
         console.log('success');
       })
       .catch((error) => {
         console.log('error', error);
       });
+  };
+
+  const playSong = async (currentSong) => {
+    try {
+      dispatch(changeSong(currentSong));
+      await TrackPlayer.add(playlist);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(currentSong.id));
+      dispatch(addToRecentlyPlayed(currentSong));
+    } catch (error) {
+      console.log('PLAY SONG', error);
+    }
   };
 
   const toggleOverlay = () => {
@@ -146,7 +187,7 @@ const SongItem = ({ song, isFavourite, playSong }) => {
         <View style={styles.containerLeft}>
           <TouchableOpacity
             style={styles.subContainerLeft}
-            onPress={() => playSong(id)}>
+            onPress={() => playSong(song)}>
             <Image
               source={artwork ? { uri: artwork } : null}
               style={styles.image}

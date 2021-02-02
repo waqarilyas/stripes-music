@@ -94,21 +94,8 @@ const AlbumDetail = () => {
           data={albumSongs}
           ItemSeparatorComponent={() => <Divider style={styles.divider} />}
           keyExtractor={(item) => item.id}
-          renderItem={({
-            item,
-            item: { title, artist, artwork, id, duration },
-          }) => {
-            return (
-              <TouchableOpacity onPress={() => playSong(item)}>
-                <SongItem
-                  title={title}
-                  author={artist}
-                  image={artwork}
-                  id={id}
-                  duration={duration}
-                />
-              </TouchableOpacity>
-            );
+          renderItem={({ item }) => {
+            return <SongItem song={item} playlist={albumSongs} />;
           }}
         />
       </Animated.View>

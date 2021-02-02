@@ -48,6 +48,7 @@ const Playlist = ({ navigation, route }) => {
       .collection('users')
       .doc(uid)
       .collection('favSongs')
+      .where('isFavourite', '==', true)
       .onSnapshot((snapshot) => {
         const favSongs = [];
         snapshot.docs.forEach((doc) => {
@@ -143,7 +144,7 @@ const Playlist = ({ navigation, route }) => {
       .doc(uid)
       .collection('favSongs')
       .doc(song.id)
-      .set({ ...song })
+      .set({ ...song, isFavourite: true })
       .then(() => {
         console.log('success');
       })
@@ -158,7 +159,7 @@ const Playlist = ({ navigation, route }) => {
       .doc(uid)
       .collection('favSongs')
       .doc(song.id)
-      .delete()
+      .update({ isFavourite: false })
       .then(() => {
         console.log('success');
       })

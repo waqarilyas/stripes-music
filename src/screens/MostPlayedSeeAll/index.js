@@ -44,11 +44,8 @@ const MostPlayedSeeAll = () => {
         data={mostPlayedSongs}
         ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         keyExtractor={(item) => item.id}
-        renderItem={({ item: { id, title, artist, artwork } }) => {
-          // const isFavorite = state.favoriteSongs.includes(id);
-          return (
-            <SongItem id={id} title={title} author={artist} image={artwork} />
-          );
+        renderItem={({ item }) => {
+          return <SongItem song={item} playlist={mostPlayedSongs} />;
         }}
       />
     </View>
