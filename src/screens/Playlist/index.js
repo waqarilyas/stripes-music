@@ -21,7 +21,11 @@ import { LOG } from '../../utils/Constants';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
 import styles from './styles';
-import { changeToMiniModal, changeSong } from '../../Redux/Reducers/audioSlice';
+import {
+  changeToMiniModal,
+  changeSong,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
@@ -121,6 +125,7 @@ const Playlist = ({ navigation, route }) => {
       dispatch(changeSong(playlistSongs[0]));
       dispatch(changeToMiniModal(true));
       await TrackPlayer.add(playlistSongs);
+      dispatch(setPlaylist(playlistSongs));
       dispatch(addPlayCount(playlistSongs[0].id));
       dispatch(addToRecentlyPlayed(playlistSongs[0]));
     } catch (error) {

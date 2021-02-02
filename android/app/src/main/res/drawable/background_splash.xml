@@ -5,6 +5,8 @@
     <item android:drawable="@color/primary_dark" />
     <item
         android:drawable="@drawable/splash_screen"
+        android:height="90dp"
+        android:width="250dp"
 
         android:gravity="center"
     />

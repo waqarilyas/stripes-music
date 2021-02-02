@@ -22,7 +22,11 @@ import {
   tickIcon,
 } from '../../../Assets/Icons';
 import { useDispatch } from 'react-redux';
-import { fullScreenChange, changeSong } from '../../Redux/Reducers/audioSlice';
+import {
+  fullScreenChange,
+  setPlaylist,
+  changeSong,
+} from '../../Redux/Reducers/audioSlice';
 import {
   addAlbumPlayCount,
   addPlayCount,
@@ -88,12 +92,13 @@ const SongItem = ({ song, playlist }) => {
       });
   };
 
-  const playSong = async (currentSong) => {
+  const playSong = async (currentSong, playlist) => {
     try {
       dispatch(changeSong(currentSong));
       await TrackPlayer.add(playlist);
       dispatch(fullScreenChange(true));
       dispatch(addPlayCount(currentSong.id));
+      dispatch(setPlaylist(playlist));
       dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {
       console.log('PLAY SONG', error);
@@ -187,7 +192,7 @@ const SongItem = ({ song, playlist }) => {
         <View style={styles.containerLeft}>
           <TouchableOpacity
             style={styles.subContainerLeft}
-            onPress={() => playSong(song)}>
+            onPress={() => playSong(song, playlist)}>
             <Image
               source={artwork ? { uri: artwork } : null}
               style={styles.image}

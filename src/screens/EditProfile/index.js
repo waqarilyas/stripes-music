@@ -42,7 +42,7 @@ const EditProfile = ({ navigation, route }) => {
   const { user } = useSelector((state) => state.root.firebase);
   const [ext, setExt] = useState(null);
   const [fileUri, setFileUri] = useState(null);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const toggleSwitch = () => setIsEnabled(!isEnabled);

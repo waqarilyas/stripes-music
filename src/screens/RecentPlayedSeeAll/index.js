@@ -6,7 +6,7 @@ import SongCardListView from '../../components/SongCardListView';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   changeSong,
-  pushToPlaylist,
+  setPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
@@ -18,23 +18,14 @@ const RecentPlayedSeeAll = () => {
   const dispatch = useDispatch();
   const { allHistory } = useSelector((state) => state.root.firebase);
 
-  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+  const playSong = async (currentSong, playlist) => {
     try {
-      const result = {
-        title,
-        artist,
-        artwork,
-        url,
-        duration,
-        id,
-        createdAt: +new Date(),
-      };
-      dispatch(changeSong(result));
-      dispatch(pushToPlaylist(result));
-      await TrackPlayer.add(result);
+      dispatch(changeSong(currentSong));
+      await TrackPlayer.add(playlist);
       dispatch(fullScreenChange(true));
-      dispatch(addPlayCount(id));
-      dispatch(addToRecentlyPlayed(result));
+      dispatch(setPlaylist(playlist));
+      dispatch(addPlayCount(currentSong.id));
+      dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {
       LOG('PLAY SONG', error);
     }
@@ -56,7 +47,7 @@ const RecentPlayedSeeAll = () => {
           item: { id, title, artist, artwork, duration },
         }) => {
           return (
-            <TouchableOpacity onPress={() => playSong(item)}>
+            <TouchableOpacity onPress={() => playSong(item, allHistory)}>
               <SongCardListView
                 title={title}
                 artist={artist}
