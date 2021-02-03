@@ -24,7 +24,7 @@ const MostPlayedSeeAll = () => {
       dispatch({ songs: collection }),
     );
 
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const userDoc = firestore().collection('users').doc(uid);
     userDoc.get().then((document) => {
       if (document.exists) {

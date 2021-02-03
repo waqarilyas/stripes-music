@@ -25,7 +25,7 @@ const ProfileArtists = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const listener = firestore()
       .collection('users')
       .doc(uid)

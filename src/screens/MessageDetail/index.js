@@ -22,7 +22,7 @@ const MessageDetail = ({ route, navigation }) => {
     });
   }, [navigation]);
 
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const passedId = otherUser.id;
 
   const [messages, setMessages] = useState([]);
@@ -109,7 +109,7 @@ const MessageDetail = ({ route, navigation }) => {
         },
         user: {
           avatar: localUser.profilePicture,
-          id: auth().currentUser.uid,
+          id: auth().currentUser?.uid,
           name: localUser.fullName,
         },
         members: [otherUser.id, uid],
@@ -132,7 +132,7 @@ const MessageDetail = ({ route, navigation }) => {
       createdAt: +new Date(),
       sentBy: 'user',
       user: {
-        _id: auth().currentUser.uid,
+        _id: auth().currentUser?.uid,
         name: localUser.fullName,
         avatar: localUser.profilePicture,
       },
@@ -179,7 +179,7 @@ const MessageDetail = ({ route, navigation }) => {
         messages={messages}
         onSend={handleSend}
         user={{
-          _id: auth().currentUser.uid,
+          _id: auth().currentUser?.uid,
         }}
         inverted
         isLoadingEarlier

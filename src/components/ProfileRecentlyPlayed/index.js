@@ -17,7 +17,7 @@ const ProfileRecentlyPlayed = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const userDoc = firestore().collection('users').doc(uid);
 
     let recentlyPlayedSongs = [];

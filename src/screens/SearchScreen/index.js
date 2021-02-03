@@ -72,7 +72,7 @@ const SearchScreen = ({ navigation }) => {
   }, [selected]);
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     firestore()
       .collection('users')
       .doc(uid)
@@ -97,7 +97,7 @@ const SearchScreen = ({ navigation }) => {
   };
 
   const addToFirestore = async (text) => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const path = firestore().collection('users').doc(uid);
     await path.collection('recentSearches').add({
       text,
@@ -196,13 +196,13 @@ const SearchScreen = ({ navigation }) => {
             }}
           />
         ) : (
-          <View style={styles.recentSearchesContainer}>
-            <Image source={hourGlassIcon} style={styles.recentIcon} />
-            <Text style={styles.recentSearchesText}>
-              No recent searches yet!
+            <View style={styles.recentSearchesContainer}>
+              <Image source={hourGlassIcon} style={styles.recentIcon} />
+              <Text style={styles.recentSearchesText}>
+                No recent searches yet!
             </Text>
-          </View>
-        )}
+            </View>
+          )}
       </SafeAreaView>
     </>
   );

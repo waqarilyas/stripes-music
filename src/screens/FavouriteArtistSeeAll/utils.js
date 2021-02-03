@@ -32,7 +32,7 @@ export const Add = () => {
   favoriteArtists.forEach((obj) => {
     firestore()
       .collection('users')
-      .doc(auth().currentUser.uid)
+      .doc(auth().currentUser?.uid)
       .set(
         {
           favoriteArtists: firestore.FieldValue.arrayUnion(obj),

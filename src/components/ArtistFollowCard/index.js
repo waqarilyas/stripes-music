@@ -10,7 +10,7 @@ import styles from './styles';
 
 const ArtistFollowCard = ({ artist }) => {
   const [status, setStatus] = useState(false);
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const { user } = useSelector((state) => state.root.firebase);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const ArtistFollowCard = ({ artist }) => {
   }, []);
 
   const handleFollowingStatus = async () => {
-    if (auth().currentUser.isAnonymous) {
+    if (!uid) {
       Alert.alert(
         'Login Required',
         'You must be logged in to follow this Artist!',

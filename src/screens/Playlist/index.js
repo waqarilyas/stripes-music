@@ -37,7 +37,7 @@ const Playlist = ({ navigation, route }) => {
   const [playlists, setPlaylists] = useState([]);
   const [targetSong, setTargetSong] = useState();
   const [visible, setVisible] = useState(false);
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const dispatch = useDispatch();
   const playbackState = usePlaybackState();
 
@@ -116,7 +116,7 @@ const Playlist = ({ navigation, route }) => {
   const resetPlay = async () => {
     try {
       await TrackPlayer.reset();
-    } catch (error) {}
+    } catch (error) { }
     dispatch(changeToMiniModal(false));
   };
 

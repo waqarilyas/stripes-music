@@ -28,7 +28,7 @@ const ProfileFavoriteSongs = ({ navigation }) => {
   const reduxDispatch = useDispatch();
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     firestore()
       .collection('users')
       .doc(uid)

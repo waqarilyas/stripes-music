@@ -76,7 +76,7 @@ const SearchResultsScreen = ({ query, selected }) => {
   }, [query]);
 
   // const addToFirestore = async (text) => {
-  //   const uid = auth().currentUser.uid;
+  //   const uid = auth().currentUser?.uid;
   //   const path = firestore().collection('users').doc(uid);
   //   await path.collection('recentSearches').add({
   //     text,
@@ -189,7 +189,7 @@ const SearchResultsScreen = ({ query, selected }) => {
             name="Artists"
             isRequired={false}
             icon={artistIcon}
-            // onPress={() => navigation.navigate('FavouriteArtistSeeAll')}
+          // onPress={() => navigation.navigate('FavouriteArtistSeeAll')}
           />
           <FlatList
             data={searchResults.artists}

@@ -213,7 +213,7 @@ export const getArtistPopularSongs = createAsyncThunk(
 );
 
 export const getUser = createAsyncThunk('firebase/getUser', async () => {
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const path = firestore().collection('users');
   const document = await path.doc(uid).get();
   if (document.exists) {
@@ -238,7 +238,7 @@ export const getArtistPlaylists = createAsyncThunk(
 
 export const getHistory = createAsyncThunk('firebase/getHistory', async () => {
   let data = [];
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const path = firestore().collection('users').doc(uid).collection('history');
   const documents = await path.orderBy('createdAt', 'desc').limit(5).get();
   documents.forEach((document) => {
@@ -253,7 +253,7 @@ export const getAllHistory = createAsyncThunk(
   'firebase/getAllHistory',
   async () => {
     let data = [];
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const path = firestore().collection('users').doc(uid).collection('history');
     const documents = await path.orderBy('createdAt', 'desc').get();
     documents.forEach((document) => {
@@ -302,7 +302,7 @@ export const getTopAllArtists = createAsyncThunk(
 export const removeFromFavorites = createAsyncThunk(
   'firebase/removeFromFavorites',
   async (id) => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     await firestore()
       .collection('users')
       .doc(uid)
@@ -422,7 +422,7 @@ export const getAllLatestVideos = createAsyncThunk(
 export const addToRecentlyPlayed = createAsyncThunk(
   'firebase/addToRecentlyPlayed',
   async (result) => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     await firestore()
       .collection('users')
       .doc(uid)
@@ -453,7 +453,7 @@ export const addPlayCount = createAsyncThunk(
 export const updateUser = createAsyncThunk('firebase/updateUser', (newData) => {
   firestore()
     .collection('users')
-    .doc(firebase.auth().currentUser.uid)
+    .doc(firebase.auth().currentUser?.uid)
     .set(newData, {
       merge: true,
     });

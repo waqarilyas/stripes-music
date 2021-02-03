@@ -75,7 +75,7 @@ const ChangePassword = ({ navigation }) => {
 
   const user = firebase.auth().currentUser;
 
-  console.log('-----usr---', user);
+
 
   const reauthenticate = () => {
     var user = firebase.auth().currentUser;

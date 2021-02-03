@@ -60,7 +60,7 @@ const history = [
 ];
 
 export const AddHistory = () => {
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   history.forEach((doc) => {
     firestore()
       .collection('users')

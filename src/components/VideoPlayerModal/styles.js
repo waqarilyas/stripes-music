@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 const styles = StyleSheet.create({
   commentDivider: {
     marginVertical: 12,
@@ -36,15 +36,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   submit: {
-    backgroundColor: '#F5148E',
-    marginTop: 20,
-    paddingHorizontal: 14,
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    paddingHorizontal: hp('2.5'),
+    paddingVertical: hp('2'),
+    borderRadius: hp('2'),
   },
   submitText: {
-    color: 'white',
+    color: '#000',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   seek: {
@@ -158,7 +157,34 @@ const styles = StyleSheet.create({
     tintColor: 'white',
     resizeMode: 'contain',
     position: 'absolute',
-  }
+  },
+  commentMainContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignContent: 'flex-start',
+  },
+  commentContainer: {
+    backgroundColor: '#31282F',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: hp('2.5'),
+    marginVertical: hp('2.5'),
+    borderRadius: hp('2'),
+    // alignSelf: 'flex-start',
+    flex: 1,
+  },
+  commentButtonText: {
+    color: 'white',
+    fontSize: 18,
+    width: '90%',
+    // textAlign: 'center',
+    paddingHorizontal: 22,
+  },
+  sendButtonContainer: {
+    position: 'absolute',
+    right: 0,
+  },
 });
 
 export default styles;

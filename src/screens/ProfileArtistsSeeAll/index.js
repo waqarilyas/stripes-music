@@ -17,7 +17,7 @@ const ProfileArtistsSeeAll = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     getQueriedCollections(
       'artists',
       'followedBy',

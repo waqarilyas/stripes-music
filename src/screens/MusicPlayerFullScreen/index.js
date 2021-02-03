@@ -111,7 +111,7 @@ const MusicPlayerFullscreen = ({
   };
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const listener = firestore()
       .collection('users')
       .doc(uid)
@@ -135,7 +135,7 @@ const MusicPlayerFullscreen = ({
       animationType="slide"
       transparent={true}
       visible={isVisible}
-      onRequestClose={() => {}}>
+      onRequestClose={() => { }}>
       <FullScreenOverlay
         visible={visible}
         onBackdropPress={toggleOverlay}
@@ -236,17 +236,17 @@ const MusicPlayerFullscreen = ({
                 <ActivityIndicator color={'black'} />
               </View>
             ) : (
-              <TouchableOpacity onPress={togglePlayback}>
-                <Image
-                  source={playing ? pauseButton : playButton}
-                  style={
-                    playlistVisible
-                      ? styles.playlistOpenMiddleIcon
-                      : styles.fullscreenMiddleIcon
-                  }
-                />
-              </TouchableOpacity>
-            )}
+                <TouchableOpacity onPress={togglePlayback}>
+                  <Image
+                    source={playing ? pauseButton : playButton}
+                    style={
+                      playlistVisible
+                        ? styles.playlistOpenMiddleIcon
+                        : styles.fullscreenMiddleIcon
+                    }
+                  />
+                </TouchableOpacity>
+              )}
 
             <TouchableOpacity onPress={skipToNext}>
               <Image

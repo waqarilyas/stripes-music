@@ -103,10 +103,13 @@ const NewsDetails = () => {
     Animated.timing(widthAnim, {
       toValue: screenWidth * 0.65,
       duartion: 1000,
+      useNativeDriver: false
+
     }).start();
     Animated.timing(opacityAnim, {
       toValue: 1,
       duration: 500,
+      useNativeDriver: false
     }).start();
   };
 
@@ -114,10 +117,13 @@ const NewsDetails = () => {
     Animated.timing(widthAnim, {
       toValue: screenWidth * 0.9,
       duartion: 1500,
+      useNativeDriver: true
+
     }).start();
     Animated.timing(opacityAnim, {
       toValue: 0,
       duration: 500,
+      useNativeDriver: true
     }).start();
   };
 
@@ -132,11 +138,11 @@ const NewsDetails = () => {
       comment: commentText,
       createdAt: +new Date(),
       id: '',
-      image: auth().currentUser.photoURL || '',
+      image: auth().currentUser?.photoURL || '',
       postId: news.id,
       updatedAt: +new Date(),
-      userId: auth().currentUser.uid,
-      username: user.fullName || '',
+      userId: auth().currentUser?.uid,
+      username: user?.fullName || '',
     };
 
     firestore()
@@ -220,30 +226,33 @@ const NewsDetails = () => {
               shareCount={news.shareCount}
               newsId={news.id}
             />
-            <View style={styles.commentMainContainer}>
-              <Animated.View
-                style={[styles.commentContainer, { width: widthAnim }]}>
-                <TextInput
-                  value={commentText}
-                  style={styles.commentButtonText}
-                  onFocus={() => commentOpen()}
-                  placeholder="Leave a comment"
-                  placeholderTextColor="gray"
-                  onChangeText={(input) => setCommentText(input)}
-                />
-              </Animated.View>
-              <Animated.View
-                style={[
-                  styles.sendButtonContainer,
-                  {
-                    opacity: opacityAnim,
-                  },
-                ]}>
-                <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-                  <Text style={styles.submitText}>SEND</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
+
+            {user &&
+              <View style={styles.commentMainContainer}>
+                <Animated.View
+                  style={[styles.commentContainer, { width: widthAnim }]}>
+                  <TextInput
+                    value={commentText}
+                    style={styles.commentButtonText}
+                    onFocus={() => commentOpen()}
+                    placeholder="Leave a comment"
+                    placeholderTextColor="gray"
+                    onChangeText={(input) => setCommentText(input)}
+                  />
+                </Animated.View>
+                <Animated.View
+                  style={[
+                    styles.sendButtonContainer,
+                    {
+                      opacity: opacityAnim,
+                    },
+                  ]}>
+                  <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+                    <Text style={styles.submitText}>SEND</Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+            }
 
             <View style={styles.commentSection}>
               {state.comments ? (
@@ -280,18 +289,18 @@ const NewsDetails = () => {
                     ) : null}
 
                     {stateVals.showMore.length >= 5 &&
-                    stateVals.showMore.length !== commentCount ? (
-                      <View style={styles.showContainer}>
-                        <Text onPress={handleShowMore} style={styles.showText}>
-                          Show More
+                      stateVals.showMore.length !== commentCount ? (
+                        <View style={styles.showContainer}>
+                          <Text onPress={handleShowMore} style={styles.showText}>
+                            Show More
                         </Text>
-                      </View>
-                    ) : null}
+                        </View>
+                      ) : null}
                   </View>
                 </>
               ) : (
-                <ActivityIndicator color="black" />
-              )}
+                  <ActivityIndicator color="black" />
+                )}
             </View>
 
             <SectionHeader
@@ -324,14 +333,14 @@ const NewsDetails = () => {
                   }}
                 />
               ) : (
-                <ActivityIndicator color="white" />
-              )}
+                  <ActivityIndicator color="white" />
+                )}
             </View>
           </View>
         </Pressable>
       ) : (
-        <ActivityIndicator color={'white'} />
-      )}
+          <ActivityIndicator color={'white'} />
+        )}
     </Block>
   );
 };

@@ -17,7 +17,7 @@ const findChatId = (userId, passedId) => {
 };
 
 const Community = ({ navigation }) => {
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const [state, dispatch] = useReducer(reducer, initialState);
   const [searchVisible, setSearchVisible] = useState(false);
 

@@ -23,7 +23,7 @@ const initialState = {
 const NewMessage = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [initializing, setInitializing] = useState(true);
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
 
   useEffect(() => {
     setTimeout(() => {
@@ -120,8 +120,8 @@ const NewMessage = ({ navigation }) => {
                     source={
                       profilePicture
                         ? {
-                            uri: profilePicture,
-                          }
+                          uri: profilePicture,
+                        }
                         : require('../../../Assets/Icons/icon-profile-placeholder.jpg')
                     }
                   />

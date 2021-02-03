@@ -38,7 +38,7 @@ const options = {
 
 const EditProfile = ({ navigation, route }) => {
   const { profilePicture } = route.params;
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const { user } = useSelector((state) => state.root.firebase);
   const [ext, setExt] = useState(null);
   const [fileUri, setFileUri] = useState(null);

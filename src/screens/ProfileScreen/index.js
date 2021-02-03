@@ -33,7 +33,7 @@ const ProfileScreen = ({ navigation }) => {
   const avatarRef = useRef();
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     firestore()
       .collection('users')
       .doc(uid)
@@ -67,14 +67,14 @@ const ProfileScreen = ({ navigation }) => {
             source={{ uri: user.profilePicture }}
           />
         ) : (
-          <Avatar
-            ref={avatarRef}
-            rounded
-            containerStyle={styles.profilePictureContainer}
-            overlayContainerStyle={styles.profilePicOverlayContainer}
-            renderPlaceholderContent={<ProfilePicPlaceholder />}
-          />
-        )}
+            <Avatar
+              ref={avatarRef}
+              rounded
+              containerStyle={styles.profilePictureContainer}
+              overlayContainerStyle={styles.profilePicOverlayContainer}
+              renderPlaceholderContent={<ProfilePicPlaceholder />}
+            />
+          )}
 
         <View style={styles.pageTopNameView}>
           <View style={styles.header}>

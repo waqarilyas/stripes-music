@@ -14,7 +14,7 @@ import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 const ArtistPopular = () => {
   const dispatch = useDispatch();
   const [favSongs, setFavSongs] = useState();
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const { artistPopularSongs } = useSelector((state) => state.root.firebase);
 
   useEffect(() => {

@@ -33,7 +33,7 @@ const FullScreenOverlay = ({
   const [added, setAdded] = useState(false);
   const [removed, setRemoved] = useState(false);
   const dispatch = useDispatch();
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
 
   useEffect(() => {
     if (added) {
@@ -61,7 +61,7 @@ const FullScreenOverlay = ({
         setAdded(true);
         console.log('-----SUCCESS----', res);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const removeFromPlaylist = (playlistId) => {
@@ -76,7 +76,7 @@ const FullScreenOverlay = ({
       .then((res) => {
         setRemoved(true);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const resumePlayer = () => {

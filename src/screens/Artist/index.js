@@ -18,7 +18,7 @@ import styles from './styles';
 const Artist = () => {
   const { user, artist } = useSelector((state) => state.root.firebase);
   const [status, setStatus] = useState(false);
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid
 
   useEffect(() => {
     const listener = firestore()
@@ -36,7 +36,9 @@ const Artist = () => {
   }, [artist]);
 
   const handleFollowingStatus = async () => {
-    if (auth().currentUser.isAnonymous) {
+
+
+    if (!uid) {
       Alert.alert(
         'Login Required',
         'You must be logged in to follow this Artist!',
@@ -112,10 +114,10 @@ const Artist = () => {
       <ArtistsTabs />
     </>
   ) : (
-    <View style={styles.loadingContainer}>
-      <ActivityIndicator color={'white'} />
-    </View>
-  );
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator color={'white'} />
+      </View>
+    );
 };
 
 export default Artist;

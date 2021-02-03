@@ -20,36 +20,44 @@ import { PLAYER_CONFIG } from './src/utils/Constants';
 const App = () => {
   let [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     SplashScreen.hide();
     SetupAudioPlayer();
     const authSubscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    AppState.addEventListener('change', handleAppStateChange);
+
+
+    let user = store?.getState().root.firebase?.user
+    console.log('---current user----', user)
+
+    !user?.isPaidUser && AppState.addEventListener('change', handleAppStateChange);
 
     return () => {
       authSubscriber();
-      AppState.removeEventListener('change', handleAppStateChange);
+      !user?.isPaidUser && AppState.removeEventListener('change', handleAppStateChange);
     };
-  }, []);
+  }, [store?.getState().root.firebase?.user]);
 
   const onAuthStateChanged = (result) => {
-    if (result) {
-      store.dispatch(getUser());
-      setLoading(false);
-    } else {
-      auth()
-        .signInAnonymously()
-        .then(() => {
-          setLoading(false);
-          store.dispatch(setUser({ isAnonymous: true }));
-        })
-        .catch(() => {
-          setLoading(false);
-        });
-    }
+    // if (result) {
+    store.dispatch(getUser());
+    setLoading(false);
+    // }
+    // else {
+    //   auth()
+    //     .signInAnonymously()
+    //     .then(() => {
+    //       setLoading(false);
+    //       store.dispatch(setUser({ isAnonymous: true }));
+    //     })
+    //     .catch(() => {
+    //       setLoading(false);
+    //     });
+    // }
   };
 
   const SetupAudioPlayer = async () => {
+    TrackPlayer.setupPlayer()
     TrackPlayer.updateOptions({
       jumpInterval: 15,
       stopWithApp: false,
@@ -85,12 +93,12 @@ const App = () => {
               <ActivityIndicator size={'large'} color="white" />
             </View>
           ) : (
-            <UserProvider>
-              <View style={{ flex: 1, backgroundColor: 'black' }}>
-                <MainAppStack />
-              </View>
-            </UserProvider>
-          )}
+              <UserProvider>
+                <View style={{ flex: 1, backgroundColor: 'black' }}>
+                  <MainAppStack />
+                </View>
+              </UserProvider>
+            )}
         </NavigationContainer>
       </Provider>
       <Toast ref={(ref) => Toast.setRef(ref)} />

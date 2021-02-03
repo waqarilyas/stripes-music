@@ -42,7 +42,7 @@ const SongItem = ({ song, playlist }) => {
   const [checked, setChecked] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const dispatch = useDispatch();
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
 
   useEffect(() => {
     const listener = firestore()
@@ -127,6 +127,7 @@ const SongItem = ({ song, playlist }) => {
           />
 
           <View style={styles.overlayBottom}>
+
             <TouchableOpacity
               onPress={() => setPlaylistOpen(!playlistOpen)}
               style={styles.overLayBottomContainer}>
@@ -142,13 +143,14 @@ const SongItem = ({ song, playlist }) => {
               {addToQueue ? (
                 <Image source={tickIcon} style={styles.tick} />
               ) : (
-                <>
-                  <Avatar size={40} rounded source={queueIcon} />
-                  <Text style={styles.overlayTitle}>Add To Queue</Text>
-                </>
-              )}
+                  <>
+                    <Avatar size={40} rounded source={queueIcon} />
+                    <Text style={styles.overlayTitle}>Add To Queue</Text>
+                  </>
+                )}
             </TouchableOpacity>
           </View>
+
           {playlistOpen && (
             <View
               style={{
@@ -190,6 +192,7 @@ const SongItem = ({ song, playlist }) => {
 
       <View style={styles.container}>
         <View style={styles.containerLeft}>
+
           <TouchableOpacity
             style={styles.subContainerLeft}
             onPress={() => playSong(song, playlist)}>
@@ -206,22 +209,27 @@ const SongItem = ({ song, playlist }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.iconContainer}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => toggleOverlay()}>
-            <Image source={plusIcon} style={styles.icon} />
-          </TouchableOpacity>
+          {uid &&
+
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => toggleOverlay()}>
+              <Image source={plusIcon} style={styles.icon} />
+            </TouchableOpacity>
+          }
           <Text style={styles.durationText}>{(duration / 60).toFixed(3)}</Text>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => {
-              isFavourite ? removeFromFavSongs(id) : addToFavSongs(id);
-            }}>
-            <Image
-              source={heartGrayIcon}
-              style={isFavourite ? styles.favoriteIcon : styles.icon}
-            />
-          </TouchableOpacity>
+          {uid &&
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => {
+                isFavourite ? removeFromFavSongs(id) : addToFavSongs(id);
+              }}>
+              <Image
+                source={heartGrayIcon}
+                style={isFavourite ? styles.favoriteIcon : styles.icon}
+              />
+            </TouchableOpacity>
+          }
         </View>
       </View>
     </>

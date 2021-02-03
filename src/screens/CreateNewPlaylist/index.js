@@ -31,7 +31,7 @@ const CreateNewPlaylist = ({ navigation, route, resumePlayer }) => {
   const [fileUri, setFileuri] = useState(null);
   const [ext, setExt] = useState('');
   const [privacy, setPrivacy] = useState(false);
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
   const dispatch = useDispatch();
 
   const chooseImage = () => {

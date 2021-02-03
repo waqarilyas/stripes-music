@@ -14,7 +14,7 @@ import { thousandSeparator } from '../../utils/Helpers';
 const NewsIconsCard = ({ viewCount, likedBy, shareCount, newsId }) => {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const uid = auth().currentUser.uid;
+  const uid = auth().currentUser?.uid;
 
   useEffect(() => {
     const listener = firestore()
@@ -44,7 +44,7 @@ const NewsIconsCard = ({ viewCount, likedBy, shareCount, newsId }) => {
           : firestore.FieldValue.arrayRemove(uid),
         likeCount: !like ? likeCount + 1 : likeCount > 0 ? likeCount - 1 : 0,
       })
-      .then(() => {})
+      .then(() => { })
       .catch((err) => {
         LOG('HANDLE LIKE STATUS', err);
       });
@@ -78,17 +78,21 @@ const NewsIconsCard = ({ viewCount, likedBy, shareCount, newsId }) => {
         <Text style={styles.count}>{thousandSeparator(viewCount)}</Text>
       </View>
 
-      <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={likeHandler}>
-          <Image
-            source={newLikeIconWhite}
-            style={like ? styles.activatedIcon : styles.icon}
-          />
-        </TouchableOpacity>
-        <Text style={like ? styles.activatedCount : styles.count}>
-          {thousandSeparator(likeCount)}
-        </Text>
-      </View>
+      {uid &&
+
+        <View style={styles.iconContainer}>
+          <TouchableOpacity onPress={likeHandler}>
+            <Image
+              source={newLikeIconWhite}
+              style={like ? styles.activatedIcon : styles.icon}
+            />
+          </TouchableOpacity>
+          <Text style={like ? styles.activatedCount : styles.count}>
+            {thousandSeparator(likeCount)}
+          </Text>
+        </View>
+      }
+
 
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={onShare}>

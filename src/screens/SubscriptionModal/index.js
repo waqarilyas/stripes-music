@@ -26,7 +26,6 @@ const itemSubs = Platform.select({
 const SubscriptionModal = ({ navigation, toggleModal }) => {
   const dispatch = useDispatch();
   const user = auth().currentUser;
-  // console.log('user', user);
   const [state, setState] = useState({
     productIDs: [],
     loading: false,
@@ -46,7 +45,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
   }, []);
 
   const subscribe = async () => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     setState((prev) => ({ ...prev, loading: true }));
 
     RNIap.requestSubscription(state.productIDs[0]?.productId, false)
@@ -140,7 +139,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
         </View>
       </TouchableOpacity>
 
-      {!user.isAnonymous && (
+      {user && (
         <TouchableOpacity
           onPress={handleSignOut}
           style={styles.logoutButtonContainer}>
