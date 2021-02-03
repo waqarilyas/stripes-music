@@ -142,6 +142,23 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
   },
+  backContainer: {
+    top: 10,
+    padding: 20,
+    left: 10,
+    position: 'absolute',
+
+    zIndex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  cancelIcon: {
+    height: 25,
+    width: 25,
+    tintColor: 'white',
+    resizeMode: 'contain',
+    position: 'absolute',
+  }
 });
 
 export default styles;

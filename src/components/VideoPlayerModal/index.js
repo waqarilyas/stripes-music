@@ -19,13 +19,15 @@ import {
 import { Divider } from 'react-native-elements';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
-import { commentIcon, eyeIcon, videoIcon } from '../../../Assets/Icons';
+import { commentIcon, eyeIcon, videoIcon, closeIcon } from '../../../Assets/Icons';
 import NewsCommentCard from '../../components/NewsCommentCard';
 import NewVideosCard from '../../components/NewVideosCard';
 import SectionHeader from '../../components/SectionHeader';
 import reducer from '../../hooks/useReducer';
+import { displayVideoModal, setVideoData } from '../../Redux/Reducers/helperSlice';
 import { LOG } from '../../utils/Constants';
 import { getCollection } from '../../utils/Firebase';
+import { useDispatch } from 'react-redux'
 import { thousandSeparator } from '../../utils/Helpers';
 import SubscriptionModalScreen from '../SubscriptionBottomSheet';
 import VideoPlayer from '../VideoPlayer';
@@ -38,19 +40,35 @@ const initialState = {
 
 const VideoPlayerModal = ({ onPress }) => {
   const { user } = useSelector((_state) => _state.root.firebase);
-
+  const disp = useDispatch()
   const { videoModal, videoData } = useSelector(
     (_state) => _state.root.helpers,
   );
 
+  const [currentVideo, setCurrentVideo] = useState({})
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
+  const [viewerCount, setViewerCount] = useState(0)
   const [stateVals, setStateVals] = useState({
     showMore: [],
   });
   const [durationTime, setDurationTime] = useState(0);
 
   // LOG('VIDEO DATA', videoData);
+
+  const getCurrentVideo = () => {
+    firestore()
+      .collection('videos')
+      .doc(videoData.id)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setCurrentVideo(doc.data())
+        }
+      })
+  }
+
+
 
   useEffect(() => {
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
@@ -72,12 +90,12 @@ const VideoPlayerModal = ({ onPress }) => {
         }));
         dispatch({ comments: allComments });
       });
-
+    getCurrentVideo();
     return () => listener;
   }, [videoData.id]);
 
   const handleSubmit = () => {
-    console.log('--------USER------', auth().currentUser);
+
     if (commentText === '') {
       return;
     }
@@ -108,15 +126,34 @@ const VideoPlayerModal = ({ onPress }) => {
 
   const [collapse, setCollapse] = useState(false);
 
+
+  console.log('---video url---', videoData.fileUrl)
+
+
   return (
     <View style={{ flex: 1, backgroundColor: 'black' }}>
+
+
+
+
       <SubscriptionModalScreen duration={durationTime} />
       <Modal animationType="slide" visible={videoModal}>
+
         <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
           <SafeAreaView style={styles.safeArea} />
+
+
+
           <StatusBar barStyle="light-content" />
           <View style={styles.container}>
-            <VideoPlayer fileUrl={videoData.fileUrl} onPress={onPress} />
+            <TouchableOpacity
+              style={styles.backContainer}
+              onPress={() => {
+                disp(displayVideoModal(false));
+              }}>
+              <Image source={closeIcon} style={styles.cancelIcon} />
+            </TouchableOpacity>
+            <VideoPlayer videoID={videoData.id} fileUrl={videoData.fileUrl} onPress={onPress} />
 
             <Text style={styles.title}>{videoData.title}</Text>
             <View style={styles.subContainer}>
@@ -124,7 +161,7 @@ const VideoPlayerModal = ({ onPress }) => {
               <View style={styles.rowContainer}>
                 <Image source={eyeIcon} style={styles.icon} />
                 <Text style={styles.count}>
-                  {thousandSeparator(videoData.viewCount)}
+                  {thousandSeparator(currentVideo?.viewCount)}
                 </Text>
               </View>
             </View>
@@ -165,7 +202,15 @@ const VideoPlayerModal = ({ onPress }) => {
                   } else {
                     return (
                       <TouchableHighlight
-                        onPress={() => console.log('OnPressed!')}>
+                        onPress={() => {
+
+
+                          disp(displayVideoModal(false))
+                          disp(setVideoData(item))
+
+                          disp(displayVideoModal(true))
+
+                        }}>
                         <NewVideosCard
                           poster={poster}
                           title={title}
@@ -284,8 +329,8 @@ const VideoPlayerModal = ({ onPress }) => {
                   </View>
                 </>
               ) : (
-                <ActivityIndicator color="black" />
-              )}
+                  <ActivityIndicator color="black" />
+                )}
             </View>
           </View>
         </ScrollView>

@@ -25,7 +25,7 @@ const PopularVideosSection = ({ navigation }) => {
 
   const playVideo = (item) => {
     dispatch(displayVideoModal(true));
-    dispatch(setVideoData(data));
+    dispatch(setVideoData(item));
   };
 
   return (

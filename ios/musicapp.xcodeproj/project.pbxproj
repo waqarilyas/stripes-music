@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* musicappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* musicappTests.m */; };
 		042633452562BE5100039313 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 042633442562BE5100039313 /* StoreKit.framework */; };
-		04E809F02554147D00EC4300 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -23,6 +22,7 @@
 		AB4057FFE3E3D5EC4C83A31F /* libPods-musicapp-musicappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC73BB022FA735C8D1B51E7A /* libPods-musicapp-musicappTests.a */; };
 		CE7EA273251F6A1B00ED1692 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7EA272251F6A1B00ED1692 /* File.swift */; };
 		CED3919D251DF5DD008E6E8F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CED3919C251DF5DD008E6E8F /* GoogleService-Info.plist */; };
+		E2995D8525C96D6A0020EFFA /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = E2995D8425C96D6A0020EFFA /* main.jsbundle */; };
 		FA732EF133BCFE6586A1F0B0 /* libPods-musicapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E19ADE0D03761AD70141216D /* libPods-musicapp.a */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +44,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* musicappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = musicappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* musicappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = musicappTests.m; sourceTree = "<group>"; };
@@ -88,6 +87,7 @@
 		DEE96518B17C4F016344ED4F /* libPods-musicapp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-musicapp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E19ADE0D03761AD70141216D /* libPods-musicapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-musicapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1BAD494FB0D441B8B458F08 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		E2995D8425C96D6A0020EFFA /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = musicapp/main.jsbundle; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EF77003DD6CD010C978FC398 /* Pods-musicapp-musicappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-musicapp-musicappTests.release.xcconfig"; path = "Target Support Files/Pods-musicapp-musicappTests/Pods-musicapp-musicappTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 		13B07FAE1A68108700A75B9A /* musicapp */ = {
 			isa = PBXGroup;
 			children = (
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				E2995D8425C96D6A0020EFFA /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -397,7 +397,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				CED3919D251DF5DD008E6E8F /* GoogleService-Info.plist in Resources */,
-				04E809F02554147D00EC4300 /* main.jsbundle in Resources */,
+				E2995D8525C96D6A0020EFFA /* main.jsbundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

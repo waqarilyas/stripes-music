@@ -14,11 +14,8 @@ const VideosBanner = () => {
   const { videos } = useSelector((state) => state.root.firebase);
 
   const playVideo = (item) => {
-    const data = item;
-    // data.createdAt = JSON.parse(data.createdAt);
-    // data.updatedAt = JSON.parse(data.updatedAt);
     dispatch(displayVideoModal(true));
-    dispatch(setVideoData(data));
+    dispatch(setVideoData(item));
   };
 
   return (

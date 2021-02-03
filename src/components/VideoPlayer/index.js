@@ -14,10 +14,15 @@ import reducer from '../../hooks/useReducer';
 import {
   displayVideoModal,
   setVidoReferences,
+  setVideoData
 } from '../../Redux/Reducers/helperSlice';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
 import { convertToMinutes } from '../../utils/Helpers';
 import styles from './styles';
+import { getVideos } from '../../Redux/Reducers/firebaseSlice';
+
 const initialState = {
   paused: true,
   currentTime: 0.0,
@@ -28,45 +33,87 @@ const initialState = {
   volume: 1.0,
 };
 
-const VideoPlayer = ({ fileUrl, onPress }) => {
+const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
   const disp = useDispatch();
   let videoPlayer = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [controlsVisible, setControlsVisible] = useState(true)
   const [finished, setFinished] = useState(false);
   const { user } = useSelector((state) => state.root.firebase);
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
 
-  useEffect(() => {
-    Animated.timing(visibility, {
-      toValue: state.paused ? 1 : 0,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start((result) => {
-      setFinished(result.finished);
-    });
-  }, [visibility, state.paused]);
+
+
+  // useEffect(() => {
+  //   Animated.timing(visibility, {
+  //     toValue: state.paused ? 1 : 0,
+  //     duration: 1000,
+  //     useNativeDriver: true,
+  //   }).start((result) => {
+  //     setFinished(result.finished);
+  //   });
+  // }, [visibility, state.paused]);
 
   const showControls = () => {
-    if (finished) {
-      Animated.timing(visibility, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-      if (state.paused) {
-        setTimeout(() => {
-          Animated.timing(visibility, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: true,
-          }).start();
-        }, 3000);
-      }
-    }
+    // if (finished) {
+    //   Animated.timing(visibility, {
+    //     toValue: 1,
+    //     duration: 500,
+    //     useNativeDriver: true,
+    //   }).start();
+    //   if (state.paused) {
+    //     setTimeout(() => {
+    //       Animated.timing(visibility, {
+    //         toValue: 0,
+    //         duration: 1000,
+    //         useNativeDriver: true,
+    //       }).start();
+    //     }, 3000);
+    //   }
+    // }
+    setControlsVisible(!controlsVisible)
   };
 
+  useEffect(() => {
+    firestore()
+      .collection('videos')
+      .doc(videoID)
+      .update({
+        viewCount: firestore.FieldValue.increment(1)
+      })
+      .then(() => {
+        firestore()
+          .collection('videos')
+          .doc(videoID)
+          .get()
+          .then(document => {
+            dispatch(setVideoData(document.data()))
+            dispatch(getVideos())
+            console.log('---count updated successfully---')
+          })
+      })
+  }, [])
+
+  if (controlsVisible) {
+    setTimeout(() => {
+      setControlsVisible(false)
+    }, 5000)
+  }
+
   return (
-    <View>
+    <View style={{
+      flex: 1,
+
+
+    }}>
+      {/* <TouchableOpacity
+        style={styles.closeContainer}
+        onPress={() => {
+          disp(displayVideoModal(false));
+        }}>
+        <Image source={closeIcon} style={styles.closeIcon} />
+      </TouchableOpacity> */}
+
       <Video
         ref={(ref) => {
           videoPlayer = ref;
@@ -96,57 +143,59 @@ const VideoPlayer = ({ fileUrl, onPress }) => {
         muted={state.muted}
         style={styles.backgroundVideo}
         paused={state.paused}
-        controls={false}
+        controls={true}
       />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{ ...styles.container, opacity: visibility }}
         onPress={showControls}>
-        <Animated.View style={{ ...styles.container, opacity: visibility }}>
-          <TouchableOpacity
-            style={styles.resumeContainer}
-            onPress={() => {
-              TrackPlayer.pause();
-              dispatch({ paused: !state.paused });
-            }}>
-            <Image
-              source={state.paused ? playIcon : pauseIcon}
-              style={styles.resumeIcon}
+        {controlsVisible &&
+          <Animated.View style={{ ...styles.container, }}>
+            <TouchableOpacity
+              style={styles.resumeContainer}
+              onPress={() => {
+                TrackPlayer.pause();
+                dispatch({ paused: !state.paused });
+              }}>
+              <Image
+                source={state.paused ? playIcon : pauseIcon}
+                style={styles.resumeIcon}
+              />
+            </TouchableOpacity>
+            <View style={styles.timeContainer}>
+              <Text style={styles.time}>
+                {convertToMinutes(Math.floor(state.currentTime))}
+              </Text>
+              <Text style={styles.time}>
+                {convertToMinutes(Math.floor(state.duration))}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.closeContainer}
+              onPress={() => {
+                disp(displayVideoModal(false));
+              }}>
+              <Image source={closeIcon} style={styles.closeIcon} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.fullScreenContainer}
+              onPress={() => videoPlayer.current.presentFullscreenPlayer()}>
+              <Image source={fullscreenIcon} style={styles.fullScreenIcon} />
+            </TouchableOpacity>
+            <Slider
+              style={styles.seek}
+              minimumValue={0}
+              onValueChange={(value) => videoPlayer.current.seek(value)}
+              thumbStyle={styles.thumb}
+              thumbTintColor="white"
+              maximumValue={state.duration}
+              value={state.currentTime}
+              minimumTrackTintColor="#E81093"
+              maximumTrackTintColor="rgba(255, 255, 255, 0.2)"
             />
-          </TouchableOpacity>
-          <View style={styles.timeContainer}>
-            <Text style={styles.time}>
-              {convertToMinutes(Math.floor(state.currentTime))}
-            </Text>
-            <Text style={styles.time}>
-              {convertToMinutes(Math.floor(state.duration))}
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={styles.closeContainer}
-            onPress={() => {
-              disp(displayVideoModal(false));
-            }}>
-            <Image source={closeIcon} style={styles.closeIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.fullScreenContainer}
-            onPress={() => videoPlayer.current.presentFullscreenPlayer()}>
-            <Image source={fullscreenIcon} style={styles.fullScreenIcon} />
-          </TouchableOpacity>
-          <Slider
-            style={styles.seek}
-            minimumValue={0}
-            onValueChange={(value) => videoPlayer.current.seek(value)}
-            thumbStyle={styles.thumb}
-            thumbTintColor="white"
-            maximumValue={state.duration}
-            value={state.currentTime}
-            minimumTrackTintColor="#E81093"
-            maximumTrackTintColor="rgba(255, 255, 255, 0.2)"
-          />
-        </Animated.View>
-      </TouchableOpacity>
+          </Animated.View>
+        }
+      </TouchableOpacity> */}
     </View>
   );
 };

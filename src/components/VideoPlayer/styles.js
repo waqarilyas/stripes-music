@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 
 const icon = {
   height: 20,
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+
   },
   backgroundVideo: {
     height: 300,
@@ -20,6 +22,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
+    marginTop: heightPercentageToDP(5.3)
   },
   seek: {
     width: '85%',
@@ -45,6 +48,7 @@ const styles = StyleSheet.create({
     top: '40%',
     bottom: '40%',
     justifyContent: 'center',
+
   },
   resumeIcon: {
     resizeMode: 'contain',
@@ -63,9 +67,13 @@ const styles = StyleSheet.create({
   },
   closeContainer: {
     position: 'absolute',
-    top: 30,
-    padding: 10,
-    left: 16,
+    top: 20,
+    padding: 20,
+    left: 10,
+    position: 'absolute',
+    backgroundColor: 'black',
+
+
   },
   fullScreenContainer: {
     position: 'absolute',
@@ -92,6 +100,8 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     ...icon,
+    position: 'absolute',
+    zIndex: 1
   },
 });
 
