@@ -71,7 +71,6 @@ const VideoPlayerModal = ({ onPress }) => {
 
 
   useEffect(() => {
-    console.log('i am inside');
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
 
     const listener = firestore()
@@ -93,7 +92,7 @@ const VideoPlayerModal = ({ onPress }) => {
       });
     getCurrentVideo();
     return () => listener;
-  }, [videoData.id]);
+  }, []);
 
   const handleSubmit = () => {
 
@@ -126,9 +125,6 @@ const VideoPlayerModal = ({ onPress }) => {
   };
 
   const [collapse, setCollapse] = useState(false);
-
-
-  console.log('---video url---', videoData.fileUrl)
 
 
   return (
@@ -207,10 +203,9 @@ const VideoPlayerModal = ({ onPress }) => {
                     return (
                       <TouchableHighlight
                         onPress={() => {
-                          disp(displayVideoModal(false))
-
-                          disp(setVideoData(item))
-                          disp(displayVideoModal(true))
+                          // disp(displayVideoModal(false));
+                          disp(setVideoData(item));
+                          // disp(displayVideoModal(true));
                         }}>
                         <NewVideosCard
                           poster={poster}

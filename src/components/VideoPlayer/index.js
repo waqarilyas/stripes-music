@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, Text, TouchableOpacity, View,ActivityIndicator } from 'react-native';
 import { Slider } from 'react-native-elements';
 import TrackPlayer from 'react-native-track-player';
 import Video from 'react-native-video';
@@ -24,7 +24,7 @@ import styles from './styles';
 import { getVideos } from '../../Redux/Reducers/firebaseSlice';
 
 const initialState = {
-  paused: true,
+  paused: false,
   currentTime: 0.0,
   duration: 0.0,
   fullScreen: false,
@@ -40,6 +40,7 @@ const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
   const [controlsVisible, setControlsVisible] = useState(true)
   const [finished, setFinished] = useState(false);
   const { user } = useSelector((state) => state.root.firebase);
+  const [reload,setReload] = useState(false);
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
 
 
@@ -74,6 +75,13 @@ const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
     setControlsVisible(!controlsVisible)
   };
 
+  useEffect(()=>{
+    setReload(true);
+    setTimeout(() => {
+      setReload(false);
+    }, 500);
+  },[fileUrl])
+
   useEffect(() => {
     firestore()
       .collection('videos')
@@ -87,12 +95,11 @@ const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
           .doc(videoID)
           .get()
           .then(document => {
-            dispatch(setVideoData(document.data()))
-            dispatch(getVideos())
-            console.log('---count updated successfully---')
+            dispatch(setVideoData(document.data()));
+            dispatch(getVideos());
           })
       })
-  }, [])
+  }, [videoID])
 
   if (controlsVisible) {
     setTimeout(() => {
@@ -113,38 +120,46 @@ const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
         }}>
         <Image source={closeIcon} style={styles.closeIcon} />
       </TouchableOpacity> */}
-
-      <Video
-        ref={(ref) => {
-          videoPlayer = ref;
-          global.vidRef = ref;
-        }}
-        source={{ uri: fileUrl }}
-        onLoad={(data) => {
-          console.log('On Load Fired!');
-          dispatch({ duration: data.duration });
-        }}
-        onProgress={(data) => {
-          if (
-            data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO &&
-            !user?.isPaidUser
-          ) {
-            disp(
-              setVidoReferences({
-                isVideoPlaying: true,
-                currentTime: data.currentTime,
-              }),
-            );
-            disp(displayVideoModal(false));
-          }
-          dispatch({ currentTime: data.currentTime, isVideo: true });
-        }}
-        volume={state.volume}
-        muted={state.muted}
-        style={styles.backgroundVideo}
-        paused={state.paused}
-        controls={true}
-      />
+      {
+        !reload ?
+        <Video
+              ref={(ref) => {
+                videoPlayer = ref;
+                global.vidRef = ref;
+              }}
+              source={{ uri: fileUrl }}
+              onLoad={(data) => {
+                dispatch({ duration: data.duration });
+              }}
+              onProgress={(data) => {
+                if (
+                  data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO &&
+                  !user?.isPaidUser
+                ) {
+                  disp(
+                    setVidoReferences({
+                      isVideoPlaying: true,
+                      currentTime: data.currentTime,
+                    }),
+                  );
+                  disp(displayVideoModal(false));
+                }
+                dispatch({ currentTime: data.currentTime, isVideo: true });
+              }}
+              volume={state.volume}
+              muted={state.muted}
+              style={styles.backgroundVideo}
+              paused={state.paused}
+              controls={true}
+            />:
+            <View style={[styles.backgroundVideo,styles.loadBackgroundVideo]}>
+              <ActivityIndicator 
+                color={'#fff'}
+                size={'large'}
+              />
+            </View>
+      }
+      
 
       {/* <TouchableOpacity
         style={{ ...styles.container, opacity: visibility }}

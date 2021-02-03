@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
     marginTop: heightPercentageToDP(5.3)
   },
+  loadBackgroundVideo:{
+    alignItems:'center',
+    justifyContent: 'center',
+  },
   seek: {
     width: '85%',
     alignSelf: 'center',
