@@ -29,7 +29,6 @@ const MiniMusicPlayer = ({
   closePlayer,
   switchMode,
   isVisible = true,
-  valueY,
 }) => {
   return isVisible ? (
     <View style={styles.container}>

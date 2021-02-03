@@ -16,7 +16,7 @@ const ArtistFollowCard = ({ artist }) => {
   useEffect(() => {
     const listener = firestore()
       .collection('artists')
-      .doc(artist.id)
+      .doc(artist?.id)
       .collection('followers')
       .doc(uid)
       .onSnapshot((document) => {
@@ -26,7 +26,7 @@ const ArtistFollowCard = ({ artist }) => {
       });
 
     return listener;
-  }, []);
+  }, [artist]);
 
   const handleFollowingStatus = async () => {
     if (!uid) {
