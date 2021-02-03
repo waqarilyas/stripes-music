@@ -16,12 +16,10 @@ import {
   setVidoReferences,
   setVideoData
 } from '../../Redux/Reducers/helperSlice';
-import auth from '@react-native-firebase/auth';
+import {updateVideo} from '../../Redux/Reducers/firebaseSlice';
 import firestore from '@react-native-firebase/firestore';
 import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
-import { convertToMinutes } from '../../utils/Helpers';
 import styles from './styles';
-import { getVideos } from '../../Redux/Reducers/firebaseSlice';
 
 const initialState = {
   paused: false,
@@ -33,7 +31,7 @@ const initialState = {
   volume: 1.0,
 };
 
-const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
+const VideoPlayer = ({ videoID, fileUrl }) => {
   const disp = useDispatch();
   let videoPlayer = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -55,25 +53,25 @@ const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
   //   });
   // }, [visibility, state.paused]);
 
-  const showControls = () => {
-    // if (finished) {
-    //   Animated.timing(visibility, {
-    //     toValue: 1,
-    //     duration: 500,
-    //     useNativeDriver: true,
-    //   }).start();
-    //   if (state.paused) {
-    //     setTimeout(() => {
-    //       Animated.timing(visibility, {
-    //         toValue: 0,
-    //         duration: 1000,
-    //         useNativeDriver: true,
-    //       }).start();
-    //     }, 3000);
-    //   }
-    // }
-    setControlsVisible(!controlsVisible)
-  };
+  // const showControls = () => {
+  //   // if (finished) {
+  //   //   Animated.timing(visibility, {
+  //   //     toValue: 1,
+  //   //     duration: 500,
+  //   //     useNativeDriver: true,
+  //   //   }).start();
+  //   //   if (state.paused) {
+  //   //     setTimeout(() => {
+  //   //       Animated.timing(visibility, {
+  //   //         toValue: 0,
+  //   //         duration: 1000,
+  //   //         useNativeDriver: true,
+  //   //       }).start();
+  //   //     }, 3000);
+  //   //   }
+  //   // }
+  //   // setControlsVisible(!controlsVisible)
+  // };
 
   useEffect(()=>{
     setReload(true);
@@ -89,23 +87,28 @@ const VideoPlayer = ({ videoID, fileUrl, onPress }) => {
       .update({
         viewCount: firestore.FieldValue.increment(1)
       })
-      .then(() => {
+      .then((res) => {
         firestore()
           .collection('videos')
           .doc(videoID)
           .get()
-          .then(document => {
-            dispatch(setVideoData(document.data()));
-            dispatch(getVideos());
-          })
+          .then((doc) => {
+            if (doc.exists) {
+              setTimeout(() => {
+                let v = doc.data();
+                disp(setVideoData(v));
+                disp(updateVideo(v));  
+              }, 1000);
+            }
+          });
       })
   }, [videoID])
 
-  if (controlsVisible) {
-    setTimeout(() => {
-      setControlsVisible(false)
-    }, 5000)
-  }
+  // if (controlsVisible) {
+  //   setTimeout(() => {
+  //     setControlsVisible(false)
+  //   }, 5000)
+  // }
 
   return (
     <View style={{

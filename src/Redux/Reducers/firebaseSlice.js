@@ -592,6 +592,10 @@ const firebaseSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    updateVideo:(state,action)=>{
+      let index = state.videos.findIndex(v => v.id == action.payload.id);
+      state.videos[index] = action.payload;
+    }
   },
   extraReducers: {
     // User data
@@ -748,5 +752,5 @@ const firebaseSlice = createSlice({
   },
 });
 
-export const { setUser } = firebaseSlice.actions;
+export const { setUser,updateVideo } = firebaseSlice.actions;
 export default firebaseSlice.reducer;
