@@ -28,7 +28,7 @@ const App = () => {
 
 
     let user = store?.getState().root.firebase?.user
-    console.log('---current user----', user)
+
 
     !user?.isPaidUser && AppState.addEventListener('change', handleAppStateChange);
 
