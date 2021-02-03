@@ -9,6 +9,7 @@ import {
   Text,
   Modal,
   View,
+  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -17,7 +18,6 @@ import {
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
 import { Overlay } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { plusIcon } from '../../../Assets/Icons';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
@@ -106,13 +106,14 @@ const FullScreenOverlay = ({
               style={[
                 styles.checkboxContainer,
                 {
-                  backgroundColor: addedToPlaylist ? '#006600' : 'gray',
+                  backgroundColor: addedToPlaylist ? '#006600' : 'grey',
                 },
               ]}
               onPress={() => {
-                addedToPlaylist
-                  ? removeFromPlaylist(item.id)
-                  : addToPlaylist(item.id);
+                if(addedToPlaylist)
+                  removeFromPlaylist(item.id);
+                else
+                   addToPlaylist(item.id);
               }}>
               <Text style={styles.checkboxInput}>{item.title}</Text>
               {addedToPlaylist && (
