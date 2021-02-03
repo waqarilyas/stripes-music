@@ -8,6 +8,7 @@ import {
   View,
   DeviceEventEmitter,
 } from 'react-native';
+import FontistoIcon from 'react-native-vector-icons/dist/Fontisto';
 import { Overlay } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { optionsIcon, plusIcon, signout } from '../../../Assets/Icons';
@@ -69,8 +70,8 @@ const ProfileActionBar = ({ navigation, profilePicture }) => {
               handleSignOut();
             }}
             style={styles.signOutContainer}>
-            <Image source={signout} style={styles.signoutIcon} />
-            <Text style={styles.signOut}>Sign Out</Text>
+            <FontistoIcon name={'power'} size={25} color={'#fff'} />
+            <Text style={styles.signOut}>Logout</Text>
           </TouchableOpacity>
         </View>
       </Overlay>
@@ -141,10 +142,12 @@ const styles = StyleSheet.create({
   },
   signOut: {
     color: 'white',
+    fontSize: 16,
   },
   signOutContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: hp('2'),
   },
 });
 

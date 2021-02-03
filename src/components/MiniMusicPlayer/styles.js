@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     bottom: RFValue(85),
     alignItems: 'center',
     paddingHorizontal: RFValue(6),
-    // backgroundColor: 'grey',
+    backgroundColor: 'black',
   },
   songArt: {
     padding: RFValue(8),

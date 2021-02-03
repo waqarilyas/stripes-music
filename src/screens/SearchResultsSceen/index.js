@@ -24,10 +24,10 @@ import { getSearchData } from '../../utils/Firebase';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const SearchResultsScreen = ({ route, navigation }) => {
-  const { selected } = route.params;
+const SearchResultsScreen = ({ query, selected }) => {
+  // const { selected } = route.params;
   const [selectedCategory, setSelectedCategory] = useState([]);
-  const [query, setQuery] = useState('');
+  // const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState({
     songs: [],
     videos: [],
@@ -75,18 +75,18 @@ const SearchResultsScreen = ({ route, navigation }) => {
     performSearches();
   }, [query]);
 
-  const addToFirestore = async (text) => {
-    const uid = auth().currentUser.uid;
-    const path = firestore().collection('users').doc(uid);
-    await path.collection('recentSearches').add({
-      text,
-      createdAt: +new Date(),
-    });
-  };
+  // const addToFirestore = async (text) => {
+  //   const uid = auth().currentUser.uid;
+  //   const path = firestore().collection('users').doc(uid);
+  //   await path.collection('recentSearches').add({
+  //     text,
+  //     createdAt: +new Date(),
+  //   });
+  // };
 
   return (
     <Block>
-      <View style={styles.searchWithClose}>
+      {/* <View style={styles.searchWithClose}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backContainer}>
@@ -94,7 +94,8 @@ const SearchResultsScreen = ({ route, navigation }) => {
         </TouchableOpacity>
         <View
           style={styles.searchContainer}
-          onPress={() => navigation.navigate('SearchResultsScreen')}>
+          onPress={() => navigation.navigate('SearchResultsScreen')}
+        >
           <Image source={searchIcon} style={styles.searchIcon} />
           <TextInput
             placeholder="Search..."
@@ -107,10 +108,10 @@ const SearchResultsScreen = ({ route, navigation }) => {
             }}
           />
         </View>
-      </View>
+      </View> */}
 
       {/* Songs Section */}
-      {selected.songs || selectedCategory.length === 0 ? (
+      {searchResults.songs.length > 0 && (
         <>
           <SectionHeader name="Songs" icon={musicIcon} isRequired={false} />
           <FlatList
@@ -129,11 +130,11 @@ const SearchResultsScreen = ({ route, navigation }) => {
             }}
           />
         </>
-      ) : null}
+      )}
       {/* Songs Section End here */}
 
       {/* Video Section Starts here */}
-      {selected.videos || selectedCategory.length === 0 ? (
+      {searchResults.videos.length > 0 && (
         <>
           <SectionHeader name="Videos" icon={videoIcon} isRequired={false} />
           <FlatList
@@ -154,11 +155,11 @@ const SearchResultsScreen = ({ route, navigation }) => {
             }}
           />
         </>
-      ) : null}
+      )}
       {/* video section ends here */}
       {/* Playlists section starts here */}
 
-      {selected.playlists || selectedCategory.length === 0 ? (
+      {searchResults.playlists.length > 0 && (
         <>
           <SectionHeader name="Playlists" isRequired={false} icon={playIcon} />
           <FlatList
@@ -178,11 +179,11 @@ const SearchResultsScreen = ({ route, navigation }) => {
             }}
           />
         </>
-      ) : null}
+      )}
       {/* playlists section end here */}
 
       {/* Favorite Artists Section */}
-      {selected.artists || selectedCategory.length === 0 ? (
+      {searchResults.artists.length > 0 && (
         <>
           <SectionHeader
             name="Artists"
@@ -204,9 +205,9 @@ const SearchResultsScreen = ({ route, navigation }) => {
             }}
           />
         </>
-      ) : null}
+      )}
       {/* Artists Section Ends here */}
-      {selected.albums || selectedCategory.length === 0 ? (
+      {searchResults.albums.length > 0 && (
         <>
           <SectionHeader name="Albums" isRequired={false} icon={playIcon} />
           <FlatList
@@ -227,7 +228,7 @@ const SearchResultsScreen = ({ route, navigation }) => {
             }}
           />
         </>
-      ) : null}
+      )}
       {/* albums start here */}
 
       {/* albums end here */}

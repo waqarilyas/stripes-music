@@ -1,5 +1,5 @@
 import auth from '@react-native-firebase/auth';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import React, { useEffect, useReducer, useState } from 'react';
 import { ActivityIndicator, AppState, StatusBar, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
@@ -73,7 +73,7 @@ const App = () => {
     <>
       <StatusBar barStyle="light-content" backgroundColor="black" />
       <Provider store={store}>
-        <NavigationContainer>
+        <NavigationContainer theme={DarkTheme}>
           {loading ? (
             <View
               style={{

@@ -11,7 +11,11 @@ import EmptyProfileCard from '../EmptyProfileCard';
 import TrackPlayer from 'react-native-track-player';
 import { useDispatch } from 'react-redux';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
-import { fullScreenChange, changeSong } from '../../Redux/Reducers/audioSlice';
+import {
+  fullScreenChange,
+  changeSong,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 import { LOG } from '../../utils/Constants';
 
@@ -38,12 +42,13 @@ const ProfileFavoriteSongs = ({ navigation }) => {
       });
   }, []);
 
-  const playSong = async (currentSong) => {
+  const playSong = async (currentSong, playlist) => {
     console.log('current Song', currentSong);
     try {
       reduxDispatch(changeSong(currentSong));
-      await TrackPlayer.add(state.favSongs);
+      await TrackPlayer.add(playlist);
       reduxDispatch(fullScreenChange(true));
+      reduxDispatch(setPlaylist(playlist));
       reduxDispatch(addPlayCount(currentSong.id));
       reduxDispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {
@@ -63,7 +68,6 @@ const ProfileFavoriteSongs = ({ navigation }) => {
         data={state.favSongs}
         keyExtractor={(item) => item.id}
         horizontal
-        contentContainerStyle={{ width: '100%' }}
         ListEmptyComponent={
           <EmptyProfileCard
             icon={mostPlayedHome}
@@ -74,7 +78,7 @@ const ProfileFavoriteSongs = ({ navigation }) => {
         }
         renderItem={({ item, item: { title, artist, artwork } }) => {
           return (
-            <TouchableOpacity onPress={() => playSong(item)}>
+            <TouchableOpacity onPress={() => playSong(item, state.favSongs)}>
               <SongCard title={title} artist={artist} artwork={artwork} />
             </TouchableOpacity>
           );

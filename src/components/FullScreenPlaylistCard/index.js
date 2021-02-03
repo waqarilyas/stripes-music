@@ -19,7 +19,7 @@ const FullScreenPlaylistCard = ({ item }) => {
           {item.artist}
         </ListItem.Subtitle>
       </ListItem.Content>
-      <Text style={styles.duration}>{item.duration}</Text>
+      <Text style={styles.duration}>{(item.duration / 60).toFixed(3)}</Text>
       <TouchableOpacity onPress={() => dispatch(removeFromPlaylist(item))}>
         <Image source={deleteIcon} style={styles.deleteIcon} />
       </TouchableOpacity>

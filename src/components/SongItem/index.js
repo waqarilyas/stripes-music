@@ -1,8 +1,12 @@
 import auth from '@react-native-firebase/auth';
+import TrackPlayer from 'react-native-track-player';
 import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Avatar, CheckBox, Overlay } from 'react-native-elements';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
+
 import {
   ActivityIndicator,
   ScrollView,
@@ -17,15 +21,46 @@ import {
   queueIcon,
   tickIcon,
 } from '../../../Assets/Icons';
+import { useDispatch } from 'react-redux';
+import {
+  fullScreenChange,
+  setPlaylist,
+  changeSong,
+} from '../../Redux/Reducers/audioSlice';
+import {
+  addAlbumPlayCount,
+  addPlayCount,
+} from '../../Redux/Reducers/firebaseSlice';
+
 import SongCardListView from '../../components/SongCardListView';
 
-const SongItem = ({ song, isFavourite }) => {
+const SongItem = ({ song, playlist }) => {
   const { title, artist, artwork, id, duration } = song;
   const [visible, setVisible] = useState(false);
+  const [isFavourite, setIsFavourite] = useState();
   const [addToQueue, setAddToQueue] = useState(false);
   const [checked, setChecked] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
+  const dispatch = useDispatch();
   const uid = auth().currentUser.uid;
+
+  useEffect(() => {
+    const listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favSongs')
+      .where('isFavourite', '==', true)
+      .onSnapshot((snapshot) => {
+        let isFavourite = false;
+        snapshot.forEach((doc) => {
+          if (doc.data().id == song.id) {
+            isFavourite = true;
+          }
+        });
+        setIsFavourite(isFavourite);
+      });
+    return () => listener();
+  });
 
   const addToFavSongs = () => {
     firestore()
@@ -33,7 +68,7 @@ const SongItem = ({ song, isFavourite }) => {
       .doc(uid)
       .collection('favSongs')
       .doc(id)
-      .set({ ...song })
+      .set({ ...song, isFavourite: true })
       .then(() => {
         console.log('success');
       })
@@ -42,19 +77,32 @@ const SongItem = ({ song, isFavourite }) => {
       });
   };
 
-  const removeFromFavSongs = (song) => {
+  const removeFromFavSongs = (id) => {
     firestore()
       .collection('users')
       .doc(uid)
       .collection('favSongs')
       .doc(id)
-      .delete()
+      .update({ isFavourite: false })
       .then(() => {
         console.log('success');
       })
       .catch((error) => {
         console.log('error', error);
       });
+  };
+
+  const playSong = async (currentSong, playlist) => {
+    try {
+      dispatch(changeSong(currentSong));
+      await TrackPlayer.add(playlist);
+      dispatch(fullScreenChange(true));
+      dispatch(addPlayCount(currentSong.id));
+      dispatch(setPlaylist(playlist));
+      dispatch(addToRecentlyPlayed(currentSong));
+    } catch (error) {
+      console.log('PLAY SONG', error);
+    }
   };
 
   const toggleOverlay = () => {
@@ -142,16 +190,20 @@ const SongItem = ({ song, isFavourite }) => {
 
       <View style={styles.container}>
         <View style={styles.containerLeft}>
-          <Image
-            source={artwork ? { uri: artwork } : null}
-            style={styles.image}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
-            <Text style={styles.author}>{artist}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.subContainerLeft}
+            onPress={() => playSong(song, playlist)}>
+            <Image
+              source={artwork ? { uri: artwork } : null}
+              style={styles.image}
+            />
+            <View style={styles.textContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>{title}</Text>
+              </View>
+              <Text style={styles.author}>{artist}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity
@@ -159,9 +211,12 @@ const SongItem = ({ song, isFavourite }) => {
             onPress={() => toggleOverlay()}>
             <Image source={plusIcon} style={styles.icon} />
           </TouchableOpacity>
+          <Text style={styles.durationText}>{(duration / 60).toFixed(3)}</Text>
           <TouchableOpacity
             style={styles.iconContainer}
-            onPress={isFavourite ? removeFromFavSongs : addToFavSongs}>
+            onPress={() => {
+              isFavourite ? removeFromFavSongs(id) : addToFavSongs(id);
+            }}>
             <Image
               source={heartGrayIcon}
               style={isFavourite ? styles.favoriteIcon : styles.icon}
@@ -183,19 +238,26 @@ const icon = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    width: wp('100'),
     marginVertical: 16,
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    width: '90%',
   },
   textContainer: {
-    flexShrink: 1,
-    // width: '60%',
+    flex: 1,
+  },
+  titleContainer: {
+    flexDirection: 'row',
   },
   containerLeft: {
+    flex: 3,
+    width: '100%',
+  },
+  subContainerLeft: {
     flexDirection: 'row',
-    width: '90%',
     alignItems: 'center',
+  },
+  durationText: {
+    color: 'silver',
   },
   title: {
     color: 'white',
@@ -215,6 +277,7 @@ const styles = StyleSheet.create({
     tintColor: '#e81093',
   },
   iconContainer: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',

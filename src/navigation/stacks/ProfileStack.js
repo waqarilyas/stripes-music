@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import HeaderRightButton from '../../components/HeaderRightButton';
 import AccountSetting from '../../screens/AccountSetting';
+import { getArtist } from '../../Redux/Reducers/firebaseSlice';
 import Artist from '../../screens/Artist';
 import ChangePassword from '../../screens/ChangePassword';
 import CreateNewPlaylist from '../../screens/CreateNewPlaylist';
@@ -22,12 +23,22 @@ const Stack = createStackNavigator();
 
 const ProfileStack = () => {
   const user = useSelector((state) => state.root.firebase.user);
+  const dispatch = useDispatch();
 
   const search = (navigation) => (
     <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
       <Image source={searchIcon} style={styles.icon} />
     </TouchableOpacity>
   );
+
+  const HandleArtist = (navigation) => {
+    const handleNavigation = () => {
+      dispatch(getArtist(null));
+      navigation.goBack();
+    };
+
+    return <BackButton handleNavigation={handleNavigation} />;
+  };
 
   const back = (navigation) => {
     return (
@@ -38,6 +49,14 @@ const ProfileStack = () => {
       </TouchableOpacity>
     );
   };
+
+  const BackButton = ({ handleNavigation }) => (
+    <TouchableOpacity
+      style={styles.backButtonContainer}
+      onPress={handleNavigation}>
+      <Image source={backIcon} style={styles.back} />
+    </TouchableOpacity>
+  );
 
   const searchAndProfile = (navigation) => (
     <HeaderRightButton navigation={navigation} />
@@ -96,7 +115,18 @@ const ProfileStack = () => {
           headerStyle: styles.headerStyle,
         })}
       />
-      <Stack.Screen name="Artist" component={Artist} />
+      <Stack.Screen
+        name="Artist"
+        component={Artist}
+        options={({ navigation }) => ({
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitleStyle: styles.headerTitleStyle,
+          headerLeft: () => HandleArtist(navigation),
+          headerRight: () => search(navigation),
+          headerStyle: styles.headerStyle,
+        })}
+      />
       <Stack.Screen name="AccountSetting" component={AccountSetting} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen

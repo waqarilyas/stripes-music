@@ -2,7 +2,11 @@ import React from 'react';
 import { FlatList, View, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
 import EmptyArtistProfileCard from '../../components/EmptyArtistProfileCard';
-import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import {
+  changeSong,
+  fullScreenChange,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
@@ -37,6 +41,7 @@ const ArtistReleases = ({ navigation }) => {
       dispatch(changeSong(playlist[0]));
       dispatch(fullScreenChange(true));
       await TrackPlayer.add(playlist);
+      dispatch(setPlaylist(playlist));
       dispatch(addPlayCount(playlist[0].id));
       dispatch(addToRecentlyPlayed(playlist[0]));
     } catch (error) {

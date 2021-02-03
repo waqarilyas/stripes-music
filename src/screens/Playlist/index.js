@@ -21,7 +21,11 @@ import { LOG } from '../../utils/Constants';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
 import styles from './styles';
-import { changeToMiniModal, changeSong } from '../../Redux/Reducers/audioSlice';
+import {
+  changeToMiniModal,
+  changeSong,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
@@ -48,6 +52,7 @@ const Playlist = ({ navigation, route }) => {
       .collection('users')
       .doc(uid)
       .collection('favSongs')
+      .where('isFavourite', '==', true)
       .onSnapshot((snapshot) => {
         const favSongs = [];
         snapshot.docs.forEach((doc) => {
@@ -120,6 +125,7 @@ const Playlist = ({ navigation, route }) => {
       dispatch(changeSong(playlistSongs[0]));
       dispatch(changeToMiniModal(true));
       await TrackPlayer.add(playlistSongs);
+      dispatch(setPlaylist(playlistSongs));
       dispatch(addPlayCount(playlistSongs[0].id));
       dispatch(addToRecentlyPlayed(playlistSongs[0]));
     } catch (error) {
@@ -143,7 +149,7 @@ const Playlist = ({ navigation, route }) => {
       .doc(uid)
       .collection('favSongs')
       .doc(song.id)
-      .set({ ...song })
+      .set({ ...song, isFavourite: true })
       .then(() => {
         console.log('success');
       })
@@ -158,7 +164,7 @@ const Playlist = ({ navigation, route }) => {
       .doc(uid)
       .collection('favSongs')
       .doc(song.id)
-      .delete()
+      .update({ isFavourite: false })
       .then(() => {
         console.log('success');
       })
@@ -238,9 +244,7 @@ const Playlist = ({ navigation, route }) => {
           contentContainerStyle={{ flexGrow: 1 }}
           ListEmptyComponent={() => renderEmptyComponent()}
           renderItem={({ item }) => {
-            const favSong = favSongs.filter((song) => song.id == item.id);
-            const isFavourite =
-              favSong.length < 1 ? false : favSong[0].isFavourite;
+            const favSong = favSongs.some((song) => song.id == item.id);
             return (
               <View style={styles.itemMainContainer}>
                 <View style={styles.itemSubContainer}>
@@ -251,13 +255,11 @@ const Playlist = ({ navigation, route }) => {
                   <View style={styles.favSongButtonContainer}>
                     <TouchableOpacity
                       onPress={() =>
-                        isFavourite
-                          ? removeFromFavSongs(item)
-                          : addToFavSongs(item)
+                        favSong ? removeFromFavSongs(item) : addToFavSongs(item)
                       }>
                       <EntypoIcon
                         name="heart"
-                        color={isFavourite ? '#F5138E' : 'silver'}
+                        color={favSong ? '#F5138E' : 'silver'}
                         size={25}
                       />
                     </TouchableOpacity>

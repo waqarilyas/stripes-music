@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import Clipboard from '@react-native-community/clipboard';
-import React from 'react';
 import { Image, Share, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
@@ -9,16 +9,23 @@ import {
 import { copy } from '../../../Assets/Icons';
 
 const TellaFriend = () => {
-  const copyToClipboard = () => {
-    Clipboard.setString('hello world');
-  };
+  const [shareText, setShareText] = useState(
+    'Hey you might wanna check this app out',
+  );
+
+  // const copyToClipboard = () => {
+  //   Clipboard.setString(shareText);
+  // };
 
   const onShare = async () => {
-    console.log('----Function called-----');
     try {
       const result = await Share.share({
-        message: 'Hey you might wanna check this app out',
-        title: 'Stripes',
+        message:
+          Platform.OS === 'android'
+            ? shareText + ' https://www.google.com'
+            : shareText,
+        url: 'https://apps.apple.com/us/app/stripes-app/id1538914059',
+        title: 'Share Stripes',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -37,32 +44,24 @@ const TellaFriend = () => {
   return (
     <View style={styles.mainContainer}>
       <View style={{ width: wp('90%') }}>
-        <Text style={styles.textStyle}>
-          Tell your friends about this amazing app.
-        </Text>
-        <Text style={styles.textStyle1}>Tab to copy the link.</Text>
+        <Text style={styles.textStyle}>Sharing Message</Text>
+        {/* <Text style={styles.textStyle1}>Tab to copy the link.</Text> */}
         <View style={styles.container}>
           <View style={{ flex: 6 }}>
             <TextInput
-              textContentType="URL"
+              // textContentType="URL"
               placeholder=""
+              onChangeText={(text) => setShareText(text)}
               defaultValue="Hey you might wanna check this app out"
               placeholderTextColor="#8B868A"
-              style={{ color: '#8B868A', fontSize:16, padding:12 }}
+              style={{ color: '#8B868A', fontSize: 16, padding: 12 }}
+              multiline={true}
             />
           </View>
-          <View style={styles.subcontainer}>
-            <TouchableOpacity
-              onPress={() => {
-                copyToClipboard();
-              }}>
-              <Image source={copy} style={styles.copy} />
-            </TouchableOpacity>
-          </View>
         </View>
-        <Text style={styles.shareButton} onPress={() => onShare()}>
-          SHARE
-        </Text>
+        <TouchableOpacity style={styles.shareButton} onPress={onShare}>
+          <Text style={styles.shareButtonText}>SHARE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -105,6 +104,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: hp('4'),
     paddingVertical: hp('1'),
     borderRadius: hp('1'),
+  },
+  shareButtonText: {
+    fontSize: 16,
+    color: '#fff',
   },
 });
 export default TellaFriend;

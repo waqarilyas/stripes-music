@@ -1,6 +1,11 @@
 import NetInfo from '@react-native-community/netinfo';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
+import {
+  ImageBackground,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useDispatch } from 'react-redux';
@@ -11,7 +16,12 @@ import HomeMostPlayed from '../../components/HomeMostPlayed';
 import HomeRecentPlayed from '../../components/HomeRecentPlayed';
 import HomeTopAlbums from '../../components/HomeTopAlbums';
 import HomeTopArtists from '../../components/HomeTopArtists';
-import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import {
+  changeSong,
+  fullScreenChange,
+  changeToMiniModal,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import TrackPlayer from 'react-native-track-player';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
@@ -107,6 +117,7 @@ const Home = ({ navigation }) => {
       dispatch(changeSong(currentSong));
       await TrackPlayer.add(playlist);
       dispatch(fullScreenChange(true));
+      dispatch(setPlaylist(playlist));
       dispatch(addPlayCount(currentSong.id));
       dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {

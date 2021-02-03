@@ -21,7 +21,7 @@ import AccountSettingStack from './AccountSettingStack';
 const Stack = createStackNavigator();
 
 const MainAppStack = () => {
-  const currentState = useSelector((state) => state.root.audio.miniModalOpen);
+  const miniPlayer = useSelector((state) => state.root.audio.miniModalOpen);
   const isFullScreen = useSelector((state) => state.root.audio.isFullScreen);
 
   const back = (navigation) => {
@@ -110,8 +110,8 @@ const MainAppStack = () => {
         />
       </Stack.Navigator>
 
-      {currentState ? <MusicPlayerModal /> : null}
-      {isFullScreen ? <MusicPlayerFullscreen /> : null}
+      {miniPlayer && <MusicPlayerModal screen="miniplayer" />}
+      {isFullScreen && <MusicPlayerModal screen="fullscreen" />}
       <SubscriptionModalScreen />
     </>
   );

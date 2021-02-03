@@ -13,6 +13,7 @@ const Block = ({ children }) => {
         <ScrollView
           showsHorizontalScrollIndicato={false}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'always'}
           nestedScrollEnabled>
           {children}
         </ScrollView>

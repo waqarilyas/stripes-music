@@ -18,13 +18,13 @@ const NewsCard = ({
 }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.inner}>
+      <TouchableOpacity onPress={handleNav} style={styles.inner}>
         <Image style={styles.image} source={image ? { uri: image } : null} />
         <View style={styles.textInner}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.date}>{date}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
       <Text numberOfLines={4} style={styles.description}>
         {description}

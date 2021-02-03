@@ -71,6 +71,7 @@ const VideoPlayerModal = ({ onPress }) => {
 
 
   useEffect(() => {
+    console.log('i am inside');
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
 
     const listener = firestore()
@@ -200,16 +201,16 @@ const VideoPlayerModal = ({ onPress }) => {
                   if (item.id === videoData.id) {
                     return null;
                   } else {
+
+
+
                     return (
                       <TouchableHighlight
                         onPress={() => {
-
-
                           disp(displayVideoModal(false))
+
                           disp(setVideoData(item))
-
                           disp(displayVideoModal(true))
-
                         }}>
                         <NewVideosCard
                           poster={poster}
