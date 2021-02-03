@@ -61,8 +61,7 @@ const Login = ({ navigation }) => {
 
   return (
     <Block>
-      <ScrollView>
-        <Text style={styles.headerText}>Login</Text>
+      <ScrollView style={styles.mainContainer}>
         <Formik
           innerRef={formik}
           initialValues={initValues}

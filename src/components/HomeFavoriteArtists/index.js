@@ -25,27 +25,26 @@ const HomeFavoriteArtists = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // const uid = auth().currentUser?.uid;
-    // let listener = firestore()
-    //   .collection('users')
-    //   .doc(uid)
-    //   .collection('favArtists')
-    //   .onSnapshot((querySnapshot) => {
-    //     let data = [];
-    //     querySnapshot.docs.forEach((document) => {
-    //       if (document.exists && document.data().isFollowing) {
-    //         console.log('docs', document.data());
-    //         data.push(document.data());
-    //       }
-    //     });
-    //     setList(data);
-    //   });
+    const uid = auth().currentUser?.uid;
+    let listener = firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('favArtists')
+      .onSnapshot((querySnapshot) => {
+        let data = [];
+        querySnapshot.docs.forEach((document) => {
+          if (document.exists && document.data().isFollowing) {
+            console.log('docs', document.data());
+            data.push(document.data());
+          }
+        });
+        setList(data);
+      });
 
-    // return listener;
+    return listener;
   }, []);
 
   const handleArtist = (id) => {
-
     try {
       dispatch(getArtist(id));
       dispatch(getArtistId(id));

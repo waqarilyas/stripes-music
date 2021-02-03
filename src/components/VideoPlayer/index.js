@@ -1,22 +1,15 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { Animated, Image, Text, TouchableOpacity, View,ActivityIndicator } from 'react-native';
-import { Slider } from 'react-native-elements';
-import TrackPlayer from 'react-native-track-player';
+import { Animated, Alert, View, ActivityIndicator } from 'react-native';
 import Video from 'react-native-video';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  closeIcon,
-  fullscreenIcon,
-  pauseIcon,
-  playIcon,
-} from '../../../Assets/Icons';
 import reducer from '../../hooks/useReducer';
 import {
   displayVideoModal,
   setVidoReferences,
-  setVideoData
+  displaySubscriptionScreen,
+  setVideoData,
 } from '../../Redux/Reducers/helperSlice';
-import {updateVideo} from '../../Redux/Reducers/firebaseSlice';
+import { updateVideo } from '../../Redux/Reducers/firebaseSlice';
 import firestore from '@react-native-firebase/firestore';
 import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
 import styles from './styles';
@@ -33,15 +26,13 @@ const initialState = {
 
 const VideoPlayer = ({ videoID, fileUrl }) => {
   const disp = useDispatch();
-  let videoPlayer = useRef(null);
+  let videoPlayerRef = useRef();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [controlsVisible, setControlsVisible] = useState(true)
+  const [controlsVisible, setControlsVisible] = useState(true);
   const [finished, setFinished] = useState(false);
   const { user } = useSelector((state) => state.root.firebase);
-  const [reload,setReload] = useState(false);
+  const [reload, setReload] = useState(false);
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
-
-
 
   // useEffect(() => {
   //   Animated.timing(visibility, {
@@ -73,19 +64,19 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
   //   // setControlsVisible(!controlsVisible)
   // };
 
-  useEffect(()=>{
+  useEffect(() => {
     setReload(true);
     setTimeout(() => {
       setReload(false);
     }, 500);
-  },[fileUrl])
+  }, [fileUrl]);
 
   useEffect(() => {
     firestore()
       .collection('videos')
       .doc(videoID)
       .update({
-        viewCount: firestore.FieldValue.increment(1)
+        viewCount: firestore.FieldValue.increment(1),
       })
       .then((res) => {
         firestore()
@@ -97,12 +88,20 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
               setTimeout(() => {
                 let v = doc.data();
                 disp(setVideoData(v));
-                disp(updateVideo(v));  
+                disp(updateVideo(v));
               }, 1000);
             }
           });
-      })
-  }, [videoID])
+      });
+  }, [videoID]);
+  console.log('videoPlayer', videoPlayer);
+
+  const subscriptionHandler = (data) => {
+    if (data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO && !user?.isPaidUser) {
+      disp(displayVideoModal(false));
+      disp(displaySubscriptionScreen(true));
+    }
+  };
 
   // if (controlsVisible) {
   //   setTimeout(() => {
@@ -111,11 +110,10 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
   // }
 
   return (
-    <View style={{
-      flex: 1,
-
-
-    }}>
+    <View
+      style={{
+        flex: 1,
+      }}>
       {/* <TouchableOpacity
         style={styles.closeContainer}
         onPress={() => {
@@ -123,46 +121,25 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
         }}>
         <Image source={closeIcon} style={styles.closeIcon} />
       </TouchableOpacity> */}
-      {
-        !reload ?
+      {!reload ? (
         <Video
-              ref={(ref) => {
-                videoPlayer = ref;
-                global.vidRef = ref;
-              }}
-              source={{ uri: fileUrl }}
-              onLoad={(data) => {
-                dispatch({ duration: data.duration });
-              }}
-              onProgress={(data) => {
-                if (
-                  data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO &&
-                  !user?.isPaidUser
-                ) {
-                  disp(
-                    setVidoReferences({
-                      isVideoPlaying: true,
-                      currentTime: data.currentTime,
-                    }),
-                  );
-                  disp(displayVideoModal(false));
-                }
-                dispatch({ currentTime: data.currentTime, isVideo: true });
-              }}
-              volume={state.volume}
-              muted={state.muted}
-              style={styles.backgroundVideo}
-              paused={state.paused}
-              controls={true}
-            />:
-            <View style={[styles.backgroundVideo,styles.loadBackgroundVideo]}>
-              <ActivityIndicator 
-                color={'#fff'}
-                size={'large'}
-              />
-            </View>
-      }
-      
+          ref={videoPlayerRef}
+          source={{ uri: fileUrl }}
+          onLoad={(data) => {
+            dispatch({ duration: data.duration });
+          }}
+          onProgress={(data) => subscriptionHandler(data)}
+          volume={state.volume}
+          muted={state.muted}
+          style={styles.backgroundVideo}
+          paused={state.paused}
+          controls={true}
+        />
+      ) : (
+        <View style={[styles.backgroundVideo, styles.loadBackgroundVideo]}>
+          <ActivityIndicator color={'#fff'} size={'large'} />
+        </View>
+      )}
 
       {/* <TouchableOpacity
         style={{ ...styles.container, opacity: visibility }}

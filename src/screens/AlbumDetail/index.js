@@ -17,7 +17,11 @@ import { LOG } from '../../utils/Constants';
 import SongItem from '../../components/SongItem';
 import { thousandSeparator } from '../../utils/Helpers';
 import { eyeIcon, playButton } from '../../../Assets/Icons';
-import { fullScreenChange, changeSong } from '../../Redux/Reducers/audioSlice';
+import {
+  fullScreenChange,
+  changeSong,
+  setPlaylist,
+} from '../../Redux/Reducers/audioSlice';
 import {
   addAlbumPlayCount,
   addPlayCount,
@@ -38,10 +42,14 @@ const AlbumDetail = () => {
   }, [fadeIn]);
 
   const playSong = async (currentSong) => {
+    const updatedPlaylist = albumSongs.filter(
+      (song) => song.id !== currentSong.id,
+    );
     try {
       dispatch(changeSong(currentSong));
-      await TrackPlayer.add(albumSongs);
+      await TrackPlayer.add([currentSong, ...updatedPlaylist]);
       dispatch(fullScreenChange(true));
+      dispatch(setPlaylist(albumSongs));
       dispatch(addPlayCount(currentSong.id));
       dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {

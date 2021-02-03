@@ -23,7 +23,6 @@ const ArtistReleases = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const getPlaylistSongs = (index) => {
-    const playlistSongs = [];
     const songs = [];
     artistPlaylists[index].songs.forEach((songId) => {
       allSongs.forEach((song) => {
@@ -48,8 +47,6 @@ const ArtistReleases = ({ navigation }) => {
       console.log('PLAY SONG', error);
     }
   };
-
-  console.log('artistPlaylist', artistPlaylists);
 
   return (
     <View style={styles.container}>

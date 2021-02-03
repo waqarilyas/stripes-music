@@ -19,9 +19,12 @@ const RecentPlayedSeeAll = () => {
   const { allHistory } = useSelector((state) => state.root.firebase);
 
   const playSong = async (currentSong, playlist) => {
+    const updatedPlaylist = playlist.filter(
+      (song) => song.id !== currentSong.id,
+    );
     try {
       dispatch(changeSong(currentSong));
-      await TrackPlayer.add(playlist);
+      await TrackPlayer.add([currentSong, ...updatedPlaylist]);
       dispatch(fullScreenChange(true));
       dispatch(setPlaylist(playlist));
       dispatch(addPlayCount(currentSong.id));

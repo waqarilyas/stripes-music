@@ -6,7 +6,7 @@ import TrackPlayer from 'react-native-track-player';
 
 import {
   changeSong,
-  pushToPlaylist,
+  setPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
@@ -23,10 +23,12 @@ const ForYouSongs = ({ navigation }) => {
   const { songs } = useSelector((state) => state.root.firebase);
 
   const playSong = async (currentSong) => {
+    const updatedPlaylist = songs.filter((song) => song.id !== currentSong.id);
     try {
       dispatch(changeSong(currentSong));
-      await TrackPlayer.add(songs);
+      await TrackPlayer.add([currentSong, ...updatedPlaylist]);
       dispatch(fullScreenChange(true));
+      dispatch(setPlaylist(songs));
       dispatch(addPlayCount(currentSong.id));
       dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {

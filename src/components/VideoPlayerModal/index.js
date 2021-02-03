@@ -18,27 +18,34 @@ import {
   Animated,
   Dimensions,
   Keyboard,
-  Pressable
+  Pressable,
 } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useSelector } from 'react-redux';
-import { commentIcon, eyeIcon, videoIcon, closeIcon } from '../../../Assets/Icons';
+import {
+  commentIcon,
+  eyeIcon,
+  videoIcon,
+  closeIcon,
+} from '../../../Assets/Icons';
 import NewsCommentCard from '../../components/NewsCommentCard';
 import NewVideosCard from '../../components/NewVideosCard';
 import SectionHeader from '../../components/SectionHeader';
 import reducer from '../../hooks/useReducer';
-import { displayVideoModal, setVideoData } from '../../Redux/Reducers/helperSlice';
+import {
+  displayVideoModal,
+  setVideoData,
+} from '../../Redux/Reducers/helperSlice';
 import { LOG } from '../../utils/Constants';
 import { getCollection } from '../../utils/Firebase';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { thousandSeparator } from '../../utils/Helpers';
 import SubscriptionModalScreen from '../SubscriptionBottomSheet';
 import VideoPlayer from '../VideoPlayer';
 import styles from './styles';
 
 const screenWidth = Dimensions.get('window').width;
-
 
 const initialState = {
   videos: [],
@@ -49,13 +56,15 @@ const VideoPlayerModal = ({ onPress }) => {
   const widthAnim = useRef(new Animated.Value(screenWidth * 0.9)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const { user } = useSelector((_state) => _state.root.firebase);
-  const disp = useDispatch()
-  const { videoModal, videoData } = useSelector((_state) => _state.root.helpers);
+  const disp = useDispatch();
+  const { videoModal, videoData } = useSelector(
+    (_state) => _state.root.helpers,
+  );
 
-  const [currentVideo, setCurrentVideo] = useState({})
+  const [currentVideo, setCurrentVideo] = useState({});
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
-  const [viewerCount, setViewerCount] = useState(0)
+  const [viewerCount, setViewerCount] = useState(0);
   const [stateVals, setStateVals] = useState({
     showMore: [],
   });
@@ -90,13 +99,13 @@ const VideoPlayerModal = ({ onPress }) => {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          setCurrentVideo(doc.data())
+          setCurrentVideo(doc.data());
         }
-      })
-  }
+      });
+  };
   const [collapse, setCollapse] = useState(false);
 
-  console.log(user)
+  console.log(user);
 
   useEffect(() => {
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
@@ -124,10 +133,9 @@ const VideoPlayerModal = ({ onPress }) => {
 
   useEffect(() => {
     console.log(videoData);
-  }, [videoData.viewCount])
+  }, [videoData.viewCount]);
 
   const handleSubmit = () => {
-
     if (commentText === '') {
       return;
     }
@@ -162,8 +170,9 @@ const VideoPlayerModal = ({ onPress }) => {
     <View style={{ flex: 1, backgroundColor: 'black' }}>
       <SubscriptionModalScreen duration={durationTime} />
       <Modal animationType="slide" visible={videoModal}>
-
-        <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
+        <ScrollView
+          style={{ flex: 1, backgroundColor: 'black' }}
+          keyboardShouldPersistTaps={'always'}>
           <SafeAreaView style={styles.safeArea} />
           <StatusBar barStyle="light-content" />
           <Pressable
@@ -174,7 +183,6 @@ const VideoPlayerModal = ({ onPress }) => {
                 Keyboard.dismiss();
               }
             }}>
-
             <TouchableOpacity
               style={styles.backContainer}
               onPress={() => {
@@ -209,7 +217,11 @@ const VideoPlayerModal = ({ onPress }) => {
               <FlatList
                 data={state.videos}
                 ListHeaderComponent={() => (
-                  <SectionHeader isRequired={false} icon={videoIcon} name="More Videos" />
+                  <SectionHeader
+                    isRequired={false}
+                    icon={videoIcon}
+                    name="More Videos"
+                  />
                 )}
                 ItemSeparatorComponent={() => (
                   <Divider style={styles.divider} />
@@ -229,9 +241,6 @@ const VideoPlayerModal = ({ onPress }) => {
                   if (item.id === videoData.id) {
                     return null;
                   } else {
-
-
-
                     return (
                       <TouchableHighlight
                         onPress={() => {
@@ -260,7 +269,7 @@ const VideoPlayerModal = ({ onPress }) => {
               isRequired={false}
             />
 
-            {user &&
+            {user && (
               <View style={styles.commentMainContainer}>
                 <Animated.View
                   style={[styles.commentContainer, { width: widthAnim }]}>
@@ -281,12 +290,14 @@ const VideoPlayerModal = ({ onPress }) => {
                       opacity: opacityAnim,
                     },
                   ]}>
-                  <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+                  <TouchableOpacity
+                    style={styles.submit}
+                    onPress={handleSubmit}>
                     <Text style={styles.submitText}>SEND</Text>
                   </TouchableOpacity>
                 </Animated.View>
               </View>
-            }
+            )}
             <View style={styles.commentSection}>
               {state.comments ? (
                 <>
@@ -370,10 +381,9 @@ const VideoPlayerModal = ({ onPress }) => {
                   </View>
                 </>
               ) : (
-                  <ActivityIndicator color="black" />
-                )}
+                <ActivityIndicator color="black" />
+              )}
             </View>
-
           </Pressable>
         </ScrollView>
       </Modal>

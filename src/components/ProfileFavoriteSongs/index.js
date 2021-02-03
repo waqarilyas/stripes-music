@@ -43,10 +43,12 @@ const ProfileFavoriteSongs = ({ navigation }) => {
   }, []);
 
   const playSong = async (currentSong, playlist) => {
-    console.log('current Song', currentSong);
+    const updatedPlaylist = playlist.filter(
+      (song) => song.id !== currentSong.id,
+    );
     try {
       reduxDispatch(changeSong(currentSong));
-      await TrackPlayer.add(playlist);
+      await TrackPlayer.add([currentSong, ...updatedPlaylist]);
       reduxDispatch(fullScreenChange(true));
       reduxDispatch(setPlaylist(playlist));
       reduxDispatch(addPlayCount(currentSong.id));

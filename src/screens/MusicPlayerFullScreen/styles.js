@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: '#000',
     flex: 1,
-    marginBottom: RFValue(Platform.OS === 'android' ? 50 : 65),
+    // marginBottom: RFValue(Platform.OS === 'android' ? 50 : 65),
   },
   header: {
     backgroundColor: 'black',
@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: RFValue(10),
     paddingVertical: RFValue(20),
     alignItems: 'center',
-    // marginTop: 50,
   },
   headerTitle: {
     color: 'white',
