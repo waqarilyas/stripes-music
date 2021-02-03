@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
-    marginTop: heightPercentageToDP(5.3)
+    // marginTop: heightPercentageToDP(5.3)
   },
-  loadBackgroundVideo:{
-    alignItems:'center',
+  loadBackgroundVideo: {
+    alignItems: 'center',
     justifyContent: 'center',
   },
   seek: {

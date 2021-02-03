@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 const styles = StyleSheet.create({
   commentDivider: {
     marginVertical: 12,
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginTop: 6,
     justifyContent: 'space-between',
+
   },
 
   rowContainer: {
@@ -142,21 +143,22 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   backContainer: {
-    top: 10,
-    padding: 20,
-    left: 10,
-    position: 'absolute',
+    // top: 10,
+    // padding: 20,
+    // left: 10,
+    // position: 'absolute',
 
-    zIndex: 1,
-    alignItems: 'center',
+    // zIndex: 1,
+    // alignItems: 'center',
     justifyContent: 'center'
   },
   cancelIcon: {
-    height: 25,
-    width: 25,
+    height: 18,
+    width: 18,
     tintColor: 'white',
     resizeMode: 'contain',
-    position: 'absolute',
+    marginRight: heightPercentageToDP(1)
+
   },
   commentMainContainer: {
     width: '100%',
@@ -185,6 +187,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
+  header: {
+
+    flexDirection: 'row'
+  }
 });
 
 export default styles;

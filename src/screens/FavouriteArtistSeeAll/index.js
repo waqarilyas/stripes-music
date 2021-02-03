@@ -15,7 +15,7 @@ const FavouriteArtistSeeAll = () => {
   const { list } = useSelector((state) => state.root.helpers);
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
+    const uid = auth().currentUser?.uid;
     const listener = firestore()
       .collection('users')
       .doc(uid)

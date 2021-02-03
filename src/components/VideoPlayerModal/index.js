@@ -175,25 +175,34 @@ const VideoPlayerModal = ({ onPress }) => {
               }
             }}>
 
-            <TouchableOpacity
-              style={styles.backContainer}
-              onPress={() => {
-                disp(displayVideoModal(false));
-              }}>
-              <Image source={closeIcon} style={styles.cancelIcon} />
-            </TouchableOpacity>
-            <VideoPlayer videoID={videoData.id} fileUrl={videoData.fileUrl} />
 
-            <Text style={styles.title}>{videoData.title}</Text>
-            <View style={styles.subContainer}>
-              <Text style={styles.author}>{videoData.artist}</Text>
-              <View style={styles.rowContainer}>
-                <Image source={eyeIcon} style={styles.icon} />
-                <Text style={styles.count}>
-                  {thousandSeparator(videoData?.viewCount)}
-                </Text>
+            <View style={styles.header}>
+              <TouchableOpacity
+                style={styles.backContainer}
+                onPress={() => {
+                  disp(displayVideoModal(false));
+                }}>
+                <Image source={closeIcon} style={styles.cancelIcon} />
+              </TouchableOpacity>
+              <View style={{}}>
+                <Text style={styles.title}>{videoData.title}</Text>
+                <View style={styles.subContainer}>
+                  <Text style={styles.author}>{videoData.artist}</Text>
+                  <View style={styles.rowContainer}>
+                    <Image source={eyeIcon} style={styles.icon} />
+                    <Text style={styles.count}>
+                      {thousandSeparator(videoData?.viewCount)}
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
+
+
+
+
+
+            <VideoPlayer videoID={videoData.id} fileUrl={videoData.fileUrl} />
 
             <Text style={styles.desc}>Description</Text>
             <Text style={styles.description} numberOfLines={collapse ? 0 : 2}>
@@ -204,7 +213,6 @@ const VideoPlayerModal = ({ onPress }) => {
                 {collapse ? 'See Less' : 'See More'}
               </Text>
             </TouchableOpacity>
-
             <View style={styles.slideContainer}>
               <FlatList
                 data={state.videos}

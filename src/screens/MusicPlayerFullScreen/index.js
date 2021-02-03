@@ -152,9 +152,9 @@ const MusicPlayerFullscreen = ({
             </View>
           </TouchableOpacity>
           <View style={styles.headerRight}>
-            <TouchableOpacity onPress={onShare}>
+            {/* <TouchableOpacity onPress={onShare}>
               <Image source={shareIcon} style={styles.icon} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={addToPlaylist}>
               <Image source={plusIcon} style={styles.icon} />
             </TouchableOpacity>
