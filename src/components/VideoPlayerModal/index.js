@@ -38,12 +38,10 @@ const initialState = {
   comments: [],
 };
 
-const VideoPlayerModal = ({ onPress }) => {
+const VideoPlayerModal = ( ) => {
   const { user } = useSelector((_state) => _state.root.firebase);
   const disp = useDispatch()
-  const { videoModal, videoData } = useSelector(
-    (_state) => _state.root.helpers,
-  );
+  const { videoModal, videoData } = useSelector((_state) => _state.root.helpers);
 
   const [currentVideo, setCurrentVideo] = useState({})
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -53,22 +51,7 @@ const VideoPlayerModal = ({ onPress }) => {
     showMore: [],
   });
   const [durationTime, setDurationTime] = useState(0);
-
-  // LOG('VIDEO DATA', videoData);
-
-  const getCurrentVideo = () => {
-    firestore()
-      .collection('videos')
-      .doc(videoData.id)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          setCurrentVideo(doc.data())
-        }
-      })
-  }
-
-
+  const [collapse, setCollapse] = useState(false);
 
   useEffect(() => {
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
@@ -90,9 +73,13 @@ const VideoPlayerModal = ({ onPress }) => {
         }));
         dispatch({ comments: allComments });
       });
-    getCurrentVideo();
+    // getCurrentVideo();
     return () => listener;
   }, []);
+
+  useEffect(()=>{
+    console.log(videoData);
+  },[videoData.viewCount])
 
   const handleSubmit = () => {
 
@@ -124,23 +111,13 @@ const VideoPlayerModal = ({ onPress }) => {
       .catch((err) => LOG('ADD ERROR', err));
   };
 
-  const [collapse, setCollapse] = useState(false);
-
-
   return (
     <View style={{ flex: 1, backgroundColor: 'black' }}>
-
-
-
-
       <SubscriptionModalScreen duration={durationTime} />
       <Modal animationType="slide" visible={videoModal}>
 
         <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
           <SafeAreaView style={styles.safeArea} />
-
-
-
           <StatusBar barStyle="light-content" />
           <View style={styles.container}>
             <TouchableOpacity
@@ -150,7 +127,7 @@ const VideoPlayerModal = ({ onPress }) => {
               }}>
               <Image source={closeIcon} style={styles.cancelIcon} />
             </TouchableOpacity>
-            <VideoPlayer videoID={videoData.id} fileUrl={videoData.fileUrl} onPress={onPress} />
+            <VideoPlayer videoID={videoData.id} fileUrl={videoData.fileUrl}/>
 
             <Text style={styles.title}>{videoData.title}</Text>
             <View style={styles.subContainer}>
@@ -158,7 +135,7 @@ const VideoPlayerModal = ({ onPress }) => {
               <View style={styles.rowContainer}>
                 <Image source={eyeIcon} style={styles.icon} />
                 <Text style={styles.count}>
-                  {thousandSeparator(currentVideo?.viewCount)}
+                  {thousandSeparator(videoData?.viewCount)}
                 </Text>
               </View>
             </View>
