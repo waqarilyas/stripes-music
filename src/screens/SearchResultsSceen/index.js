@@ -24,7 +24,7 @@ import { getSearchData } from '../../utils/Firebase';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const SearchResultsScreen = ({ query, selected }) => {
+const SearchResultsScreen = ({ query, selected, playSong }) => {
 
   const [selectedCategory, setSelectedCategory] = useState([]);
 
@@ -127,12 +127,16 @@ const SearchResultsScreen = ({ query, selected }) => {
             horizontal
             renderItem={({ item }) => {
               return (
-                <SongCard
-                  title={item.title.raw}
-                  artist={item.artist.raw}
-                  arts={[item.artwork.raw]}
-                  duration={item.duration.raw}
-                />
+                <TouchableOpacity onPress={() => {
+                  playSong(item)
+                }}>
+                  <SongCard
+                    title={item.title.raw}
+                    artist={item.artist.raw}
+                    arts={[item.artwork.raw]}
+                    duration={item.duration.raw}
+                  />
+                </TouchableOpacity>
               );
             }}
           />
