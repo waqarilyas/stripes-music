@@ -7,7 +7,7 @@ import styles from './styles';
 import ForYouAudioCard from '../../components/ForYouAudioCard';
 import {
   changeSong,
-  pushToPlaylist,
+  setPlaylist,
   fullScreenChange,
 } from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
@@ -19,23 +19,17 @@ const ForYouAudioSeeAll = () => {
   const dispatch = useDispatch();
   const { allSongs } = useSelector((state) => state.root.firebase);
 
-  const playSong = async ({ title, artist, artwork, url, duration, id }) => {
+  const playSong = async (currentSong) => {
+    const updatedPlaylist = allSongs.filter(
+      (song) => song.id !== currentSong.id,
+    );
     try {
-      const result = {
-        title,
-        artist,
-        artwork,
-        url,
-        duration,
-        id,
-        createdAt: +new Date(),
-      };
-      dispatch(changeSong(result));
-      dispatch(pushToPlaylist(result));
-      await TrackPlayer.add(result);
+      dispatch(changeSong(currentSong));
+      await TrackPlayer.add([currentSong, ...updatedPlaylist]);
       dispatch(fullScreenChange(true));
-      dispatch(addPlayCount(id));
-      dispatch(addToRecentlyPlayed(result));
+      dispatch(setPlaylist(allSongs));
+      dispatch(addPlayCount(currentSong.id));
+      dispatch(addToRecentlyPlayed(currentSong));
     } catch (error) {
       LOG('PLAY SONG', error);
     }

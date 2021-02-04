@@ -12,19 +12,14 @@ const styles = StyleSheet.create({
     marginVertical: hp('1'),
     textAlign: 'center',
   },
-  headerText: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: hp('3'),
-    marginBottom: hp('4'),
-    marginTop: hp('2'),
-  },
   textInput: {
     flex: 1,
     paddingVertical: hp('2'),
     color: '#ffffff',
     fontSize: hp('2'),
+  },
+  mainContainer: {
+    marginTop: hp('6'),
   },
   input: {
     backgroundColor: '#1a1a1a',

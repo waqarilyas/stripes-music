@@ -104,6 +104,8 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
 };
 
 export const getSearchData = async (searchValue, engineName, callback) => {
+  console.log('engine name', engineName)
+
   axios
     .get(`https://host-vgzu6u.api.swiftype.com/api/as/v1/engines/${engineName}/search?query=${searchValue}`,
       {

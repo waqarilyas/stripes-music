@@ -3,13 +3,12 @@ import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useSelector } from 'react-redux';
-
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { backIcon, searchIcon } from '../../../Assets/Icons';
 import SubscriptionModalScreen from '../../components/SubscriptionBottomSheet';
 import ForgotPassword from '../../screens/ForgotPassword';
 import IntroScreen from '../../screens/IntroScreen';
 import Login from '../../screens/Login';
-import MusicPlayerFullscreen from '../../screens/MusicPlayerFullScreen';
 import MusicPlayerModal from '../../screens/MusicPlayerModal';
 import NoInternet from '../../screens/NoInternet';
 import SearchResultsScreen from '../../screens/SearchResultsSceen';
@@ -71,7 +70,13 @@ const MainAppStack = () => {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ headerShown: false }}
+          options={({ navigation }) => ({
+            title: 'Login',
+            headerTitleStyle: { fontSize: hp('3'), fontWeight: 'bold' },
+            headerTitleAlign: 'center',
+            headerLeft: () => back(navigation),
+            headerStyle: styles.headerStyle,
+          })}
         />
 
         <Stack.Screen

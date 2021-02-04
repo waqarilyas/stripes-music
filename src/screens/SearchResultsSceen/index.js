@@ -25,9 +25,9 @@ import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const SearchResultsScreen = ({ query, selected }) => {
-  // const { selected } = route.params;
+
   const [selectedCategory, setSelectedCategory] = useState([]);
-  // const [query, setQuery] = useState('');
+
   const [searchResults, setSearchResults] = useState({
     songs: [],
     videos: [],
@@ -35,6 +35,9 @@ const SearchResultsScreen = ({ query, selected }) => {
     albums: [],
     artists: [],
   });
+
+
+  console.log(query, '--------', selected)
 
   const getSection = () => {
     const arr = [];
@@ -71,8 +74,10 @@ const SearchResultsScreen = ({ query, selected }) => {
   };
 
   useEffect(() => {
-    getSection();
-    performSearches();
+    if (query.length > 0) {
+      getSection();
+      performSearches();
+    }
   }, [query]);
 
   // const addToFirestore = async (text) => {
@@ -84,8 +89,10 @@ const SearchResultsScreen = ({ query, selected }) => {
   //   });
   // };
 
+  console.log('---search results--', searchResults)
+
   return (
-    <Block>
+    <View style={{ backgroundColor: 'black' }}>
       {/* <View style={styles.searchWithClose}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -232,7 +239,7 @@ const SearchResultsScreen = ({ query, selected }) => {
       {/* albums start here */}
 
       {/* albums end here */}
-    </Block>
+    </View>
   );
 };
 

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Text,
+  Alert
 } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import Video from 'react-native-video';
@@ -20,6 +21,7 @@ import {
   displayVideoModal,
   setVideoData,
   setVidoReferences,
+  displaySubscriptionScreen,
 } from '../../Redux/Reducers/helperSlice';
 import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
 import { convertToMinutes } from '../../utils/Helpers'
@@ -37,9 +39,9 @@ const initialState = {
 
 const VideoPlayer = ({ videoID, fileUrl }) => {
   const disp = useDispatch();
-  let videoPlayer = useRef(null);
+  let videoPlayer = useRef();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [controlsVisible, setControlsVisible] = useState(true)
+  const [controlsVisible, setControlsVisible] = useState(true);
   const [finished, setFinished] = useState(false);
   const { user } = useSelector((state) => state.root.firebase);
   const [reload, setReload] = useState(false);
@@ -90,7 +92,7 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
       .collection('videos')
       .doc(videoID)
       .update({
-        viewCount: firestore.FieldValue.increment(1)
+        viewCount: firestore.FieldValue.increment(1),
       })
       .then((res) => {
         firestore()
@@ -106,8 +108,16 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
               }, 1000);
             }
           });
-      })
-  }, [videoID])
+      });
+  }, [videoID]);
+
+
+  const subscriptionHandler = (data) => {
+    if (data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO && !user?.isPaidUser) {
+      disp(displayVideoModal(false));
+      disp(displaySubscriptionScreen(true));
+    }
+  };
 
   // if (controlsVisible) {
   //   setTimeout(() => {

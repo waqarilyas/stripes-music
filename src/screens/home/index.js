@@ -48,6 +48,7 @@ import {
   getUser,
   getVideos,
 } from '../../Redux/Reducers/firebaseSlice';
+import { uploadDataToStorage } from '../../utils/Firebase'
 import styles from './styles';
 
 const wait = (timeout) => {
@@ -113,9 +114,12 @@ const Home = ({ navigation }) => {
   }, []);
 
   const playSong = async (currentSong, playlist) => {
+    const updatedPlaylist = playlist.filter(
+      (song) => song.id !== currentSong.id,
+    );
     try {
       dispatch(changeSong(currentSong));
-      await TrackPlayer.add(playlist);
+      await TrackPlayer.add([currentSong, ...updatedPlaylist]);
       dispatch(fullScreenChange(true));
       dispatch(setPlaylist(playlist));
       dispatch(addPlayCount(currentSong.id));
@@ -124,6 +128,12 @@ const Home = ({ navigation }) => {
       LOG('PLAY SONG', error);
     }
   };
+
+  useEffect(() => {
+    uploadDataToStorage('songs', 'songs', (res) => {
+      console.log('-------data upload----', res)
+    })
+  }, [])
 
   return (
     <ScrollView

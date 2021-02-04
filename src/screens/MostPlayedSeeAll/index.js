@@ -1,49 +1,18 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, View, Text } from 'react-native';
 import { Divider } from 'react-native-elements';
 import SongItem from '../../components/SongItem';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 
 import styles from './styles';
 import { getOrderedCollections } from '../../utils/Firebase';
-import reducer from '../../hooks/useReducer';
-
-const initialState = {
-  songs: [],
-  favoriteSongs: [],
-};
 
 const MostPlayedSeeAll = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [favSongs, setFavSongs] = useState([]);
   const { mostPlayedSongs } = useSelector((state) => state.root.firebase);
   useEffect(() => {
     getOrderedCollections('songs', 'playCount', 'desc', (collection) =>
       dispatch({ songs: collection }),
     );
-
-    const uid = auth().currentUser?.uid;
-    const userDoc = firestore().collection('users').doc(uid);
-    userDoc.get().then((document) => {
-      if (document.exists) {
-        const favoriteSongsList = document.data().favoriteSongs;
-        dispatch({ favoriteSongs: favoriteSongsList });
-      }
-    });
-    const listener = firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('favSongs')
-      .onSnapshot((snapshot) => {
-        const favSongs = [];
-        snapshot.docs.forEach((doc) => {
-          favSongs.push(doc.data());
-        });
-        setFavSongs(favSongs);
-      });
-    return () => listener;
   }, []);
 
   return (

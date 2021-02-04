@@ -111,9 +111,10 @@ const SearchScreen = ({ navigation }) => {
         <View style={styles.searchWithClose}>
           <TouchableOpacity
             style={styles.searchContainer}
-            onPress={() =>
-              navigation.navigate('SearchResultsScreen', { selected: selected })
-            }>
+          // onPress={() =>
+          //   navigation.navigate('SearchResultsScreen', { selected: selected, query: {} })
+          // }
+          >
             <Image source={searchIcon} style={styles.searchIcon} />
             <TextInput
               placeholder="Search..."
@@ -172,6 +173,7 @@ const SearchScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <SearchResultsScreen query={query} selected={selected} />
         <View style={styles.header}>
           <Image source={clockIcon} style={styles.headerIcon} />

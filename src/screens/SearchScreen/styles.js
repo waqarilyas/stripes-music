@@ -45,19 +45,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: RFValue('10'),
+
   },
   buttonsView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: RFValue('10'),
+
   },
   buttonContainer: {
-    marginVertical: hp(2),
+    paddingVertical: hp(6),
+
+
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: RFValue('20'),
+    // marginBottom: RFValue('20'),
   },
   headerText: {
     color: 'white',
