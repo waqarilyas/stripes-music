@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Video from 'react-native-video';
 import { useDispatch } from 'react-redux';
@@ -29,10 +29,10 @@ import styles from './styles';
 
 const IntroScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-
+  const [show, setShow] = useState(true);
   useEffect(() => {
     setTimeout(() => {
-      navigation.pop();
+      setShow(false);
       navigation.navigate('MainTabs');
     }, 5000);
   }, []);
@@ -64,14 +64,13 @@ const IntroScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Video
-        source={introVideo}
-        onBuffer={this.onBuffer}
-        onError={this.videoError}
-        style={styles.backgroundVideo}
-        resizeMode={'cover'}
-        repeat={true}
-      />
+      {show ? (
+        <Video
+          source={introVideo}
+          style={styles.backgroundVideo}
+          resizeMode={'cover'}
+        />
+      ) : null}
     </View>
   );
 };
