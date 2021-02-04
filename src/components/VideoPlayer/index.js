@@ -94,7 +94,6 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
           });
       });
   }, [videoID]);
-  console.log('videoPlayer', videoPlayer);
 
   const subscriptionHandler = (data) => {
     if (data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO && !user?.isPaidUser) {

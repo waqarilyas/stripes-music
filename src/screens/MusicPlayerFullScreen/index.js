@@ -135,13 +135,14 @@ const MusicPlayerFullscreen = ({
       animationType="slide"
       transparent={true}
       visible={isVisible}
-      onRequestClose={() => { }}>
+      onRequestClose={() => {}}>
       <FullScreenOverlay
         visible={visible}
         onBackdropPress={toggleOverlay}
         toggleOverlay={toggleOverlay}
         playlists={playlists}
         targetSong={currentSong}
+        switchMode={switchMode}
       />
       <SafeAreaView style={styles.mainContainer}>
         <View style={styles.header}>
@@ -236,17 +237,17 @@ const MusicPlayerFullscreen = ({
                 <ActivityIndicator color={'black'} />
               </View>
             ) : (
-                <TouchableOpacity onPress={togglePlayback}>
-                  <Image
-                    source={playing ? pauseButton : playButton}
-                    style={
-                      playlistVisible
-                        ? styles.playlistOpenMiddleIcon
-                        : styles.fullscreenMiddleIcon
-                    }
-                  />
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity onPress={togglePlayback}>
+                <Image
+                  source={playing ? pauseButton : playButton}
+                  style={
+                    playlistVisible
+                      ? styles.playlistOpenMiddleIcon
+                      : styles.fullscreenMiddleIcon
+                  }
+                />
+              </TouchableOpacity>
+            )}
 
             <TouchableOpacity onPress={skipToNext}>
               <Image

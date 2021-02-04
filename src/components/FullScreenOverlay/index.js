@@ -10,14 +10,10 @@ import {
   Modal,
   View,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import {
-  changeToMiniModal,
-  fullScreenChange,
-} from '../../Redux/Reducers/audioSlice';
 import { Overlay } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { plusIcon } from '../../../Assets/Icons';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
@@ -29,6 +25,7 @@ const FullScreenOverlay = ({
   toggleOverlay,
   onBackdropPress,
   navigation,
+  switchMode,
 }) => {
   const [added, setAdded] = useState(false);
   const [removed, setRemoved] = useState(false);
@@ -61,7 +58,7 @@ const FullScreenOverlay = ({
         setAdded(true);
         console.log('-----SUCCESS----', res);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const removeFromPlaylist = (playlistId) => {
@@ -76,12 +73,7 @@ const FullScreenOverlay = ({
       .then((res) => {
         setRemoved(true);
       })
-      .catch(() => { });
-  };
-
-  const resumePlayer = () => {
-    dispatch(changeToMiniModal(false));
-    dispatch(fullScreenChange(true));
+      .catch(() => {});
   };
 
   return (
@@ -150,9 +142,10 @@ const FullScreenOverlay = ({
           style={styles.createPlaylistTitle}
           onPress={() => {
             if (!navigation) {
-              dispatch(changeToMiniModal(true));
-              dispatch(fullScreenChange(false));
-              global.nav.navigate('CreateNewPlaylist', { resumePlayer });
+              switchMode('miniplayer');
+              global.nav.navigate('CreateNewPlaylist', {
+                switchMode,
+              });
             } else {
               navigation.navigate('CreateNewPlaylist');
             }

@@ -26,10 +26,6 @@ import RecentPlayedSeeAll from '../../screens/RecentPlayedSeeAll';
 import TopAlbumsSeeAll from '../../screens/TopAlbumsSeeAll';
 import ForYouTabs from '../Tabs/ForYouTabs';
 import NowPlayingTabs from '../Tabs/NowPlayingTabs';
-import {
-  changeToMiniModal,
-  fullScreenChange,
-} from '../../Redux/Reducers/audioSlice';
 
 const Stack = createStackNavigator();
 
@@ -55,24 +51,6 @@ const HeaderRight = (navigation) => (
 
 const HomeStack = () => {
   const dispatch = useDispatch();
-
-  const resumePlayer = () => {
-    dispatch(changeToMiniModal(false));
-    dispatch(fullScreenChange(true));
-  };
-
-  const HeaderLeftPlaylist = (navigation) => {
-    return (
-      <TouchableOpacity
-        style={styles.backButtonContainer}
-        onPress={() => {
-          resumePlayer();
-          navigation.goBack();
-        }}>
-        <Image source={backIcon} style={styles.back} />
-      </TouchableOpacity>
-    );
-  };
 
   const BackButton = ({ handleNavigation }) => (
     <TouchableOpacity
@@ -206,7 +184,6 @@ const HomeStack = () => {
           title: '',
           headerTitleAlign: 'center',
           headerTitleStyle: styles.headerTitleStyle,
-          headerLeft: () => HeaderLeftPlaylist(navigation),
           headerStyle: styles.headerStyle,
         })}
       />
