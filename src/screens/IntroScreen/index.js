@@ -71,6 +71,8 @@ const IntroScreen = ({ navigation }) => {
         style={styles.backgroundVideo}
         resizeMode={'cover'}
         repeat={true}
+        pictureInPicture={false}
+        playInBackground={false}
       />
     </View>
   );

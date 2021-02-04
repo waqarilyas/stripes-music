@@ -132,6 +132,19 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     uploadDataToStorage('songs', 'songs', (res) => {
       console.log('-------data upload----', res)
+    }
+    )
+    uploadDataToStorage('videos', 'videos', (res) => {
+      console.log('-------data upload----', res)
+    })
+    uploadDataToStorage('playlists', 'playlists', (res) => {
+      console.log('-------data upload----', res)
+    })
+    uploadDataToStorage('artists', 'artists', (res) => {
+      console.log('-------data upload----', res)
+    })
+    uploadDataToStorage('albums', 'albums', (res) => {
+      console.log('-------data upload----', res)
     })
   }, [])
 

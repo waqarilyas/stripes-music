@@ -7,12 +7,15 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import dayjs from 'dayjs';
 import moment from 'moment';
+import TrackPlayer from 'react-native-track-player'
+import { useDispatch, useSelector } from 'react-redux'
 import SearchResultsScreen from '../SearchResultsSceen';
 
 const relativeTime = require('dayjs/plugin/relativeTime');
@@ -44,10 +47,17 @@ import RecentSearchesCard from '../../components/RecentSearchesCard';
 import SearchScreenButton from '../../components/SearchScreenButton';
 
 import styles from './styles';
+import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
+
 
 const SearchScreen = ({ navigation }) => {
   const [searchHistory, setSearchHistory] = useState([]);
   const [query, setQuery] = useState('');
+  const dispatch = useDispatch()
+  const { songs } = useSelector((state) => state.root.firebase);
+
   const [selected, setSelected] = useState({
     all: false,
     songs: false,
@@ -89,6 +99,36 @@ const SearchScreen = ({ navigation }) => {
       });
   }, []);
 
+  const playSong = async (currentSong) => {
+    console.log('---current-song---', currentSong)
+
+    const song = {
+      score: currentSong._meta.score,
+      artist: currentSong.artist.raw,
+      artwork: currentSong.artwork.raw,
+      duration: currentSong.duration.raw,
+      id: currentSong.id.raw,
+      title: currentSong.title.raw
+    }
+    console.log('----current song----', song)
+
+
+    const updatedPlaylist = songs.filter(
+      (item) => item.id !== song.id,
+    );
+
+    try {
+      dispatch(changeSong(song));
+      await TrackPlayer.add([song, ...updatedPlaylist]);
+      dispatch(fullScreenChange(true));
+      // dispatch(setPlaylist(songs));
+      dispatch(addPlayCount(song.id));
+      dispatch(addToRecentlyPlayed(song));
+    } catch (error) {
+      console.log('---error----', error)
+    }
+  };
+
   const selectButton = (name, value) => {
     setSelected((prevState) => ({
       ...prevState,
@@ -106,7 +146,7 @@ const SearchScreen = ({ navigation }) => {
   };
 
   return (
-    <>
+    <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.searchWithClose}>
           <TouchableOpacity
@@ -174,7 +214,7 @@ const SearchScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <SearchResultsScreen query={query} selected={selected} />
+        <SearchResultsScreen query={query} selected={selected} playSong={playSong} />
         <View style={styles.header}>
           <Image source={clockIcon} style={styles.headerIcon} />
           <Text style={styles.headerText}>Recent Searches</Text>
@@ -188,7 +228,7 @@ const SearchScreen = ({ navigation }) => {
                 'MMMM Do YYYY, h:mm:ss a',
               );
               const created = dayjs().from(dayjs(item.createdAt), true);
-              console.log('---created---', tm);
+
               return (
                 <RecentSearchesCard
                   title={item.text}
@@ -206,7 +246,7 @@ const SearchScreen = ({ navigation }) => {
             </View>
           )}
       </SafeAreaView>
-    </>
+    </ScrollView>
   );
 };
 

@@ -25,6 +25,8 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
     .get()
     .then((documents) => {
       documents.forEach((document) => {
+        console.log('---data to upload---', document.data().fileUrl)
+
         if (document.exists) {
           switch (collection) {
             case 'songs':
@@ -34,8 +36,12 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 duration: document.data().duration,
                 id: document.data().id,
                 title: document.data().title,
+                fileUrl: document.data().fileUrl
               };
-              documentsData.push(audio);
+              console.log('---audio----', audio.fileUrl)
+
+
+              documentsData.push(document.data());
               break;
             case 'videos':
               const video = {
@@ -44,8 +50,9 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 duration: document.data().duration,
                 id: document.data().id,
                 title: document.data().title,
+                fileUrl: document.data().fileUrl
               };
-              documentsData.push(video);
+              documentsData.push(document.data());
               break;
             case 'playlists':
               const playlist = {
@@ -56,7 +63,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 image: document.data().image,
               };
 
-              documentsData.push(playlist);
+              documentsData.push(document.data());
               break;
             case 'artists':
               const artists = {
@@ -65,7 +72,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 image: document.data().imgUrl,
                 followercount: document.data().followerCount,
               };
-              documentsData.push(artists);
+              documentsData.push(document.data());
               break;
             case 'albums':
               const albums = {
@@ -75,7 +82,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 songcount: document.data().songCount,
                 title: document.data().title,
               };
-              documentsData.push(albums);
+              documentsData.push(document.data());
               break;
             default:
               break;
@@ -97,14 +104,15 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
         headers: headers,
       },
     )
-    .then((response) => { })
+    .then((response) => {
+      console.log('--DATA POSTED SUCCESSFULLY---')
+    })
     .catch((error) => {
       console.log('-----POST ERROR------', engineName, ':', error);
     });
 };
 
 export const getSearchData = async (searchValue, engineName, callback) => {
-  console.log('engine name', engineName)
 
   axios
     .get(`https://host-vgzu6u.api.swiftype.com/api/as/v1/engines/${engineName}/search?query=${searchValue}`,

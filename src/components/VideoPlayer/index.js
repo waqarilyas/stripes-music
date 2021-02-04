@@ -139,7 +139,7 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
             resizeMode="cover"
             fullscreen={true}
             onVideoFullscreenPlayerWillPresent={(res) => { }}
-            pictureInPicture={true}
+            pictureInPicture={false}
 
             onLoad={(data) => {
               dispatch({ duration: data.duration });
