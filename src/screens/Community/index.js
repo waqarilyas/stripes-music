@@ -4,6 +4,7 @@ import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
 import { Alert, FlatList } from 'react-native';
 import ChatCard from '../../components/ChatCard';
+import EmptyChatList from '../../components/EmptyChatList'
 import reducer from '../../hooks/useReducer';
 
 const initialState = {
@@ -89,8 +90,8 @@ const Community = ({ navigation }) => {
         data={state.inbox}
         contentContainerStyle={{ flex: 1, backgroundColor: 'black' }}
         keyExtractor={(item) => randomize(10)}
-        // ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
-        // ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+        ListEmptyComponent={() => <EmptyChatList navigation={navigation} />}
+        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         scrollEnabled={state.inbox.length < 1 ? false : true}
         renderItem={({ item }) => {
           const targetUser =

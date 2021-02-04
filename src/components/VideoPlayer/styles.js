@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   },
   fullScreenIcon: {
     ...icon,
+    tintColor: 'white'
   },
   muteContainer: {
     position: 'absolute',
