@@ -100,7 +100,7 @@ const SearchScreen = ({ navigation }) => {
   }, []);
 
   const playSong = async (currentSong) => {
-    console.log('---current-song---', currentSong)
+
 
     const song = {
       score: currentSong._meta.score,
@@ -110,20 +110,25 @@ const SearchScreen = ({ navigation }) => {
       id: currentSong.id.raw,
       title: currentSong.title.raw
     }
-    console.log('----current song----', song)
 
 
     const updatedPlaylist = songs.filter(
       (item) => item.id !== song.id,
     );
+    const currentSongFromPLaylist = songs.filter(item => {
+      console.log(item.id == song.id)
+      return item.id === song.id
+    })
+
+    console.log('-----searched song-----', currentSongFromPLaylist)
 
     try {
-      dispatch(changeSong(song));
-      await TrackPlayer.add([song, ...updatedPlaylist]);
+      dispatch(changeSong(currentSongFromPLaylist));
+      await TrackPlayer.add([currentSongFromPLaylist, ...updatedPlaylist]);
       dispatch(fullScreenChange(true));
       // dispatch(setPlaylist(songs));
-      dispatch(addPlayCount(song.id));
-      dispatch(addToRecentlyPlayed(song));
+      dispatch(addPlayCount(currentSongFromPLaylist.id));
+      dispatch(addToRecentlyPlayed(currentSongFromPLaylist));
     } catch (error) {
       console.log('---error----', error)
     }

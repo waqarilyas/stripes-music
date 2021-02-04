@@ -37,7 +37,7 @@ const SearchResultsScreen = ({ query, selected, playSong }) => {
   });
 
 
-  console.log(query, '--------', selected)
+
 
   const getSection = () => {
     const arr = [];
