@@ -14,6 +14,9 @@ Navigate into the project folder and run the following command
 npm install
 ```
 
+In order to remove picture in picture from IOS, place the following line in RCTVideo.m line Number:159
+viewController.allowsPictureInPicturePlayback = false;
+
 ### Install iOS depdencies using pods
 
 Navigate into the ios folder and run the following command
