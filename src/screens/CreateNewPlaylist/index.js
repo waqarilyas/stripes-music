@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
   View,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
@@ -20,19 +21,38 @@ import Button from '../../components/Button';
 import { CreatePlaylistVS } from '../../utils/Validation';
 import styles from './styles';
 import { useDispatch } from 'react-redux';
-import { fullScreenChange } from '../../Redux/Reducers/audioSlice';
+import { backIcon } from '../../../Assets/Icons';
 
 const initValues = {
   title: '',
   err: '',
 };
 
-const CreateNewPlaylist = ({ navigation, route, resumePlayer }) => {
+const CreateNewPlaylist = ({ navigation, route }) => {
   const [fileUri, setFileuri] = useState(null);
   const [ext, setExt] = useState('');
   const [privacy, setPrivacy] = useState(false);
   const uid = auth().currentUser?.uid;
   const dispatch = useDispatch();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ headerLeft: () => back() });
+  }, [navigation]);
+
+  const back = () => {
+    return (
+      <TouchableOpacity
+        style={styles.backButtonContainer}
+        onPress={() => {
+          if (route.params) {
+            route.params.switchMode('fullscreen');
+          }
+          navigation.goBack();
+        }}>
+        <Image source={backIcon} style={styles.back} />
+      </TouchableOpacity>
+    );
+  };
 
   const chooseImage = () => {
     const options = {
@@ -143,11 +163,9 @@ const CreateNewPlaylist = ({ navigation, route, resumePlayer }) => {
       })
       .then(() => {
         if (route.params) {
-          route.params.resumePlayer();
-          navigation.goBack();
-        } else {
-          navigation.goBack();
+          route.params.switchMode('fullscreen');
         }
+        navigation.goBack();
       });
   };
 
@@ -199,6 +217,9 @@ const CreateNewPlaylist = ({ navigation, route, resumePlayer }) => {
                     value={privacy}
                     onValueChange={(newValue) => setPrivacy(newValue)}
                     onTintColor="#F5138E"
+                    tintColors={{ true: '#F5138E', false: '#fff' }}
+                    boxType={'circle'}
+                    tintColor={'#fff'}
                     onCheckColor="#F5138E"
                   />
                   <Text style={styles.private}>Private</Text>

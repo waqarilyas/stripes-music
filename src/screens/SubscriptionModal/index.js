@@ -66,14 +66,14 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
       });
   };
 
-  const handleSignOut = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        toggleModal();
-        navigation.navigate('Home');
-      });
-  };
+  // const handleSignOut = () => {
+  //   auth()
+  //     .signOut()
+  //     .then(() => {
+  //       toggleModal();
+  //       navigation.navigate('Home');
+  //     });
+  // };
 
   return (
     <>
@@ -141,13 +141,6 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
           </View>
         </TouchableOpacity>
 
-        {user && (
-          <TouchableOpacity
-            onPress={handleSignOut}
-            style={styles.logoutButtonContainer}>
-            <Text style={styles.logoutButtonText}>Signout</Text>
-          </TouchableOpacity>
-        )}
         {/* </View> */}
 
         {state.loading && (
@@ -166,8 +159,6 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
           </View>
         )}
       </SafeAreaView>
-
-
     </>
   );
 };

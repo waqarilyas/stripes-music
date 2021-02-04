@@ -26,13 +26,14 @@ const initalState = {
 const ProfileFavoriteSongs = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initalState);
   const reduxDispatch = useDispatch();
+  const uid = auth().currentUser?.uid;
 
   useEffect(() => {
-    const uid = auth().currentUser?.uid;
-    firestore()
+    const listener = firestore()
       .collection('users')
       .doc(uid)
       .collection('favSongs')
+      .where('isFavourite', '==', true)
       .onSnapshot((snapshot) => {
         const favSongs = [];
         snapshot.docs.forEach((doc) => {
@@ -40,6 +41,7 @@ const ProfileFavoriteSongs = ({ navigation }) => {
         });
         dispatch({ favSongs });
       });
+    return listener;
   }, []);
 
   const playSong = async (currentSong, playlist) => {

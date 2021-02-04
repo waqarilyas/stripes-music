@@ -22,6 +22,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: hp('2'),
   },
+  backButtonContainer: {
+    paddingRight: 15,
+    paddingVertical: 10,
+  },
+  back: {
+    resizeMode: 'contain',
+    marginLeft: 18,
+  },
   error: {
     color: '#B22222',
     marginVertical: hp('1'),

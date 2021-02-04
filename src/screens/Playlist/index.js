@@ -30,7 +30,7 @@ import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
 const Playlist = ({ navigation, route }) => {
-  const { title, songs, id: playlistId } = route.params;
+  const { image, title, songs, id: playlistId } = route.params;
   const { allSongs } = useSelector((state) => state.root.firebase);
   const [favSongs, setFavSongs] = useState([]);
   const [playlistSongs, setPlaylistSongs] = useState([]);
@@ -116,7 +116,7 @@ const Playlist = ({ navigation, route }) => {
   const resetPlay = async () => {
     try {
       await TrackPlayer.reset();
-    } catch (error) { }
+    } catch (error) {}
     dispatch(changeToMiniModal(false));
   };
 
@@ -209,7 +209,10 @@ const Playlist = ({ navigation, route }) => {
         style={styles.linearGradient}
         colors={['#000', '#1C2745']}>
         <View style={styles.imageContainer}>
-          <Image source={playlistDefault} style={styles.image} />
+          <Image
+            source={image === '' ? playlistDefault : { uri: image }}
+            style={styles.image}
+          />
           <Text style={styles.titleText}>{title}</Text>
           <View style={styles.songsHeaderContainer}>
             <View style={styles.songsSubContainer}>

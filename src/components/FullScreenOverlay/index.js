@@ -11,12 +11,9 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import {
-  changeToMiniModal,
-  fullScreenChange,
-} from '../../Redux/Reducers/audioSlice';
 import { Overlay } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { plusIcon } from '../../../Assets/Icons';
@@ -29,6 +26,7 @@ const FullScreenOverlay = ({
   toggleOverlay,
   onBackdropPress,
   navigation,
+  switchMode,
 }) => {
   const [added, setAdded] = useState(false);
   const [removed, setRemoved] = useState(false);
@@ -79,11 +77,6 @@ const FullScreenOverlay = ({
       .catch(() => { });
   };
 
-  const resumePlayer = () => {
-    dispatch(changeToMiniModal(false));
-    dispatch(fullScreenChange(true));
-  };
-
   return (
     <Overlay
       isVisible={visible}
@@ -110,10 +103,10 @@ const FullScreenOverlay = ({
                 },
               ]}
               onPress={() => {
-                if(addedToPlaylist)
+                if (addedToPlaylist)
                   removeFromPlaylist(item.id);
                 else
-                   addToPlaylist(item.id);
+                  addToPlaylist(item.id);
               }}>
               <Text style={styles.checkboxInput}>{item.title}</Text>
               {addedToPlaylist && (
@@ -151,9 +144,10 @@ const FullScreenOverlay = ({
           style={styles.createPlaylistTitle}
           onPress={() => {
             if (!navigation) {
-              dispatch(changeToMiniModal(true));
-              dispatch(fullScreenChange(false));
-              global.nav.navigate('CreateNewPlaylist', { resumePlayer });
+              switchMode('miniplayer');
+              global.nav.navigate('CreateNewPlaylist', {
+                switchMode,
+              });
             } else {
               navigation.navigate('CreateNewPlaylist');
             }

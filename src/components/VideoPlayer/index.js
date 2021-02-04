@@ -111,7 +111,6 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
       });
   }, [videoID]);
 
-
   const subscriptionHandler = (data) => {
     if (data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO && !user?.isPaidUser) {
       disp(displayVideoModal(false));
