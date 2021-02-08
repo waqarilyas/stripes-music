@@ -7,15 +7,15 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import TrackPlayer from 'react-native-track-player'
-import { useDispatch, useSelector } from 'react-redux'
+import TrackPlayer from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
 import SearchResultsScreen from '../SearchResultsSceen';
 
 const relativeTime = require('dayjs/plugin/relativeTime');
@@ -51,11 +51,10 @@ import { changeSong, fullScreenChange } from '../../Redux/Reducers/audioSlice';
 import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
 import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
 
-
 const SearchScreen = ({ navigation }) => {
   const [searchHistory, setSearchHistory] = useState([]);
   const [query, setQuery] = useState('');
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { songs } = useSelector((state) => state.root.firebase);
 
   const [selected, setSelected] = useState({
@@ -100,11 +99,9 @@ const SearchScreen = ({ navigation }) => {
   }, []);
 
   const playSong = async (currentSong) => {
-
-
-    const currentSongFromPLaylist = songs.filter(item => {
-      return item.id === currentSong.id.raw
-    })
+    const currentSongFromPLaylist = songs.filter((item) => {
+      return item.id === currentSong.id.raw;
+    });
 
     try {
       dispatch(changeSong(currentSongFromPLaylist));
@@ -114,7 +111,7 @@ const SearchScreen = ({ navigation }) => {
       dispatch(addPlayCount(currentSongFromPLaylist.id));
       dispatch(addToRecentlyPlayed(currentSongFromPLaylist));
     } catch (error) {
-      console.log('---error----', error)
+      console.log('---error----', error);
     }
   };
 
@@ -140,9 +137,9 @@ const SearchScreen = ({ navigation }) => {
         <View style={styles.searchWithClose}>
           <TouchableOpacity
             style={styles.searchContainer}
-          // onPress={() =>
-          //   navigation.navigate('SearchResultsScreen', { selected: selected, query: {} })
-          // }
+            // onPress={() =>
+            //   navigation.navigate('SearchResultsScreen', { selected: selected, query: {} })
+            // }
           >
             <Image source={searchIcon} style={styles.searchIcon} />
             <TextInput
@@ -164,9 +161,12 @@ const SearchScreen = ({ navigation }) => {
         <View style={styles.buttonContainer}>
           <View style={styles.buttonsView}>
             <TouchableOpacity
-              onPress={() => selectButton('all', !selected.all)}
+              onPress={() => selectButton('all')}
               style={styles.item}>
-              <SearchScreenButton title="ALL" selected={selected.all} />
+              <SearchScreenButton
+                title="ALL"
+                selected={(selected.all, !selected.all)}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => selectButton('songs', !selected.songs)}
@@ -203,7 +203,11 @@ const SearchScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <SearchResultsScreen query={query} selected={selected} playSong={playSong} />
+        <SearchResultsScreen
+          query={query}
+          selected={selected}
+          playSong={playSong}
+        />
         <View style={styles.header}>
           <Image source={clockIcon} style={styles.headerIcon} />
           <Text style={styles.headerText}>Recent Searches</Text>
@@ -227,13 +231,13 @@ const SearchScreen = ({ navigation }) => {
             }}
           />
         ) : (
-            <View style={styles.recentSearchesContainer}>
-              <Image source={hourGlassIcon} style={styles.recentIcon} />
-              <Text style={styles.recentSearchesText}>
-                No recent searches yet!
+          <View style={styles.recentSearchesContainer}>
+            <Image source={hourGlassIcon} style={styles.recentIcon} />
+            <Text style={styles.recentSearchesText}>
+              No recent searches yet!
             </Text>
-            </View>
-          )}
+          </View>
+        )}
       </SafeAreaView>
     </ScrollView>
   );

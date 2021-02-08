@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text, TouchableOpacity } from 'react-native';
+import { Image, Text, TouchableOpacity, Alert } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 
@@ -20,7 +20,22 @@ const FullScreenPlaylistCard = ({ item }) => {
         </ListItem.Subtitle>
       </ListItem.Content>
       <Text style={styles.duration}>{(item.duration / 60).toFixed(3)}</Text>
-      <TouchableOpacity onPress={() => dispatch(removeFromPlaylist(item))}>
+      <TouchableOpacity
+        onPress={() => {
+          Alert.alert(
+            'Confirm!',
+            'Are you sure you want to delete this song from list?',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'OK', onPress: () => dispatch(removeFromPlaylist(item)) },
+            ],
+            { cancelable: false },
+          );
+        }}>
         <Image source={deleteIcon} style={styles.deleteIcon} />
       </TouchableOpacity>
       {/* <Image source={} /> */}

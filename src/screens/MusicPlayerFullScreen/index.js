@@ -333,13 +333,19 @@ const MusicPlayerFullscreen = ({
                   </TouchableOpacity>
                 </View>
               </View>
+
               <FlatList
                 data={queue}
                 ListEmptyComponent={<EmptyPlaylist />}
+                contentContainerStyle={{
+                  minHeight: `80%`,
+                }}
                 keyExtractor={() => randomize('Aa0!', 10)}
                 renderItem={({ item }) => {
                   return (
-                    <TouchableOpacity onPress={() => playNewSong(item)}>
+                    <TouchableOpacity
+                      onPress={() => playNewSong(item)}
+                      style={{ flex: 1 }}>
                       <FullScreenPlaylistCard item={item} />
                     </TouchableOpacity>
                   );
