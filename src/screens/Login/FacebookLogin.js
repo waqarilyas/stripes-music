@@ -59,7 +59,7 @@ const onFacebookButtonPress = async (setVisibility) => {
     return true;
   } catch (err) {
     setVisibility(false);
-    console.log(err);
+
     return false;
   }
 };

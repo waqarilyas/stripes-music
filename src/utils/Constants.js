@@ -52,9 +52,9 @@ export const PLAYER_CONFIG = {
     TrackPlayer.CAPABILITY_SEEK_TO,
     TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
     TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-    TrackPlayer.CAPABILITY_SET_RATING,
-    TrackPlayer.CAPABILITY_PLAY_FROM_ID,
-    TrackPlayer.CAPABILITY_JUMP_FORWARD,
-    TrackPlayer.CAPABILITY_JUMP_BACKWARD,
+    // TrackPlayer.CAPABILITY_SET_RATING,
+    // TrackPlayer.CAPABILITY_PLAY_FROM_ID,
+    // TrackPlayer.CAPABILITY_JUMP_FORWARD,
+    // TrackPlayer.CAPABILITY_JUMP_BACKWARD,
   ],
 };

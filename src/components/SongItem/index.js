@@ -70,7 +70,7 @@ const SongItem = ({ song, playlist }) => {
       .doc(id)
       .set({ ...song, isFavourite: true })
       .then(() => {
-        console.log('success');
+
       })
       .catch((error) => {
         console.log('error', error);
@@ -85,7 +85,7 @@ const SongItem = ({ song, playlist }) => {
       .doc(id)
       .update({ isFavourite: false })
       .then(() => {
-        console.log('success');
+
       })
       .catch((error) => {
         console.log('error', error);
@@ -145,11 +145,11 @@ const SongItem = ({ song, playlist }) => {
               {addToQueue ? (
                 <Image source={tickIcon} style={styles.tick} />
               ) : (
-                <>
-                  <Avatar size={40} rounded source={queueIcon} />
-                  <Text style={styles.overlayTitle}>Add To Queue</Text>
-                </>
-              )}
+                  <>
+                    <Avatar size={40} rounded source={queueIcon} />
+                    <Text style={styles.overlayTitle}>Add To Queue</Text>
+                  </>
+                )}
             </TouchableOpacity>
           </View>
 

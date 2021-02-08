@@ -50,7 +50,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
 
     RNIap.requestSubscription(state.productIDs[0]?.productId, false)
       .then((res) => {
-        console.log(res);
+
         firestore()
           .collection('users')
           .doc(uid)

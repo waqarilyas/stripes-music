@@ -59,9 +59,7 @@ const ChangePassword = ({ navigation }) => {
   }, [emptyFieldError, matchErr, wrongPassword, passwordUpdated]);
 
   const handleSubmit = () => {
-    console.log(currentPass);
-    console.log(newPass);
-    console.log(confirmPass);
+    
 
     if (currentPass === '' || newPass == '' || confirmPass == '') {
       setEmptyFieldError(true);
@@ -88,7 +86,7 @@ const ChangePassword = ({ navigation }) => {
   };
 
   const setNewPassword = () => {
-    console.log(currentPass, '---------', newPass);
+
     setLoading(true);
     reauthenticate()
       .then(() => {
@@ -97,18 +95,18 @@ const ChangePassword = ({ navigation }) => {
           .updatePassword(newPass)
           .then(() => {
             setLoading(false);
-            console.log('Password updated!');
+
             setPasswordUpdated(true);
           })
           .catch((error) => {
             setLoading(false);
-            console.log('---Error----', error.message);
+
           });
       })
       .catch((error) => {
         setLoading(false);
         setWrongPassword(true);
-        console.log('----Functionreauthenticate error--', error.message);
+
       });
   };
 

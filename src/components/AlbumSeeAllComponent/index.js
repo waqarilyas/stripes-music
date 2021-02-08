@@ -14,7 +14,7 @@ const AlbumSeeAllComponent = ({
   playCount,
   songCount,
 }) => {
-  console.log('Counts', viewCount, playCount, songCount);
+
   return (
     <View style={styles.container}>
       <ImageBackground source={{ uri: image }} style={styles.image}>

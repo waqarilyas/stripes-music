@@ -71,9 +71,9 @@ const CreateNewPlaylist = ({ navigation, route }) => {
 
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+
       } else {
         const splittedUri = response.uri.split('.');
         const extension = splittedUri[splittedUri.length - 1];
@@ -102,10 +102,10 @@ const CreateNewPlaylist = ({ navigation, route }) => {
       'state_changed',
       (snapshot) => {
         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(`Upload is ${progress}% done`);
+
         switch (snapshot.state) {
           case storage.TaskState.PAUSED:
-            console.log('Upload is paused');
+
             break;
           case storage.TaskState.CANCELLED:
           case storage.TaskState.ERROR:
@@ -115,7 +115,7 @@ const CreateNewPlaylist = ({ navigation, route }) => {
             });
             break;
           case storage.TaskState.RUNNING:
-            console.log('Upload is running');
+
             break;
         }
       }, // Failed Listener
@@ -126,9 +126,9 @@ const CreateNewPlaylist = ({ navigation, route }) => {
         });
       }, // Successful Listener
       () => {
-        console.log('------ SUCCESSFULLY UPLOADED PICTURE ------');
+
         uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {
-          console.log('File available at', downloadUrl);
+
           uploadDataToFirestore(title, downloadUrl);
         });
       },

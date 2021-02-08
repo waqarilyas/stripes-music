@@ -89,7 +89,7 @@ const SearchResultsScreen = ({ query, selected, playSong }) => {
   //   });
   // };
 
-  console.log('---search results--', searchResults)
+
 
   return (
     <View style={{ backgroundColor: 'black' }}>

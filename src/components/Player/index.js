@@ -113,7 +113,7 @@ const Player = ({ screen }) => {
 
   const handleMute = async () => {
     try {
-      //console.log('isMute', isMute);
+
 
       await TrackPlayer.setVolume(volume === 0 ? 1 : 0).then(() =>
         setVolume(volume === 0 ? 1 : 0),
@@ -167,7 +167,7 @@ const Player = ({ screen }) => {
       await TrackPlayer.reset();
       dispatch(fullScreenChange(false));
       dispatch(changeToMiniModal(false));
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const shuffleQueue = (queue) => {

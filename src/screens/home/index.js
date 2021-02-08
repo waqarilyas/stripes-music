@@ -48,7 +48,7 @@ import {
   getUser,
   getVideos,
 } from '../../Redux/Reducers/firebaseSlice';
-import { uploadDataToStorage } from '../../utils/Firebase'
+import { uploadDataToStorage } from '../../utils/Firebase';
 import styles from './styles';
 
 const wait = (timeout) => {
@@ -128,25 +128,6 @@ const Home = ({ navigation }) => {
       LOG('PLAY SONG', error);
     }
   };
-
-  useEffect(() => {
-    uploadDataToStorage('songs', 'songs', (res) => {
-      console.log('-------data upload----', res)
-    }
-    )
-    uploadDataToStorage('videos', 'videos', (res) => {
-      console.log('-------data upload----', res)
-    })
-    uploadDataToStorage('playlists', 'playlists', (res) => {
-      console.log('-------data upload----', res)
-    })
-    uploadDataToStorage('artists', 'artists', (res) => {
-      console.log('-------data upload----', res)
-    })
-    uploadDataToStorage('albums', 'albums', (res) => {
-      console.log('-------data upload----', res)
-    })
-  }, [])
 
   return (
     <ScrollView

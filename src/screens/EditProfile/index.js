@@ -103,7 +103,7 @@ const EditProfile = ({ navigation, route }) => {
         }
       }, // Failed Listener
       (_err) => {
-        console.log('Error: ', _err);
+
         setLoading(false);
       }, // Successful Listener
       () => {

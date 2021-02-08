@@ -25,7 +25,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
     .get()
     .then((documents) => {
       documents.forEach((document) => {
-        console.log('---data to upload---', document.data().fileUrl)
+
 
         if (document.exists) {
           switch (collection) {
@@ -38,10 +38,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 title: document.data().title,
                 fileUrl: document.data().fileUrl
               };
-              console.log('---audio----', audio.fileUrl)
-
-
-              documentsData.push(document.data());
+              documentsData.push(audio);
               break;
             case 'videos':
               const video = {
@@ -52,7 +49,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 title: document.data().title,
                 fileUrl: document.data().fileUrl
               };
-              documentsData.push(document.data());
+              documentsData.push(video);
               break;
             case 'playlists':
               const playlist = {
@@ -63,7 +60,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 image: document.data().image,
               };
 
-              documentsData.push(document.data());
+              documentsData.push(playlist);
               break;
             case 'artists':
               const artists = {
@@ -72,7 +69,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 image: document.data().imgUrl,
                 followercount: document.data().followerCount,
               };
-              documentsData.push(document.data());
+              documentsData.push(artists);
               break;
             case 'albums':
               const albums = {
@@ -82,7 +79,7 @@ export const uploadDataToStorage = async (collection, engineName, callback) => {
                 songcount: document.data().songCount,
                 title: document.data().title,
               };
-              documentsData.push(document.data());
+              documentsData.push(albums);
               break;
             default:
               break;

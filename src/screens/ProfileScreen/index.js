@@ -33,7 +33,7 @@ const ProfileScreen = ({ navigation }) => {
       .collection('favArtists')
       .where('isFollowing', '==', true)
       .onSnapshot((snapshot) => {
-        console.log('snapshot', snapshot);
+
         setFollowCount(snapshot.size);
       });
     return () => listener();
@@ -51,14 +51,14 @@ const ProfileScreen = ({ navigation }) => {
             source={{ uri: user.profilePicture }}
           />
         ) : (
-          <Avatar
-            ref={avatarRef}
-            rounded
-            containerStyle={styles.profilePictureContainer}
-            overlayContainerStyle={styles.profilePicOverlayContainer}
-            renderPlaceholderContent={<ProfilePicPlaceholder />}
-          />
-        )}
+            <Avatar
+              ref={avatarRef}
+              rounded
+              containerStyle={styles.profilePictureContainer}
+              overlayContainerStyle={styles.profilePicOverlayContainer}
+              renderPlaceholderContent={<ProfilePicPlaceholder />}
+            />
+          )}
 
         <View style={styles.pageTopNameView}>
           <View style={styles.header}>

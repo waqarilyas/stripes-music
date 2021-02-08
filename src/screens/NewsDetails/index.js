@@ -68,7 +68,7 @@ const NewsDetails = () => {
 
   useEffect(() => {
     getDocument('artists', news.artistId, (document) => {
-      console.log('artistDoc', document);
+
       dispatch({ artist: document });
     });
   }, [news.artistId]);
@@ -117,13 +117,13 @@ const NewsDetails = () => {
     Animated.timing(widthAnim, {
       toValue: screenWidth * 0.9,
       duartion: 1500,
-      useNativeDriver: true
+      useNativeDriver: false
 
     }).start();
     Animated.timing(opacityAnim, {
       toValue: 0,
       duration: 500,
-      useNativeDriver: true
+      useNativeDriver: false
     }).start();
   };
 
@@ -157,8 +157,7 @@ const NewsDetails = () => {
       .catch((err) => LOG('ERROR', err));
   };
 
-  // console.log('Comment Count', commentCount);
-  // console.log('Equality', commentCount === stateVals.showMore.length);
+  
 
   const handleShowLess = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);

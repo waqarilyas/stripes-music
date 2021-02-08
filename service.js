@@ -6,8 +6,7 @@ import {
 import { displayVideoModal } from './src/Redux/Reducers/helperSlice';
 import { store } from './src/Redux/store';
 
-let didAddListeners = false;
-let userObj = null;
+
 let listeners = [];
 let timer = null;
 
@@ -39,15 +38,11 @@ module.exports = async function () {
     }),
 
     TrackPlayer.addEventListener('remote-stop', () => {
-      try {
-        store.dispatch(changeToMiniModal(false));
-        store.dispatch(fullScreenChange(false));
-      } catch (err) {}
-      console.log('------STOP-------2');
-      setTimeout(() => {
-        TrackPlayer.destroy();
-        removeAllListeners();
-      }, 1000);
+      store.dispatch(changeToMiniModal(false));
+      store.dispatch(fullScreenChange(false));
+      TrackPlayer.destroy();
+      removeAllListeners();
+
     }),
 
     TrackPlayer.addEventListener('remote-next', () => {
@@ -59,21 +54,26 @@ module.exports = async function () {
       TrackPlayer.skipToPrevious();
     }),
     TrackPlayer.addEventListener('remote-seek', (E) => {
-      console.log('------SEEKING-------', E);
       TrackPlayer.seekTo(E.position);
       TrackPlayer.play();
     }),
-    TrackPlayer.addEventListener('remote-jump-forward', (t) => {
+    TrackPlayer.addEventListener('remote-jump-forward', async (t) => {
+      const duration = await TrackPlayer.getPosition();
+      console.log('------SEEKING-------', duration);
       console.log('------JUMPING FORWARDS-------', t);
+      TrackPlayer.seekTo(t.interval + duration);
     }),
-    TrackPlayer.addEventListener('remote-jump-backward', (S) => {
-      console.log('------JUM BACKWARD-------', S);
+    TrackPlayer.addEventListener('remote-jump-backward', async (t) => {
+
+      const duration = await TrackPlayer.getPosition();
+
+      TrackPlayer.seekTo(duration - t.interval);
     }),
     TrackPlayer.addEventListener('remote-duck', (X) => {
       console.log('------remote DUCK-------', X);
     }),
     TrackPlayer.addEventListener('playback-track-changed', (Z) => {
-      console.log('------track player chaned-------', Z);
+      console.log('------track player changed-------', Z);
     }),
 
     TrackPlayer.addEventListener('playback-queue-ended', (Z) => {

@@ -53,14 +53,14 @@ const MessageDetail = ({ route, navigation }) => {
                 user: { name, _id, avatar },
               } = doc.data();
 
-              console.log('-------CREATED AT------', createdAt);
+
               let data = {
                 _id: doc.id,
                 text,
                 createdAt: createdAt,
                 user: { name, _id, avatar },
               };
-              console.log('------DATA-------', data);
+
 
               return data;
             } else {

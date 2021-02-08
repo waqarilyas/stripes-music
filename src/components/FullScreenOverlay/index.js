@@ -57,7 +57,7 @@ const FullScreenOverlay = ({
       })
       .then((res) => {
         setAdded(true);
-        console.log('-----SUCCESS----', res);
+
       })
       .catch(() => { });
   };

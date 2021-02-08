@@ -14,7 +14,7 @@ const TextBox = ({
   blurOnSubmit,
   secureTextEntry,
 }) => {
-  console.log(defaultValue);
+
 
   return (
     <View style={styles.maincontainer}>

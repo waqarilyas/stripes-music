@@ -44,7 +44,7 @@ const ForYouPlaylistSeeAll = ({ navigation }) => {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log(response.uri);
+
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {

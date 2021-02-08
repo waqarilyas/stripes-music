@@ -34,7 +34,7 @@ const HomeFavoriteArtists = ({ navigation }) => {
         let data = [];
         querySnapshot.docs.forEach((document) => {
           if (document.exists && document.data().isFollowing) {
-            console.log('docs', document.data());
+
             data.push(document.data());
           }
         });
@@ -72,7 +72,7 @@ const HomeFavoriteArtists = ({ navigation }) => {
           keyExtractor={(item) => `${item.id}`}
           horizontal
           renderItem={({ item, item: { name, avatar } }) => {
-            console.log('item', item);
+
             return (
               <TouchableOpacity onPress={() => handleArtist(item.artistId)}>
                 <ArtistsHorizontalCard name={name} avatar={avatar} />

@@ -138,9 +138,7 @@ const VideoPlayerModal = ({ onPress }) => {
   }, [])
 
 
-  useEffect(() => {
-    console.log(videoData);
-  }, [videoData.viewCount]);
+
 
   const handleSubmit = () => {
     if (commentText === '') {

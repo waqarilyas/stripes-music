@@ -43,7 +43,7 @@ const ProfileArtists = ({ navigation }) => {
   }, []);
 
   const handleArtist = (id) => {
-    console.log('artistId', id);
+
     try {
       dispatch(getArtist(id));
       dispatch(getArtistId(id));

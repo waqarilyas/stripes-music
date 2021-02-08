@@ -26,17 +26,13 @@ const App = () => {
     SetupAudioPlayer();
     const authSubscriber = auth().onAuthStateChanged(onAuthStateChanged);
 
-
-    let user = store?.getState().root.firebase?.user
-
-
-    !user?.isPaidUser && AppState.addEventListener('change', handleAppStateChange);
+    AppState.addEventListener('change', handleAppStateChange);
 
     return () => {
       authSubscriber();
-      !user?.isPaidUser && AppState.removeEventListener('change', handleAppStateChange);
+      AppState.removeEventListener('change', handleAppStateChange);
     };
-  }, [store?.getState().root.firebase?.user]);
+  }, []);
 
   const onAuthStateChanged = (result) => {
     // if (result) {
@@ -71,9 +67,15 @@ const App = () => {
       nextAppState === 'background' ||
       nextAppState != 'active'
     ) {
-      store.dispatch(changeToMiniModal(false));
-      store.dispatch(fullScreenChange(false));
-      TrackPlayer.destroy();
+
+      let user = store?.getState().root.firebase?.user
+
+      if (!user.isPaidUser) {
+
+        store.dispatch(changeToMiniModal(false));
+        store.dispatch(fullScreenChange(false));
+        TrackPlayer.destroy();
+      }
     }
   };
 
