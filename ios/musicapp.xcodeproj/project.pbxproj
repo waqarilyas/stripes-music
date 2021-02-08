@@ -51,7 +51,7 @@
 		06F51465081E45DFA4ED6E91 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		080A704015914454B5D1602C /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		0D39FCAA140843FAAD47A4D7 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* musicapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musicapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* STRIPES.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STRIPES.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = musicapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = musicapp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = musicapp/Images.xcassets; sourceTree = "<group>"; };
@@ -219,7 +219,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* musicapp.app */,
+				13B07F961A680F5B00A75B9A /* STRIPES.app */,
 				00E356EE1AD99517003FC87E /* musicappTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* musicapp-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* musicapp-tvOSTests.xctest */,
@@ -292,7 +292,7 @@
 			);
 			name = musicapp;
 			productName = musicapp;
-			productReference = 13B07F961A680F5B00A75B9A /* musicapp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* STRIPES.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* musicapp-tvOS */ = {
@@ -816,7 +816,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stripes.io;
-				PRODUCT_NAME = musicapp;
+				PRODUCT_NAME = STRIPES;
 				SWIFT_OBJC_BRIDGING_HEADER = "musicapp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -847,7 +847,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stripes.io;
-				PRODUCT_NAME = musicapp;
+				PRODUCT_NAME = STRIPES;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "musicapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

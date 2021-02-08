@@ -20,7 +20,6 @@ import { PLAYER_CONFIG } from './src/utils/Constants';
 const App = () => {
   let [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     SplashScreen.hide();
     SetupAudioPlayer();
@@ -53,7 +52,7 @@ const App = () => {
   };
 
   const SetupAudioPlayer = async () => {
-    TrackPlayer.setupPlayer()
+    TrackPlayer.setupPlayer();
     TrackPlayer.updateOptions({
       jumpInterval: 15,
       stopWithApp: false,
@@ -67,11 +66,9 @@ const App = () => {
       nextAppState === 'background' ||
       nextAppState != 'active'
     ) {
+      let user = store?.getState().root.firebase?.user;
 
-      let user = store?.getState().root.firebase?.user
-
-      if (!user.isPaidUser) {
-
+      if (!user?.isPaidUser) {
         store.dispatch(changeToMiniModal(false));
         store.dispatch(fullScreenChange(false));
         TrackPlayer.destroy();
@@ -95,12 +92,12 @@ const App = () => {
               <ActivityIndicator size={'large'} color="white" />
             </View>
           ) : (
-              <UserProvider>
-                <View style={{ flex: 1, backgroundColor: 'black' }}>
-                  <MainAppStack />
-                </View>
-              </UserProvider>
-            )}
+            <UserProvider>
+              <View style={{ flex: 1, backgroundColor: 'black' }}>
+                <MainAppStack />
+              </View>
+            </UserProvider>
+          )}
         </NavigationContainer>
       </Provider>
       <Toast ref={(ref) => Toast.setRef(ref)} />
