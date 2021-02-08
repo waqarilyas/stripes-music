@@ -127,6 +127,7 @@ const Home = ({ navigation }) => {
     } catch (error) {
       LOG('PLAY SONG', error);
     }
+    ``;
   };
 
   return (
