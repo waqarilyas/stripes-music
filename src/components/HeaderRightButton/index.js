@@ -11,7 +11,10 @@ import auth from '@react-native-firebase/auth';
 
 import { searchIcon, profilePicPlaceholder } from '../../../Assets/Icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
+import {
+  displaySubscriptionScreen,
+  setIsChatNotPaid,
+} from '../../Redux/Reducers/helperSlice';
 import styles from './styles';
 
 const HeaderRightButton = ({ navigation }) => {
@@ -20,15 +23,22 @@ const HeaderRightButton = ({ navigation }) => {
   const currentUser = auth().currentUser;
 
   const handleAuth = () => navigation.navigate('Login');
-  const handleClick = () => dispatch(setIsChatNotPaid(true));
+  const handleClick = () => {
+    dispatch(displaySubscriptionScreen(true));
+    dispatch(setIsChatNotPaid(true));
+  };
 
   return (
     <View style={styles.container}>
       {currentUser && user?.isPaidUser ? (
         <Avatar
           rounded
-          source={{ uri: user ? user.profilePicture : profilePicPlaceholder }}
-          renderPlaceholderContent={<ActivityIndicator color="white" />}
+          source={
+            user?.profilePicture?.length > 0
+              ? { uri: user.profilePicture }
+              : profilePicPlaceholder
+          }
+          // renderPlaceholderContent={<ActivityIndicator color="white" />}
           onPress={() => navigation.navigate('Profile')}
         />
       ) : currentUser && user ? (

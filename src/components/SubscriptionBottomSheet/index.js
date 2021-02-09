@@ -6,15 +6,22 @@ import TrackPlayer, { useTrackPlayerProgress } from 'react-native-track-player';
 import { useDispatch, useSelector } from 'react-redux';
 import { fullScreenChange } from '../../Redux/Reducers/audioSlice';
 import {
+  displaySubscriptionScreen,
+  displayVideoModal,
   setIsChatNotPaid,
   setVidoReferences,
 } from '../../Redux/Reducers/helperSlice';
 import SubscriptionModal from '../../screens/SubscriptionModal';
-import { PLAYBACK_TIME_LIMIT_AUDIO } from '../../utils/Constants';
+import {
+  PLAYBACK_TIME_LIMIT_AUDIO,
+  PLAYBACK_TIME_LIMIT_VIDEO,
+} from '../../utils/Constants';
 
 const SubscriptionModalScreen = ({}) => {
   const { user } = useSelector((state) => state.root.firebase);
-  const { subscriptionModal } = useSelector((state) => state.root.helpers);
+  const { subscriptionModal, isVideoPlaying, currentTime } = useSelector(
+    (state) => state.root.helpers,
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const progressData = useTrackPlayerProgress();
   const dist = useDispatch();
@@ -49,6 +56,18 @@ const SubscriptionModalScreen = ({}) => {
     }
   }, [subscriptionModal]);
 
+  if (isVideoPlaying) {
+    if (currentTime > PLAYBACK_TIME_LIMIT_VIDEO) {
+      dist(displayVideoModal(false));
+      dist(
+        setVidoReferences({
+          isVideoPlaying: false,
+          currentTime: 0,
+        }),
+      );
+      stateUpdate();
+    }
+  }
   return (
     <Overlay
       isVisible={modalVisible}
@@ -60,6 +79,7 @@ const SubscriptionModalScreen = ({}) => {
           dist(setVidoReferences({ isVideoPlaying: false, currentTime: 0 }));
           dist(setIsChatNotPaid(false));
           setModalVisible(false);
+          dist(displaySubscriptionScreen(false));
         }}
       />
     </Overlay>

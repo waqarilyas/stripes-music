@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View, Linking } from 'react-native';
 import {
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -11,7 +11,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { downpicker, picker } from '../../../Assets/Icons';
 import Entity from '../../components/Entity';
-import { setIsChatNotPaid } from '../../Redux/Reducers/helperSlice';
+import {
+  displaySubscriptionScreen,
+  setIsChatNotPaid,
+} from '../../Redux/Reducers/helperSlice';
 
 const Subscription = ({ route }) => {
   let { user } = useSelector((state) => state.root.firebase);
@@ -22,19 +25,11 @@ const Subscription = ({ route }) => {
   const [visible3, setVisible3] = useState(true);
 
   const onDowngradeClicked = () => {
-    setVisible3(!visible3);
-    setVisible1(!visible1);
-    setVisible2(!visible2);
+    Linking.openURL('https://apps.apple.com/account/subscriptions');
   };
 
   const onUpgradeClicked = () => {
-    if (user?.isPaidUser) {
-      setVisible3(!visible3);
-      setVisible1(!visible1);
-      setVisible2(!visible2);
-    } else {
-      dist(setIsChatNotPaid(true));
-    }
+    dist(displaySubscriptionScreen(true));
   };
 
   return (
@@ -45,10 +40,10 @@ const Subscription = ({ route }) => {
           <View style={{ flex: 5 }}>
             <Text style={styles.container1Text}>Current Plan</Text>
             <Text style={styles.container1Text2}>
-              {!visible3 ? 'Standard' : 'Free'}
+              {user?.isPaidUser ? 'Standard' : 'Free'}
             </Text>
           </View>
-          {!visible3 ? (
+          {user?.isPaidUser ? (
             <View style={styles.button}>
               <TouchableOpacity
                 style={styles.touchView3}
@@ -139,7 +134,7 @@ const Subscription = ({ route }) => {
               <Entity text="Listen to any song for full length" />
               <Entity text="Create a queue of your favorite songs" />
               <Entity text="Chat with any artist" />
-              {visible3 ? (
+              {!user?.isPaidUser ? (
                 <TouchableOpacity
                   style={styles.touchView2}
                   onPress={onUpgradeClicked}>

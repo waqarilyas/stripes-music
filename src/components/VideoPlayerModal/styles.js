@@ -1,5 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { heightPercentageToDP, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import {
+  heightPercentageToDP,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 const styles = StyleSheet.create({
   commentDivider: {
     marginVertical: 12,
@@ -25,6 +28,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     paddingHorizontal: 22,
+    maxHeight: heightPercentageToDP(13),
   },
   commentSection: {
     backgroundColor: 'white',
@@ -115,7 +119,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginTop: 6,
     justifyContent: 'space-between',
-
   },
 
   rowContainer: {
@@ -150,15 +153,14 @@ const styles = StyleSheet.create({
 
     // zIndex: 1,
     // alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   cancelIcon: {
     height: 18,
     width: 18,
     tintColor: 'white',
     resizeMode: 'contain',
-    marginRight: heightPercentageToDP(1)
-
+    marginRight: heightPercentageToDP(1),
   },
   commentMainContainer: {
     width: '100%',
@@ -176,21 +178,20 @@ const styles = StyleSheet.create({
     // alignSelf: 'flex-start',
     flex: 1,
   },
-  commentButtonText: {
-    color: 'white',
-    fontSize: 18,
-    width: '90%',
-    // textAlign: 'center',
-    paddingHorizontal: 22,
-  },
+  // commentButtonText: {
+  //   color: 'white',
+  //   fontSize: 18,
+  //   width: '90%',
+  //   // textAlign: 'center',
+  //   paddingHorizontal: 22,
+  // },
   sendButtonContainer: {
     position: 'absolute',
     right: 0,
   },
   header: {
-
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+  },
 });
 
 export default styles;

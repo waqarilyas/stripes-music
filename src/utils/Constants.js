@@ -1,6 +1,8 @@
 import TrackPlayer from 'react-native-track-player';
 
 export const BASE_URL = 'https://us-central1-musicapp-956bc.cloudfunctions.net';
+export const SEARCH_BASE_URL =
+  'https://us-central1-musicapp-956bc.cloudfunctions.net/api/stripes/';
 
 export const GOOGLE_WEB_CLIENT_ID =
   '91986739524-je9lbope2f8mfn7l0ld58k10dk00armv.apps.googleusercontent.com';

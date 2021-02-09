@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
-import { BASE_URL } from './Constants';
+import { BASE_URL, SEARCH_BASE_URL } from './Constants';
 
 export const thousandSeparator = (num = 0) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -57,4 +57,17 @@ export const updateAlbum = (albumId) => {
 
 export const updateArtist = (artistId) => {
   return axios.get(`${BASE_URL}/updateArtist?id=${artistId}`);
+};
+
+// all: selected.all ? 1 : 0,
+// songs: selected.songs ? 1 : 0,
+// videos: selected.videos ? 1 : 0,
+
+// albums: selected.albums ? 1 : 0,
+// artists: selected.artists ? 1 : 0,
+
+export const getSearchData = (param) => {
+  return axios.get(
+    `${SEARCH_BASE_URL}/search?search=${param.search}&page=${param.page}&all=${param.all}&songs=${param.songs}&videos=${param.videos}&albums=${param.albums}&artists=${param.artists}`,
+  );
 };

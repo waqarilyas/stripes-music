@@ -51,6 +51,12 @@ const styles = StyleSheet.create({
   back: {
     resizeMode: 'contain',
   },
+  emptySearchIcon: {
+    resizeMode: 'contain',
+    height: hp(15),
+    width: hp(15),
+    marginBottom: hp(2),
+  },
 });
 
 export default styles;

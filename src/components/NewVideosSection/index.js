@@ -19,8 +19,9 @@ const NewVideosSection = ({ navigation }) => {
 
   const playVideo = (item) => {
     const data = item;
-    data.createdAt = JSON.parse(data.createdAt);
-    data.updatedAt = JSON.parse(data.updatedAt);
+    console.log('---data---', data.createdAt.toDate());
+    // data.createdAt = data.createdAt.toDate();
+    // data.updatedAt = data.updatedAt.toDate();
     dispatch(displayVideoModal(true));
     dispatch(setVideoData(data));
   };

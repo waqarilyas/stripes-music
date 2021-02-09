@@ -1,13 +1,9 @@
 import NetInfo from '@react-native-community/netinfo';
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ImageBackground,
-  RefreshControl,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { RFPercentage } from 'react-native-responsive-fontsize';
+import TrackPlayer from 'react-native-track-player';
 import { useDispatch } from 'react-redux';
 import HomeBanner from '../../components/HomeBanner';
 import HomeFavoriteArtists from '../../components/HomeFavoriteArtists';
@@ -19,36 +15,27 @@ import HomeTopArtists from '../../components/HomeTopArtists';
 import {
   changeSong,
   fullScreenChange,
-  changeToMiniModal,
   setPlaylist,
 } from '../../Redux/Reducers/audioSlice';
-import TrackPlayer from 'react-native-track-player';
-import { addPlayCount } from '../../Redux/Reducers/firebaseSlice';
-import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
-import { LOG } from '../../utils/Constants';
 import {
+  addPlayCount,
   getAlbums,
   getAllAlbums,
   getAllBestAlbums,
   getAllHistory,
-  getAllNews,
   getAllPlaylists,
-  getAllPopularVideos,
   getAllSongs,
   getBestAlbums,
   getHistory,
-  getLatestVideos,
   getMostPlayed,
   getMostPlayedSongs,
-  getPlaylists,
-  getPopularVideos,
   getSongs,
   getTopAllArtists,
   getTopArtists,
   getUser,
-  getVideos,
 } from '../../Redux/Reducers/firebaseSlice';
-import { uploadDataToStorage } from '../../utils/Firebase';
+import { addToRecentlyPlayed } from '../../Redux/Reducers/playerSlice';
+import { LOG } from '../../utils/Constants';
 import styles from './styles';
 
 const wait = (timeout) => {
@@ -102,13 +89,7 @@ const Home = ({ navigation }) => {
     dispatch(getTopAllArtists());
     dispatch(getBestAlbums());
     dispatch(getAllBestAlbums());
-    // dispatch(getVideos());
-    // dispatch(getPopularVideos());
-    // dispatch(getLatestVideos());
-    // dispatch(getAllPopularVideos());
-    // dispatch(getAllNews());
     dispatch(getUser());
-    // dispatch(getPlaylists());
 
     wait(2000).then(() => setRefreshing(false));
   }, []);

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
-  Alert
+  Alert,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser, updateUser } from '../../Redux/Reducers/firebaseSlice';
 import firestore from '@react-native-firebase/firestore';
 import firebase from '@react-native-firebase/app';
+import { displaySubscriptionScreen } from '../../Redux/Reducers/helperSlice';
 
 const itemSubs = Platform.select({
   ios: ['1Month'],
@@ -27,7 +28,7 @@ const itemSubs = Platform.select({
 const SubscriptionModal = ({ navigation, toggleModal }) => {
   const uid = auth().currentUser?.uid;
   const dispatch = useDispatch();
-  const user = auth().currentUser;
+  const user = auth()?.currentUser;
   const [state, setState] = useState({
     productIDs: [],
     loading: false,
@@ -50,7 +51,6 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
 
     RNIap.requestSubscription(state.productIDs[0]?.productId, false)
       .then((res) => {
-
         firestore()
           .collection('users')
           .doc(uid)
@@ -58,11 +58,17 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
           .then(() => {
             setState((prev) => ({ ...prev, loading: false }));
             dispatch(getUser());
+            // dispatch(displaySubscriptionScreen(false));
+            toggleModal();
           })
-          .catch(() => setState((prev) => ({ ...prev, loading: false })));
+          .catch(() => {
+            toggleModal();
+            setState((prev) => ({ ...prev, loading: false }));
+          });
       })
       .catch(() => {
         setState((prev) => ({ ...prev, loading: false }));
+        toggleModal();
       });
   };
 
@@ -77,13 +83,15 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
 
   return (
     <>
-
       <SafeAreaView style={styles.container}>
         {/* <View> */}
         <Text style={styles.header}>Choose a Subscription</Text>
         <TouchableOpacity
           style={styles.cancelButtonContainer}
-          onPress={() => toggleModal()}>
+          onPress={() => {
+            // dispatch(displaySubscriptionScreen(false));
+            toggleModal();
+          }}>
           <Image
             source={require('../../../Assets/Icons/cancel.png')}
             style={styles.cancel}
@@ -115,7 +123,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
                 <Image source={tick2} style={styles.tick} />
                 <Text style={styles.text}>
                   Create a queue for your favorite songs
-              </Text>
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -137,7 +145,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
             <Image source={tick2} style={styles.tick} />
             <Text style={styles.text}>
               Create a queue for your favourite songs
-          </Text>
+            </Text>
           </View>
         </TouchableOpacity>
 

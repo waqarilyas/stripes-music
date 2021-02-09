@@ -15,7 +15,7 @@ const SongCardListView = ({ title, artist, artwork, duration }) => {
         </ListItem.Title>
         <ListItem.Subtitle style={styles.subtitle}>{artist}</ListItem.Subtitle>
       </ListItem.Content>
-      <Text style={styles.duration}>{convertToMinutes(duration)}</Text>
+      <Text style={styles.duration}>{convertToMinutes(duration).toF}</Text>
     </ListItem>
   );
 };

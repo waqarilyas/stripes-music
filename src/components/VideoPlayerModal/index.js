@@ -19,7 +19,7 @@ import {
   Dimensions,
   Keyboard,
   Pressable,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -37,6 +37,7 @@ import reducer from '../../hooks/useReducer';
 import {
   displayVideoModal,
   setVideoData,
+  setVidoReferences,
 } from '../../Redux/Reducers/helperSlice';
 import { LOG } from '../../utils/Constants';
 import { getCollection } from '../../utils/Firebase';
@@ -65,9 +66,9 @@ const VideoPlayerModal = ({ onPress }) => {
   const [currentVideo, setCurrentVideo] = useState({});
   const [state, dispatch] = useReducer(reducer, initialState);
   const [commentText, setCommentText] = useState('');
-  const [viewerCount, setViewerCount] = useState(0)
+
   const [collapse, setCollapse] = useState(false);
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState([]);
   const [stateVals, setStateVals] = useState({
     showMore: [],
   });
@@ -104,13 +105,10 @@ const VideoPlayerModal = ({ onPress }) => {
         if (doc.exists) {
           setCurrentVideo(doc.data());
         }
-      })
-  }
-
-
+      });
+  };
 
   useEffect(() => {
-
     const listener = firestore()
       .collection('videos')
       .doc(videoData.id)
@@ -121,24 +119,18 @@ const VideoPlayerModal = ({ onPress }) => {
         querySnapshot.forEach((doc) => {
           allComments.push(doc.data());
         });
-        let tempComments = allComments;
-        setStateVals((prev) => ({
-          ...prev,
-          showMore: tempComments.splice(0, 5),
-        }));
-        setComments(allComments)
-        // dispatch({ comments: allComments });
+
+        setComments(allComments);
+
+        dispatch({ comments: allComments });
       });
-    // getCurrentVideo();
+
     return () => listener();
-  }, []);
+  }, [videoData]);
 
   useEffect(() => {
     getCollection('videos', 5, (documents) => dispatch({ videos: documents }));
-  }, [])
-
-
-
+  }, []);
 
   const handleSubmit = () => {
     if (commentText === '') {
@@ -159,6 +151,7 @@ const VideoPlayerModal = ({ onPress }) => {
         username: user?.fullName || '',
       })
       .then((result) => {
+        console.log('--comment added successfully---');
         setCommentText('');
         const documentId = result.id;
         result.update({
@@ -166,18 +159,21 @@ const VideoPlayerModal = ({ onPress }) => {
         });
         commentClose();
         Keyboard.dismiss();
-        setCommentText('');
       })
       .catch((err) => LOG('ADD ERROR', err));
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: 'black' }}>
-      <SubscriptionModalScreen duration={durationTime} />
-      <Modal animationType="slide" visible={videoModal}>
+      {/* <SubscriptionModalScreen duration={durationTime} /> */}
+      <Modal
+        animationType="slide"
+        visible={videoModal}
+        style={{
+          backgroundColor: 'red',
+        }}>
         <KeyboardAvoidingView style={{}} behavior="position">
-
-          <ScrollView style={{}}>
+          <ScrollView style={{ backgroundColor: 'black' }}>
             <SafeAreaView style={styles.safeArea} />
             <StatusBar barStyle="light-content" />
             <Pressable
@@ -188,13 +184,17 @@ const VideoPlayerModal = ({ onPress }) => {
                   Keyboard.dismiss();
                 }
               }}>
-
-
               <View style={styles.header}>
                 <TouchableOpacity
                   style={styles.backContainer}
                   onPress={() => {
                     disp(displayVideoModal(false));
+                    disp(
+                      setVidoReferences({
+                        isVideoPlaying: false,
+                        currentTime: 0,
+                      }),
+                    );
                   }}>
                   <Image source={closeIcon} style={styles.cancelIcon} />
                 </TouchableOpacity>
@@ -212,10 +212,6 @@ const VideoPlayerModal = ({ onPress }) => {
                 </View>
               </View>
 
-
-
-
-
               <VideoPlayer videoID={videoData.id} fileUrl={videoData.fileUrl} />
 
               <Text style={styles.desc}>Description</Text>
@@ -231,7 +227,11 @@ const VideoPlayerModal = ({ onPress }) => {
                 <FlatList
                   data={state.videos}
                   ListHeaderComponent={() => (
-                    <SectionHeader isRequired={false} icon={videoIcon} name="More Videos" />
+                    <SectionHeader
+                      isRequired={false}
+                      icon={videoIcon}
+                      name="More Videos"
+                    />
                   )}
                   ItemSeparatorComponent={() => (
                     <Divider style={styles.divider} />
@@ -251,9 +251,6 @@ const VideoPlayerModal = ({ onPress }) => {
                     if (item.id === videoData.id) {
                       return null;
                     } else {
-
-
-
                       return (
                         <TouchableHighlight
                           onPress={() => {
@@ -282,7 +279,7 @@ const VideoPlayerModal = ({ onPress }) => {
                 isRequired={false}
               />
 
-              {user &&
+              {user && (
                 <View style={styles.commentMainContainer}>
                   <Animated.View
                     style={[styles.commentContainer, { width: widthAnim }]}>
@@ -303,23 +300,27 @@ const VideoPlayerModal = ({ onPress }) => {
                         opacity: opacityAnim,
                       },
                     ]}>
-                    <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+                    <TouchableOpacity
+                      style={styles.submit}
+                      onPress={handleSubmit}>
                       <Text style={styles.submitText}>SEND</Text>
                     </TouchableOpacity>
                   </Animated.View>
                 </View>
-              }
+              )}
               <View style={styles.commentSection}>
-                {state.comments ? (
+                {comments.length > 0 ? (
                   <>
                     <FlatList
                       style={styles.commentListStyle}
                       data={comments}
+                      maxToRenderPerBatch={10}
                       ItemSeparatorComponent={() => (
                         <Divider style={styles.commentDivider} />
                       )}
                       keyExtractor={() => randomize('Aa0!', 10)}
                       renderItem={({
+                        item,
                         item: { image, comment, username, createdAt },
                       }) => {
                         return (
@@ -333,7 +334,12 @@ const VideoPlayerModal = ({ onPress }) => {
                       }}
                     />
 
-                    <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
+                    {/* <View
+                      style={{
+                        flexDirection: 'row',
+                        alignSelf: 'flex-end',
+                        // backgroundColor: 'red',
+                      }}>
                       {stateVals.showMore.length > 5 ? (
                         <View
                           style={{
@@ -359,7 +365,7 @@ const VideoPlayerModal = ({ onPress }) => {
                               textAlign: 'center',
                             }}>
                             Show Less
-                        </Text>
+                          </Text>
                         </View>
                       ) : null}
 
@@ -387,17 +393,25 @@ const VideoPlayerModal = ({ onPress }) => {
                             textAlign: 'center',
                           }}>
                           Show More
-                      </Text>
+                        </Text>
                       </View>
-                    </View>
+                    </View> */}
                   </>
                 ) : (
-                    <ActivityIndicator color="black" />
-                  )}
+                  <View style={{ backgroundColor: 'black' }}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                      }}>
+                      No comments yet!
+                    </Text>
+                  </View>
+                )}
               </View>
-
             </Pressable>
-
           </ScrollView>
         </KeyboardAvoidingView>
       </Modal>

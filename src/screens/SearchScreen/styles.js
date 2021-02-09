@@ -27,12 +27,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     marginLeft: RFValue('10'),
-    // paddingHorizontal: RFValue('10'),
   },
   textInput: {
     height: RFValue(35),
     margin: RFValue('5'),
     color: 'white',
+
+    flex: 1,
   },
   searchIcon: {
     resizeMode: 'contain',
@@ -45,18 +46,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: RFValue('10'),
-
   },
   buttonsView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: RFValue('10'),
-
   },
   buttonContainer: {
     paddingVertical: hp(6),
-
-
   },
   header: {
     flexDirection: 'row',

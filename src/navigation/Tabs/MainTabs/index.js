@@ -30,14 +30,14 @@ const MainTabs = () => {
       barStyle={
         miniModalOpen
           ? {
-            height: RFValue(80),
-            marginTop: RFValue(80),
-            backgroundColor: 'black',
-          }
+              height: RFValue(80),
+              marginTop: RFValue(80),
+              backgroundColor: 'black',
+            }
           : {
-            height: RFValue(Platform.OS === 'android' ? 50 : 65),
-            backgroundColor: 'black',
-          }
+              height: RFValue(Platform.OS === 'android' ? 50 : 65),
+              backgroundColor: 'black',
+            }
       }
       initialRouteName="Home"
       activeColor="#FFFFFF"
@@ -79,7 +79,7 @@ const MainTabs = () => {
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Videos" component={VideoStack} />
-      {user && (
+      {user && user.isPaidUser && (
         <Tab.Screen name="Profile" component={ProfileStack} />
       )}
       {user && user.isPaidUser && (

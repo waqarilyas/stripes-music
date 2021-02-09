@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Text,
-  Alert
+  Alert,
 } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import Video from 'react-native-video';
@@ -24,7 +24,7 @@ import {
   displaySubscriptionScreen,
 } from '../../Redux/Reducers/helperSlice';
 import { PLAYBACK_TIME_LIMIT_VIDEO } from '../../utils/Constants';
-import { convertToMinutes } from '../../utils/Helpers'
+import { convertToMinutes } from '../../utils/Helpers';
 import styles from './styles';
 
 const initialState = {
@@ -46,8 +46,6 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
   const { user } = useSelector((state) => state.root.firebase);
   const [reload, setReload] = useState(false);
   let visibility = useRef(new Animated.Value(state.paused ? 0 : 1)).current;
-
-
 
   useEffect(() => {
     Animated.timing(visibility, {
@@ -76,7 +74,7 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
         }, 3000);
       }
     }
-    setControlsVisible(!controlsVisible)
+    setControlsVisible(!controlsVisible);
   };
 
   useEffect(() => {
@@ -85,7 +83,7 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
     setTimeout(() => {
       setReload(false);
     }, 500);
-  }, [fileUrl])
+  }, [fileUrl]);
 
   useEffect(() => {
     firestore()
@@ -125,64 +123,56 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
   // }
 
   return (
-    <View style={{
-      flex: 1,
-    }}>
-
-      {
-        !reload ?
-
-          <Video
-            ref={videoPlayer}
-            source={{ uri: fileUrl }}
-            playInBackground={false}
-            resizeMode="cover"
-            fullscreen={true}
-            onVideoFullscreenPlayerWillPresent={(res) => { }}
-            pictureInPicture={false}
-
-            onLoad={(data) => {
-              dispatch({ duration: data.duration });
-            }}
-            onProgress={(data) => {
-              if (
-                data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO &&
-                !user?.isPaidUser
-              ) {
-                disp(
-                  setVidoReferences({
-                    isVideoPlaying: true,
-                    currentTime: data.currentTime,
-                  }),
-                );
-                disp(displayVideoModal(false));
-              }
-              dispatch({ currentTime: data.currentTime, isVideo: true });
-            }}
-            volume={state.volume}
-            muted={state.muted}
-            style={styles.backgroundVideo}
-            paused={state.paused}
-            controls={false}
-          /> :
-          <View style={[styles.backgroundVideo, styles.loadBackgroundVideo]}>
-            <ActivityIndicator
-              color={'#fff'}
-              size={'large'}
-            />
-          </View>
-      }
-
+    <View
+      style={{
+        flex: 1,
+      }}>
+      {!reload ? (
+        <Video
+          ref={videoPlayer}
+          source={{ uri: fileUrl }}
+          playInBackground={false}
+          resizeMode="cover"
+          fullscreen={true}
+          onVideoFullscreenPlayerWillPresent={(res) => {}}
+          pictureInPicture={false}
+          onLoad={(data) => {
+            dispatch({ duration: data.duration });
+          }}
+          onProgress={(data) => {
+            if (
+              data.currentTime > PLAYBACK_TIME_LIMIT_VIDEO &&
+              !user?.isPaidUser
+            ) {
+              disp(
+                setVidoReferences({
+                  isVideoPlaying: true,
+                  currentTime: data.currentTime,
+                }),
+              );
+            }
+            dispatch({ currentTime: data.currentTime, isVideo: true });
+          }}
+          volume={state.volume}
+          muted={state.muted}
+          style={styles.backgroundVideo}
+          paused={state.paused}
+          controls={false}
+        />
+      ) : (
+        <View style={[styles.backgroundVideo, styles.loadBackgroundVideo]}>
+          <ActivityIndicator color={'#fff'} size={'large'} />
+        </View>
+      )}
 
       <TouchableOpacity
         style={{ ...styles.container, opacity: visibility }}
         onPress={showControls}>
-        {controlsVisible &&
-          <Animated.View style={{ ...styles.container, }}>
+        {controlsVisible && (
+          <Animated.View style={{ ...styles.container }}>
             <TouchableOpacity
               style={styles.resumeContainer}
               onPress={() => {
-
                 dispatch({ paused: !state.paused });
               }}>
               <Image
@@ -202,8 +192,7 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
             <TouchableOpacity
               style={styles.fullScreenContainer}
               onPress={() => {
-
-                videoPlayer.current.presentFullscreenPlayer()
+                videoPlayer.current.presentFullscreenPlayer();
               }}>
               <Image source={fullscreenIcon} style={styles.fullScreenIcon} />
             </TouchableOpacity>
@@ -219,7 +208,7 @@ const VideoPlayer = ({ videoID, fileUrl }) => {
               maximumTrackTintColor="rgba(255, 255, 255, 0.2)"
             />
           </Animated.View>
-        }
+        )}
       </TouchableOpacity>
     </View>
   );

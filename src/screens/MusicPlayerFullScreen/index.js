@@ -15,6 +15,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+
 import AudioPlayerSlider from '../../components/AudioPlayerSlider';
 import {
   muteIcon,
@@ -35,6 +36,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { downIcon, plusIcon, shareIcon } from '../../../Assets/Icons';
 import FullScreenOverlay from '../../components/FullScreenOverlay';
 import styles from './styles';
+import SubscriptionModalScreen from '../../components/SubscriptionBottomSheet';
 
 const EmptyPlaylist = () => {
   return (
@@ -355,6 +357,7 @@ const MusicPlayerFullscreen = ({
           ) : null}
           {/* Playlists End here */}
         </View>
+        {/* <SubscriptionModalScreen isVisible={false} /> */}
       </SafeAreaView>
       {/* <MusicPlayerRelated /> */}
     </Modal>

@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import dayjs from 'dayjs';
 import moment from 'moment';
+import { profilePicPlaceholder } from '../../../Assets/Icons';
 
 import styles from './styles';
 
@@ -32,7 +33,11 @@ dayjs.updateLocale('en', {
 const NewsCommentCard = ({ image, comment, username, createdAt }) => {
   return (
     <View style={styles.container}>
-      <Avatar size="medium" rounded source={{ uri: image }} />
+      <Avatar
+        size="medium"
+        rounded
+        source={image ? { uri: image } : profilePicPlaceholder}
+      />
       <View style={styles.detail}>
         <View style={styles.extra}>
           <Text style={styles.author}>{username}</Text>
