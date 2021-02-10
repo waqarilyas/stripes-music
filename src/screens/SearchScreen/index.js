@@ -88,23 +88,6 @@ const SearchScreen = ({ navigation }) => {
       });
   }, []);
 
-  const playSong = async (currentSong) => {
-    const currentSongFromPLaylist = songs.filter((item) => {
-      return item.id === currentSong.id.raw;
-    });
-
-    try {
-      dispatch(changeSong(currentSongFromPLaylist));
-      await TrackPlayer.add(currentSongFromPLaylist);
-      dispatch(fullScreenChange(true));
-
-      dispatch(addPlayCount(currentSongFromPLaylist.id));
-      dispatch(addToRecentlyPlayed(currentSongFromPLaylist));
-    } catch (error) {
-      console.log('---error----', error);
-    }
-  };
-
   const selectButton = (name, value) => {
     if (name == 'all' && value) {
       setSelected({
@@ -142,8 +125,10 @@ const SearchScreen = ({ navigation }) => {
   };
 
   const searchIt = async () => {
-    setLoading(true);
-    console.log('---function called-----');
+    if (query.length === 0) {
+      return;
+    }
+
     await getSearchData({
       search: query,
       page: 1,

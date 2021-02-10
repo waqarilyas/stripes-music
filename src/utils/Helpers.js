@@ -59,15 +59,8 @@ export const updateArtist = (artistId) => {
   return axios.get(`${BASE_URL}/updateArtist?id=${artistId}`);
 };
 
-// all: selected.all ? 1 : 0,
-// songs: selected.songs ? 1 : 0,
-// videos: selected.videos ? 1 : 0,
-
-// albums: selected.albums ? 1 : 0,
-// artists: selected.artists ? 1 : 0,
-
 export const getSearchData = (param) => {
   return axios.get(
-    `${SEARCH_BASE_URL}/search?search=${param.search}&page=${param.page}&all=${param.all}&songs=${param.songs}&videos=${param.videos}&albums=${param.albums}&artists=${param.artists}`,
+    `${SEARCH_BASE_URL}/search?search=${param.search}&page=${param.page}&a=ll=${param.all}&songs=${param.songs}&videos=${param.videos}&albums=${param.albums}&artists=${param.artists}`,
   );
 };
