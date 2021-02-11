@@ -8,6 +8,7 @@ import {
   View,
   ActivityIndicator,
   Alert,
+  Button,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
@@ -72,14 +73,14 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
       });
   };
 
-  // const handleSignOut = () => {
-  //   auth()
-  //     .signOut()
-  //     .then(() => {
-  //       toggleModal();
-  //       navigation.navigate('Home');
-  //     });
-  // };
+  const handleSignOut = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        toggleModal();
+        navigation.navigate('Home');
+      });
+  };
 
   return (
     <>
@@ -166,6 +167,7 @@ const SubscriptionModal = ({ navigation, toggleModal }) => {
             <ActivityIndicator color="white" size="large" />
           </View>
         )}
+        <Button title="SignOut" onPress={handleSignOut} />
       </SafeAreaView>
     </>
   );

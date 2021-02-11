@@ -15,6 +15,7 @@ import { getOrderedCollections } from '../../utils/Firebase';
 import reducer from '../../hooks/useReducer';
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
+import ListEmptyComponent from '../../components/ListEmptyComponent';
 
 const initialState = { news: [] };
 
@@ -63,43 +64,46 @@ const NewsTrending = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {news.length > 0 && (
-        <FlatList
-          ListEmptyComponent={<ActivityIndicator />}
-          data={news}
-          extraData={news}
-          keyExtractor={() => randomize('Aa0!', 10)}
-          renderItem={({
-            item: {
-              title,
-              imgUrl,
-              createdAt,
-              description,
-              likeCount,
-              shareCount,
-              commentCount,
-              viewCount,
-              id,
-            },
-          }) => {
-            const date = dayjs(createdAt.seconds).format('DD MMMM, YYYY');
-            return (
-              <NewsCard
-                title={title}
-                image={imgUrl}
-                date={date}
-                description={description}
-                likeCount={likeCount}
-                shareCount={shareCount}
-                commentCount={commentCount}
-                nav={navigation}
-                newsId={id}
-                handleNav={() => handleNav(id, viewCount)}
-              />
-            );
-          }}
-        />
-      )}
+      {/* {news.length > 0 && ( */}
+      <FlatList
+        contentContainerStyle={{ flex: 1, backgroundColor: 'black' }}
+        ListEmptyComponent={() => (
+          <ListEmptyComponent navigation={navigation} />
+        )}
+        data={news}
+        extraData={news}
+        keyExtractor={() => randomize('Aa0!', 10)}
+        renderItem={({
+          item: {
+            title,
+            imgUrl,
+            createdAt,
+            description,
+            likeCount,
+            shareCount,
+            commentCount,
+            viewCount,
+            id,
+          },
+        }) => {
+          const date = dayjs(createdAt.seconds).format('DD MMMM, YYYY');
+          return (
+            <NewsCard
+              title={title}
+              image={imgUrl}
+              date={date}
+              description={description}
+              likeCount={likeCount}
+              shareCount={shareCount}
+              commentCount={commentCount}
+              nav={navigation}
+              newsId={id}
+              handleNav={() => handleNav(id, viewCount)}
+            />
+          );
+        }}
+      />
+      {/* )} */}
     </View>
   );
 };

@@ -4,7 +4,7 @@ import randomize from 'randomatic';
 import React, { useEffect, useReducer, useState } from 'react';
 import { Alert, FlatList } from 'react-native';
 import ChatCard from '../../components/ChatCard';
-import EmptyChatList from '../../components/EmptyChatList'
+import EmptyChatList from '../../components/EmptyChatList';
 import reducer from '../../hooks/useReducer';
 
 const initialState = {
